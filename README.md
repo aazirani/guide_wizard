@@ -3,6 +3,7 @@
 An app that guides international students through the initial stages of settling into a new city and university.
 
 For more information about the basics of this repo, head over to the links below.
+
 https://github.com/zubairehman/flutter-boilerplate-project/tree/master
 
 https://github.com/zubairehman/flutter-boilerplate-project/wiki
