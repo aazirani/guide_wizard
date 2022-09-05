@@ -4,6 +4,7 @@ An app that guides international students through the initial stages of settling
 
 For more information about the basics of this repo, head over to the links below.
 https://github.com/zubairehman/flutter-boilerplate-project/tree/master
+
 https://github.com/zubairehman/flutter-boilerplate-project/wiki
 
 This Flutter project was written using MobX and Provider.
