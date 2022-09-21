@@ -15,4 +15,7 @@ class AppColors {
     800: const Color(0xFFDB7424),
     900: const Color(0xFFD56217)
   };
+
+  static const Color hannover_blue = const Color.fromRGBO(0, 81, 158, 1);
+
 }

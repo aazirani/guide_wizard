@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import '../../constants/colors.dart';
 
 class TextQuestion extends StatefulWidget {
   const TextQuestion({Key? key}) : super(key: key);
@@ -35,7 +36,27 @@ class _TextQuestionState extends State<TextQuestion> {
       );
     }
 
+    PreferredSizeWidget? _buildAppBar() {
+      return AppBar(
+        backgroundColor: AppColors.hannover_blue,
+        toolbarHeight: 70,
+        titleSpacing: 10,
+        title: Row(
+          mainAxisAlignment: MainAxisAlignment.start,
+          children: [
+            Image.asset(
+              'assets/icons/honnover_uni_logo.png',
+              fit: BoxFit.cover,
+              height: 60,
+            ),
+          ],
+
+        ),
+      );
+    }
+
     return Scaffold(
+      appBar: _buildAppBar(),
       body: ListView(
         children: [
           ExpansionPanelList(
