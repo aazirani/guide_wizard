@@ -96,6 +96,24 @@ class _TextQuestionState extends State<TextQuestion> {
       );
     }
 
+    Widget _buildNextQuestionButton() {
+      return Padding(
+        padding: const EdgeInsets.symmetric(vertical: 20),
+        child: TextButton(
+          style: ButtonStyle(
+            minimumSize: MaterialStateProperty.all(Size(math.max(_getScreenWidth()-26, 0),55)),
+            backgroundColor: MaterialStateProperty.all<Color>(AppColors.hannover_blue),
+            shape: MaterialStateProperty.all<RoundedRectangleBorder>(
+              RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(5.0),
+              ),
+            ),
+          ),
+          onPressed: () {  },
+          child: Text("Next Question", style: TextStyle(color: Colors.white, fontSize: 15),),
+        ),
+      );
+    }
 
     Widget _buildDescription(){
       return Container(
@@ -124,7 +142,7 @@ class _TextQuestionState extends State<TextQuestion> {
           children: <Widget>[
             _buildDescription(),
             _buildOptionsList(),
-            SizedBox(height: 20,),
+            _buildNextQuestionButton(),
           ],
         ),
       ),

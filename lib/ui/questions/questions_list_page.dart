@@ -29,7 +29,7 @@ class _QuestionsListPageState extends State<QuestionsListPage> {
     return TextButton(
       style: ButtonStyle(
         minimumSize: MaterialStateProperty.all(Size(math.max(_getScreenWidth()-26, 0),55)),
-        backgroundColor: MaterialStateProperty.all<Color>(AppColors.hannover_blue),
+        backgroundColor: MaterialStateProperty.all<Color>(Colors.green.shade600.withOpacity(1)),
         shape: MaterialStateProperty.all<RoundedRectangleBorder>(
           RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(5.0),
@@ -65,7 +65,7 @@ class _QuestionsListPageState extends State<QuestionsListPage> {
       appBar: _buildAppBar(),
       body: ListView(
         children: [
-          TextQuestion(title: "Title", description: "description description description description description description description", options: ["Option1", "Option2", "Option3", "Option4", "Option5", "Option6"], expanded: true, multiChoice: false),
+          TextQuestion(title: "Title", description: "description description description description description description description", options: ["Option1", "Option2", "Option3"], expanded: true, multiChoice: false),
           TextQuestion(title: "Title", description: "description description description description description description description", options: [], expanded: true, multiChoice: false),
           SizedBox(height: 80,),
         ],
