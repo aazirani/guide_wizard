@@ -31,9 +31,9 @@ class _QuestionsListPageState extends State<QuestionsListPage> {
         minimumSize: MaterialStateProperty.all(Size(math.max(_getScreenWidth()-26, 0),55)),
         backgroundColor: MaterialStateProperty.all<Color>(AppColors.hannover_blue),
         shape: MaterialStateProperty.all<RoundedRectangleBorder>(
-            RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(5.0),
-            )
+          RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(5.0),
+          ),
         ),
       ),
       onPressed: () {  },
@@ -65,24 +65,9 @@ class _QuestionsListPageState extends State<QuestionsListPage> {
       appBar: _buildAppBar(),
       body: ListView(
         children: [
-          // ExpansionPanelList(
-          //   expansionCallback: (index, isExpanded) {
-          //     setState(() {
-          //       expanded = !isExpanded;
-          //     });
-          //   },
-          //   children:  [
-          //       // TextQuestion(title: "Question Title", description: "this is a description!"*10, options: ["Option1", "Option2", "Option3", "Option4",], expanded: true, multiChoice: false) as ExpansionPanel,
-          //   ],
-          // ),
-          // ExpandedTileList.builder(
-          //     itemCount: 1,
-          //     maxOpened: 1,
-          //     itemBuilder: (context, index, controller) {
-          //       return ExpandedTile(title: Text("Question"), content: Text("Description!"), controller: controller);
-          //     }
-          // ),
+          TextQuestion(title: "Title", description: "description description description description description description description", options: ["Option1", "Option2", "Option3", "Option4", "Option5", "Option6"], expanded: true, multiChoice: false),
           TextQuestion(title: "Title", description: "description description description description description description description", options: [], expanded: true, multiChoice: false),
+          SizedBox(height: 80,),
         ],
       ),
       floatingActionButton: _buildFloatingActionButton(),
