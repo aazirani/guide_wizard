@@ -1,4 +1,6 @@
-class TextQuestion {
+import 'package:boilerplate/models/question/question.dart';
+
+class TextQuestion implements Question{
   String title, description;
   List<Map<String, dynamic>> options;
   bool multiChoice, isAnswered=false;

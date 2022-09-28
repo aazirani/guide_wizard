@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import '../../constants/colors.dart';
 import 'dart:math' as math;
+import '../../models/question/question.dart';
 import '../../models/question/text_question.dart';
 import 'text_question_widget.dart';
 import 'package:flutter_expanded_tile/flutter_expanded_tile.dart';
@@ -16,11 +17,34 @@ class _QuestionsListPageState extends State<QuestionsListPage> {
 
   late bool expanded;
   late ExpandedTileController _controller;
+  late List<Question> questions;
 
   @override
   void initState() {
     expanded=true;
     _controller = ExpandedTileController(isExpanded:true);
+    questions=[
+      TextQuestion(
+          title: "Question Title",
+          description: "description description description description description description description",
+          options: [
+            {"title": "option1", "selected":false},
+            {"title": "option2", "selected":false},
+            {"title": "option3", "selected":false},
+          ],
+          multiChoice: true
+      ),
+      TextQuestion(
+          title: "What is up?!",
+          description: "description description description description description description description",
+          options: [
+            {"title": "option1", "selected":false},
+            {"title": "option2", "selected":false},
+            {"title": "option3", "selected":false},
+          ],
+          multiChoice: true
+      ),
+    ];
     super.initState();
   }
 
@@ -63,26 +87,33 @@ class _QuestionsListPageState extends State<QuestionsListPage> {
     );
   }
 
+
+  List<Widget> _buildQuestionsWidgetList(){
+    List<Widget> questionsWidgets=questions.map<Widget>((question){
+      if(question.runtimeType==TextQuestion) {
+        return TextQuestionWidget(
+          textQuestion: question as TextQuestion,
+          expanded: false,
+        );
+      }
+      else{
+        return SizedBox();
+      }
+    }
+    ).toList();
+    questionsWidgets.add(
+      SizedBox(height: 80,)
+    );
+
+    return questionsWidgets;
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: _buildAppBar(),
       body: ListView(
-        children: [
-          TextQuestionWidget(
-            textQuestion: TextQuestion(
-              title: "Title",
-              description: "description description description description description description description",
-              options: [
-                {"title": "option1", "selected":false},
-                {"title": "option2", "selected":false},
-                {"title": "option3", "selected":false},
-              ],
-                multiChoice: true
-            ),
-            expanded: true),
-          SizedBox(height: 80,),
-        ],
+        children: _buildQuestionsWidgetList(),
       ),
       floatingActionButton: _buildFloatingActionButton(),
       floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
