@@ -1,29 +1,24 @@
 import 'package:flutter/material.dart';
 import '../../constants/colors.dart';
 import 'dart:math' as math;
-import 'package:flutter_expanded_tile/flutter_expanded_tile.dart';
+import '../../models/question/text_question.dart';
 
-class TextQuestion extends StatefulWidget {
-  String title, description;
-  List<String> options;
-  bool multiChoice, expanded;
+class TextQuestionWidget extends StatefulWidget {
+  TextQuestion textQuestion;
+  bool expanded;
 
-  TextQuestion(
+  TextQuestionWidget(
       {Key? key,
-      required this.title,
-      required this.description,
-      required this.options,
-      required this.expanded,
-      required this.multiChoice})
+      required this.textQuestion,
+      required this.expanded,})
       : super(key: key);
 
   @override
-  State<TextQuestion> createState() => _TextQuestionState();
+  State<TextQuestionWidget> createState() => _TextQuestionWidgetState();
 }
 
-class _TextQuestionState extends State<TextQuestion> {
+class _TextQuestionWidgetState extends State<TextQuestionWidget> {
   double _getScreenWidth() => MediaQuery.of(context).size.width;
-  late List<Map<String, dynamic>> _options_data=widget.options.map((e) => {"title":e, "value":false}).toList();
 
   @override
   Widget build(BuildContext context) {
@@ -58,7 +53,7 @@ class _TextQuestionState extends State<TextQuestion> {
                 width: 15,
               ),
               Text(
-                widget.title,
+                widget.textQuestion.title,
                 style: TextStyle(fontSize: 20, fontWeight: FontWeight.w500),
               ),
             ],
@@ -71,19 +66,19 @@ class _TextQuestionState extends State<TextQuestion> {
 
     Widget _buildOptionsList(){
       return Column(
-        children: _options_data.map((option) =>
+        children: widget.textQuestion.options.map((option) =>
             Container(
               margin: const EdgeInsets.only(left: 15, right: 15, top: 10),
               child: CheckboxListTile(
                 shape: RoundedRectangleBorder(
-                  side: BorderSide(color: option["value"] ? Colors.black:Colors.transparent, width: 2),
+                  side: BorderSide(color: option["selected"] ? Colors.black:Colors.transparent, width: 2),
                   borderRadius: BorderRadius.circular(5),
                 ),
                 checkboxShape: CircleBorder(),
-                value: option["value"],
+                value: option["selected"],
                 onChanged: (value) {
                   setState(() {
-                    _options_data.elementAt(_options_data.indexOf(option))["value"]=value;
+                    widget.textQuestion.options.elementAt(widget.textQuestion.options.indexOf(option))["selected"]=value;
                   });
                 },
                 title: Text(option["title"]),
@@ -119,7 +114,7 @@ class _TextQuestionState extends State<TextQuestion> {
       return Container(
         margin: const EdgeInsets.only(left: 10, right: 10, bottom: 10),
         child: Text(
-          widget.description,
+          widget.textQuestion.description,
         ),
       );
     }

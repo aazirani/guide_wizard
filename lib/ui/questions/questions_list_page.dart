@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
 import '../../constants/colors.dart';
 import 'dart:math' as math;
-import 'text_question.dart';
+import '../../models/question/text_question.dart';
+import 'text_question_widget.dart';
 import 'package:flutter_expanded_tile/flutter_expanded_tile.dart';
 
 class QuestionsListPage extends StatefulWidget {
@@ -24,6 +25,9 @@ class _QuestionsListPageState extends State<QuestionsListPage> {
   }
 
   double _getScreenWidth()=>MediaQuery.of(context).size.width;
+
+
+
 
   Widget _buildFloatingActionButton() {
     return TextButton(
@@ -65,8 +69,18 @@ class _QuestionsListPageState extends State<QuestionsListPage> {
       appBar: _buildAppBar(),
       body: ListView(
         children: [
-          TextQuestion(title: "Title", description: "description description description description description description description", options: ["Option1", "Option2", "Option3"], expanded: true, multiChoice: false),
-          TextQuestion(title: "Title", description: "description description description description description description description", options: [], expanded: true, multiChoice: false),
+          TextQuestionWidget(
+            textQuestion: TextQuestion(
+              title: "Title",
+              description: "description description description description description description description",
+              options: [
+                {"title": "option1", "selected":false},
+                {"title": "option2", "selected":false},
+                {"title": "option3", "selected":false},
+              ],
+                multiChoice: true
+            ),
+            expanded: true),
           SizedBox(height: 80,),
         ],
       ),
