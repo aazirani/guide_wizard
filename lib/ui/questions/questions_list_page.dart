@@ -1,9 +1,10 @@
 import 'package:flutter/material.dart';
 import '../../constants/colors.dart';
 import 'dart:math' as math;
+import '../../models/question/image_questions.dart';
 import '../../models/question/question.dart';
 import '../../models/question/text_question.dart';
-import 'text_question_widget.dart';
+import 'question_widget.dart';
 import 'package:flutter_expanded_tile/flutter_expanded_tile.dart';
 
 class QuestionsListPage extends StatefulWidget {
@@ -16,13 +17,13 @@ class QuestionsListPage extends StatefulWidget {
 class _QuestionsListPageState extends State<QuestionsListPage> {
 
   late bool expanded;
-  late ExpandedTileController _controller;
+  // late ExpandedTileController _controller;
   late List<Question> questions;
 
   @override
   void initState() {
     expanded=true;
-    _controller = ExpandedTileController(isExpanded:true);
+    // _controller = ExpandedTileController(isExpanded:true);
     questions=[
       TextQuestion(
           title: "Question Title",
@@ -32,17 +33,27 @@ class _QuestionsListPageState extends State<QuestionsListPage> {
             {"title": "option2", "selected":false},
             {"title": "option3", "selected":false},
           ],
-          multiChoice: true
+          multiChoice: true,
       ),
       TextQuestion(
-          title: "What is up?!",
+          title: "What is up?",
           description: "description description description description description description description",
           options: [
             {"title": "option1", "selected":false},
             {"title": "option2", "selected":false},
             {"title": "option3", "selected":false},
           ],
-          multiChoice: true
+          multiChoice: true,
+      ),
+      ImageQuestion(
+        title: "Fun Image Question!",
+        description: "description description description description description description description",
+        options: [
+          {"image": Image.asset("assets/icons/ic_appicon.png"), "subtitle":"image subtitle hooray!", "selected":false},
+          {"image": Image.asset("assets/icons/ic_appicon.png"), "subtitle":"image subtitle hooray!", "selected":false},
+          {"image": Image.asset("assets/icons/ic_appicon.png"), "subtitle":"image subtitle hooray!", "selected":false},
+        ],
+        multiChoice: true,
       ),
     ];
     super.initState();
@@ -90,15 +101,10 @@ class _QuestionsListPageState extends State<QuestionsListPage> {
 
   List<Widget> _buildQuestionsWidgetList(){
     List<Widget> questionsWidgets=questions.map<Widget>((question){
-      if(question.runtimeType==TextQuestion) {
-        return TextQuestionWidget(
-          textQuestion: question as TextQuestion,
-          expanded: false,
-        );
-      }
-      else{
-        return SizedBox();
-      }
+      return QuestionWidget(
+        question: question,
+        expanded: false,
+      );
     }
     ).toList();
     questionsWidgets.add(

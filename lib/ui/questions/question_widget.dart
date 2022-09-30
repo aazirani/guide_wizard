@@ -1,23 +1,24 @@
 import 'package:flutter/material.dart';
 import '../../constants/colors.dart';
 import 'dart:math' as math;
+import '../../models/question/question.dart';
 import '../../models/question/text_question.dart';
 
-class TextQuestionWidget extends StatefulWidget {
-  TextQuestion textQuestion;
+class QuestionWidget extends StatefulWidget {
+  Question question;
   bool expanded;
 
-  TextQuestionWidget(
+  QuestionWidget(
       {Key? key,
-      required this.textQuestion,
+      required this.question,
       required this.expanded,})
       : super(key: key);
 
   @override
-  State<TextQuestionWidget> createState() => _TextQuestionWidgetState();
+  State<QuestionWidget> createState() => _QuestionWidgetState();
 }
 
-class _TextQuestionWidgetState extends State<TextQuestionWidget> {
+class _QuestionWidgetState extends State<QuestionWidget> {
   double _getScreenWidth() => MediaQuery.of(context).size.width;
 
   @override
@@ -53,7 +54,7 @@ class _TextQuestionWidgetState extends State<TextQuestionWidget> {
                 width: 15,
               ),
               Text(
-                widget.textQuestion.title,
+                widget.question.title,
                 style: TextStyle(fontSize: 20, fontWeight: FontWeight.w500),
               ),
             ],
@@ -64,9 +65,10 @@ class _TextQuestionWidgetState extends State<TextQuestionWidget> {
       );
     }
 
-    Widget _buildOptionsList(){
+
+    Widget _buildTextOptions(){
       return Column(
-        children: widget.textQuestion.options.map((option) =>
+        children: widget.question.options.map((option) =>
             Container(
               margin: const EdgeInsets.only(left: 15, right: 15, top: 10),
               child: CheckboxListTile(
@@ -78,7 +80,7 @@ class _TextQuestionWidgetState extends State<TextQuestionWidget> {
                 value: option["selected"],
                 onChanged: (value) {
                   setState(() {
-                    widget.textQuestion.options.elementAt(widget.textQuestion.options.indexOf(option))["selected"]=value;
+                    widget.question.options.elementAt(widget.question.options.indexOf(option))["selected"]=value;
                   });
                 },
                 title: Text(option["title"]),
@@ -89,6 +91,63 @@ class _TextQuestionWidgetState extends State<TextQuestionWidget> {
             )
         ).toList(),
       );
+    }
+
+    Widget _buildImageOptions(){
+      return Column(
+        children: widget.question.options.map((option) =>
+          Container(
+            margin: const EdgeInsets.only(left: 15, right: 15, top: 10),
+            child: ListTile(
+              onTap: (){
+                setState(() {
+                  int index=widget.question.options.indexOf(option);
+                  widget.question.options.elementAt(index)["selected"]=!widget.question.options.elementAt(index)["selected"];
+                });
+              },
+              shape: RoundedRectangleBorder(
+                side: BorderSide(color: option["selected"] ? Colors.black:Colors.transparent, width: 2),
+                borderRadius: BorderRadius.circular(5),
+              ),
+              // checkboxShape: CircleBorder(),
+              title: Column(
+                children: [
+                  option["image"],
+                  Row(
+                    children: [
+                      Checkbox(
+                        value: widget.question.options.elementAt(widget.question.options.indexOf(option))["selected"],
+                        onChanged: (value){
+                          setState(() {
+                            int index=widget.question.options.indexOf(option);
+                            widget.question.options.elementAt(index)["selected"]=value;
+                          });
+                        },
+                        checkColor: Colors.white,
+                        activeColor: Colors.black87,
+                        shape: CircleBorder(),
+                      ),
+                      Text(option["subtitle"]),
+                    ],
+                  ),
+                ],
+              ),
+              // controlAffinity: ListTileControlAffinity.trailing,
+              tileColor: AppColors.grey,
+              // activeColor: Colors.black,
+            ),
+          )
+        ).toList(),
+      );
+    }
+
+    Widget _buildOptions(){
+      if(widget.question.runtimeType==TextQuestion){
+        return _buildTextOptions();
+      }
+      else{
+        return _buildImageOptions();
+      }
     }
 
     Widget _buildNextQuestionButton() {
@@ -114,7 +173,7 @@ class _TextQuestionWidgetState extends State<TextQuestionWidget> {
       return Container(
         margin: const EdgeInsets.only(left: 10, right: 10, bottom: 10),
         child: Text(
-          widget.textQuestion.description,
+          widget.question.description,
         ),
       );
     }
@@ -136,7 +195,7 @@ class _TextQuestionWidgetState extends State<TextQuestionWidget> {
 
           children: <Widget>[
             _buildDescription(),
-            _buildOptionsList(),
+            _buildOptions(),
             _buildNextQuestionButton(),
           ],
         ),
