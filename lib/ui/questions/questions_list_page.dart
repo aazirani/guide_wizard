@@ -5,7 +5,6 @@ import '../../models/question/image_questions.dart';
 import '../../models/question/question.dart';
 import '../../models/question/text_question.dart';
 import 'question_widget.dart';
-import 'package:flutter_expanded_tile/flutter_expanded_tile.dart';
 
 class QuestionsListPage extends StatefulWidget {
   const QuestionsListPage({Key? key}) : super(key: key);
@@ -46,14 +45,32 @@ class _QuestionsListPageState extends State<QuestionsListPage> {
           multiChoice: true,
       ),
       ImageQuestion(
-        title: "Fun Image Question!",
+        title: "Image with subtitle",
         description: "description description description description description description description",
         options: [
-          {"image": Image.asset("assets/icons/ic_appicon.png"), "subtitle":"image subtitle hooray!", "selected":false},
-          {"image": Image.asset("assets/icons/ic_appicon.png"), "subtitle":"image subtitle hooray!", "selected":false},
-          {"image": Image.asset("assets/icons/ic_appicon.png"), "subtitle":"image subtitle hooray!", "selected":false},
+          {"image": Image.asset("assets/images/test_image.jpg"), "subtitle":"image subtitle!", "selected":false},
+          {"image": Image.asset("assets/images/test_image.jpg"), "subtitle":"image subtitle!", "selected":false},
+          {"image": Image.asset("assets/images/test_image.jpg"), "subtitle":"image subtitle!", "selected":false},
+          {"image": Image.asset("assets/images/test_image.jpg"), "subtitle":"image subtitle!", "selected":false},
         ],
         multiChoice: true,
+        columns: 2,
+        // height: 150,
+        // width: 150,
+      ),
+      ImageQuestion(
+        title: "Image without subtitle!",
+        description: "description description description description description description description",
+        options: [
+          {"image": Image.asset("assets/images/test_image.jpg"), "selected":false},
+          {"image": Image.asset("assets/images/test_image.jpg"), "selected":false},
+          {"image": Image.asset("assets/images/test_image.jpg"), "selected":false},
+          {"image": Image.asset("assets/images/test_image.jpg"), "selected":false},
+        ],
+        multiChoice: true,
+        columns: 2,
+        // height: 150,
+        // width: 150,
       ),
     ];
     super.initState();
@@ -64,7 +81,7 @@ class _QuestionsListPageState extends State<QuestionsListPage> {
 
 
 
-  Widget _buildFloatingActionButton() {
+  Widget _buildNextStageButton() {
     return TextButton(
       style: ButtonStyle(
         minimumSize: MaterialStateProperty.all(Size(math.max(_getScreenWidth()-26, 0),55)),
@@ -107,8 +124,10 @@ class _QuestionsListPageState extends State<QuestionsListPage> {
       );
     }
     ).toList();
-    questionsWidgets.add(
-      SizedBox(height: 80,)
+    questionsWidgets.addAll(
+      [
+        SizedBox(height: 80,),
+      ]
     );
 
     return questionsWidgets;
@@ -121,8 +140,8 @@ class _QuestionsListPageState extends State<QuestionsListPage> {
       body: ListView(
         children: _buildQuestionsWidgetList(),
       ),
-      floatingActionButton: _buildFloatingActionButton(),
-      floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
+      // floatingActionButton: _buildNextStageButton(),
+      // floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
     );
   }
 }

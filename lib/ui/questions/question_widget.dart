@@ -1,3 +1,4 @@
+import 'package:boilerplate/models/question/image_questions.dart';
 import 'package:flutter/material.dart';
 import '../../constants/colors.dart';
 import 'dart:math' as math;
@@ -11,7 +12,8 @@ class QuestionWidget extends StatefulWidget {
   QuestionWidget(
       {Key? key,
       required this.question,
-      required this.expanded,})
+      required this.expanded,
+      })
       : super(key: key);
 
   @override
@@ -93,51 +95,100 @@ class _QuestionWidgetState extends State<QuestionWidget> {
       );
     }
 
-    Widget _buildImageOptions(){
-      return Column(
-        children: widget.question.options.map((option) =>
-          Container(
-            margin: const EdgeInsets.only(left: 15, right: 15, top: 10),
-            child: ListTile(
-              onTap: (){
-                setState(() {
-                  int index=widget.question.options.indexOf(option);
-                  widget.question.options.elementAt(index)["selected"]=!widget.question.options.elementAt(index)["selected"];
-                });
-              },
-              shape: RoundedRectangleBorder(
-                side: BorderSide(color: option["selected"] ? Colors.black:Colors.transparent, width: 2),
-                borderRadius: BorderRadius.circular(5),
-              ),
-              // checkboxShape: CircleBorder(),
-              title: Column(
-                children: [
-                  option["image"],
-                  Row(
-                    children: [
-                      Checkbox(
-                        value: widget.question.options.elementAt(widget.question.options.indexOf(option))["selected"],
-                        onChanged: (value){
-                          setState(() {
-                            int index=widget.question.options.indexOf(option);
-                            widget.question.options.elementAt(index)["selected"]=value;
-                          });
-                        },
-                        checkColor: Colors.white,
-                        activeColor: Colors.black87,
-                        shape: CircleBorder(),
-                      ),
-                      Text(option["subtitle"]),
-                    ],
+    Widget _buildImageOptionSubtitle(int index){
+      if(widget.question.options.elementAt(index)["subtitle"]!=null){
+        return Padding(
+          padding: const EdgeInsets.only(top: 5),
+          child: Row(
+            children: [
+              Transform.scale(
+                child: SizedBox(
+                  child: Checkbox(
+                    value: widget.question.options.elementAt(index)["selected"],
+                    onChanged: (value){
+                      setState(() {
+                        widget.question.options.elementAt(index)["selected"]=value;
+                      });
+                    },
+                    checkColor: Colors.white,
+                    activeColor: Colors.black87,
+                    shape: CircleBorder(),
                   ),
-                ],
+                  height: 30,
+                  width: 30,
+                ),
+                scale: 0.8,
               ),
-              // controlAffinity: ListTileControlAffinity.trailing,
-              tileColor: AppColors.grey,
-              // activeColor: Colors.black,
+              Flexible(
+                  child: Text(
+                    widget.question.options.elementAt(index)["subtitle"],
+                    style: TextStyle(
+                      fontSize: 13,
+                    ),
+                  ),
+              ),
+            ],
+          ),
+        );
+      }
+      else{
+        return SizedBox();
+      }
+    }
+
+
+    Widget _buildSingleImageOption(int index){
+      ImageQuestion imageQuestion=widget.question as ImageQuestion;
+      return Flexible(
+        child: Container(
+        margin: const EdgeInsets.all(8),
+        height: imageQuestion.height,
+          width: imageQuestion.width,
+          child: ListTile(
+            onTap: (){
+              setState(() {
+                imageQuestion.options.elementAt(index)["selected"]=!imageQuestion.options.elementAt(index)["selected"];
+              });
+            },
+            shape: RoundedRectangleBorder(
+              side: BorderSide(color: imageQuestion.options.elementAt(index)["selected"] ? Colors.black:Colors.transparent, width: 2),
+              borderRadius: BorderRadius.circular(5),
             ),
-          )
-        ).toList(),
+            // checkboxShape: CircleBorder(),
+            title: Column(
+              children: [
+                imageQuestion.options.elementAt(index)["image"],
+                _buildImageOptionSubtitle(index),
+              ],
+            ),
+            // controlAffinity: ListTileControlAffinity.trailing,
+            tileColor: AppColors.grey,
+            // activeColor: Colors.black,
+          ),
+        ),
+      );
+    }
+
+    Widget _buildAImageOptionsRow(int begin, int end){
+      return Padding(
+        padding: const EdgeInsets.symmetric(horizontal: 10),
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            for(int index=begin; index<end; index++)
+              _buildSingleImageOption(index),
+          ],
+        ),
+      );
+    }
+
+    Widget _buildImageOptions(){
+      ImageQuestion imageQuestion=widget.question as ImageQuestion;
+      return Column(
+        children: [
+          for(int begin=0; begin<=imageQuestion.options.length-imageQuestion.columns+1; begin+=imageQuestion.columns)
+            _buildAImageOptionsRow(begin, math.min(begin+imageQuestion.columns, imageQuestion.options.length)),
+        ],
       );
     }
 
@@ -152,7 +203,7 @@ class _QuestionWidgetState extends State<QuestionWidget> {
 
     Widget _buildNextQuestionButton() {
       return Padding(
-        padding: const EdgeInsets.symmetric(vertical: 20),
+        padding: const EdgeInsets.only(bottom: 20, top: 15),
         child: TextButton(
           style: ButtonStyle(
             minimumSize: MaterialStateProperty.all(Size(math.max(_getScreenWidth()-26, 0),55)),
