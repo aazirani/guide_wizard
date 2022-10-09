@@ -138,7 +138,7 @@ class _QuestionWidgetState extends State<QuestionWidget> {
 
 
     Widget _buildImageCheckBox(int index){
-      if(widget.question.options.elementAt(index)["subtitle"]==null && widget.question.options.elementAt(index)["selected"]==true)
+      if(widget.question.options.elementAt(index)["subtitle"]==null)
         return Checkbox(
           value: widget.question.options.elementAt(index)["selected"],
           onChanged: (value){
@@ -149,6 +149,7 @@ class _QuestionWidgetState extends State<QuestionWidget> {
           checkColor: Colors.white,
           activeColor: Colors.black87,
           shape: CircleBorder(),
+          side: BorderSide(color: Colors.transparent),
         );
       return SizedBox();
     }

@@ -18,6 +18,7 @@ class _QuestionsListPageState extends State<QuestionsListPage> {
   late bool expanded;
   // late ExpandedTileController _controller;
   late List<Question> questions;
+  final itemKey=GlobalKey();
 
   @override
   void initState() {
@@ -116,11 +117,18 @@ class _QuestionsListPageState extends State<QuestionsListPage> {
   }
 
 
+  Future scrollToItem() async{
+    await Scrollable.ensureVisible(context);
+  }
+
   List<Widget> _buildQuestionsWidgetList(){
     List<Widget> questionsWidgets=questions.map<Widget>((question){
-      return QuestionWidget(
-        question: question,
-        expanded: false,
+      return Container(
+        // key: itemKey,
+        child: QuestionWidget(
+          question: question,
+          expanded: false,
+        ),
       );
     }
     ).toList();
