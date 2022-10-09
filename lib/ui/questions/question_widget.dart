@@ -137,39 +137,62 @@ class _QuestionWidgetState extends State<QuestionWidget> {
     }
 
 
+    Widget _buildImageCheckBox(int index){
+      if(widget.question.options.elementAt(index)["subtitle"]==null && widget.question.options.elementAt(index)["selected"]==true)
+        return Checkbox(
+          value: widget.question.options.elementAt(index)["selected"],
+          onChanged: (value){
+            setState(() {
+              widget.question.options.elementAt(index)["selected"]=value;
+            });
+          },
+          checkColor: Colors.white,
+          activeColor: Colors.black87,
+          shape: CircleBorder(),
+        );
+      return SizedBox();
+    }
+
     Widget _buildSingleImageOption(int index){
       ImageQuestion imageQuestion=widget.question as ImageQuestion;
       return Flexible(
-        child: Container(
-        margin: const EdgeInsets.all(8),
-        height: imageQuestion.height,
-          width: imageQuestion.width,
-          child: ListTile(
-            onTap: (){
-              setState(() {
-                imageQuestion.options.elementAt(index)["selected"]=!imageQuestion.options.elementAt(index)["selected"];
-              });
-            },
-            shape: RoundedRectangleBorder(
-              side: BorderSide(color: imageQuestion.options.elementAt(index)["selected"] ? Colors.black:Colors.transparent, width: 2),
-              borderRadius: BorderRadius.circular(5),
+        child: Stack(
+          alignment: AlignmentDirectional.topEnd,
+          children: [
+            Container(
+            margin: const EdgeInsets.all(8),
+            height: imageQuestion.height,
+              width: imageQuestion.width,
+              child: ListTile(
+                onTap: (){
+                  setState(() {
+                    imageQuestion.options.elementAt(index)["selected"]=!imageQuestion.options.elementAt(index)["selected"];
+                  });
+                },
+                shape: RoundedRectangleBorder(
+                  side: BorderSide(color: imageQuestion.options.elementAt(index)["selected"] ? Colors.black:Colors.transparent, width: 2),
+                  borderRadius: BorderRadius.circular(5),
+                ),
+                // checkboxShape: CircleBorder(),
+                title: Column(
+                  children: [
+                    imageQuestion.options.elementAt(index)["image"],
+                    _buildImageOptionSubtitle(index),
+                  ],
+                ),
+                // controlAffinity: ListTileControlAffinity.trailing,
+                tileColor: AppColors.grey,
+                // activeColor: Colors.black,
+              ),
             ),
-            // checkboxShape: CircleBorder(),
-            title: Column(
-              children: [
-                imageQuestion.options.elementAt(index)["image"],
-                _buildImageOptionSubtitle(index),
-              ],
-            ),
-            // controlAffinity: ListTileControlAffinity.trailing,
-            tileColor: AppColors.grey,
-            // activeColor: Colors.black,
-          ),
+            _buildImageCheckBox(index),
+          ],
         ),
       );
     }
 
     Widget _buildAImageOptionsRow(int begin, int end){
+      print("Row is from " + begin.toString() + " to " + end.toString());
       return Padding(
         padding: const EdgeInsets.symmetric(horizontal: 10),
         child: Row(
@@ -185,9 +208,10 @@ class _QuestionWidgetState extends State<QuestionWidget> {
     Widget _buildImageOptions(){
       ImageQuestion imageQuestion=widget.question as ImageQuestion;
       return Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          for(int begin=0; begin<=imageQuestion.options.length-imageQuestion.columns+1; begin+=imageQuestion.columns)
-            _buildAImageOptionsRow(begin, math.min(begin+imageQuestion.columns, imageQuestion.options.length)),
+          for(int row=0; row<=imageQuestion.options.length/imageQuestion.columns; row++)
+            _buildAImageOptionsRow(row*imageQuestion.columns, math.min((row+1)*imageQuestion.columns, imageQuestion.options.length)),
         ],
       );
     }
