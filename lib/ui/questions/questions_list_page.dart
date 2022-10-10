@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:scrollable_positioned_list/scrollable_positioned_list.dart';
 import '../../constants/colors.dart';
 import 'dart:math' as math;
 import '../../models/question/image_questions.dart';
@@ -14,11 +15,12 @@ class QuestionsListPage extends StatefulWidget {
 }
 
 class _QuestionsListPageState extends State<QuestionsListPage> {
+  double _getScreenHeight() => MediaQuery.of(context).size.height;
 
   late bool expanded;
   // late ExpandedTileController _controller;
   late List<Question> questions;
-  final itemKey=GlobalKey();
+  final itemScrollController = ItemScrollController();
 
   @override
   void initState() {
@@ -82,21 +84,7 @@ class _QuestionsListPageState extends State<QuestionsListPage> {
 
 
 
-  Widget _buildNextStageButton() {
-    return TextButton(
-      style: ButtonStyle(
-        minimumSize: MaterialStateProperty.all(Size(math.max(_getScreenWidth()-26, 0),55)),
-        backgroundColor: MaterialStateProperty.all<Color>(Colors.green.shade600.withOpacity(1)),
-        shape: MaterialStateProperty.all<RoundedRectangleBorder>(
-          RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(5.0),
-          ),
-        ),
-      ),
-      onPressed: () {  },
-      child: Text("Next Stage", style: TextStyle(color: Colors.white, fontSize: 15),),
-    );
-  }
+
 
   PreferredSizeWidget? _buildAppBar() {
     return AppBar(
@@ -117,36 +105,44 @@ class _QuestionsListPageState extends State<QuestionsListPage> {
   }
 
 
-  Future scrollToItem() async{
-    await Scrollable.ensureVisible(context);
-  }
+  // List<Widget> _buildQuestionsWidgetList(){
+  //   List<Widget> questionsWidgets=questions.map<Widget>((question){
+  //     return Container(
+  //       // key: itemKey,
+  //       child: QuestionWidget(
+  //         question: question,
+  //         expanded: false,
+  //       ),
+  //     );
+  //   }
+  //   ).toList();
+  //   questionsWidgets.addAll(
+  //     [
+  //       SizedBox(height: 80,),
+  //     ]
+  //   );
+  //
+  //   return questionsWidgets;
+  // }
 
-  List<Widget> _buildQuestionsWidgetList(){
-    List<Widget> questionsWidgets=questions.map<Widget>((question){
-      return Container(
-        // key: itemKey,
-        child: QuestionWidget(
-          question: question,
-          expanded: false,
-        ),
-      );
-    }
-    ).toList();
-    questionsWidgets.addAll(
-      [
-        SizedBox(height: 80,),
-      ]
+  Widget _buildQuestionWidget(int index){
+    return QuestionWidget(
+      index: index,
+      itemScrollController: itemScrollController,
+      question: questions[index],
+      expanded: false,
+      isLastQuestion: index==questions.length-1
     );
-
-    return questionsWidgets;
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: _buildAppBar(),
-      body: ListView(
-        children: _buildQuestionsWidgetList(),
+      body: ScrollablePositionedList.builder(
+        itemCount: questions.length,
+        itemBuilder: (context, index) => _buildQuestionWidget(index),
+        itemScrollController: itemScrollController,
       ),
       // floatingActionButton: _buildNextStageButton(),
       // floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,

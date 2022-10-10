@@ -1,5 +1,6 @@
 import 'package:boilerplate/models/question/image_questions.dart';
 import 'package:flutter/material.dart';
+import 'package:scrollable_positioned_list/scrollable_positioned_list.dart';
 import '../../constants/colors.dart';
 import 'dart:math' as math;
 import '../../models/question/question.dart';
@@ -7,12 +8,17 @@ import '../../models/question/text_question.dart';
 
 class QuestionWidget extends StatefulWidget {
   Question question;
-  bool expanded;
+  bool expanded, isLastQuestion;
+  int index;
+  ItemScrollController itemScrollController;
 
   QuestionWidget(
       {Key? key,
+      required this.index,
+      required this.itemScrollController,
       required this.question,
       required this.expanded,
+      required this.isLastQuestion,
       })
       : super(key: key);
 
@@ -23,8 +29,35 @@ class QuestionWidget extends StatefulWidget {
 class _QuestionWidgetState extends State<QuestionWidget> {
   double _getScreenWidth() => MediaQuery.of(context).size.width;
 
+  Future scrollToItem(int index) async{
+    widget.itemScrollController.scrollTo(
+      index: index,
+      duration: Duration(milliseconds: 700),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
+
+    Widget _buildNextStageButton() {
+      return Padding(
+        padding: const EdgeInsets.only(bottom: 20, top: 15),
+        child: TextButton(
+          style: ButtonStyle(
+            minimumSize: MaterialStateProperty.all(Size(math.max(_getScreenWidth()-26, 0),55)),
+            backgroundColor: MaterialStateProperty.all<Color>(Colors.green.shade600),
+            shape: MaterialStateProperty.all<RoundedRectangleBorder>(
+              RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(5.0),
+              ),
+            ),
+          ),
+          onPressed: () {  },
+          child: Text("Next Stage", style: TextStyle(color: Colors.white, fontSize: 15),),
+        ),
+      );
+    }
+
     Widget _buildHelpButton() {
       return Container(
         child: Material(
@@ -193,7 +226,6 @@ class _QuestionWidgetState extends State<QuestionWidget> {
     }
 
     Widget _buildAImageOptionsRow(int begin, int end){
-      print("Row is from " + begin.toString() + " to " + end.toString());
       return Padding(
         padding: const EdgeInsets.symmetric(horizontal: 10),
         child: Row(
@@ -239,7 +271,9 @@ class _QuestionWidgetState extends State<QuestionWidget> {
               ),
             ),
           ),
-          onPressed: () {  },
+          onPressed: () {
+            scrollToItem(widget.index+1);
+          },
           child: Text("Next Question", style: TextStyle(color: Colors.white, fontSize: 15),),
         ),
       );
@@ -272,7 +306,7 @@ class _QuestionWidgetState extends State<QuestionWidget> {
           children: <Widget>[
             _buildDescription(),
             _buildOptions(),
-            _buildNextQuestionButton(),
+            widget.isLastQuestion ? _buildNextStageButton():_buildNextQuestionButton(),
           ],
         ),
       ),
