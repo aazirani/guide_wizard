@@ -214,7 +214,6 @@ class _QuestionWidgetState extends State<QuestionWidget> {
                     _buildImageOptionSubtitle(index),
                   ],
                 ),
-                // controlAffinity: ListTileControlAffinity.trailing,
                 tileColor: AppColors.grey,
                 // activeColor: Colors.black,
               ),
