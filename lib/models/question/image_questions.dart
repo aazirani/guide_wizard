@@ -11,7 +11,7 @@ class ImageQuestion implements Question{
     required this.description,
     required this.options,
     required this.multiChoice,
-    this.columns=2,
+    this.columns = 2,
     this.height,
     this.width,
   });
