@@ -271,7 +271,7 @@ class _QuestionWidgetState extends State<QuestionWidget> {
             ),
           ),
           onPressed: () {
-            scrollToItem(widget.index+1);
+            scrollToItem(widget.index + 1);
           },
           child: Text("Next Question", style: TextStyle(color: Colors.white, fontSize: 15),),
         ),
