@@ -230,7 +230,7 @@ class _QuestionWidgetState extends State<QuestionWidget> {
         child: Row(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            for(int index=begin; index<end; index++)
+            for(int index = begin; index < end; index++)
               _buildSingleImageOption(index),
           ],
         ),
