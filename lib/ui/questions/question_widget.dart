@@ -200,7 +200,7 @@ class _QuestionWidgetState extends State<QuestionWidget> {
               child: ListTile(
                 onTap: (){
                   setState(() {
-                    imageQuestion.options.elementAt(index)["selected"]=!imageQuestion.options.elementAt(index)["selected"];
+                    imageQuestion.options.elementAt(index)["selected"] = !imageQuestion.options.elementAt(index)["selected"];
                   });
                 },
                 shape: RoundedRectangleBorder(
