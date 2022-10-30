@@ -3,7 +3,7 @@ import 'package:boilerplate/models/question/question.dart';
 class ImageQuestion implements Question{
   String title, description;
   List<Map<String, dynamic>> options;
-  bool multiChoice, isAnswered=false;
+  bool multiChoice, isAnswered = false;
   late int columns;
   double? height, width;
   ImageQuestion({
