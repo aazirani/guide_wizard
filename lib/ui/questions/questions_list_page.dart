@@ -81,11 +81,6 @@ class _QuestionsListPageState extends State<QuestionsListPage> {
 
   double _getScreenWidth()=>MediaQuery.of(context).size.width;
 
-
-
-
-
-
   PreferredSizeWidget? _buildAppBar() {
     return AppBar(
       backgroundColor: AppColors.hannover_blue,
