@@ -249,7 +249,7 @@ class _QuestionWidgetState extends State<QuestionWidget> {
     }
 
     Widget _buildOptions(){
-      if(widget.question.runtimeType==TextQuestion){
+      if(widget.question.runtimeType == TextQuestion){
         return _buildTextOptions();
       }
       else{
