@@ -238,7 +238,7 @@ class _QuestionWidgetState extends State<QuestionWidget> {
     }
 
     Widget _buildImageOptions(){
-      ImageQuestion imageQuestion=widget.question as ImageQuestion;
+      ImageQuestion imageQuestion = widget.question as ImageQuestion;
       return Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
