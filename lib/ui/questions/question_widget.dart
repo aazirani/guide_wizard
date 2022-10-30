@@ -204,7 +204,7 @@ class _QuestionWidgetState extends State<QuestionWidget> {
                   });
                 },
                 shape: RoundedRectangleBorder(
-                  side: BorderSide(color: imageQuestion.options.elementAt(index)["selected"] ? Colors.black:Colors.transparent, width: 2),
+                  side: BorderSide(color: imageQuestion.options.elementAt(index)["selected"] ? Colors.black : Colors.transparent, width: 2),
                   borderRadius: BorderRadius.circular(5),
                 ),
                 // checkboxShape: CircleBorder(),
