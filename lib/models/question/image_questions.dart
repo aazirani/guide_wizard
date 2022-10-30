@@ -17,6 +17,6 @@ class ImageQuestion implements Question{
   });
 
   void answer(){
-    isAnswered=true;
+    isAnswered = true;
   }
 }
