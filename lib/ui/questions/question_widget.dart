@@ -242,7 +242,7 @@ class _QuestionWidgetState extends State<QuestionWidget> {
       return Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          for(int row=0; row<=imageQuestion.options.length/imageQuestion.columns; row++)
+          for(int row = 0; row <= imageQuestion.options.length / imageQuestion.columns; row++)
             _buildAImageOptionsRow(row*imageQuestion.columns, math.min((row+1)*imageQuestion.columns, imageQuestion.options.length)),
         ],
       );
