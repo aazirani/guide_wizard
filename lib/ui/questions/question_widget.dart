@@ -1,10 +1,11 @@
 import 'package:boilerplate/models/question/image_questions.dart';
 import 'package:flutter/material.dart';
 import 'package:scrollable_positioned_list/scrollable_positioned_list.dart';
-import '../../constants/colors.dart';
+import 'package:boilerplate/constants/colors.dart';
 import 'dart:math' as math;
-import '../../models/question/question.dart';
-import '../../models/question/text_question.dart';
+import 'package:boilerplate/models/question/question.dart';
+import 'package:boilerplate/models/question/text_question.dart';
+import 'package:boilerplate/constants/dimens.dart';
 
 class QuestionWidget extends StatefulWidget {
   Question question;
@@ -39,19 +40,23 @@ class _QuestionWidgetState extends State<QuestionWidget> {
   @override
   Widget build(BuildContext context) {
 
+    ButtonStyle _buildQuestionsButtonStyle(Color color){
+      return ButtonStyle(
+        minimumSize: MaterialStateProperty.all(Size(math.max(_getScreenWidth()-26, 0),55)),
+        backgroundColor: MaterialStateProperty.all<Color>(color),
+        shape: MaterialStateProperty.all<RoundedRectangleBorder>(
+          RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(5.0),
+          ),
+        ),
+      );
+    }
+
     Widget _buildNextStageButton() {
       return Padding(
-        padding: const EdgeInsets.only(bottom: 20, top: 15),
+        padding: Dimens.questionButtonPadding,
         child: TextButton(
-          style: ButtonStyle(
-            minimumSize: MaterialStateProperty.all(Size(math.max(_getScreenWidth()-26, 0),55)),
-            backgroundColor: MaterialStateProperty.all<Color>(Colors.green.shade600),
-            shape: MaterialStateProperty.all<RoundedRectangleBorder>(
-              RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(5.0),
-              ),
-            ),
-          ),
+          style: _buildQuestionsButtonStyle(Colors.green.shade600),
           onPressed: () {  },
           child: Text("Next Stage", style: TextStyle(color: Colors.white, fontSize: 15),),
         ),
@@ -74,7 +79,7 @@ class _QuestionWidgetState extends State<QuestionWidget> {
           color: Colors.transparent,
         ),
         decoration: BoxDecoration(
-            color: AppColors.hannover_blue,
+            color: AppColors.main_color,
             borderRadius: BorderRadius.all(Radius.circular(5))),
       );
     }
@@ -215,7 +220,6 @@ class _QuestionWidgetState extends State<QuestionWidget> {
                   ],
                 ),
                 tileColor: AppColors.grey,
-                // activeColor: Colors.black,
               ),
             ),
             _buildImageCheckBox(index),
@@ -249,27 +253,22 @@ class _QuestionWidgetState extends State<QuestionWidget> {
     }
 
     Widget _buildOptions(){
-      if(widget.question.runtimeType==TextQuestion){
-        return _buildTextOptions();
-      }
-      else{
-        return _buildImageOptions();
+      switch(widget.question.runtimeType){
+        case TextQuestion:
+          return _buildTextOptions();
+        case ImageQuestion:
+          return _buildImageOptions();
+        default:
+          return SizedBox();
       }
     }
 
+
     Widget _buildNextQuestionButton() {
       return Padding(
-        padding: const EdgeInsets.only(bottom: 20, top: 15),
+        padding: Dimens.questionButtonPadding,
         child: TextButton(
-          style: ButtonStyle(
-            minimumSize: MaterialStateProperty.all(Size(math.max(_getScreenWidth()-26, 0),55)),
-            backgroundColor: MaterialStateProperty.all<Color>(AppColors.hannover_blue),
-            shape: MaterialStateProperty.all<RoundedRectangleBorder>(
-              RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(5.0),
-              ),
-            ),
-          ),
+          style: _buildQuestionsButtonStyle(AppColors.main_color),
           onPressed: () {
             scrollToItem(widget.index+1);
           },
@@ -280,7 +279,7 @@ class _QuestionWidgetState extends State<QuestionWidget> {
 
     Widget _buildDescription(){
       return Container(
-        margin: const EdgeInsets.only(left: 10, right: 10, bottom: 10),
+        margin: Dimens.questionDescriptionPadding,
         child: Text(
           widget.question.description,
         ),
@@ -289,17 +288,16 @@ class _QuestionWidgetState extends State<QuestionWidget> {
 
     return Card(
       child: ListTileTheme(
-        contentPadding: EdgeInsets.symmetric(horizontal: 10, vertical: 5),
+        contentPadding: Dimens.listTilePadding,
         dense: false,
         horizontalTitleGap: 0.0,
         minLeadingWidth: 0,
         child: ExpansionTile(
-          tilePadding: EdgeInsets.symmetric(horizontal: 10, vertical: 5),
-          textColor: AppColors.hannover_blue,
-          iconColor: AppColors.hannover_blue,
+          tilePadding: Dimens.listTilePadding,
+          textColor: AppColors.main_color,
+          iconColor: AppColors.main_color,
           initiallyExpanded: widget.expanded,
           title: _buildTitle(),
-          // subtitle: Text('Trailing expansion arrow icon'),
           controlAffinity: ListTileControlAffinity.leading,
 
           children: <Widget>[

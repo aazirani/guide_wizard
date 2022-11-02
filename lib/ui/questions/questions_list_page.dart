@@ -1,10 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:scrollable_positioned_list/scrollable_positioned_list.dart';
-import '../../constants/colors.dart';
+import 'package:boilerplate/constants/colors.dart';
 import 'dart:math' as math;
-import '../../models/question/image_questions.dart';
-import '../../models/question/question.dart';
-import '../../models/question/text_question.dart';
+import 'package:boilerplate/models/question/image_questions.dart';
+import 'package:boilerplate/models/question/question.dart';
+import 'package:boilerplate/models/question/text_question.dart';
+import 'package:boilerplate/constants/dimens.dart';
 import 'question_widget.dart';
 
 class QuestionsListPage extends StatefulWidget {
@@ -88,16 +89,16 @@ class _QuestionsListPageState extends State<QuestionsListPage> {
 
   PreferredSizeWidget? _buildAppBar() {
     return AppBar(
-      backgroundColor: AppColors.hannover_blue,
-      toolbarHeight: 70,
-      titleSpacing: 5,
+      backgroundColor: AppColors.main_color,
+      toolbarHeight: Dimens.appBar["toolbarHeight"],
+      titleSpacing: Dimens.appBar["titleSpacing"],
       title: Row(
         mainAxisAlignment: MainAxisAlignment.start,
         children: [
           Image.asset(
-            'assets/icons/honnover_uni_logo.png',
+            'assets/icons/appbar_logo.png',
             fit: BoxFit.cover,
-            height: 60,
+            height: Dimens.appBar["logoHeight"],
           ),
         ],
       ),
@@ -126,6 +127,9 @@ class _QuestionsListPageState extends State<QuestionsListPage> {
   // }
 
   Widget _buildQuestionWidget(int index){
+    if(index==questions.length){
+      return SizedBox(height: _getScreenHeight(),);
+    }
     return QuestionWidget(
       index: index,
       itemScrollController: itemScrollController,
@@ -140,7 +144,7 @@ class _QuestionsListPageState extends State<QuestionsListPage> {
     return Scaffold(
       appBar: _buildAppBar(),
       body: ScrollablePositionedList.builder(
-        itemCount: questions.length,
+        itemCount: questions.length+1,
         itemBuilder: (context, index) => _buildQuestionWidget(index),
         itemScrollController: itemScrollController,
       ),
