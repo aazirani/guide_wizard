@@ -1,4 +1,5 @@
 import 'package:boilerplate/models/question/image_questions.dart';
+import 'package:boilerplate/utils/locale/app_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:scrollable_positioned_list/scrollable_positioned_list.dart';
 import 'package:boilerplate/constants/colors.dart';
@@ -42,7 +43,7 @@ class _QuestionWidgetState extends State<QuestionWidget> {
 
     ButtonStyle _buildQuestionsButtonStyle(Color color){
       return ButtonStyle(
-        minimumSize: MaterialStateProperty.all(Size(math.max(_getScreenWidth()-26, 0),55)),
+        minimumSize: MaterialStateProperty.all(Size(math.max(_getScreenWidth()-Dimens.buildQuestionsButtonStyle["pixels_smaller_than_screen_width"]!, 0),Dimens.buildQuestionsButtonStyle["height"]!)),
         backgroundColor: MaterialStateProperty.all<Color>(color),
         shape: MaterialStateProperty.all<RoundedRectangleBorder>(
           RoundedRectangleBorder(
@@ -58,7 +59,10 @@ class _QuestionWidgetState extends State<QuestionWidget> {
         child: TextButton(
           style: _buildQuestionsButtonStyle(Colors.green.shade600),
           onPressed: () {  },
-          child: Text("Next Stage", style: TextStyle(color: Colors.white, fontSize: 15),),
+          child: Text(
+              AppLocalizations.of(context).translate('next_stage_button_text'),
+            style: TextStyle(color: Colors.white, fontSize: 15),
+          ),
         ),
       );
     }
@@ -272,7 +276,10 @@ class _QuestionWidgetState extends State<QuestionWidget> {
           onPressed: () {
             scrollToItem(widget.index+1);
           },
-          child: Text("Next Question", style: TextStyle(color: Colors.white, fontSize: 15),),
+          child: Text(
+            AppLocalizations.of(context).translate('next_question_button_text'),
+            style: TextStyle(color: Colors.white, fontSize: 15),
+          ),
         ),
       );
     }
