@@ -13,6 +13,6 @@ class TextQuestion implements Question{
   });
 
   void answer(){
-    isAnswered=true;
+    isAnswered = true;
   }
 }
