@@ -15,4 +15,7 @@ class AppColors {
     800: const Color(0xFFDB7424),
     900: const Color(0xFFD56217)
   };
+
+  static const Color main_color = const Color.fromRGBO(0, 81, 158, 1);
+  static const Color grey = const Color.fromRGBO(231, 231, 231, 1);
 }
