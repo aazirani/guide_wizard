@@ -39,6 +39,7 @@ class _BlockPageWithImageState extends State<BlockPageWithImage> {
           TextButton(
               onPressed: (){},
               style: ButtonStyle(
+                  overlayColor: MaterialStateProperty.all<Color>(Colors.white10),
                   shape: MaterialStateProperty.all<RoundedRectangleBorder>(
                       RoundedRectangleBorder(
                           borderRadius: BorderRadius.circular(10.0),
@@ -60,7 +61,7 @@ class _BlockPageWithImageState extends State<BlockPageWithImage> {
                     Icon(Icons.done_rounded, color: Colors.white),
                   ],
                 ),
-              )
+              ),
           ),
           SizedBox(width: 15,),
         ],
