@@ -16,15 +16,53 @@ class _BlockPageWithImageState extends State<BlockPageWithImage> {
     return AppBar(
       backgroundColor: AppColors.main_color,
       toolbarHeight: Dimens.appBar["toolbarHeight"],
-      titleSpacing: Dimens.appBar["titleSpacing"],
+      titleSpacing: 0,
+      actions: [
+        // TextButton.icon(
+        //   onPressed: (){}, icon: Icon(Icons.done_rounded, color: Colors.white,), label: Text("Done"),
+        // ),
+
+      ],
+      leading: IconButton(
+          onPressed: (){}, icon: Icon(Icons.arrow_back_ios_new_rounded, color: Colors.white,),
+      ),
       title: Row(
-        mainAxisAlignment: MainAxisAlignment.start,
         children: [
-          Image.asset(
-            'assets/icons/appbar_logo.png',
-            fit: BoxFit.cover,
-            height: Dimens.appBar["logoHeight"],
+          Text(
+            "Private Housing",
+            style: TextStyle(
+              color: Colors.white,
+              fontSize: 22,
+            ),
           ),
+          Spacer(),
+          TextButton(
+              onPressed: (){},
+              style: ButtonStyle(
+                  shape: MaterialStateProperty.all<RoundedRectangleBorder>(
+                      RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(10.0),
+                          side: BorderSide(color: Colors.white)
+                      )
+                  )
+              ),
+              child: Padding(
+                padding: const EdgeInsets.all(1),
+                child: Row(
+                  children: [
+                    Text(
+                      "Done",
+                      style: TextStyle(
+                        color: Colors.white,
+                      ),
+                    ),
+                    SizedBox(width: 3,),
+                    Icon(Icons.done_rounded, color: Colors.white),
+                  ],
+                ),
+              )
+          ),
+          SizedBox(width: 15,),
         ],
       ),
     );
@@ -62,6 +100,7 @@ class _BlockPageWithImageState extends State<BlockPageWithImage> {
                     child: ListView(
                       controller: scrollController,
                       children: [
+                        for(int i=0; i<10; i++)
                         Padding(
                           padding: const EdgeInsets.all(30),
                           child: Image.asset('assets/images/img_no_jobs.png'),
