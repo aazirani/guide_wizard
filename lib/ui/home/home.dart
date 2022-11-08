@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import '../../constants/colors.dart';
 import '../step slider/step_slider_widget.dart';
 import '../step timeline/step_timeline.dart';
+import '../../models/step/step.dart' as s;
+import '../../utils/enums/enum.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({Key? key}) : super(key: key);
@@ -13,6 +15,13 @@ class HomeScreen extends StatefulWidget {
 class _HomeScreenState extends State<HomeScreen> {
   double _getScreenHeight() => MediaQuery.of(context).size.height;
   double _getScreenWidth() => MediaQuery.of(context).size.width;
+
+  List<s.Step> steps = [
+    s.Step(title: StepTitle.Info),
+    s.Step(title: StepTitle.Documents),
+    s.Step(title: StepTitle.Housing),
+    s.Step(title: StepTitle.University)
+  ];
 
   @override
   Widget build(BuildContext context) {
@@ -67,7 +76,7 @@ class _HomeScreenState extends State<HomeScreen> {
                   Padding(
                       padding: EdgeInsets.only(top: 15, left: 15),
                       child: Row(children: [Text("Steps"), Text("4/4")])),
-                  StepSliderWidget(),
+                  StepSliderWidget(steps: steps,),
                   SizedBox(height: 1),
                   StepTimeLine(),
                   SizedBox(height: 20),

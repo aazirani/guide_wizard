@@ -8,7 +8,10 @@ import '../../utils/enums/enum.dart';
 import '../../constants/colors.dart';
 
 class StepSliderWidget extends StatefulWidget {
-  const StepSliderWidget({Key? key}) : super(key: key);
+
+  final List<s.Step> steps;
+
+  const StepSliderWidget({Key? key, required this.steps}) : super(key: key);
 
   @override
   State<StepSliderWidget> createState() => _StepSliderWidgetState();
@@ -127,7 +130,7 @@ class _StepSliderWidgetState extends State<StepSliderWidget> {
       height: MediaQuery.of(context).size.height / 3.2,
       child: CarouselSlider(
         options: CarouselOptions(
-            height: _getScreenHeight() / 4, enlargeCenterPage: true),
+            height: _getScreenHeight() / 4, enlargeCenterPage: true, enableInfiniteScroll: false),
         items: [1, 2, 3, 4, 5].map((i) {
           return Builder(
             builder: (BuildContext context) {
