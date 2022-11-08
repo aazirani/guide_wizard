@@ -18,4 +18,5 @@ class AppColors {
 
   static const Color main_color = const Color.fromRGBO(0, 81, 158, 1);
   static const Color grey = const Color.fromRGBO(231, 231, 231, 1);
+  static const Color button_background_color = const Color.fromRGBO(217, 217, 217, 0.15);
 }

@@ -4,7 +4,9 @@ import 'package:flutter/material.dart';
 import 'package:boilerplate/widgets/image_slide.dart';
 
 class BlockPageWithImage extends StatefulWidget {
-  const BlockPageWithImage({Key? key}) : super(key: key);
+
+  bool isDone=false;
+  BlockPageWithImage({Key? key}) : super(key: key);
 
   @override
   State<BlockPageWithImage> createState() => _BlockPageWithImageState();
@@ -12,17 +14,85 @@ class BlockPageWithImage extends StatefulWidget {
 
 class _BlockPageWithImageState extends State<BlockPageWithImage> {
 
+
+  Widget _buildDoneButton(){
+    return TextButton(
+      onPressed: (){
+        setState(() {
+          widget.isDone = !widget.isDone;
+        });
+      },
+      style: ButtonStyle(
+        overlayColor: MaterialStateProperty.all<Color>(Colors.white10),
+        backgroundColor: MaterialStateProperty.all<Color>(AppColors.button_background_color),
+          shape: MaterialStateProperty.all<RoundedRectangleBorder>(
+              RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(10.0),
+              )
+          )
+      ),
+      child: Padding(
+        padding: const EdgeInsets.all(1),
+        child: Row(
+          children: [
+            Text(
+              "Done",
+              style: TextStyle(
+                color: Colors.white,
+              ),
+            ),
+            SizedBox(width: 3,),
+            Icon(Icons.done_rounded, color: Colors.white),
+          ],
+        ),
+      ),
+    );
+  }
+
+
+  Widget _buildUndoneButton(){
+    return TextButton(
+      onPressed: (){
+        setState(() {
+          widget.isDone = !widget.isDone;
+        });
+      },
+      style: ButtonStyle(
+          overlayColor: MaterialStateProperty.all<Color>(Colors.white10),
+          shape: MaterialStateProperty.all<RoundedRectangleBorder>(
+              RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(10.0),
+                  side: BorderSide(color: Colors.white)
+              )
+          )
+      ),
+      child: Padding(
+        padding: const EdgeInsets.all(1),
+        child: Row(
+          children: [
+            Text(
+              "Undone",
+              style: TextStyle(
+                color: Colors.white,
+              ),
+            ),
+            SizedBox(width: 3,),
+            Icon(Icons.close_rounded, color: Colors.white),
+          ],
+        ),
+      ),
+    );
+  }
+
+  Widget _buildAppBarButton(){
+    return widget.isDone ? _buildUndoneButton():_buildDoneButton();
+  }
+
   PreferredSizeWidget? _buildAppBar() {
     return AppBar(
       backgroundColor: AppColors.main_color,
       toolbarHeight: Dimens.appBar["toolbarHeight"],
       titleSpacing: 0,
-      actions: [
-        // TextButton.icon(
-        //   onPressed: (){}, icon: Icon(Icons.done_rounded, color: Colors.white,), label: Text("Done"),
-        // ),
-
-      ],
       leading: IconButton(
           onPressed: (){}, icon: Icon(Icons.arrow_back_ios_new_rounded, color: Colors.white,),
       ),
@@ -36,33 +106,7 @@ class _BlockPageWithImageState extends State<BlockPageWithImage> {
             ),
           ),
           Spacer(),
-          TextButton(
-              onPressed: (){},
-              style: ButtonStyle(
-                  overlayColor: MaterialStateProperty.all<Color>(Colors.white10),
-                  shape: MaterialStateProperty.all<RoundedRectangleBorder>(
-                      RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(10.0),
-                          side: BorderSide(color: Colors.white)
-                      )
-                  )
-              ),
-              child: Padding(
-                padding: const EdgeInsets.all(1),
-                child: Row(
-                  children: [
-                    Text(
-                      "Done",
-                      style: TextStyle(
-                        color: Colors.white,
-                      ),
-                    ),
-                    SizedBox(width: 3,),
-                    Icon(Icons.done_rounded, color: Colors.white),
-                  ],
-                ),
-              ),
-          ),
+          _buildAppBarButton(),
           SizedBox(width: 15,),
         ],
       ),
@@ -95,18 +139,72 @@ class _BlockPageWithImageState extends State<BlockPageWithImage> {
                   color: AppColors.main_color,
                   child: Container(
                     decoration: BoxDecoration(
-                      borderRadius: BorderRadius.only(topLeft: Radius.circular(40), topRight: Radius.circular(40),),
+                      borderRadius: BorderRadius.only(topLeft: Radius.circular(25), topRight: Radius.circular(25),),
                       color: Colors.white
                     ),
-                    child: ListView(
-                      controller: scrollController,
-                      children: [
-                        for(int i=0; i<10; i++)
-                        Padding(
-                          padding: const EdgeInsets.all(30),
-                          child: Image.asset('assets/images/img_no_jobs.png'),
+                    child: Padding(
+                      padding: const EdgeInsets.only(top: 25),
+                      child: ListView(
+                        controller: scrollController,
+                        children: [
+                          for(int i=0; i<10; i++)
+                      Padding(
+                        padding: const EdgeInsets.symmetric(horizontal: 20),
+                        child: ClipRRect(
+                          borderRadius: BorderRadius.circular(16),
+                          child: Card(
+                            elevation: 0,
+                            shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(16),
+                                // side: BorderSide(color: AppColors.main_color)
+                            ),
+                            child: ListTileTheme(
+                              shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(16),
+                                  side: BorderSide(color: AppColors.main_color, width: 2),
+                              ),
+                              tileColor: AppColors.button_background_color,
+                              contentPadding: Dimens.listTilePadding,
+                              dense: false,
+                              horizontalTitleGap: 0.0,
+                              minLeadingWidth: 0,
+                              child: ExpansionTile(
+                                // tilePadding: Dimens.listTilePadding,
+                                textColor: AppColors.main_color,
+                                iconColor: AppColors.main_color,
+                                initiallyExpanded: false,
+                                title: Text("Title"),
+                                // controlAffinity: ListTileControlAffinity.leading,
+
+                                children: <Widget>[
+                                  Row(
+                                    children: [
+                                      SizedBox(width: 20,),
+                                      Flexible(
+                                        child: Container(
+                                          width: 10,
+                                          height: 300,
+                                          // height: double.infinity,
+                                          color: Colors.green,
+                                        ),
+                                      ),
+                                      Container(
+                                        width: 10,
+                                        height: 300,
+                                        // height: double.infinity,
+                                        color: Colors.transparent,
+                                      ),
+                                      Text("test"),
+                                    ],
+                                  )
+                                ],
+                              ),
+                            ),
+                          ),
                         ),
-                      ]
+                      ),
+                        ]
+                      ),
                     ),
                   ),
                 );
