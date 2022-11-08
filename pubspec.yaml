@@ -80,6 +80,10 @@ dependencies:
   flutter_markdown: ^0.6.13
   url_launcher: ^6.1.6
 
+  timelines: ^0.1.0
+  timeline_tile: ^2.0.0
+  carousel_slider: ^4.1.1
+  
 dev_dependencies:
   flutter_test:
     sdk: flutter
