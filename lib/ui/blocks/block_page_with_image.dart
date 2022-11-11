@@ -2,6 +2,10 @@ import 'package:boilerplate/constants/colors.dart';
 import 'package:boilerplate/constants/dimens.dart';
 import 'package:flutter/material.dart';
 import 'package:boilerplate/widgets/image_slide.dart';
+import 'package:dotted_line/dotted_line.dart';
+import 'package:widget_size/widget_size.dart';
+import 'package:render_metrics/render_metrics.dart';
+import 'package:boilerplate/widgets/measure_size.dart';
 
 class BlockPageWithImage extends StatefulWidget {
 
@@ -13,6 +17,9 @@ class BlockPageWithImage extends StatefulWidget {
 }
 
 class _BlockPageWithImageState extends State<BlockPageWithImage> {
+
+  RenderParametersManager renderManager = RenderParametersManager<dynamic>();
+  double expansion_child_size = 0;
 
 
   Widget _buildDoneButton(){
@@ -113,6 +120,62 @@ class _BlockPageWithImageState extends State<BlockPageWithImage> {
     );
   }
 
+
+  double _getHeightByRenderID(String ID){
+    RenderData? data = renderManager.getRenderData(ID);
+    return data==null ? 0 : data.height;
+  }
+
+  Widget _getExpansionContent(){
+
+    return Row(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Padding(
+          padding: const EdgeInsets.only(left: 20, top: 5, right: 15,),
+          child: DottedLine(
+            dashLength: 15,
+            dashGapLength: 15,
+            lineThickness: 7,
+            dashColor: Colors.green,
+            direction: Axis.vertical,
+            lineLength: _getHeightByRenderID("ExpandedBlockID"),
+            // lineLength: expansion_child_size,
+          ),
+        ),
+        // Flexible(
+        //   child: MeasureSize(
+        //     onChange: (Size size) {
+        //       setState(() {
+        //         expansion_child_size=size as double;
+        //       });
+        //     },
+        //     child: Padding(
+        //       padding: const EdgeInsets.only(top: 5),
+        //       child: Text(
+        //         "test " * 120,
+        //         // overflow: TextOverflow.clip,
+        //       ),
+        //     ),
+        //   ),
+        // ),
+        Flexible(
+          child: RenderMetricsObject(
+            id: "ExpandedBlockID",
+            manager: renderManager,
+            child: Padding(
+              padding: const EdgeInsets.only(top: 5),
+              child: Text(
+                "test " * 120,
+                // overflow: TextOverflow.clip,
+              ),
+            ),
+          ),
+        ),
+      ],
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -145,6 +208,7 @@ class _BlockPageWithImageState extends State<BlockPageWithImage> {
                     child: Padding(
                       padding: const EdgeInsets.only(top: 25),
                       child: ListView(
+                        shrinkWrap: true,
                         controller: scrollController,
                         children: [
                           for(int i=0; i<10; i++)
@@ -164,39 +228,23 @@ class _BlockPageWithImageState extends State<BlockPageWithImage> {
                                   side: BorderSide(color: AppColors.main_color, width: 2),
                               ),
                               tileColor: AppColors.button_background_color,
+                              textColor: AppColors.main_color,
                               contentPadding: Dimens.listTilePadding,
                               dense: false,
                               horizontalTitleGap: 0.0,
                               minLeadingWidth: 0,
                               child: ExpansionTile(
-                                // tilePadding: Dimens.listTilePadding,
+                                onExpansionChanged: ((isNewState){
+                                  // if(isNewState){
+                                  //   setState(() {});
+                                  // }
+                                }),
                                 textColor: AppColors.main_color,
                                 iconColor: AppColors.main_color,
                                 initiallyExpanded: false,
-                                title: Text("Title"),
-                                // controlAffinity: ListTileControlAffinity.leading,
-
+                                title: Text("Title",),
                                 children: <Widget>[
-                                  Row(
-                                    children: [
-                                      SizedBox(width: 20,),
-                                      Flexible(
-                                        child: Container(
-                                          width: 10,
-                                          height: 300,
-                                          // height: double.infinity,
-                                          color: Colors.green,
-                                        ),
-                                      ),
-                                      Container(
-                                        width: 10,
-                                        height: 300,
-                                        // height: double.infinity,
-                                        color: Colors.transparent,
-                                      ),
-                                      Text("test"),
-                                    ],
-                                  )
+                                  _getExpansionContent(),
                                 ],
                               ),
                             ),
