@@ -176,91 +176,110 @@ class _BlockPageWithImageState extends State<BlockPageWithImage> {
     );
   }
 
+  Widget _buildExpansionTile(){
+    return Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 20),
+      child: ClipRRect(
+        borderRadius: BorderRadius.circular(16),
+        child: Card(
+          elevation: 0,
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(16),
+            // side: BorderSide(color: AppColors.main_color)
+          ),
+          child: ListTileTheme(
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(16),
+              side: BorderSide(color: AppColors.main_color, width: 2),
+            ),
+            tileColor: AppColors.button_background_color,
+            textColor: AppColors.main_color,
+            contentPadding: Dimens.listTilePadding,
+            dense: false,
+            horizontalTitleGap: 0.0,
+            minLeadingWidth: 0,
+            child: ExpansionTile(
+              onExpansionChanged: ((isNewState){
+                // if(isNewState){
+                //   setState(() {});
+                // }
+              }),
+              textColor: AppColors.main_color,
+              iconColor: AppColors.main_color,
+              initiallyExpanded: false,
+              title: Text("Title",),
+              children: <Widget>[
+                _getExpansionContent(),
+              ],
+            ),
+          ),
+        ),
+      ),
+    );
+  }
+
+
+  Widget _buildDraggableScrollableSheet(){
+    return SizedBox.expand(
+      child: DraggableScrollableSheet(
+        snap: true,
+        initialChildSize: 0.55,
+        minChildSize: 0.55,
+        builder: (BuildContext context, ScrollController scrollController) {
+          return Container(
+            color: AppColors.main_color,
+            child: Container(
+              decoration: BoxDecoration(
+                  borderRadius: BorderRadius.only(topLeft: Radius.circular(25), topRight: Radius.circular(25),),
+                  color: Colors.white
+              ),
+              child: Padding(
+                padding: const EdgeInsets.only(top: 25),
+                child: ListView(
+                    shrinkWrap: true,
+                    controller: scrollController,
+                    children: [
+                      for(int i=0; i<10; i++)
+                        _buildExpansionTile(),
+                    ]
+                ),
+              ),
+            ),
+          );
+        },
+      ),
+    );
+  }
+
+
+  Widget _buildImageSlide(){
+    return Padding(
+      padding: const EdgeInsets.only(top: 0),
+      child: ImageSlide(images: []),
+    );
+  }
+
+
+  Widget _buildScaffoldBody(){
+    return Stack(
+      children: [
+        Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            _buildImageSlide(),
+            _buildDraggableScrollableSheet(),
+          ],
+        ),
+      ],
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: AppColors.main_color,
       appBar: _buildAppBar(),
-      body: Stack(
-        children: [
-          Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Padding(
-                padding: const EdgeInsets.only(top: 0),
-                child: ImageSlide(images: []),
-              ),
-            ],
-          ),
-          SizedBox.expand(
-            child: DraggableScrollableSheet(
-              snap: true,
-              initialChildSize: 0.55,
-              minChildSize: 0.55,
-              builder: (BuildContext context, ScrollController scrollController) {
-                return Container(
-                  color: AppColors.main_color,
-                  child: Container(
-                    decoration: BoxDecoration(
-                      borderRadius: BorderRadius.only(topLeft: Radius.circular(25), topRight: Radius.circular(25),),
-                      color: Colors.white
-                    ),
-                    child: Padding(
-                      padding: const EdgeInsets.only(top: 25),
-                      child: ListView(
-                        shrinkWrap: true,
-                        controller: scrollController,
-                        children: [
-                          for(int i=0; i<10; i++)
-                      Padding(
-                        padding: const EdgeInsets.symmetric(horizontal: 20),
-                        child: ClipRRect(
-                          borderRadius: BorderRadius.circular(16),
-                          child: Card(
-                            elevation: 0,
-                            shape: RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(16),
-                                // side: BorderSide(color: AppColors.main_color)
-                            ),
-                            child: ListTileTheme(
-                              shape: RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(16),
-                                  side: BorderSide(color: AppColors.main_color, width: 2),
-                              ),
-                              tileColor: AppColors.button_background_color,
-                              textColor: AppColors.main_color,
-                              contentPadding: Dimens.listTilePadding,
-                              dense: false,
-                              horizontalTitleGap: 0.0,
-                              minLeadingWidth: 0,
-                              child: ExpansionTile(
-                                onExpansionChanged: ((isNewState){
-                                  // if(isNewState){
-                                  //   setState(() {});
-                                  // }
-                                }),
-                                textColor: AppColors.main_color,
-                                iconColor: AppColors.main_color,
-                                initiallyExpanded: false,
-                                title: Text("Title",),
-                                children: <Widget>[
-                                  _getExpansionContent(),
-                                ],
-                              ),
-                            ),
-                          ),
-                        ),
-                      ),
-                        ]
-                      ),
-                    ),
-                  ),
-                );
-              },
-            ),
-          ),
-        ],
-      ),
+      body: _buildScaffoldBody(),
     );
   }
 }
