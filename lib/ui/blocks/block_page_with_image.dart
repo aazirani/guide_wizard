@@ -9,6 +9,7 @@ import 'package:widget_size/widget_size.dart';
 import 'package:render_metrics/render_metrics.dart';
 import 'package:boilerplate/widgets/measure_size.dart';
 import 'package:flutter_markdown/flutter_markdown.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 class BlockPageWithImage extends StatefulWidget {
 
@@ -49,6 +50,20 @@ class _BlockPageWithImageState extends State<BlockPageWithImage> {
   //   sticky.remove();
   //   super.dispose();
   // }
+
+
+  _launchURL(String url) async {
+    if (await canLaunch(url)) {
+      await launch(
+        url,
+        // forceSafariVC: true,
+        // forceWebView: true,
+        // enableJavaScript: true,
+      );
+    } else {
+      throw 'Could not launch $url';
+    }
+  }
 
   Widget _buildDoneButton() {
     return TextButton(
@@ -264,6 +279,9 @@ class _BlockPageWithImageState extends State<BlockPageWithImage> {
       builder: (BuildContext context, AsyncSnapshot<String> snapshot) {
         if (snapshot.hasData) {
           return Markdown(
+              onTapLink: (text, url, title){
+                _launchURL(url!);
+              },
             shrinkWrap: true,
             physics: NeverScrollableScrollPhysics(),
             data: snapshot.data!

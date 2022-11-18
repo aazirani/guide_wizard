@@ -78,6 +78,7 @@ dependencies:
   widget_size: ^1.0.0
   render_metrics: ^2.0.2
   flutter_markdown: ^0.6.13
+  url_launcher: ^6.1.6
 
 dev_dependencies:
   flutter_test:

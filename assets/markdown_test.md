@@ -6,6 +6,8 @@
 ###### h6 Heading
 
 
+[Click here to open Collegiality website!](http://collegiality.de/)
+
 ## Horizontal Rules
 
 ___
@@ -61,3 +63,8 @@ Ordered
 | data   | path to data files to supply the data that will be passed into templates. |
 | engine | engine to be used for processing templates. Handlebars is the default. |
 | ext    | extension to be used for dest files. |
+
+
+<a href="https://github.com/i4mShayan" target="_blank">
+<img src=https://img.shields.io/badge/github-%2324292e.svg?&style=for-the-badge&logo=github&logoColor=white alt=github style="margin-bottom: 5px;" />
+</a>
