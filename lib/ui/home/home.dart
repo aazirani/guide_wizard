@@ -19,11 +19,12 @@ class _HomeScreenState extends State<HomeScreen> {
   double _getScreenWidth() => MediaQuery.of(context).size.width;
 
   List<s.Step> steps = [
-    s.Step(title: "Info", numTasks: 10, percentage: 100),
-    s.Step(title: "Documents", numTasks: 20, percentage: 20),
+    s.Step(title: "Info", numTasks: 10, percentage: 1, status: StepStatus.isDone),
+    s.Step(title: "Documents", numTasks: 20, percentage: 0.2, status: StepStatus.isPending),
     s.Step(title: "Housing", numTasks: 4, percentage: 0),
     s.Step(title: "University", numTasks: 12, percentage: 0)
   ];
+
   @override
   Widget build(BuildContext context) {
     print(_getScreenHeight());

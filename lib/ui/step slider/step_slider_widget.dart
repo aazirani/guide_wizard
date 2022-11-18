@@ -1,7 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/src/foundation/key.dart';
-import 'package:flutter/src/widgets/container.dart';
-import 'package:flutter/src/widgets/framework.dart';
 import 'package:carousel_slider/carousel_slider.dart';
 import '../../models/step/step.dart' as s;
 import '../../utils/enums/enum.dart';
@@ -17,7 +14,6 @@ class StepSliderWidget extends StatefulWidget {
 }
 
 class _StepSliderWidgetState extends State<StepSliderWidget> {
-
   double _getScreenHeight() => MediaQuery.of(context).size.height;
   double _getScreenWidth() => MediaQuery.of(context).size.width;
   int number = 10;
@@ -25,6 +21,18 @@ class _StepSliderWidgetState extends State<StepSliderWidget> {
   @override
   Widget build(BuildContext context) {
     return _buildCarouselSlider();
+  }
+
+  Border _buildPendingBorder() {
+    return Border.all(width: 4, color: AppColors.main_color);
+  }
+
+  Border _buildDoneBorder() {
+    return Border.all(width: 1, color: AppColors.main_color);
+  }
+
+  Border _buildNotStartedBorder() {
+    return Border.all(width: 2, color: Color.fromARGB(255, 177, 182, 186));
   }
 
   Widget _buildSliderContainer(int i) {
@@ -35,38 +43,20 @@ class _StepSliderWidgetState extends State<StepSliderWidget> {
         padding: EdgeInsets.only(top: 10),
         decoration: BoxDecoration(
           color: Color.fromARGB(255, 205, 243, 231),
-          border: (i == 1)
-              ? Border.all(width: 4, color: AppColors.main_color)
-              : Border.all(width: 2, color: AppColors.main_color),
-          boxShadow: (i == 1)
-              ? [BoxShadow(blurRadius: 1, offset: Offset(0, 1))]
-              : null,
-          borderRadius: BorderRadius.all(Radius.circular(10)),
+          border: (widget.steps[i].status == StepStatus.isDone)
+              ? _buildDoneBorder()
+              : (widget.steps[i].status == StepStatus.isPending)
+                  ? _buildPendingBorder()
+                  : _buildNotStartedBorder(),
+          // boxShadow: (widget.steps[i].status == StepStatus.isPending)
+          //     ? [BoxShadow(blurRadius: 1, offset: Offset(0, 1))]
+          //     : null,
+          borderRadius: BorderRadius.all(Radius.circular(20)),
         ),
         child: Stack(
           children: [
             _buildAvatar(),
-            Padding(
-              padding: EdgeInsets.only(top: 20, left: 10),
-              child: Column(
-                  mainAxisAlignment: MainAxisAlignment.start,
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text(
-                      "${widget.steps[i].title}",
-                      style: TextStyle(fontSize: 17),
-                    ),
-                    SizedBox(height: 10),
-                    Text("${widget.steps[i].numTasks} tasks",
-                        style: TextStyle(fontSize: 15)),
-                    // SizedBox(height: 5),
-
-                    SizedBox(height: 20),
-                    _buildContinueButton(),
-                    SizedBox(height: 10),
-                    _buildProgressBar(widget.steps[i].percentage),
-                  ]),
-            )
+            _buildContent(i),
           ],
         ));
   }
@@ -82,6 +72,32 @@ class _StepSliderWidgetState extends State<StepSliderWidget> {
           child:
               Image.asset("assets/images/avatar_girl.png", fit: BoxFit.cover))
     ]);
+  }
+
+  Widget _buildContent(i) {
+    return Padding(
+              padding: EdgeInsets.only(top: 20, left: 10),
+              child: Column(
+                  mainAxisAlignment: MainAxisAlignment.start,
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      "${widget.steps[i].title}",
+                      style:
+                          TextStyle(fontSize: 17, color: AppColors.main_color),
+                    ),
+                    SizedBox(height: 10),
+                    Text("${widget.steps[i].numTasks} tasks",
+                        style: TextStyle(
+                            fontSize: 15, color: AppColors.main_color)),
+                    // SizedBox(height: 5),
+
+                    SizedBox(height: 20),
+                    _buildContinueButton(),
+                    SizedBox(height: 10),
+                    _buildProgressBar(widget.steps[i].percentage),
+                  ]),
+            ); 
   }
 
   Widget _buildContinueButton() {
@@ -116,11 +132,15 @@ class _StepSliderWidgetState extends State<StepSliderWidget> {
     print(percentage);
     return Padding(
         padding: EdgeInsets.only(right: 10),
-        child: LinearProgressIndicator(
-            value: percentage,
-            backgroundColor: Colors.white,
-            valueColor:
-                AlwaysStoppedAnimation(Color.fromARGB(255, 47, 205, 144))));
+        child: ClipRRect(
+          borderRadius: BorderRadius.all(Radius.circular(10)),
+          child: LinearProgressIndicator(
+            // minHeight: 4,
+              value: percentage,
+              backgroundColor: Colors.white,
+              valueColor:
+                  AlwaysStoppedAnimation(Color.fromARGB(255, 47, 205, 144))),
+        ));
   }
 
   Widget _buildCarouselSlider() {
