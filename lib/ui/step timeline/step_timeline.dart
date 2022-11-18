@@ -6,52 +6,99 @@ import 'package:flutter/src/widgets/framework.dart';
 import '../../constants/colors.dart';
 
 class StepTimeLine extends StatefulWidget {
-  const StepTimeLine({Key? key}) : super(key: key);
+
+  int pending;
+  int stepNo;
+  StepTimeLine({Key? key, required this.pending, required this.stepNo})
+      : super(key: key);
 
   @override
   State<StepTimeLine> createState() => _StepTimeLineState();
 }
 
 class _StepTimeLineState extends State<StepTimeLine> {
-
+  int index = 3;
+  // int stepNo = 3;
+  // int pending = 1;
+  late int pending = widget.pending;
+  late int stepNo = widget.stepNo;
   double _getScreenHeight() => MediaQuery.of(context).size.height;
   double _getScreenWidth() => MediaQuery.of(context).size.width;
-
   @override
   Widget build(BuildContext context) {
-    return Container(
-        width: _getScreenWidth() / 1.2,
-        height: _getScreenHeight() / 18,
+    print(widget.pending);
+    return _buildTimelineContainer();
+  }
+
+  Widget _buildTimelineContainer() {
+    return Padding(
+      padding: const EdgeInsets.only(left: 25, right: 25),
+      child: Container(
+        width: _getScreenWidth(),
+        height: 40,
         decoration: BoxDecoration(
-          color: Color.fromARGB(207, 245, 249, 248).withOpacity(0.3),
-          borderRadius: BorderRadius.all(Radius.circular(40)),
-          boxShadow: [
-            BoxShadow(
-                spreadRadius: 4,
-                blurRadius: 4,
-                color: Color.fromARGB(116, 139, 154, 150).withOpacity(0.2),
-                offset: Offset(0, 5)),
-          ],
-        ),
-        child: Align(
-            alignment: Alignment.center,
-            // child: Text("hi")
-            child: FixedTimeline.tileBuilder(
-              direction: Axis.horizontal,
-              builder: TimelineTileBuilder.connectedFromStyle(
-                connectionDirection: ConnectionDirection.before,
-                connectorStyleBuilder: (context, index) {
-                  return (index == 1)
-                      ? ConnectorStyle.dashedLine
-                      : ConnectorStyle.solidLine;
-                },
-                indicatorStyleBuilder: (context, index) => IndicatorStyle.outlined,
-                itemExtent: (_getScreenWidth() / 1.2) / 4,
-                itemCount: 4,
-              ),
-            ))
-        // child: FixedTimeline(children: [TimelineNode.simple()])),
-        );
+            color: Color.fromARGB(255, 239, 237, 237),
+            borderRadius: BorderRadius.all(Radius.circular(30)),
+            boxShadow: [BoxShadow(color: Colors.grey, blurRadius: 0.3, offset: Offset(0, 2))]),
+        child: _buildTimeline(),
+      ),
+    );
+  }
+
+  Widget _buildTimeline() {
+    return FixedTimeline.tileBuilder(
+      direction: Axis.horizontal,
+      builder: TimelineTileBuilder(
+        itemCount: 4,
+        itemExtent: 90,
+        // contentsBuilder: (context, index) => _buildContents(),
+        indicatorBuilder: (context, index) => _buildIndicator(index),
+        startConnectorBuilder: (context, index) => _buildStartConnector(index),
+        endConnectorBuilder: (context, index) => _buildEndConnector(index),
+      ),
+    );
+  }
+
+  Widget _buildIndicator(index) {
+    return (index == widget.pending)
+        ? _buildPendingIndicator()
+        : (index < widget.pending)
+            ? _buildDoneIndicator()
+            : _buildNotStartedIndicator();
+  }
+
+  // Widget _buildDoneIndicator() {
+  //   return (index == widget.visit)
+  //       ? _buildPendingIndicator()
+  //       : const DotIndicator(size: 15, color: Colors.blue);
+  // }
+
+  Widget _buildDoneIndicator() {
+    return const DotIndicator(size: 15, color: Colors.blue);
+  }
+
+  Widget _buildNotStartedIndicator() {
+    return const DotIndicator(size: 15, color: Colors.grey);
+  }
+
+  Widget _buildPendingIndicator() {
+    return Center(
+      child: Container(
+          padding: const EdgeInsets.all(3),
+          decoration: BoxDecoration(
+            color: Color.fromARGB(255, 255, 255, 255),
+            shape: BoxShape.circle,
+            border: Border.all(color: Colors.blue, width: 4),
+          ),
+          child: Container(
+              padding: const EdgeInsets.all(2),
+              child: Container(
+                  padding: const EdgeInsets.all(8),
+                  decoration: const BoxDecoration(
+                    color: Color.fromARGB(255, 154, 221, 193),
+                    shape: BoxShape.circle,
+                  )))),
+    );
   }
 
   BoxDecoration _buildStartGradient() {
@@ -59,46 +106,59 @@ class _StepTimeLineState extends State<StepTimeLine> {
       gradient: LinearGradient(
         begin: Alignment.centerLeft,
         end: Alignment.centerRight,
-        colors: [Color.fromARGB(159, 25, 156, 196), Colors.green.shade600],
+        colors: [
+          const Color.fromARGB(159, 77, 172, 180),
+          Color.fromARGB(255, 124, 222, 194)
+        ],
       ),
     );
   }
 
   BoxDecoration _buildEndGradient() {
-    return BoxDecoration(
+    return const BoxDecoration(
       gradient: LinearGradient(
         begin: Alignment.centerLeft,
         end: Alignment.centerRight,
-        colors: [AppColors.main_color, Color.fromARGB(159, 25, 156, 196)],
+        colors: [Colors.blue, Color.fromARGB(159, 77, 172, 180)],
       ),
     );
   }
 
-  Widget _buildStartConnector() {
+  Widget _buildPendingStartConnectorGradient() {
     return DecoratedLineConnector(
-      thickness: 6,
-      direction: Axis.horizontal,
-      decoration: _buildStartGradient(),
-    );
+        thickness: 3, decoration: _buildStartGradient());
   }
 
-  Widget _buildEndConnector() {
+  Widget _buildPendingEndConnectorGradient() {
     return DecoratedLineConnector(
-      thickness: 6,
-      direction: Axis.horizontal,
-      decoration: _buildEndGradient(),
-    );
+        thickness: 3, decoration: _buildEndGradient());
   }
 
-  Widget _buildIndicator() {
-    return DotIndicator(color: AppColors.main_color);
+  Widget _buildNotStartedConnector() {
+    return const DashedLineConnector(
+        thickness: 3, color: Colors.grey, gap: 3, indent: 2);
   }
 
-  Widget _buildNode(int index) {
-    return TimelineNode(
-      indicator: _buildIndicator(),
-      startConnector: (index == 0) ? null : _buildStartConnector(),
-      endConnector: (index == 3) ? null : _buildEndConnector(),
-    );
+  Widget? _buildStartConnector(index) {
+    return (stepNo - index == stepNo)
+        ? null
+        : (index == widget.pending)
+            ? _buildPendingStartConnectorGradient()
+            : (index > widget.pending)
+                ? _buildNotStartedConnector()
+                : const SolidLineConnector(thickness: 3, color: Colors.blue);
+  }
+
+  Widget? _buildEndConnector(index) {
+    return (index == stepNo)
+        ? null
+        : (index == widget.pending)
+            ? _buildNotStartedConnector()
+            : (index == widget.pending - 1)
+                ? _buildPendingEndConnectorGradient()
+                : (index > widget.pending)
+                    ? _buildNotStartedConnector()
+                    : const SolidLineConnector(
+                        thickness: 3, color: Colors.blue);
   }
 }

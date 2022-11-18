@@ -8,7 +8,6 @@ import '../../utils/enums/enum.dart';
 import '../../constants/colors.dart';
 
 class StepSliderWidget extends StatefulWidget {
-
   final List<s.Step> steps;
 
   const StepSliderWidget({Key? key, required this.steps}) : super(key: key);
@@ -21,6 +20,7 @@ class _StepSliderWidgetState extends State<StepSliderWidget> {
 
   double _getScreenHeight() => MediaQuery.of(context).size.height;
   double _getScreenWidth() => MediaQuery.of(context).size.width;
+  int number = 10;
 
   @override
   Widget build(BuildContext context) {
@@ -30,8 +30,8 @@ class _StepSliderWidgetState extends State<StepSliderWidget> {
   Widget _buildSliderContainer(int i) {
     return Container(
         alignment: Alignment.topLeft,
-        width: MediaQuery.of(context).size.width,
-        margin: EdgeInsets.symmetric(horizontal: 5.0),
+        width: _getScreenWidth(),
+        // margin: EdgeInsets.symmetric(horizontal: 5.0),
         padding: EdgeInsets.only(top: 10),
         decoration: BoxDecoration(
           color: Color.fromARGB(255, 205, 243, 231),
@@ -53,17 +53,18 @@ class _StepSliderWidgetState extends State<StepSliderWidget> {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text(
-                      'text $i',
-                      style: TextStyle(fontSize: 20.0),
+                      "${widget.steps[i].title}",
+                      style: TextStyle(fontSize: 17),
                     ),
                     SizedBox(height: 10),
-                    Text("text2"),
+                    Text("${widget.steps[i].numTasks} tasks",
+                        style: TextStyle(fontSize: 15)),
                     // SizedBox(height: 5),
 
                     SizedBox(height: 20),
                     _buildContinueButton(),
                     SizedBox(height: 10),
-                    _buildProgressBar(),
+                    _buildProgressBar(widget.steps[i].percentage),
                   ]),
             )
           ],
@@ -90,8 +91,8 @@ class _StepSliderWidgetState extends State<StepSliderWidget> {
         style: ButtonStyle(
             fixedSize: MaterialStateProperty.all(
                 Size.fromWidth(MediaQuery.of(context).size.width / 4)),
-            backgroundColor: MaterialStateProperty.all(
-                AppColors.main_color.withOpacity(0)),
+            backgroundColor:
+                MaterialStateProperty.all(AppColors.main_color.withOpacity(0)),
             shape: MaterialStateProperty.all<RoundedRectangleBorder>(
                 RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(18.0),
@@ -111,11 +112,12 @@ class _StepSliderWidgetState extends State<StepSliderWidget> {
     );
   }
 
-  Widget _buildProgressBar() {
+  Widget _buildProgressBar(double percentage) {
+    print(percentage);
     return Padding(
         padding: EdgeInsets.only(right: 10),
         child: LinearProgressIndicator(
-            value: 0.2,
+            value: percentage,
             backgroundColor: Colors.white,
             valueColor:
                 AlwaysStoppedAnimation(Color.fromARGB(255, 47, 205, 144))));
@@ -129,9 +131,7 @@ class _StepSliderWidgetState extends State<StepSliderWidget> {
       padding: EdgeInsets.only(top: 20),
       height: MediaQuery.of(context).size.height / 3.2,
       child: CarouselSlider(
-        options: CarouselOptions(
-            height: _getScreenHeight() / 4, enlargeCenterPage: true, enableInfiniteScroll: false),
-        items: [1, 2, 3, 4, 5].map((i) {
+        items: [0, 1, 2, 3].map((i) {
           return Builder(
             builder: (BuildContext context) {
               return GestureDetector(
@@ -141,6 +141,15 @@ class _StepSliderWidgetState extends State<StepSliderWidget> {
             },
           );
         }).toList(),
+        options: CarouselOptions(
+            onPageChanged: (index, reason) => setState(() {
+                  print(number);
+                  number = index;
+                  print(number);
+                }),
+            height: _getScreenHeight() / 4,
+            enlargeCenterPage: true,
+            enableInfiniteScroll: false),
       ),
     );
   }
