@@ -3,6 +3,7 @@ import 'package:boilerplate/constants/dimens.dart';
 import 'package:flutter/material.dart';
 import 'package:boilerplate/widgets/image_slide.dart';
 import 'package:dotted_line/dotted_line.dart';
+import 'package:flutter/scheduler.dart';
 import 'package:widget_size/widget_size.dart';
 import 'package:render_metrics/render_metrics.dart';
 import 'package:boilerplate/widgets/measure_size.dart';
@@ -21,20 +22,46 @@ class _BlockPageWithImageState extends State<BlockPageWithImage> {
   RenderParametersManager renderManager = RenderParametersManager<dynamic>();
   double expansion_child_size = 0;
 
+  // final controller = ScrollController();
+  // late OverlayEntry sticky;
+  // GlobalKey stickyKey = GlobalKey();
 
-  Widget _buildDoneButton(){
+  @override
+  void initState() {
+    // if (sticky != null) {
+    //   sticky.remove();
+    // }
+    // sticky = OverlayEntry(
+    //   builder: (context) => stickyBuilder(context),
+    // );
+    //
+    // SchedulerBinding.instance.addPostFrameCallback((_) {
+    //   Overlay.of(context)!.insert(sticky);
+    // });
+
+    super.initState();
+  }
+
+  // @override
+  // void dispose() {
+  //   sticky.remove();
+  //   super.dispose();
+  // }
+
+  Widget _buildDoneButton() {
     return TextButton(
-      onPressed: (){
+      onPressed: () {
         setState(() {
           widget.isDone = !widget.isDone;
         });
       },
       style: ButtonStyle(
-        overlayColor: MaterialStateProperty.all<Color>(Colors.white10),
-        backgroundColor: MaterialStateProperty.all<Color>(AppColors.button_background_color),
+          overlayColor: MaterialStateProperty.all<Color>(Colors.white10),
+          backgroundColor: MaterialStateProperty.all<Color>(
+              AppColors.button_background_color),
           shape: MaterialStateProperty.all<RoundedRectangleBorder>(
               RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(10.0),
+                borderRadius: BorderRadius.circular(10.0),
               )
           )
       ),
@@ -57,9 +84,9 @@ class _BlockPageWithImageState extends State<BlockPageWithImage> {
   }
 
 
-  Widget _buildUndoneButton(){
+  Widget _buildUndoneButton() {
     return TextButton(
-      onPressed: (){
+      onPressed: () {
         setState(() {
           widget.isDone = !widget.isDone;
         });
@@ -91,8 +118,8 @@ class _BlockPageWithImageState extends State<BlockPageWithImage> {
     );
   }
 
-  Widget _buildAppBarButton(){
-    return widget.isDone ? _buildUndoneButton():_buildDoneButton();
+  Widget _buildAppBarButton() {
+    return widget.isDone ? _buildUndoneButton() : _buildDoneButton();
   }
 
   PreferredSizeWidget? _buildAppBar() {
@@ -101,7 +128,8 @@ class _BlockPageWithImageState extends State<BlockPageWithImage> {
       toolbarHeight: Dimens.appBar["toolbarHeight"],
       titleSpacing: 0,
       leading: IconButton(
-          onPressed: (){}, icon: Icon(Icons.arrow_back_ios_new_rounded, color: Colors.white,),
+        onPressed: () {},
+        icon: Icon(Icons.arrow_back_ios_new_rounded, color: Colors.white,),
       ),
       title: Row(
         children: [
@@ -121,13 +149,41 @@ class _BlockPageWithImageState extends State<BlockPageWithImage> {
   }
 
 
-  double _getHeightByRenderID(String ID){
+  double _getHeightByRenderID(String ID) {
     RenderData? data = renderManager.getRenderData(ID);
-    return data==null ? 0 : data.height;
+    return data == null ? 0 : data.height;
   }
 
-  Widget _getExpansionContent(){
 
+  // Widget stickyBuilder(BuildContext context) {
+  //   return AnimatedBuilder(
+  //     animation: controller,
+  //     builder: (_,Widget? child) {
+  //       final keyContext = stickyKey.currentContext;
+  //       if (keyContext != null) {
+  //         // widget is visible
+  //         final box = keyContext.findRenderObject() as RenderBox;
+  //         final pos = box.localToGlobal(Offset.zero);
+  //         return Positioned(
+  //           top: pos.dy + box.size.height,
+  //           left: 50.0,
+  //           right: 50.0,
+  //           height: box.size.height,
+  //           child: Material(
+  //             child: Container(
+  //               alignment: Alignment.center,
+  //               color: Colors.purple,
+  //               child: const Text("^ Nah I think you're okay"),
+  //             ),
+  //           ),
+  //         );
+  //       }
+  //       return Container();
+  //     },
+  //   );
+  // }
+
+  Widget _getExpansionContent() {
     return Row(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -139,26 +195,10 @@ class _BlockPageWithImageState extends State<BlockPageWithImage> {
             lineThickness: 7,
             dashColor: Colors.green,
             direction: Axis.vertical,
-            lineLength: _getHeightByRenderID("ExpandedBlockID"),
-            // lineLength: expansion_child_size,
+            // lineLength: _getHeightByRenderID("ExpandedBlockID"),
+            lineLength: 1000,
           ),
         ),
-        // Flexible(
-        //   child: MeasureSize(
-        //     onChange: (Size size) {
-        //       setState(() {
-        //         expansion_child_size=size as double;
-        //       });
-        //     },
-        //     child: Padding(
-        //       padding: const EdgeInsets.only(top: 5),
-        //       child: Text(
-        //         "test " * 120,
-        //         // overflow: TextOverflow.clip,
-        //       ),
-        //     ),
-        //   ),
-        // ),
         Flexible(
           child: RenderMetricsObject(
             id: "ExpandedBlockID",
@@ -176,7 +216,7 @@ class _BlockPageWithImageState extends State<BlockPageWithImage> {
     );
   }
 
-  Widget _buildExpansionTile(){
+  Widget _buildExpansionTile() {
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 20),
       child: ClipRRect(
@@ -199,7 +239,7 @@ class _BlockPageWithImageState extends State<BlockPageWithImage> {
             horizontalTitleGap: 0.0,
             minLeadingWidth: 0,
             child: ExpansionTile(
-              onExpansionChanged: ((isNewState){
+              onExpansionChanged: ((isNewState) {
                 // if(isNewState){
                 //   setState(() {});
                 // }
@@ -219,18 +259,21 @@ class _BlockPageWithImageState extends State<BlockPageWithImage> {
   }
 
 
-  Widget _buildDraggableScrollableSheet(){
-    return SizedBox.expand(
+  Widget _buildDraggableScrollableSheet() {
+    return           SizedBox.expand(
       child: DraggableScrollableSheet(
         snap: true,
         initialChildSize: 0.55,
         minChildSize: 0.55,
-        builder: (BuildContext context, ScrollController scrollController) {
+        builder: (BuildContext context,
+            ScrollController scrollController) {
           return Container(
             color: AppColors.main_color,
             child: Container(
               decoration: BoxDecoration(
-                  borderRadius: BorderRadius.only(topLeft: Radius.circular(25), topRight: Radius.circular(25),),
+                  borderRadius: BorderRadius.only(
+                    topLeft: Radius.circular(25),
+                    topRight: Radius.circular(25),),
                   color: Colors.white
               ),
               child: Padding(
@@ -239,7 +282,7 @@ class _BlockPageWithImageState extends State<BlockPageWithImage> {
                     shrinkWrap: true,
                     controller: scrollController,
                     children: [
-                      for(int i=0; i<10; i++)
+                      for(int i = 0; i < 10; i++)
                         _buildExpansionTile(),
                     ]
                 ),
@@ -252,7 +295,7 @@ class _BlockPageWithImageState extends State<BlockPageWithImage> {
   }
 
 
-  Widget _buildImageSlide(){
+  Widget _buildImageSlide() {
     return Padding(
       padding: const EdgeInsets.only(top: 0),
       child: ImageSlide(images: []),
@@ -260,16 +303,11 @@ class _BlockPageWithImageState extends State<BlockPageWithImage> {
   }
 
 
-  Widget _buildScaffoldBody(){
+  Widget _buildScaffoldBody() {
     return Stack(
       children: [
-        Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            _buildImageSlide(),
-            _buildDraggableScrollableSheet(),
-          ],
-        ),
+        _buildImageSlide(),
+        _buildDraggableScrollableSheet(),
       ],
     );
   }
