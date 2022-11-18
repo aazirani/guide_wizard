@@ -1,12 +1,14 @@
 import 'package:boilerplate/constants/colors.dart';
 import 'package:boilerplate/constants/dimens.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:boilerplate/widgets/image_slide.dart';
 import 'package:dotted_line/dotted_line.dart';
 import 'package:flutter/scheduler.dart';
 import 'package:widget_size/widget_size.dart';
 import 'package:render_metrics/render_metrics.dart';
 import 'package:boilerplate/widgets/measure_size.dart';
+import 'package:flutter_markdown/flutter_markdown.dart';
 
 class BlockPageWithImage extends StatefulWidget {
 
@@ -195,8 +197,8 @@ class _BlockPageWithImageState extends State<BlockPageWithImage> {
             lineThickness: 7,
             dashColor: Colors.green,
             direction: Axis.vertical,
-            // lineLength: _getHeightByRenderID("ExpandedBlockID"),
-            lineLength: 1000,
+            lineLength: _getHeightByRenderID("ExpandedBlockID"),
+            // lineLength: 300,
           ),
         ),
         Flexible(
@@ -205,10 +207,7 @@ class _BlockPageWithImageState extends State<BlockPageWithImage> {
             manager: renderManager,
             child: Padding(
               padding: const EdgeInsets.only(top: 5),
-              child: Text(
-                "test " * 120,
-                // overflow: TextOverflow.clip,
-              ),
+              child: _buildMarkdownExample(),
             ),
           ),
         ),
@@ -259,8 +258,25 @@ class _BlockPageWithImageState extends State<BlockPageWithImage> {
   }
 
 
+  Widget _buildMarkdownExample(){
+    return FutureBuilder(
+      future: rootBundle.loadString("assets/markdown_test.md"),
+      builder: (BuildContext context, AsyncSnapshot<String> snapshot) {
+        if (snapshot.hasData) {
+          return Markdown(
+            shrinkWrap: true,
+            physics: NeverScrollableScrollPhysics(),
+            data: snapshot.data!
+          );
+        }
+        return Center(
+          child: CircularProgressIndicator(),
+        );
+      });
+  }
+
   Widget _buildDraggableScrollableSheet() {
-    return           SizedBox.expand(
+    return SizedBox.expand(
       child: DraggableScrollableSheet(
         snap: true,
         initialChildSize: 0.55,
@@ -279,13 +295,23 @@ class _BlockPageWithImageState extends State<BlockPageWithImage> {
               child: Padding(
                 padding: const EdgeInsets.only(top: 25),
                 child: ListView(
-                    shrinkWrap: true,
-                    controller: scrollController,
-                    children: [
-                      for(int i = 0; i < 10; i++)
-                        _buildExpansionTile(),
-                    ]
+                  scrollDirection: Axis.vertical,
+                  shrinkWrap: true,
+                  controller: scrollController,
+                  children: [
+                    for(int i = 0; i < 10; i++)
+                      _buildExpansionTile(),
+                  ]
                 ),
+                // child: SingleChildScrollView(
+                //   physics: ScrollPhysics(),
+                //   child: Column(
+                //     children: <Widget>[
+                //       Text('Hey'),
+                //       _buildMarkdownExample()
+                //     ],
+                //   ),
+                // ),
               ),
             ),
           );
