@@ -4,7 +4,6 @@ import '../step slider/step_slider_widget.dart';
 import '../step timeline/step_timeline.dart';
 import '../../models/step/step.dart' as s;
 import '../../utils/enums/enum.dart';
-import '../step timeline/step_timeline_widget.dart';
 
 import 'package:timelines/timelines.dart';
 
