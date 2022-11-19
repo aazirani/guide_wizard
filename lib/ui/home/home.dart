@@ -4,6 +4,8 @@ import '../step slider/step_slider_widget.dart';
 import '../step timeline/step_timeline.dart';
 import '../../models/step/step.dart' as s;
 import '../../utils/enums/enum.dart';
+import 'package:flutter_mobx/flutter_mobx.dart';
+import '../../stores/step/step_store.dart';
 
 import 'package:timelines/timelines.dart';
 
@@ -15,19 +17,27 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _HomeScreenState extends State<HomeScreen> {
+  
+  StepStore stepStore = StepStore();
+
   double _getScreenHeight() => MediaQuery.of(context).size.height;
   double _getScreenWidth() => MediaQuery.of(context).size.width;
 
   List<s.Step> steps = [
-    s.Step(title: "Info", numTasks: 10, percentage: 1, status: StepStatus.isDone),
-    s.Step(title: "Documents", numTasks: 20, percentage: 0.2, status: StepStatus.isPending),
+    s.Step(
+        title: "Info", numTasks: 10, percentage: 1, status: StepStatus.isDone),
+    s.Step(
+        title: "Documents",
+        numTasks: 20,
+        percentage: 0.2,
+        status: StepStatus.isPending),
     s.Step(title: "Housing", numTasks: 4, percentage: 0),
     s.Step(title: "University", numTasks: 12, percentage: 0)
   ];
 
   @override
   Widget build(BuildContext context) {
-    print(_getScreenHeight());
+    print(stepStore.currentStep);
     return Scaffold(
       backgroundColor: AppColors.main_color,
       appBar: AppBar(
@@ -36,8 +46,8 @@ class _HomeScreenState extends State<HomeScreen> {
         backgroundColor: AppColors.main_color,
         title: Padding(
             padding: EdgeInsets.only(left: 10),
-            child:
-                Text("Welcome Guide", style: TextStyle(color: Colors.white, fontSize: 20))),
+            child: Text("Welcome Guide",
+                style: TextStyle(color: Colors.white, fontSize: 20))),
       ),
       // body: _buildBody(context),
       body: _buildBody(),
@@ -57,7 +67,6 @@ class _HomeScreenState extends State<HomeScreen> {
   // }
 
   Widget _buildBody() {
-    print(steps[0].title);
     return ClipRRect(
       borderRadius: BorderRadius.only(
           topLeft: Radius.circular(30), topRight: Radius.circular(30)),
@@ -75,12 +84,17 @@ class _HomeScreenState extends State<HomeScreen> {
           children: [
             Padding(
                 padding: EdgeInsets.only(top: 15, left: 15),
-                child: Row(children: [Text("Steps"), SizedBox(width: 10), Text("4/4")])),
+                child: Row(children: [
+                  Text("Steps"),
+                  SizedBox(width: 10),
+                  Observer(builder: (_) => Text("${stepStore.currentStep}/4"))
+                ])),
             //step slider
             StepSliderWidget(
               steps: steps,
+              stepStore: stepStore
             ),
-            StepTimeLine(pending: 1, stepNo: 3),
+            StepTimeLine(pending: 1, stepNo: 3, steps: steps),
             SizedBox(height: 10),
             Padding(
                 padding: EdgeInsets.only(left: 20),
@@ -97,7 +111,6 @@ class _HomeScreenState extends State<HomeScreen> {
   }
 
   Widget _buildBody2(BuildContext context) {
-    print(MediaQuery.of(context).size.height);
     return Container(
       color: AppColors.main_color,
       // height: 160.0,
