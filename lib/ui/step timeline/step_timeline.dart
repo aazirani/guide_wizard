@@ -1,15 +1,16 @@
 import 'package:flutter/material.dart';
 import 'package:timelines/timelines.dart';
+import '../../models/step/step.dart' as s;
 import 'package:flutter/src/foundation/key.dart';
 import 'package:flutter/src/widgets/container.dart';
 import 'package:flutter/src/widgets/framework.dart';
 import '../../constants/colors.dart';
 
 class StepTimeLine extends StatefulWidget {
-
+  List<s.Step> steps;
   int pending;
   int stepNo;
-  StepTimeLine({Key? key, required this.pending, required this.stepNo})
+  StepTimeLine({Key? key, required this.pending, required this.stepNo, required this.steps})
       : super(key: key);
 
   @override
@@ -18,8 +19,6 @@ class StepTimeLine extends StatefulWidget {
 
 class _StepTimeLineState extends State<StepTimeLine> {
   int index = 3;
-  // int stepNo = 3;
-  // int pending = 1;
   late int pending = widget.pending;
   late int stepNo = widget.stepNo;
   double _getScreenHeight() => MediaQuery.of(context).size.height;
@@ -39,7 +38,10 @@ class _StepTimeLineState extends State<StepTimeLine> {
         decoration: BoxDecoration(
             color: Color.fromARGB(255, 239, 237, 237),
             borderRadius: BorderRadius.all(Radius.circular(30)),
-            boxShadow: [BoxShadow(color: Colors.grey, blurRadius: 0.3, offset: Offset(0, 2))]),
+            boxShadow: [
+              BoxShadow(
+                  color: Colors.grey, blurRadius: 0.3, offset: Offset(0, 2))
+            ]),
         child: _buildTimeline(),
       ),
     );

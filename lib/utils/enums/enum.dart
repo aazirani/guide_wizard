@@ -3,10 +3,3 @@ enum StepStatus {
   isDone,
   notStarted,
 }
-
-enum StepTitle {
-  Info,
-  Documents,
-  Housing, 
-  University,
-}
