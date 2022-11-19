@@ -14,6 +14,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:provider/provider.dart';
+import '../stores/step/step_store.dart';
 import 'questions/questions_list_page.dart';
 import 'package:boilerplate/ui/blocks/block_page_with_image.dart';
 import 'package:boilerplate/ui/blocks/block_page_text_only.dart';
@@ -26,6 +27,7 @@ class MyApp extends StatelessWidget {
   final PostStore _postStore = PostStore(getIt<Repository>());
   final LanguageStore _languageStore = LanguageStore(getIt<Repository>());
   final UserStore _userStore = UserStore(getIt<Repository>());
+  final StepStore _stepStore = StepStore();
 
   @override
   Widget build(BuildContext context) {
@@ -34,6 +36,7 @@ class MyApp extends StatelessWidget {
         Provider<ThemeStore>(create: (_) => _themeStore),
         Provider<PostStore>(create: (_) => _postStore),
         Provider<LanguageStore>(create: (_) => _languageStore),
+        Provider<StepStore>(create: (_) => _stepStore),
       ],
       child: Observer(
         name: 'global-observer',

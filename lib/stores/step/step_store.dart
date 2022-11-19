@@ -12,7 +12,6 @@ abstract class _StepStore with Store {
 
   @action
   dynamic increment(int stepIndex) {
-    print("${currentStep} is this shit tho");
     currentStep = stepIndex;
   }
 }

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import '../../constants/colors.dart';
 import '../step slider/step_slider_widget.dart';
 import '../step timeline/step_timeline.dart';
@@ -17,8 +18,7 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _HomeScreenState extends State<HomeScreen> {
-  
-  StepStore stepStore = StepStore();
+  // StepStore stepStore = StepStore();
 
   double _getScreenHeight() => MediaQuery.of(context).size.height;
   double _getScreenWidth() => MediaQuery.of(context).size.width;
@@ -37,6 +37,7 @@ class _HomeScreenState extends State<HomeScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final stepStore = Provider.of<StepStore>(context);
     print(stepStore.currentStep);
     return Scaffold(
       backgroundColor: AppColors.main_color,
@@ -50,7 +51,7 @@ class _HomeScreenState extends State<HomeScreen> {
                 style: TextStyle(color: Colors.white, fontSize: 20))),
       ),
       // body: _buildBody(context),
-      body: _buildBody(),
+      body: _buildBody(stepStore),
     );
   }
 
@@ -66,7 +67,7 @@ class _HomeScreenState extends State<HomeScreen> {
   //   );
   // }
 
-  Widget _buildBody() {
+  Widget _buildBody(stepStore) {
     return ClipRRect(
       borderRadius: BorderRadius.only(
           topLeft: Radius.circular(30), topRight: Radius.circular(30)),
@@ -90,10 +91,7 @@ class _HomeScreenState extends State<HomeScreen> {
                   Observer(builder: (_) => Text("${stepStore.currentStep}/4"))
                 ])),
             //step slider
-            StepSliderWidget(
-              steps: steps,
-              stepStore: stepStore
-            ),
+            StepSliderWidget(steps: steps,),
             StepTimeLine(pending: 1, stepNo: 3, steps: steps),
             SizedBox(height: 10),
             Padding(

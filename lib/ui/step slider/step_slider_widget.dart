@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:carousel_slider/carousel_slider.dart';
+import 'package:provider/provider.dart';
 import '../../models/step/step.dart' as s;
 import '../../utils/enums/enum.dart';
 import '../../constants/colors.dart';
@@ -8,28 +9,24 @@ import '../../stores/step/step_store.dart';
 
 class StepSliderWidget extends StatefulWidget {
   final List<s.Step> steps;
-  final StepStore stepStore;
   const StepSliderWidget(
-      {Key? key, required this.steps, required this.stepStore})
+      {Key? key, required this.steps})
       : super(key: key);
 
   @override
-  State<StepSliderWidget> createState() => _StepSliderWidgetState(stepStore);
+  State<StepSliderWidget> createState() => _StepSliderWidgetState();
 }
 
 class _StepSliderWidgetState extends State<StepSliderWidget> {
-  StepStore stepStore;
-  _StepSliderWidgetState(this.stepStore) {
-    this.stepStore = stepStore;
-  }
-  // StepStore stepStore = StepStore();
+
   double _getScreenHeight() => MediaQuery.of(context).size.height;
   double _getScreenWidth() => MediaQuery.of(context).size.width;
   int number = 10;
 
   @override
   Widget build(BuildContext context) {
-    return _buildCarouselSlider();
+    final stepStore = Provider.of<StepStore>(context);
+    return _buildCarouselSlider(stepStore);
   }
 
   Border _buildPendingBorder() {
@@ -149,7 +146,7 @@ class _StepSliderWidgetState extends State<StepSliderWidget> {
         ));
   }
 
-  Widget _buildCarouselSlider() {
+  Widget _buildCarouselSlider(stepStore) {
     return Container(
       color: Color.fromARGB(255, 95, 34, 139).withOpacity(0),
       alignment: Alignment.topRight,
@@ -170,7 +167,6 @@ class _StepSliderWidgetState extends State<StepSliderWidget> {
             // onPageChanged: (index, reason) =>
             //   stepStore.increment,
             onPageChanged: (index, reson) {
-              print("${index} is this shit");
               stepStore.increment(index+1);
             },
             // onPageChanged: (index, reason) {
