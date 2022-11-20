@@ -7,6 +7,7 @@ import '../../models/step/step.dart' as s;
 import '../../utils/enums/enum.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import '../../stores/step/step_store.dart';
+import '../compressed blocklist timeline/compressed_blocklist_timeline.dart';
 
 import 'package:timelines/timelines.dart';
 
@@ -91,15 +92,23 @@ class _HomeScreenState extends State<HomeScreen> {
                   Observer(builder: (_) => Text("${stepStore.currentStep}/4"))
                 ])),
             //step slider
-            StepSliderWidget(steps: steps,),
+            StepSliderWidget(
+              steps: steps,
+            ),
             StepTimeLine(pending: 1, stepNo: 3, steps: steps),
             SizedBox(height: 10),
             Padding(
-                padding: EdgeInsets.only(left: 20),
+                padding: EdgeInsets.only(left: 20, top: 10),
                 child: Align(
                     alignment: Alignment.centerLeft,
                     child:
                         Text("In Progress", style: TextStyle(fontSize: 18)))),
+            SizedBox(height: 10),
+            Container(
+                // margin: EdgeInsets.only(right: 0),
+                padding: EdgeInsets.only(left: 20, right: 20),
+                // height: 300,
+                child: CompressedBlocklistTimeline()),
             // SizedBox(height:   20),
             // _buildScrollableTimeline(),
           ],
