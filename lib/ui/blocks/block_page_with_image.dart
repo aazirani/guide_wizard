@@ -1,14 +1,12 @@
 import 'package:boilerplate/constants/colors.dart';
 import 'package:boilerplate/constants/dimens.dart';
-import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:boilerplate/widgets/image_slide.dart';
 import 'package:dotted_line/dotted_line.dart';
-import 'package:flutter/scheduler.dart';
-import 'package:widget_size/widget_size.dart';
-import 'package:render_metrics/render_metrics.dart';
-import 'package:boilerplate/widgets/measure_size.dart';
+import 'package:flutter/material.dart';
+import 'package:flutter/rendering.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_markdown/flutter_markdown.dart';
+import 'package:render_metrics/render_metrics.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 class BlockPageWithImage extends StatefulWidget {
@@ -52,18 +50,7 @@ class _BlockPageWithImageState extends State<BlockPageWithImage> {
   // }
 
 
-  _launchURL(String url) async {
-    if (await canLaunch(url)) {
-      await launch(
-        url,
-        // forceSafariVC: true,
-        // forceWebView: true,
-        // enableJavaScript: true,
-      );
-    } else {
-      throw 'Could not launch $url';
-    }
-  }
+
 
   Widget _buildDoneButton() {
     return TextButton(
@@ -166,12 +153,6 @@ class _BlockPageWithImageState extends State<BlockPageWithImage> {
   }
 
 
-  double _getHeightByRenderID(String ID) {
-    RenderData? data = renderManager.getRenderData(ID);
-    return data == null ? 0 : data.height;
-  }
-
-
   // Widget stickyBuilder(BuildContext context) {
   //   return AnimatedBuilder(
   //     animation: controller,
@@ -201,33 +182,7 @@ class _BlockPageWithImageState extends State<BlockPageWithImage> {
   // }
 
   Widget _getExpansionContent() {
-    return Row(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        Padding(
-          padding: const EdgeInsets.only(left: 20, top: 5, right: 15,),
-          child: DottedLine(
-            dashLength: 15,
-            dashGapLength: 15,
-            lineThickness: 7,
-            dashColor: Colors.green,
-            direction: Axis.vertical,
-            lineLength: _getHeightByRenderID("ExpandedBlockID"),
-            // lineLength: 300,
-          ),
-        ),
-        Flexible(
-          child: RenderMetricsObject(
-            id: "ExpandedBlockID",
-            manager: renderManager,
-            child: Padding(
-              padding: const EdgeInsets.only(top: 5),
-              child: _buildMarkdownExample(),
-            ),
-          ),
-        ),
-      ],
-    );
+    return ExpansionContent(renderManager: renderManager);
   }
 
   Widget _buildExpansionTile() {
@@ -273,25 +228,6 @@ class _BlockPageWithImageState extends State<BlockPageWithImage> {
   }
 
 
-  Widget _buildMarkdownExample(){
-    return FutureBuilder(
-      future: rootBundle.loadString("assets/markdown_test.md"),
-      builder: (BuildContext context, AsyncSnapshot<String> snapshot) {
-        if (snapshot.hasData) {
-          return Markdown(
-              onTapLink: (text, url, title){
-                _launchURL(url!);
-              },
-            shrinkWrap: true,
-            physics: NeverScrollableScrollPhysics(),
-            data: snapshot.data!
-          );
-        }
-        return Center(
-          child: CircularProgressIndicator(),
-        );
-      });
-  }
 
   Widget _buildDraggableScrollableSheet() {
     return SizedBox.expand(
@@ -363,5 +299,141 @@ class _BlockPageWithImageState extends State<BlockPageWithImage> {
       appBar: _buildAppBar(),
       body: _buildScaffoldBody(),
     );
+  }
+}
+
+class ExpansionContent extends StatefulWidget {
+  const ExpansionContent({
+    Key? key,
+    required this.renderManager,
+  }) : super(key: key);
+
+  final RenderParametersManager renderManager;
+
+  @override
+  State<ExpansionContent> createState() => _ExpansionContentState();
+}
+
+class _ExpansionContentState extends State<ExpansionContent> {
+
+  double widgetHeight = 0;
+
+  @override
+  Widget build(BuildContext context) {
+    return Row(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Padding(
+          padding: const EdgeInsets.only(left: 20, top: 5, right: 15,),
+          child: DottedLine(
+            dashLength: 15,
+            dashGapLength: 15,
+            lineThickness: 7,
+            dashColor: Colors.green,
+            direction: Axis.vertical,
+            lineLength: widgetHeight,
+            //lineLength: _getHeightByRenderID("ExpandedBlockID"),
+            // lineLength: 300,
+          ),
+        ),
+        Flexible(
+          child: RenderMetricsObject(
+            id: "ExpandedBlockID",
+            manager: widget.renderManager,
+            child: Padding(
+              padding: const EdgeInsets.only(top: 5),
+              child: MeasureSize(onChange: (Size size) {
+                setState(() {
+                  widgetHeight = size.height;
+                });
+              },
+              child: _buildMarkdownExample()),
+            ),
+          ),
+        ),
+      ],
+    );
+  }
+
+  //double _getHeightByRenderID(String ID) {
+  //  RenderData? data = widget.renderManager.getRenderData(ID);
+  //  return data == null ? 0 : data.height;
+  //}
+
+  Widget _buildMarkdownExample(){
+    return FutureBuilder(
+        future: rootBundle.loadString("assets/markdown_test.md"),
+        builder: (BuildContext context, AsyncSnapshot<String> snapshot) {
+          if (snapshot.hasData) {
+            return Markdown(
+                onTapLink: (text, url, title){
+                  _launchURL(url!);
+                },
+                shrinkWrap: true,
+                physics: NeverScrollableScrollPhysics(),
+                data: snapshot.data!
+            );
+          }
+          return Center(
+            child: CircularProgressIndicator(),
+          );
+        });
+  }
+
+  _launchURL(String url) async {
+    if (await canLaunch(url)) {
+      await launch(
+        url,
+        // forceSafariVC: true,
+        // forceWebView: true,
+        // enableJavaScript: true,
+      );
+    } else {
+      throw 'Could not launch $url';
+    }
+  }
+}
+
+
+typedef void OnWidgetSizeChange(Size size);
+
+class MeasureSizeRenderObject extends RenderProxyBox {
+  Size? oldSize;
+  OnWidgetSizeChange onChange;
+
+  MeasureSizeRenderObject(this.onChange);
+
+  @override
+  void performLayout() {
+    super.performLayout();
+
+    Size newSize = child!.size;
+    if (oldSize == newSize) return;
+
+    oldSize = newSize;
+    WidgetsBinding.instance!.addPostFrameCallback((_) {
+      onChange(newSize);
+    });
+  }
+}
+
+class MeasureSize extends SingleChildRenderObjectWidget {
+  final OnWidgetSizeChange onChange;
+
+  const MeasureSize({
+    Key? key,
+    required this.onChange,
+    required Widget child,
+  }) : super(key: key, child: child);
+
+  @override
+  RenderObject createRenderObject(BuildContext context) {
+    return MeasureSizeRenderObject(onChange);
+  }
+
+  @override
+  void updateRenderObject(
+      BuildContext context, covariant MeasureSizeRenderObject renderObject) {
+    renderObject.onChange = onChange;
   }
 }
