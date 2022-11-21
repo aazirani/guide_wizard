@@ -8,11 +8,13 @@ import 'package:flutter/services.dart';
 import 'package:flutter_markdown/flutter_markdown.dart';
 import 'package:render_metrics/render_metrics.dart';
 import 'package:url_launcher/url_launcher.dart';
+import 'package:boilerplate/widgets/app_expansiontile.dart';
 
 class BlockPageWithImage extends StatefulWidget {
 
   bool isDone=false;
   BlockPageWithImage({Key? key}) : super(key: key);
+  final GlobalKey<AppExpansionTileState> expansionTile = new GlobalKey();
 
   @override
   State<BlockPageWithImage> createState() => _BlockPageWithImageState();
@@ -21,33 +23,12 @@ class BlockPageWithImage extends StatefulWidget {
 class _BlockPageWithImageState extends State<BlockPageWithImage> {
 
   RenderParametersManager renderManager = RenderParametersManager<dynamic>();
-  double expansion_child_size = 0;
-
-  // final controller = ScrollController();
-  // late OverlayEntry sticky;
-  // GlobalKey stickyKey = GlobalKey();
+  // double expansion_child_size = 0;
 
   @override
   void initState() {
-    // if (sticky != null) {
-    //   sticky.remove();
-    // }
-    // sticky = OverlayEntry(
-    //   builder: (context) => stickyBuilder(context),
-    // );
-    //
-    // SchedulerBinding.instance.addPostFrameCallback((_) {
-    //   Overlay.of(context)!.insert(sticky);
-    // });
-
     super.initState();
   }
-
-  // @override
-  // void dispose() {
-  //   sticky.remove();
-  //   super.dispose();
-  // }
 
 
 
@@ -152,35 +133,6 @@ class _BlockPageWithImageState extends State<BlockPageWithImage> {
     );
   }
 
-
-  // Widget stickyBuilder(BuildContext context) {
-  //   return AnimatedBuilder(
-  //     animation: controller,
-  //     builder: (_,Widget? child) {
-  //       final keyContext = stickyKey.currentContext;
-  //       if (keyContext != null) {
-  //         // widget is visible
-  //         final box = keyContext.findRenderObject() as RenderBox;
-  //         final pos = box.localToGlobal(Offset.zero);
-  //         return Positioned(
-  //           top: pos.dy + box.size.height,
-  //           left: 50.0,
-  //           right: 50.0,
-  //           height: box.size.height,
-  //           child: Material(
-  //             child: Container(
-  //               alignment: Alignment.center,
-  //               color: Colors.purple,
-  //               child: const Text("^ Nah I think you're okay"),
-  //             ),
-  //           ),
-  //         );
-  //       }
-  //       return Container();
-  //     },
-  //   );
-  // }
-
   Widget _getExpansionContent() {
     return ExpansionContent(renderManager: renderManager);
   }
@@ -207,7 +159,7 @@ class _BlockPageWithImageState extends State<BlockPageWithImage> {
             dense: false,
             horizontalTitleGap: 0.0,
             minLeadingWidth: 0,
-            child: ExpansionTile(
+            child: AppExpansionTile(
               onExpansionChanged: ((isNewState) {
                 // if(isNewState){
                 //   setState(() {});
@@ -217,6 +169,7 @@ class _BlockPageWithImageState extends State<BlockPageWithImage> {
               iconColor: AppColors.main_color,
               initiallyExpanded: false,
               title: Text("Title",),
+              key: widget.expansionTile,
               children: <Widget>[
                 _getExpansionContent(),
               ],
@@ -253,19 +206,9 @@ class _BlockPageWithImageState extends State<BlockPageWithImage> {
                   shrinkWrap: true,
                   controller: scrollController,
                   children: [
-                    for(int i = 0; i < 10; i++)
-                      _buildExpansionTile(),
+                    _buildExpansionTile(),
                   ]
                 ),
-                // child: SingleChildScrollView(
-                //   physics: ScrollPhysics(),
-                //   child: Column(
-                //     children: <Widget>[
-                //       Text('Hey'),
-                //       _buildMarkdownExample()
-                //     ],
-                //   ),
-                // ),
               ),
             ),
           );
@@ -333,7 +276,6 @@ class _ExpansionContentState extends State<ExpansionContent> {
             direction: Axis.vertical,
             lineLength: widgetHeight,
             //lineLength: _getHeightByRenderID("ExpandedBlockID"),
-            // lineLength: 300,
           ),
         ),
         Flexible(
@@ -384,9 +326,9 @@ class _ExpansionContentState extends State<ExpansionContent> {
     if (await canLaunch(url)) {
       await launch(
         url,
-        // forceSafariVC: true,
-        // forceWebView: true,
-        // enableJavaScript: true,
+        forceSafariVC: true,
+        forceWebView: true,
+        enableJavaScript: true,
       );
     } else {
       throw 'Could not launch $url';
@@ -411,7 +353,7 @@ class MeasureSizeRenderObject extends RenderProxyBox {
     if (oldSize == newSize) return;
 
     oldSize = newSize;
-    WidgetsBinding.instance!.addPostFrameCallback((_) {
+    WidgetsBinding.instance.addPostFrameCallback((_) {
       onChange(newSize);
     });
   }
