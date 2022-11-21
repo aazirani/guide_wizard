@@ -4,10 +4,11 @@ import '../../constants/colors.dart';
 import '../step slider/step_slider_widget.dart';
 import '../step timeline/step_timeline.dart';
 import '../../models/step/step.dart' as s;
+import '../../models/task/task.dart';
 import '../../utils/enums/enum.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import '../../stores/step/step_store.dart';
-import '../compressed blocklist timeline/compressed_blocklist_timeline.dart';
+import '../compressed blocklist timeline/compressed_task_list_timeline.dart';
 
 import 'package:timelines/timelines.dart';
 
@@ -26,14 +27,32 @@ class _HomeScreenState extends State<HomeScreen> {
 
   List<s.Step> steps = [
     s.Step(
-        title: "Info", numTasks: 10, percentage: 1, status: StepStatus.isDone),
-    s.Step(
-        title: "Documents",
+        title: "Info",
         numTasks: 20,
         percentage: 0.2,
-        status: StepStatus.isPending),
-    s.Step(title: "Housing", numTasks: 4, percentage: 0),
-    s.Step(title: "University", numTasks: 12, percentage: 0)
+        status: StepStatus.isDone,
+        tasks: List<Task>.generate(10, (index) => Task(title: 'task $index'))),
+    s.Step(
+        title: "Documents",
+        numTasks: 4,
+        percentage: 1,
+        status: StepStatus.isPending,
+        tasks: [
+          Task(title: "Application Dates"),
+          Task(title: "Private Housing"),
+          Task(title: "Requirements"),
+          Task(title: "Language Certificate")
+        ]),
+    s.Step(
+        title: "Housing",
+        numTasks: 4,
+        percentage: 0,
+        tasks: List<Task>.generate(4, (index) => Task(title: 'task $index'))),
+    s.Step(
+        title: "University",
+        numTasks: 12,
+        percentage: 0,
+        tasks: List<Task>.generate(12, (index) => Task(title: "task $index")))
   ];
 
   @override
@@ -85,11 +104,20 @@ class _HomeScreenState extends State<HomeScreen> {
         child: Column(
           children: [
             Padding(
-                padding: EdgeInsets.only(top: 30, left: 15,),
+                padding: EdgeInsets.only(
+                  top: 30,
+                  left: 15,
+                ),
                 child: Row(children: [
-                  Text("Steps", style: TextStyle(color: AppColors.main_color, fontSize: 18, fontWeight: FontWeight.bold)),
+                  Text("Steps",
+                      style: TextStyle(
+                          color: AppColors.main_color,
+                          fontSize: 18,
+                          fontWeight: FontWeight.bold)),
                   SizedBox(width: 10),
-                  Observer(builder: (_) => Text("${stepStore.currentStep}/4", style: TextStyle(color: AppColors.main_color)))
+                  Observer(
+                      builder: (_) => Text("${stepStore.currentStep}/4",
+                          style: TextStyle(color: AppColors.main_color)))
                 ])),
             //step slider
             StepSliderWidget(
@@ -101,8 +129,11 @@ class _HomeScreenState extends State<HomeScreen> {
                 padding: EdgeInsets.only(left: 20, top: 10),
                 child: Align(
                     alignment: Alignment.centerLeft,
-                    child:
-                        Text("In Progress", style: TextStyle(fontSize: 18, color: AppColors.main_color, fontWeight: FontWeight.bold)))),
+                    child: Text("In Progress",
+                        style: TextStyle(
+                            fontSize: 18,
+                            color: AppColors.main_color,
+                            fontWeight: FontWeight.bold)))),
             SizedBox(height: 10),
             Container(
                 // margin: EdgeInsets.only(right: 0),

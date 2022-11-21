@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:timelines/timelines.dart';
 import '../../widgets/diamond_indicator.dart';
+import '../../constants/colors.dart';
 
 class CompressedBlocklistTimeline extends StatefulWidget {
   const CompressedBlocklistTimeline({Key? key}) : super(key: key);
@@ -18,8 +19,8 @@ class _CompressedBlocklistTimelineState
   @override
   Widget build(BuildContext context) {
     return Container(
-      // padding: EdgeInsets.only(left: 15),
-      height: _getScreenHeight() / 2.5,
+      padding: EdgeInsets.only(top: 25),
+      height: _getScreenHeight() / 2.8,
       width: double.infinity,
       // color: Colors.green,
       child: Align(
@@ -44,27 +45,59 @@ class _CompressedBlocklistTimelineState
           // scrollDirection: Axis.vertical,
           builder: TimelineTileBuilder(
             itemCount: 20,
-            itemExtent: 90,
-            contentsBuilder: (context, index) => Container(
-                margin: EdgeInsets.only(left: 15),
-                color: Colors.white,
-                width: 200,
-                height: 40,
-                child: Align(
-                    alignment: Alignment.center,
-                    child: Text("this shit is pretty big"))),
+            itemExtent: 70,
+            contentsBuilder: (context, index) => _buildContents(),
             indicatorBuilder: (context, index) => _buildIndicator(),
-            startConnectorBuilder: (context, index) => SolidLineConnector(
-                direction: Axis.vertical, color: Colors.amber),
-            endConnectorBuilder: (context, index) => SolidLineConnector(
-                direction: Axis.vertical, color: Colors.amber),
+            startConnectorBuilder: (context, index) => _buildConnector(),
+            endConnectorBuilder: (context, index) => _buildConnector(),
             // scrollDirection:
           )),
     );
   }
 
   Widget _buildIndicator() {
-    return Container(color: Colors.transparent, width: 10, height: 10, child: DiamondIndicator());
+    return Container(
+        color: Colors.transparent,
+        width: 8,
+        height: 8,
+        child: DiamondIndicator());
+  }
+
+  Widget _buildConnector() {
+    return SolidLineConnector(
+        direction: Axis.vertical, color: Color.fromARGB(255, 115, 213, 172));
+  }
+
+  Widget _buildContents() {
+    return Container(
+        margin: EdgeInsets.only(left: 20),
+        // color: Colors.white,
+        decoration: BoxDecoration(
+            color: Color.fromARGB(255, 247, 246, 246),
+            // border:
+            //     Border.all(width: 1, color: Color.fromARGB(255, 222, 224, 225)),
+            borderRadius: BorderRadius.all(Radius.circular(10)),
+            boxShadow: [BoxShadow(color: Color.fromARGB(255, 224, 222, 222), blurRadius: 2, offset: Offset(1, 2), spreadRadius: 1,)]),
+        width: _getScreenWidth() / 1.23,
+        height: 60,
+        child: Padding(
+          padding: const EdgeInsets.only(left: 10),
+          child: Row(
+            children: [
+              Align(
+                  alignment: Alignment.centerLeft,
+                  child: Text("this is biiiiig",
+                      style: TextStyle(
+                        color: AppColors.main_color,
+                        fontSize: 16,
+                      ))),
+              Spacer(),
+              Align(
+                  alignment: Alignment.centerRight,
+                  child: Icon(Icons.more_vert, color: AppColors.main_color)),
+            ],
+          ),
+        ));
   }
 
   Widget _buildNodeTimeline() {
@@ -92,9 +125,9 @@ class _CompressedBlocklistTimelineState
     );
   }
 
-  Widget _buildContents() {
-    // print(_getScreenWidth());
-    return Container(
-        width: 100, height: 30, child: Text("zoha"), color: Colors.amber);
-  }
+  // Widget _buildContents() {
+  //   // print(_getScreenWidth());
+  //   return Container(
+  //       width: 100, height: 30, child: Text("zoha"), color: Colors.amber);
+  // }
 }
