@@ -5,6 +5,7 @@ class Step {
   late StepStatus status;
   late double percentage;
   late int numTasks;
+  // late List<subTasks> subTasks;
   Step(
       {required this.title,
       this.status = StepStatus.notStarted,

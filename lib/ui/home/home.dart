@@ -85,24 +85,24 @@ class _HomeScreenState extends State<HomeScreen> {
         child: Column(
           children: [
             Padding(
-                padding: EdgeInsets.only(top: 15, left: 15),
+                padding: EdgeInsets.only(top: 30, left: 15,),
                 child: Row(children: [
-                  Text("Steps"),
+                  Text("Steps", style: TextStyle(color: AppColors.main_color, fontSize: 18, fontWeight: FontWeight.bold)),
                   SizedBox(width: 10),
-                  Observer(builder: (_) => Text("${stepStore.currentStep}/4"))
+                  Observer(builder: (_) => Text("${stepStore.currentStep}/4", style: TextStyle(color: AppColors.main_color)))
                 ])),
             //step slider
             StepSliderWidget(
               steps: steps,
             ),
-            StepTimeLine(pending: 1, stepNo: 3, steps: steps),
-            SizedBox(height: 10),
+            StepTimeLine(pending: 3, stepNo: 3, steps: steps),
+            SizedBox(height: 25),
             Padding(
                 padding: EdgeInsets.only(left: 20, top: 10),
                 child: Align(
                     alignment: Alignment.centerLeft,
                     child:
-                        Text("In Progress", style: TextStyle(fontSize: 18)))),
+                        Text("In Progress", style: TextStyle(fontSize: 18, color: AppColors.main_color, fontWeight: FontWeight.bold)))),
             SizedBox(height: 10),
             Container(
                 // margin: EdgeInsets.only(right: 0),

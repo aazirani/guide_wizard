@@ -10,7 +10,11 @@ class StepTimeLine extends StatefulWidget {
   List<s.Step> steps;
   int pending;
   int stepNo;
-  StepTimeLine({Key? key, required this.pending, required this.stepNo, required this.steps})
+  StepTimeLine(
+      {Key? key,
+      required this.pending,
+      required this.stepNo,
+      required this.steps})
       : super(key: key);
 
   @override
@@ -76,11 +80,14 @@ class _StepTimeLineState extends State<StepTimeLine> {
   // }
 
   Widget _buildDoneIndicator() {
-    return const DotIndicator(size: 15, color: Colors.blue);
+    return const DotIndicator(size: 10, color: AppColors.main_color);
   }
 
   Widget _buildNotStartedIndicator() {
-    return const DotIndicator(size: 15, color: Colors.grey);
+    return const DotIndicator(
+      size: 10,
+      color: Colors.grey,
+    );
   }
 
   Widget _buildPendingIndicator() {
@@ -90,14 +97,14 @@ class _StepTimeLineState extends State<StepTimeLine> {
           decoration: BoxDecoration(
             color: Color.fromARGB(255, 255, 255, 255),
             shape: BoxShape.circle,
-            border: Border.all(color: Colors.blue, width: 4),
+            border: Border.all(color: AppColors.main_color, width: 4),
           ),
           child: Container(
               padding: const EdgeInsets.all(2),
               child: Container(
                   padding: const EdgeInsets.all(8),
                   decoration: const BoxDecoration(
-                    color: Color.fromARGB(255, 154, 221, 193),
+                    color: Color.fromARGB(255, 115, 213, 172),
                     shape: BoxShape.circle,
                   )))),
     );
@@ -121,24 +128,32 @@ class _StepTimeLineState extends State<StepTimeLine> {
       gradient: LinearGradient(
         begin: Alignment.centerLeft,
         end: Alignment.centerRight,
-        colors: [Colors.blue, Color.fromARGB(159, 77, 172, 180)],
+        colors: [AppColors.main_color, Color.fromARGB(159, 77, 172, 180)],
       ),
     );
   }
 
   Widget _buildPendingStartConnectorGradient() {
     return DecoratedLineConnector(
-        thickness: 3, decoration: _buildStartGradient());
+      thickness: 3,
+      decoration: _buildStartGradient(),
+      endIndent: 10,
+    );
   }
 
   Widget _buildPendingEndConnectorGradient() {
     return DecoratedLineConnector(
-        thickness: 3, decoration: _buildEndGradient());
+        thickness: 3, decoration: _buildEndGradient(), indent: 10);
   }
 
-  Widget _buildNotStartedConnector() {
+  Widget _buildNotStartedStartConnector() {
     return const DashedLineConnector(
-        thickness: 3, color: Colors.grey, gap: 3, indent: 2);
+        thickness: 3, color: Colors.grey, gap: 2, endIndent: 10);
+  }
+
+  Widget _buildNotStartedEndConnector() {
+    return const DashedLineConnector(
+        thickness: 3, color: Colors.grey, gap: 2, indent: 10);
   }
 
   Widget? _buildStartConnector(index) {
@@ -147,20 +162,21 @@ class _StepTimeLineState extends State<StepTimeLine> {
         : (index == widget.pending)
             ? _buildPendingStartConnectorGradient()
             : (index > widget.pending)
-                ? _buildNotStartedConnector()
-                : const SolidLineConnector(thickness: 3, color: Colors.blue);
+                ? _buildNotStartedStartConnector()
+                : const SolidLineConnector(
+                    thickness: 3, color: AppColors.main_color, endIndent: 10);
   }
 
   Widget? _buildEndConnector(index) {
     return (index == stepNo)
         ? null
         : (index == widget.pending)
-            ? _buildNotStartedConnector()
+            ? _buildNotStartedEndConnector()
             : (index == widget.pending - 1)
                 ? _buildPendingEndConnectorGradient()
                 : (index > widget.pending)
-                    ? _buildNotStartedConnector()
+                    ? _buildNotStartedEndConnector()
                     : const SolidLineConnector(
-                        thickness: 3, color: Colors.blue);
+                        thickness: 3, color: AppColors.main_color, indent: 10);
   }
 }
