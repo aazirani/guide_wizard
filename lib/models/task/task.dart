@@ -1,20 +1,18 @@
 import 'package:boilerplate/utils/enums/enum.dart';
 
 class Task {
+  //TODO: add list of sub-task
   late String title;
-  late StepStatus status;
-  // late List<subTasks> subTasks;
-  DateTime deadline = new DateTime(2022, 11, 4);
-  // late List<subTasks> subTasks;
-  Task(
-      {required this.title,
-      this.status = StepStatus.notStarted,});
+  late TaskStatus status;
+  DateTime? deadline;
 
-  void setStatus(StepStatus status) {
+  Task({
+    required this.title,
+    this.status = TaskStatus.notDone,
+    this.deadline,
+  });
+
+  void setStatus(TaskStatus status) {
     this.status = status;
   }
-
-  // void setPercentage(double percentage) {
-  //   this.percentage = percentage;
-  // }
 }

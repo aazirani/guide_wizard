@@ -1,10 +1,16 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_mobx/flutter_mobx.dart';
+import 'package:provider/provider.dart';
 import 'package:timelines/timelines.dart';
 import '../../widgets/diamond_indicator.dart';
 import '../../constants/colors.dart';
+import '../../stores/step/step_store.dart';
+import '../../models/step/step.dart' as s;
 
 class CompressedBlocklistTimeline extends StatefulWidget {
-  const CompressedBlocklistTimeline({Key? key}) : super(key: key);
+  List<s.Step> steps;
+  CompressedBlocklistTimeline({Key? key, required this.steps})
+      : super(key: key);
 
   @override
   State<CompressedBlocklistTimeline> createState() =>
@@ -18,6 +24,11 @@ class _CompressedBlocklistTimelineState
 
   @override
   Widget build(BuildContext context) {
+    final stepStore = Provider.of<StepStore>(context);
+    return _buildTimelineContainer(stepStore);
+  }
+
+  Widget _buildTimelineContainer(stepStore) {
     return Container(
       padding: EdgeInsets.only(top: 25),
       height: _getScreenHeight() / 2.8,
@@ -25,33 +36,39 @@ class _CompressedBlocklistTimelineState
       // color: Colors.green,
       child: Align(
         alignment: Alignment.topLeft,
-        child: _buildTimeline(),
+        child: _buildTimeline(stepStore),
       ),
     );
   }
 
-  Widget _buildTimeline() {
-    return Align(
-      alignment: Alignment.topLeft,
-      child: Timeline.tileBuilder(
-          theme: TimelineThemeData(
-            direction: Axis.vertical,
-            color: Colors.blue,
-            // nodeItemOverlap: true,
-            // indicatorPosition: ,
-            nodePosition: 0.009,
-            // indicatorTheme: IndicatorThemeData(position: 100)),
-          ),
-          // scrollDirection: Axis.vertical,
-          builder: TimelineTileBuilder(
-            itemCount: 20,
-            itemExtent: 70,
-            contentsBuilder: (context, index) => _buildContents(),
-            indicatorBuilder: (context, index) => _buildIndicator(),
-            startConnectorBuilder: (context, index) => _buildConnector(),
-            endConnectorBuilder: (context, index) => _buildConnector(),
-            // scrollDirection:
-          )),
+  Widget _buildTimeline(stepStore) {
+    print("${stepStore.currentStep}, ${widget.steps[stepStore.currentStep - 1].numTasks} is this shit");
+    return Observer(
+      builder: (_) => Align(
+        alignment: Alignment.topLeft,
+        child: Timeline.tileBuilder(
+              theme: TimelineThemeData(
+                direction: Axis.vertical,
+                color: Colors.blue,
+                // nodeItemOverlap: true,
+                // indicatorPosition: ,
+                nodePosition: 0.009,
+                // indicatorTheme: IndicatorThemeData(position: 100)),
+              ),
+              // scrollDirection: Axis.vertical,
+              builder: TimelineTileBuilder(
+                itemCount: widget.steps[(stepStore.currentStep) - 1].numTasks,
+                // itemCount: 20,
+                itemExtent: 70,
+                contentsBuilder: (context, index) =>
+                    _buildContents(index, stepStore),
+                indicatorBuilder: (context, index) => _buildIndicator(),
+                startConnectorBuilder: (context, index) => _buildConnector(),
+                endConnectorBuilder: (context, index) => _buildConnector(),
+                // scrollDirection:
+              )),
+        
+      ),
     );
   }
 
@@ -68,7 +85,8 @@ class _CompressedBlocklistTimelineState
         direction: Axis.vertical, color: Color.fromARGB(255, 115, 213, 172));
   }
 
-  Widget _buildContents() {
+  Widget _buildContents(index, stepStore) {
+    print("this is index $index, ${widget.steps[stepStore.currentStep -1].numTasks}");
     return Container(
         margin: EdgeInsets.only(left: 20),
         // color: Colors.white,
@@ -77,7 +95,14 @@ class _CompressedBlocklistTimelineState
             // border:
             //     Border.all(width: 1, color: Color.fromARGB(255, 222, 224, 225)),
             borderRadius: BorderRadius.all(Radius.circular(10)),
-            boxShadow: [BoxShadow(color: Color.fromARGB(255, 224, 222, 222), blurRadius: 2, offset: Offset(1, 2), spreadRadius: 1,)]),
+            boxShadow: [
+              BoxShadow(
+                color: Color.fromARGB(255, 224, 222, 222),
+                blurRadius: 2,
+                offset: Offset(1, 2),
+                spreadRadius: 1,
+              )
+            ]),
         width: _getScreenWidth() / 1.23,
         height: 60,
         child: Padding(
@@ -86,11 +111,15 @@ class _CompressedBlocklistTimelineState
             children: [
               Align(
                   alignment: Alignment.centerLeft,
-                  child: Text("this is biiiiig",
-                      style: TextStyle(
-                        color: AppColors.main_color,
-                        fontSize: 16,
-                      ))),
+                  child: Text(
+                        "${widget.steps[stepStore.currentStep - 1].tasks[index].title}",
+                        style: TextStyle(
+                          color: AppColors.main_color,
+                          fontSize: 16,
+                        )),
+                  ),
+                  // child: Text("hi")
+              
               Spacer(),
               Align(
                   alignment: Alignment.centerRight,

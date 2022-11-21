@@ -31,7 +31,7 @@ class _HomeScreenState extends State<HomeScreen> {
         numTasks: 20,
         percentage: 0.2,
         status: StepStatus.isDone,
-        tasks: List<Task>.generate(10, (index) => Task(title: 'task $index'))),
+        tasks: List<Task>.generate(20, (index) => Task(title: 'task $index'))),
     s.Step(
         title: "Documents",
         numTasks: 4,
@@ -41,13 +41,13 @@ class _HomeScreenState extends State<HomeScreen> {
           Task(title: "Application Dates"),
           Task(title: "Private Housing"),
           Task(title: "Requirements"),
-          Task(title: "Language Certificate")
+          Task(title: "Language Certificate", deadline: DateTime.now())
         ]),
     s.Step(
         title: "Housing",
         numTasks: 4,
         percentage: 0,
-        tasks: List<Task>.generate(4, (index) => Task(title: 'task $index'))),
+        tasks: List<Task>.generate(4, (index) => Task(title: 'task $index',))),
     s.Step(
         title: "University",
         numTasks: 12,
@@ -139,7 +139,7 @@ class _HomeScreenState extends State<HomeScreen> {
                 // margin: EdgeInsets.only(right: 0),
                 padding: EdgeInsets.only(left: 20, right: 20),
                 // height: 300,
-                child: CompressedBlocklistTimeline()),
+                child: CompressedBlocklistTimeline(steps: steps)),
             // SizedBox(height:   20),
             // _buildScrollableTimeline(),
           ],

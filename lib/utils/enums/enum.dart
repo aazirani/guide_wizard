@@ -3,3 +3,8 @@ enum StepStatus {
   isDone,
   notStarted,
 }
+
+enum TaskStatus {
+  Done, 
+  notDone,
+}

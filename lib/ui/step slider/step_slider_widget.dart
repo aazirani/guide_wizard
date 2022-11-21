@@ -17,7 +17,6 @@ class StepSliderWidget extends StatefulWidget {
 class _StepSliderWidgetState extends State<StepSliderWidget> {
   double _getScreenHeight() => MediaQuery.of(context).size.height;
   double _getScreenWidth() => MediaQuery.of(context).size.width;
-  int number = 10;
 
   @override
   Widget build(BuildContext context) {
