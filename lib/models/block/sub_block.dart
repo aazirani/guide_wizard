@@ -1,12 +1,16 @@
 import 'package:boilerplate/widgets/app_expansiontile.dart';
 import 'package:flutter/material.dart';
 
-abstract class SubBlock{
-  late String title, markdown;
-  // late GlobalKey<AppExpansionTileState> expansionKey;
-  SubBlock({
+class SubBlockModel{
+  String title;
+  late String markdown; //TODO implement
+  late GlobalKey<AppExpansionTileState> globalKey;
+  bool expanded;
+
+  SubBlockModel({
     required this.title,
-    // required this.markdown,
-    // required this.expansionKey
-  });
+    required this.expanded,
+  }){
+    globalKey = GlobalKey<AppExpansionTileState>();
+  }
 }

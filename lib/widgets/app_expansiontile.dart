@@ -41,7 +41,7 @@ class AppExpansionTile extends StatefulWidget {
   /// Creates a single-line [ListTile] with an expansion arrow icon that expands or collapses
   /// the tile to reveal or hide the [children]. The [initiallyExpanded] property must
   /// be non-null.
-  const AppExpansionTile({
+  AppExpansionTile({
     required Key key,
     this.leading,
     required this.title,
@@ -131,7 +131,7 @@ class AppExpansionTile extends StatefulWidget {
   final Widget? trailing;
 
   /// Specifies if the list tile is initially expanded (true) or collapsed (false, the default).
-  final bool initiallyExpanded;
+  bool initiallyExpanded;
 
   /// Specifies whether the state of the children is maintained when the tile expands and collapses.
   ///

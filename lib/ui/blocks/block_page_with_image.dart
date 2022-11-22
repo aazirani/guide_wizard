@@ -7,12 +7,12 @@ import 'package:flutter/rendering.dart';
 import 'package:flutter/services.dart';
 import 'package:render_metrics/render_metrics.dart';
 import 'package:boilerplate/widgets/app_expansiontile.dart';
+import 'package:boilerplate/models/block/sub_block.dart';
 
-
-List<Map<String, dynamic>> subBlocks=[
-  {"key": GlobalKey<AppExpansionTileState>()},
-  {"key": GlobalKey<AppExpansionTileState>()},
-  {"key": GlobalKey<AppExpansionTileState>()},
+List<SubBlockModel> subBlocks=[
+  SubBlockModel(title: "test title", expanded: false),
+  SubBlockModel(title: "test title", expanded: false),
+  SubBlockModel(title: "test title", expanded: false),
 ];
 
 class BlockPageWithImage extends StatefulWidget {
@@ -153,13 +153,14 @@ class _BlockPageWithImageState extends State<BlockPageWithImage> {
               ),
               child: Padding(
                 padding: const EdgeInsets.only(top: 25),
-                child: ListView(
+                child: ListView.builder(
                   scrollDirection: Axis.vertical,
                   shrinkWrap: true,
                   controller: scrollController,
-                  children: subBlocks.map((element){
-                    return SubBlock(globalKey: element["key"], renderManager: renderManager,);
-                  }).toList(),
+                  itemCount: subBlocks.length,
+                  itemBuilder: (context, i){
+                    return SubBlock(subBlockModel: subBlocks[i], renderManager: renderManager,);
+                  },
                 ),
               ),
             ),

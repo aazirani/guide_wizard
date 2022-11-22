@@ -5,17 +5,18 @@ import 'package:flutter/rendering.dart';
 import 'package:render_metrics/render_metrics.dart';
 import 'package:boilerplate/widgets/app_expansiontile.dart';
 import 'package:boilerplate/ui/blocks/expansion_content.dart';
+import 'package:boilerplate/models/block/sub_block.dart';
 
 class SubBlock extends StatefulWidget {
-  GlobalKey<AppExpansionTileState> globalKey;
+  SubBlockModel subBlockModel;
   RenderParametersManager renderManager;
-  SubBlock({Key? key, required this.globalKey, required this.renderManager}) : super(key: key);
+  SubBlock({Key? key, required this.subBlockModel, required this.renderManager}) : super(key: key);
 
   @override
-  State<SubBlock> createState() => _SubBlockState();
+  State<SubBlock> createState() => SubBlockState();
 }
 
-class _SubBlockState extends State<SubBlock> {
+class SubBlockState extends State<SubBlock> with AutomaticKeepAliveClientMixin{
   Widget _getExpansionContent() {
     return ExpansionContent(renderManager: widget.renderManager);
   }
@@ -44,13 +45,16 @@ class _SubBlockState extends State<SubBlock> {
             minLeadingWidth: 0,
             child: AppExpansionTile(
               onExpansionChanged: ((isNewState) {
-                // if(isNewState){
-                //   setState(() {});
-                // }
+                if(isNewState){
+                  setState(() {
+                    // widget.subBlockModel.expanded=!widget.subBlockModel.expanded;
+                  });
+                }
               }),
+              // initiallyExpanded: widget.subBlockModel.expanded,
+              maintainState: true,
               textColor: AppColors.main_color,
               iconColor: AppColors.main_color,
-              initiallyExpanded: false,
               title: Text("Title",),
               key: key,
               children: <Widget>[
@@ -64,11 +68,16 @@ class _SubBlockState extends State<SubBlock> {
   }
 
   @override
-  Widget build(BuildContext context) {
-    return _buildExpansionTile(key: widget.globalKey);
+  void initState() {
+    super.initState();
   }
 
-  // @override
-  // // TODO: implement wantKeepAlive
-  // bool get wantKeepAlive => throw UnimplementedError();
+  @override
+  Widget build(BuildContext context) {
+    return _buildExpansionTile(key: widget.subBlockModel.globalKey);
+  }
+
+  @override
+  // TODO: implement wantKeepAlive
+  bool get wantKeepAlive => true;
 }
