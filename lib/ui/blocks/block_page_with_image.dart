@@ -1,20 +1,24 @@
 import 'package:boilerplate/constants/colors.dart';
 import 'package:boilerplate/constants/dimens.dart';
+import 'package:boilerplate/ui/blocks/sub_block_widget.dart';
 import 'package:boilerplate/widgets/image_slide.dart';
-import 'package:dotted_line/dotted_line.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:flutter/services.dart';
-import 'package:flutter_markdown/flutter_markdown.dart';
 import 'package:render_metrics/render_metrics.dart';
-import 'package:url_launcher/url_launcher.dart';
 import 'package:boilerplate/widgets/app_expansiontile.dart';
+
+
+List<Map<String, dynamic>> subBlocks=[
+  {"key": GlobalKey<AppExpansionTileState>()},
+  {"key": GlobalKey<AppExpansionTileState>()},
+  {"key": GlobalKey<AppExpansionTileState>()},
+];
 
 class BlockPageWithImage extends StatefulWidget {
 
   bool isDone=false;
   BlockPageWithImage({Key? key}) : super(key: key);
-  final GlobalKey<AppExpansionTileState> expansionTile = new GlobalKey();
 
   @override
   State<BlockPageWithImage> createState() => _BlockPageWithImageState();
@@ -29,9 +33,6 @@ class _BlockPageWithImageState extends State<BlockPageWithImage> {
   void initState() {
     super.initState();
   }
-
-
-
 
   Widget _buildDoneButton() {
     return TextButton(
@@ -133,55 +134,6 @@ class _BlockPageWithImageState extends State<BlockPageWithImage> {
     );
   }
 
-  Widget _getExpansionContent() {
-    return ExpansionContent(renderManager: renderManager);
-  }
-
-  Widget _buildExpansionTile() {
-    return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 20),
-      child: ClipRRect(
-        borderRadius: BorderRadius.circular(16),
-        child: Card(
-          elevation: 0,
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(16),
-            // side: BorderSide(color: AppColors.main_color)
-          ),
-          child: ListTileTheme(
-            shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(16),
-              side: BorderSide(color: AppColors.main_color, width: 2),
-            ),
-            tileColor: AppColors.button_background_color,
-            textColor: AppColors.main_color,
-            contentPadding: Dimens.listTilePadding,
-            dense: false,
-            horizontalTitleGap: 0.0,
-            minLeadingWidth: 0,
-            child: AppExpansionTile(
-              onExpansionChanged: ((isNewState) {
-                // if(isNewState){
-                //   setState(() {});
-                // }
-              }),
-              textColor: AppColors.main_color,
-              iconColor: AppColors.main_color,
-              initiallyExpanded: false,
-              title: Text("Title",),
-              key: widget.expansionTile,
-              children: <Widget>[
-                _getExpansionContent(),
-              ],
-            ),
-          ),
-        ),
-      ),
-    );
-  }
-
-
-
   Widget _buildDraggableScrollableSheet() {
     return SizedBox.expand(
       child: DraggableScrollableSheet(
@@ -205,9 +157,9 @@ class _BlockPageWithImageState extends State<BlockPageWithImage> {
                   scrollDirection: Axis.vertical,
                   shrinkWrap: true,
                   controller: scrollController,
-                  children: [
-                    _buildExpansionTile(),
-                  ]
+                  children: subBlocks.map((element){
+                    return SubBlock(globalKey: element["key"], renderManager: renderManager,);
+                  }).toList(),
                 ),
               ),
             ),
@@ -242,140 +194,5 @@ class _BlockPageWithImageState extends State<BlockPageWithImage> {
       appBar: _buildAppBar(),
       body: _buildScaffoldBody(),
     );
-  }
-}
-
-class ExpansionContent extends StatefulWidget {
-  const ExpansionContent({
-    Key? key,
-    required this.renderManager,
-  }) : super(key: key);
-
-  final RenderParametersManager renderManager;
-
-  @override
-  State<ExpansionContent> createState() => _ExpansionContentState();
-}
-
-class _ExpansionContentState extends State<ExpansionContent> {
-
-  double widgetHeight = 0;
-
-  @override
-  Widget build(BuildContext context) {
-    return Row(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        Padding(
-          padding: const EdgeInsets.only(left: 20, top: 5, right: 15,),
-          child: DottedLine(
-            dashLength: 15,
-            dashGapLength: 15,
-            lineThickness: 7,
-            dashColor: Colors.green,
-            direction: Axis.vertical,
-            lineLength: widgetHeight,
-            //lineLength: _getHeightByRenderID("ExpandedBlockID"),
-          ),
-        ),
-        Flexible(
-          child: RenderMetricsObject(
-            id: "ExpandedBlockID",
-            manager: widget.renderManager,
-            child: Padding(
-              padding: const EdgeInsets.only(top: 5),
-              child: MeasureSize(onChange: (Size size) {
-                setState(() {
-                  widgetHeight = size.height;
-                });
-              },
-              child: _buildMarkdownExample()),
-            ),
-          ),
-        ),
-      ],
-    );
-  }
-
-  //double _getHeightByRenderID(String ID) {
-  //  RenderData? data = widget.renderManager.getRenderData(ID);
-  //  return data == null ? 0 : data.height;
-  //}
-
-  Widget _buildMarkdownExample(){
-    return FutureBuilder(
-        future: rootBundle.loadString("assets/markdown_test.md"),
-        builder: (BuildContext context, AsyncSnapshot<String> snapshot) {
-          if (snapshot.hasData) {
-            return Markdown(
-                onTapLink: (text, url, title){
-                  _launchURL(url!);
-                },
-                shrinkWrap: true,
-                physics: NeverScrollableScrollPhysics(),
-                data: snapshot.data!
-            );
-          }
-          return Center(
-            child: CircularProgressIndicator(),
-          );
-        });
-  }
-
-  _launchURL(String url) async {
-    if (await canLaunch(url)) {
-      await launch(
-        url,
-        forceSafariVC: true,
-        forceWebView: true,
-        enableJavaScript: true,
-      );
-    } else {
-      throw 'Could not launch $url';
-    }
-  }
-}
-
-
-typedef void OnWidgetSizeChange(Size size);
-
-class MeasureSizeRenderObject extends RenderProxyBox {
-  Size? oldSize;
-  OnWidgetSizeChange onChange;
-
-  MeasureSizeRenderObject(this.onChange);
-
-  @override
-  void performLayout() {
-    super.performLayout();
-
-    Size newSize = child!.size;
-    if (oldSize == newSize) return;
-
-    oldSize = newSize;
-    WidgetsBinding.instance.addPostFrameCallback((_) {
-      onChange(newSize);
-    });
-  }
-}
-
-class MeasureSize extends SingleChildRenderObjectWidget {
-  final OnWidgetSizeChange onChange;
-
-  const MeasureSize({
-    Key? key,
-    required this.onChange,
-    required Widget child,
-  }) : super(key: key, child: child);
-
-  @override
-  RenderObject createRenderObject(BuildContext context) {
-    return MeasureSizeRenderObject(onChange);
-  }
-
-  @override
-  void updateRenderObject(
-      BuildContext context, covariant MeasureSizeRenderObject renderObject) {
-    renderObject.onChange = onChange;
   }
 }
