@@ -72,6 +72,7 @@ dependencies:
   flutter_svg: ^1.1.5
   flutter_expanded_tile: ^0.3.6
   scrollable_positioned_list: ^0.3.5
+  timelines: ^0.1.0
 
 dev_dependencies:
   flutter_test:
