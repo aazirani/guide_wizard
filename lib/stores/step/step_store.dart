@@ -12,6 +12,6 @@ abstract class _StepStore with Store {
 
   @action
   dynamic increment(int stepIndex) {
-    currentStep = stepIndex;
+    currentStep = stepIndex + 1;
   }
 }

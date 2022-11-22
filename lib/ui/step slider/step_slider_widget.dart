@@ -16,13 +16,41 @@ class StepSliderWidget extends StatefulWidget {
 }
 
 class _StepSliderWidgetState extends State<StepSliderWidget> {
-  double _getScreenHeight() => MediaQuery.of(context).size.height;
-  double _getScreenWidth() => MediaQuery.of(context).size.width;
-
   @override
   Widget build(BuildContext context) {
     final stepStore = Provider.of<StepStore>(context);
-    return _buildCarouselSlider(stepStore);
+    return _buildCarouselSliderContainer(stepStore);
+  }
+
+  Widget _buildCarouselSliderContainer(stepStore) {
+    return Container(
+      alignment: Alignment.topRight,
+      padding: EdgeInsets.only(top: 20),
+      height: MediaQuery.of(context).size.height / 3.2,
+      child: _buildCarouselSlider(stepStore),
+    );
+  }
+
+  _buildCarouselSlider(stepStore) {
+    return CarouselSlider(
+      options: CarouselOptions(
+          onPageChanged: (index, reson) {
+            stepStore.increment(index);
+          },
+          height: _getScreenHeight() / 4,
+          enlargeCenterPage: false,
+          enableInfiniteScroll: false),
+      items: List<int>.generate(Dimens.stepNo, (index) => index).map((index) {
+        return Builder(
+          builder: (BuildContext context) {
+            return GestureDetector(
+              onTap: () {},
+              child: _buildSliderContainer(index),
+            );
+          },
+        );
+      }).toList(),
+    );
   }
 
   Widget _buildSliderContainer(index) {
@@ -156,33 +184,6 @@ class _StepSliderWidgetState extends State<StepSliderWidget> {
     );
   }
 
-  Widget _buildCarouselSlider(stepStore) {
-    return Container(
-      alignment: Alignment.topRight,
-      padding: EdgeInsets.only(top: 20),
-      height: MediaQuery.of(context).size.height / 3.2,
-      child: CarouselSlider(
-        options: CarouselOptions(
-            onPageChanged: (index, reson) {
-              stepStore.increment(index + 1);
-            },
-            height: _getScreenHeight() / 4,
-            enlargeCenterPage: false,
-            enableInfiniteScroll: false),
-        items: List<int>.generate(4, (index) => index).map((index) {
-          return Builder(
-            builder: (BuildContext context) {
-              return GestureDetector(
-                onTap: () {},
-                child: _buildSliderContainer(index),
-              );
-            },
-          );
-        }).toList(),
-      ),
-    );
-  }
-
   Border _buildPendingBorder() {
     return Border.all(width: 4, color: AppColors.main_color);
   }
@@ -194,4 +195,8 @@ class _StepSliderWidgetState extends State<StepSliderWidget> {
   Border _buildNotStartedBorder() {
     return Border.all(width: 2, color: AppColors.greys[200]!);
   }
+
+  //general methods ............................................................
+  double _getScreenHeight() => MediaQuery.of(context).size.height;
+  double _getScreenWidth() => MediaQuery.of(context).size.width;
 }

@@ -3,6 +3,8 @@ import 'package:flutter/material.dart';
 class Dimens {
   Dimens._();
 
+  //number of steps 
+  static const int stepNo = 4;
   //for all screens
   static const double horizontal_padding = 12.0;
   static const double vertical_padding = 12.0;
