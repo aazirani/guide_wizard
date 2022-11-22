@@ -8,7 +8,7 @@ import '../../stores/step/step_store.dart';
 import '../../models/step/step.dart' as s;
 
 class CompressedBlocklistTimeline extends StatefulWidget {
-  List<s.Step> steps;
+  final List<s.Step> steps;
   CompressedBlocklistTimeline({Key? key, required this.steps})
       : super(key: key);
 
@@ -30,7 +30,8 @@ class _CompressedBlocklistTimelineState
 
   Widget _buildTimelineContainer(stepStore) {
     return Container(
-      padding: EdgeInsets.only(top: 25),
+      padding: EdgeInsets.only(left: 20, right: 20, top: 25),
+      // padding: EdgeInsets.only(top: 25),
       height: _getScreenHeight() / 2.8,
       width: double.infinity,
       // color: Colors.green,
@@ -153,10 +154,4 @@ class _CompressedBlocklistTimelineState
       // ],
     );
   }
-
-  // Widget _buildContents() {
-  //   // print(_getScreenWidth());
-  //   return Container(
-  //       width: 100, height: 30, child: Text("zoha"), color: Colors.amber);
-  // }
 }

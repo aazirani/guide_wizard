@@ -19,14 +19,14 @@ class DiamondIndicator extends StatelessWidget {
             // width: 100,
             // height: 100,
             decoration: BoxDecoration(
-              color: Colors.transparent,
+              color: Color.fromARGB(255, 115, 213, 172),
               border: Border.all(
-                width: 3,
-                color: Colors.amber,
+                width: 2,
+                color: Color.fromARGB(255, 115, 213, 172),
               ),
             ),
             child: InkWell(
-              splashColor: Colors.blueAccent,
+              // splashColor: Colors.blueAccent,
               // onTap: () {},
               child: Center(
                 child: Transform(

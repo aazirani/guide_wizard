@@ -1,7 +1,7 @@
 import 'package:boilerplate/utils/enums/enum.dart';
 
 class Task {
-  //TODO: add list of sub-task
+  //TODO: add a list of sub-tasks
   late String title;
   late TaskStatus status;
   DateTime? deadline;
