@@ -5,12 +5,28 @@ class SubBlockModel{
   String title;
   late String markdown; //TODO implement
   late GlobalKey<AppExpansionTileState> globalKey;
-  bool expanded;
+  late bool expanded;
 
   SubBlockModel({
     required this.title,
-    required this.expanded,
   }){
+    _buildGlobalKey();
+    expanded = false;
+  }
+
+  void _buildGlobalKey(){
     globalKey = GlobalKey<AppExpansionTileState>();
+  }
+
+  void rebuildGlobalKey(){
+    _buildGlobalKey();
+  }
+
+  void setExpanded(bool value){
+    expanded = value;
+  }
+
+  void toggleExpanded(){
+    expanded = !expanded;
   }
 }

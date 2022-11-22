@@ -8,33 +8,48 @@ import 'package:boilerplate/ui/blocks/expansion_content.dart';
 import 'package:boilerplate/models/block/sub_block.dart';
 
 class SubBlock extends StatefulWidget {
-  SubBlockModel subBlockModel;
+  int index;
+  List<SubBlockModel> subBlockModelsList;
   RenderParametersManager renderManager;
-  SubBlock({Key? key, required this.subBlockModel, required this.renderManager}) : super(key: key);
+  SubBlock({Key? key,required this.index , required this.subBlockModelsList, required this.renderManager,}) : super(key: key);
 
   @override
   State<SubBlock> createState() => SubBlockState();
 }
 
 class SubBlockState extends State<SubBlock> with AutomaticKeepAliveClientMixin{
+
+
+  void _runAtExpanding(){
+    setState(() {
+      widget.subBlockModelsList.map((element){
+        if(element.expanded){
+          element.rebuildGlobalKey();
+          element.expanded = false;
+        }
+      });
+
+      widget.subBlockModelsList[widget.index].toggleExpanded();
+    });
+  }
+
   Widget _getExpansionContent() {
     return ExpansionContent(renderManager: widget.renderManager);
   }
 
   Widget _buildExpansionTile({required GlobalKey<AppExpansionTileState> key}) {
     return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 20),
+      padding: Dimens.expansionPadding,
       child: ClipRRect(
-        borderRadius: BorderRadius.circular(16),
+        borderRadius: Dimens.expansionTileBorderRadius,
         child: Card(
           elevation: 0,
           shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(16),
-            // side: BorderSide(color: AppColors.main_color)
+            borderRadius: Dimens.expansionTileBorderRadius,
           ),
           child: ListTileTheme(
             shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(16),
+              borderRadius: Dimens.expansionTileBorderRadius,
               side: BorderSide(color: AppColors.main_color, width: 2),
             ),
             tileColor: AppColors.button_background_color,
@@ -46,17 +61,14 @@ class SubBlockState extends State<SubBlock> with AutomaticKeepAliveClientMixin{
             child: AppExpansionTile(
               onExpansionChanged: ((isNewState) {
                 if(isNewState){
-                  setState(() {
-                    // widget.subBlockModel.expanded=!widget.subBlockModel.expanded;
-                  });
+                  _runAtExpanding();
                 }
               }),
-              // initiallyExpanded: widget.subBlockModel.expanded,
               maintainState: true,
               textColor: AppColors.main_color,
               iconColor: AppColors.main_color,
-              title: Text("Title",),
-              key: key,
+              title: Text(widget.subBlockModelsList[widget.index].title,),
+              key: widget.subBlockModelsList[widget.index].globalKey,
               children: <Widget>[
                 _getExpansionContent(),
               ],
@@ -74,10 +86,9 @@ class SubBlockState extends State<SubBlock> with AutomaticKeepAliveClientMixin{
 
   @override
   Widget build(BuildContext context) {
-    return _buildExpansionTile(key: widget.subBlockModel.globalKey);
+    return _buildExpansionTile(key: widget.subBlockModelsList[widget.index].globalKey);
   }
 
   @override
-  // TODO: implement wantKeepAlive
   bool get wantKeepAlive => true;
 }

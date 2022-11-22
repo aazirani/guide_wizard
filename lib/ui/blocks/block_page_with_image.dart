@@ -6,13 +6,12 @@ import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:flutter/services.dart';
 import 'package:render_metrics/render_metrics.dart';
-import 'package:boilerplate/widgets/app_expansiontile.dart';
 import 'package:boilerplate/models/block/sub_block.dart';
 
 List<SubBlockModel> subBlocks=[
-  SubBlockModel(title: "test title", expanded: false),
-  SubBlockModel(title: "test title", expanded: false),
-  SubBlockModel(title: "test title", expanded: false),
+  SubBlockModel(title: "Title",),
+  SubBlockModel(title: "Title",),
+  SubBlockModel(title: "Title",),
 ];
 
 class BlockPageWithImage extends StatefulWidget {
@@ -27,7 +26,6 @@ class BlockPageWithImage extends StatefulWidget {
 class _BlockPageWithImageState extends State<BlockPageWithImage> {
 
   RenderParametersManager renderManager = RenderParametersManager<dynamic>();
-  // double expansion_child_size = 0;
 
   @override
   void initState() {
@@ -47,7 +45,7 @@ class _BlockPageWithImageState extends State<BlockPageWithImage> {
               AppColors.button_background_color),
           shape: MaterialStateProperty.all<RoundedRectangleBorder>(
               RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(10.0),
+                borderRadius: Dimens.blockPageAppBarButtonBorderRadius,
               )
           )
       ),
@@ -81,7 +79,7 @@ class _BlockPageWithImageState extends State<BlockPageWithImage> {
           overlayColor: MaterialStateProperty.all<Color>(Colors.white10),
           shape: MaterialStateProperty.all<RoundedRectangleBorder>(
               RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(10.0),
+                  borderRadius: Dimens.blockPageAppBarButtonBorderRadius,
                   side: BorderSide(color: Colors.white)
               )
           )
@@ -159,7 +157,7 @@ class _BlockPageWithImageState extends State<BlockPageWithImage> {
                   controller: scrollController,
                   itemCount: subBlocks.length,
                   itemBuilder: (context, i){
-                    return SubBlock(subBlockModel: subBlocks[i], renderManager: renderManager,);
+                    return SubBlock(index: i, subBlockModelsList: subBlocks, renderManager: renderManager, );
                   },
                 ),
               ),
@@ -172,10 +170,7 @@ class _BlockPageWithImageState extends State<BlockPageWithImage> {
 
 
   Widget _buildImageSlide() {
-    return Padding(
-      padding: const EdgeInsets.only(top: 0),
-      child: ImageSlide(images: []),
-    );
+    return ImageSlide(images: []);
   }
 
 

@@ -16,6 +16,7 @@ import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:provider/provider.dart';
 import 'questions/questions_list_page.dart';
 import 'package:boilerplate/ui/blocks/block_page_with_image.dart';
+import 'package:boilerplate/ui/blocks/block_page_text_only.dart';
 
 class MyApp extends StatelessWidget {
   // This widget is the root of your application.
@@ -58,7 +59,7 @@ class MyApp extends StatelessWidget {
               // Built-in localization of basic text for Cupertino widgets
               GlobalCupertinoLocalizations.delegate,
             ],
-            home: BlockPageWithImage(),
+            home: BlockPageTextOnly(),
           );
         },
       ),

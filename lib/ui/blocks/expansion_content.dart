@@ -1,3 +1,4 @@
+import 'package:boilerplate/constants/dimens.dart';
 import 'package:flutter/material.dart';
 import 'package:dotted_line/dotted_line.dart';
 import 'package:flutter/rendering.dart';
@@ -29,7 +30,7 @@ class _ExpansionContentState extends State<ExpansionContent> {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Padding(
-          padding: const EdgeInsets.only(left: 20, top: 5, right: 15,),
+          padding: Dimens.expansionDottedLinePadding,
           child: DottedLine(
             dashLength: 15,
             dashGapLength: 15,
@@ -37,46 +38,41 @@ class _ExpansionContentState extends State<ExpansionContent> {
             dashColor: Colors.green,
             direction: Axis.vertical,
             lineLength: widgetHeight,
-            //lineLength: _getHeightByRenderID("ExpandedBlockID"),
           ),
         ),
         Flexible(
-          child: RenderMetricsObject(
-            id: "ExpandedBlockID",
-            manager: widget.renderManager,
-            child: Padding(
-              padding: const EdgeInsets.only(top: 5),
-              child: MeasureSize(onChange: (Size size) {
-                setState(() {
-                  widgetHeight = size.height;
-                });
-              },
-                  child: _buildMarkdownExample()),
-            ),
+          child: Padding(
+            padding: Dimens.expansionContentPadding,
+            child: MeasureSize(onChange: (Size size) {
+              setState(() {
+                widgetHeight = size.height;
+              });
+            },
+            child: _buildMarkdownExample()),
           ),
         ),
       ],
     );
   }
 
-  Widget _buildMarkdownExample(){
+  Widget _buildMarkdownExample(){ //Just for test
     return FutureBuilder(
-        future: rootBundle.loadString("assets/markdown_test.md"),
-        builder: (BuildContext context, AsyncSnapshot<String> snapshot) {
-          if (snapshot.hasData) {
-            return Markdown(
-                onTapLink: (text, url, title){
-                  _launchURL(url!);
-                },
-                shrinkWrap: true,
-                physics: NeverScrollableScrollPhysics(),
-                data: snapshot.data!
-            );
-          }
-          return Center(
-            child: CircularProgressIndicator(),
+      future: rootBundle.loadString("assets/markdown_test.md"),
+      builder: (BuildContext context, AsyncSnapshot<String> snapshot) {
+        if (snapshot.hasData) {
+          return Markdown(
+            onTapLink: (text, url, title){
+              _launchURL(url!);
+            },
+            shrinkWrap: true,
+            physics: NeverScrollableScrollPhysics(),
+            data: snapshot.data!
           );
-        });
+        }
+        return Center(
+          child: CircularProgressIndicator(),
+        );
+      });
   }
 
   _launchURL(String url) async {

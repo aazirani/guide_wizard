@@ -1,0 +1,170 @@
+import 'package:boilerplate/constants/colors.dart';
+import 'package:boilerplate/constants/dimens.dart';
+import 'package:boilerplate/ui/blocks/sub_block_widget.dart';
+import 'package:boilerplate/widgets/image_slide.dart';
+import 'package:flutter/material.dart';
+import 'package:flutter/rendering.dart';
+import 'package:flutter/services.dart';
+import 'package:render_metrics/render_metrics.dart';
+import 'package:boilerplate/models/block/sub_block.dart';
+
+List<SubBlockModel> subBlocks=[
+  SubBlockModel(title: "Title",),
+  SubBlockModel(title: "Title",),
+  SubBlockModel(title: "Title",),
+];
+
+class BlockPageTextOnly extends StatefulWidget {
+
+  bool isDone=false;
+  BlockPageTextOnly({Key? key}) : super(key: key);
+
+  @override
+  State<BlockPageTextOnly> createState() => _BlockPageTextOnlyState();
+}
+
+class _BlockPageTextOnlyState extends State<BlockPageTextOnly> {
+
+  RenderParametersManager renderManager = RenderParametersManager<dynamic>();
+
+  @override
+  void initState() {
+    super.initState();
+  }
+
+  Widget _buildDoneButton() {
+    return TextButton(
+      onPressed: () {
+        setState(() {
+          widget.isDone = !widget.isDone;
+        });
+      },
+      style: ButtonStyle(
+          overlayColor: MaterialStateProperty.all<Color>(Colors.white10),
+          backgroundColor: MaterialStateProperty.all<Color>(
+              AppColors.button_background_color),
+          shape: MaterialStateProperty.all<RoundedRectangleBorder>(
+              RoundedRectangleBorder(
+                borderRadius: Dimens.blockPageAppBarButtonBorderRadius,
+              )
+          )
+      ),
+      child: Padding(
+        padding: const EdgeInsets.all(1),
+        child: Row(
+          children: [
+            Text(
+              "Done",
+              style: TextStyle(
+                color: Colors.white,
+              ),
+            ),
+            SizedBox(width: 3,),
+            Icon(Icons.done_rounded, color: Colors.white),
+          ],
+        ),
+      ),
+    );
+  }
+
+
+  Widget _buildUndoneButton() {
+    return TextButton(
+      onPressed: () {
+        setState(() {
+          widget.isDone = !widget.isDone;
+        });
+      },
+      style: ButtonStyle(
+          overlayColor: MaterialStateProperty.all<Color>(Colors.white10),
+          shape: MaterialStateProperty.all<RoundedRectangleBorder>(
+              RoundedRectangleBorder(
+                  borderRadius: Dimens.blockPageAppBarButtonBorderRadius,
+                  side: BorderSide(color: Colors.white)
+              )
+          )
+      ),
+      child: Padding(
+        padding: const EdgeInsets.all(1),
+        child: Row(
+          children: [
+            Text(
+              "Undone",
+              style: TextStyle(
+                color: Colors.white,
+              ),
+            ),
+            SizedBox(width: 3,),
+            Icon(Icons.close_rounded, color: Colors.white),
+          ],
+        ),
+      ),
+    );
+  }
+
+  Widget _buildAppBarButton() {
+    return widget.isDone ? _buildUndoneButton() : _buildDoneButton();
+  }
+
+  PreferredSizeWidget? _buildAppBar() {
+    return AppBar(
+      backgroundColor: AppColors.main_color,
+      toolbarHeight: Dimens.appBar["toolbarHeight"],
+      titleSpacing: 0,
+      leading: IconButton(
+        onPressed: () {},
+        icon: Icon(Icons.arrow_back_ios_new_rounded, color: Colors.white,),
+      ),
+      title: Row(
+        children: [
+          Text(
+            "Private Housing",
+            style: TextStyle(
+              color: Colors.white,
+              fontSize: 22,
+            ),
+          ),
+          Spacer(),
+          _buildAppBarButton(),
+          SizedBox(width: 15,),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildScaffoldBody() {
+    return SizedBox.expand(
+      child: Container(
+        color: AppColors.main_color,
+        child: Container(
+          decoration: BoxDecoration(
+              borderRadius: BorderRadius.only(
+                topLeft: Radius.circular(25),
+                topRight: Radius.circular(25),),
+              color: Colors.white
+          ),
+          child: Padding(
+            padding: const EdgeInsets.only(top: 25),
+            child: ListView.builder(
+              scrollDirection: Axis.vertical,
+              shrinkWrap: true,
+              itemCount: subBlocks.length,
+              itemBuilder: (context, i){
+                return SubBlock(index: i, subBlockModelsList: subBlocks, renderManager: renderManager, );
+              },
+            ),
+          ),
+        ),
+      ),
+    );
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      backgroundColor: AppColors.main_color,
+      appBar: _buildAppBar(),
+      body: _buildScaffoldBody(),
+    );
+  }
+}
