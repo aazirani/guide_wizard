@@ -45,7 +45,7 @@ class _TaskListTimeLineState extends State<TaskListTimeLine> {
             nodePosition: 0.05,
           ),
           builder: TimelineTileBuilder(
-            itemCount: 4,
+            itemCount: 20,
             itemExtent: 115,
             contentsBuilder: (context, index) => _buildContents(index),
             indicatorBuilder: (context, index) => _buildIndicator(),
