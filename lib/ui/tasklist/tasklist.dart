@@ -12,28 +12,102 @@ class TaskList extends StatefulWidget {
 }
 
 class _TaskListState extends State<TaskList> {
-  List<Task> tasks = [
-    Task(
-        title: "Application Dates",
-        deadline: DateTime.now(),
-        status: TaskStatus.notDone),
-    Task(
-        title: "Requirements",
-        deadline: DateTime.now(),
-        status: TaskStatus.notDone),
-    Task(title: "Language Certificate", status: TaskStatus.Done),
-    Task(
-        title: "Private Housing",
-        deadline: DateTime.now(),
-        status: TaskStatus.Done),
-  ];
+  // List<Task> tasks = [
+  //   Task(
+  //       title: "Application Dates",
+  //       deadline: DateTime.now(),
+  //       status: TaskStatus.notDone),
+  //   Task(
+  //       title: "Requirements",
+  //       deadline: DateTime.now(),
+  //       status: TaskStatus.notDone),
+  //   Task(title: "Language Certificate", status: TaskStatus.Done),
+  //   Task(
+  //       title: "Private Housing",
+  //       deadline: DateTime.now(),
+  //       status: TaskStatus.Done),
+  // ];
+
+  List<Task> tasks = List<Task>.generate(
+      20,
+      (index) => Task(
+            title: "hi",
+          ));
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.white,
-      appBar: _buildAppBar(),
-      body: _buildBody(tasks),
-    );
+        backgroundColor: Colors.white,
+        body: NestedScrollView(
+            headerSliverBuilder: (context, innerBoxIsScrolled) => [
+                  SliverAppBar(
+                    toolbarHeight: 70,
+                    title: Padding(
+                      padding: const EdgeInsets.only(top: 0.0),
+                      child: Row(
+                        children: [
+                          IconButton(
+                              color: Colors.white,
+                              icon: Icon(Icons.arrow_back_ios),
+                              onPressed: () {}),
+                          // SizedBox(height: 10),
+                          Text("University",
+                              style: TextStyle(
+                                  color: Colors.white,
+                                  fontSize: 18,
+                                  fontWeight: FontWeight.bold))
+                        ],
+                      ),
+                    ),
+                    floating: true,
+                    snap: true,
+                    pinned: true,
+                    expandedHeight: 170,
+                    collapsedHeight: 70,
+                    backgroundColor: AppColors.main_color.withOpacity(1),
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.vertical(
+                        bottom: Radius.circular(30),
+                      ),
+                    ),
+                    centerTitle: false,
+                    flexibleSpace: FlexibleSpaceBar(
+                      stretchModes: const <StretchMode>[
+                        StretchMode.zoomBackground,
+                        StretchMode.blurBackground,
+                        StretchMode.fadeTitle,
+                      ],
+                      
+                      background: SafeArea(
+                        child: Align(
+                          alignment: Alignment.bottomCenter,
+                          child: Container( 
+                            height: 150, 
+                            child: Column(
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Padding(
+                                      padding: const EdgeInsets.only(
+                                          left: 40.0, top: 80, bottom: 0),
+                                      child: Align(
+                                        alignment: Alignment.bottomLeft,
+                                        child: Text("4 tasks",
+                                            style: TextStyle(
+                                                fontSize: 15,
+                                                color: Colors.white)),
+                                      )),
+                                  Spacer(),
+                                  Align(
+                                      alignment: Alignment.bottomCenter,
+                                      child: _buildProgressBar()),
+                                ]),
+                          ),
+                        ),
+                      ),
+                    ),
+                  ),
+                ],
+            body: _buildBody(tasks)));
   }
 
   //appBar methods .............................................................
