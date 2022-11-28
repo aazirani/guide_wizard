@@ -36,11 +36,11 @@ class _TaskListState extends State<TaskList> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        backgroundColor: Colors.white,
+        backgroundColor: AppColors.main_color,
         body: NestedScrollView(
             headerSliverBuilder: (context, innerBoxIsScrolled) => [
                   SliverAppBar(
-                    toolbarHeight: 70,
+                    toolbarHeight: 60,
                     title: Padding(
                       padding: const EdgeInsets.only(top: 0.0),
                       child: Row(
@@ -62,7 +62,7 @@ class _TaskListState extends State<TaskList> {
                     snap: true,
                     pinned: true,
                     expandedHeight: 170,
-                    collapsedHeight: 70,
+                    collapsedHeight: 60,
                     backgroundColor: AppColors.main_color.withOpacity(1),
                     shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.vertical(
@@ -76,12 +76,11 @@ class _TaskListState extends State<TaskList> {
                         StretchMode.blurBackground,
                         StretchMode.fadeTitle,
                       ],
-                      
                       background: SafeArea(
                         child: Align(
                           alignment: Alignment.bottomCenter,
-                          child: Container( 
-                            height: 150, 
+                          child: Container(
+                            height: 150,
                             child: Column(
                                 mainAxisAlignment: MainAxisAlignment.center,
                                 crossAxisAlignment: CrossAxisAlignment.start,
@@ -168,6 +167,7 @@ class _TaskListState extends State<TaskList> {
   }
 
   // body methods ..............................................................
+
   Widget _buildBody(tasks) {
     return TaskListTimeLine(tasks: tasks);
   }
