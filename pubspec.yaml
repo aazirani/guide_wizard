@@ -73,6 +73,7 @@ dependencies:
   flutter_expanded_tile: ^0.3.6
   scrollable_positioned_list: ^0.3.5
   timelines: ^0.1.0
+  render_metrics: ^2.0.2
 
 dev_dependencies:
   flutter_test:

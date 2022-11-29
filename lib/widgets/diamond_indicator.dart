@@ -3,7 +3,8 @@ import 'dart:math' as math;
 import 'package:flutter/material.dart';
 
 class DiamondIndicator extends StatelessWidget {
-  const DiamondIndicator({Key? key}) : super(key: key);
+  final bool fill; 
+  const DiamondIndicator({Key? key, this.fill = false}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -19,9 +20,9 @@ class DiamondIndicator extends StatelessWidget {
             // width: 100,
             // height: 100,
             decoration: BoxDecoration(
-              color: Colors.transparent,
+              color: (fill) ? Color.fromARGB(255, 115, 213, 172) : Colors.transparent,
               border: Border.all(
-                width: 3,
+                width: 2,
                 color: Color.fromARGB(255, 115, 213, 172),
               ),
             ),
@@ -34,7 +35,6 @@ class DiamondIndicator extends StatelessWidget {
                   transform: Matrix4.rotationZ(
                     -math.pi / 4,
                   ),
-                  
                 ),
               ),
             ),
