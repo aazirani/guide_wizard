@@ -4,7 +4,8 @@ import 'package:flutter/material.dart';
 import 'package:boilerplate/constants/colors.dart';
 
 class DiamondIndicator extends StatelessWidget {
-  const DiamondIndicator({Key? key}) : super(key: key);
+  final bool fill; 
+  const DiamondIndicator({Key? key, this.fill = false}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -18,7 +19,7 @@ class DiamondIndicator extends StatelessWidget {
           ),
           child: Container(
             decoration: BoxDecoration(
-              color: AppColors.diamondColor,
+              color: (fill) ? Color.fromARGB(255, 115, 213, 172) : Colors.transparent,
               border: Border.all(
                 width: 2,
                 color: AppColors.diamondBorderColor,
