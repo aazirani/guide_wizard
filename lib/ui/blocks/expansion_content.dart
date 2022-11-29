@@ -1,4 +1,5 @@
 import 'package:boilerplate/constants/dimens.dart';
+import 'package:boilerplate/widgets/webview_page.dart';
 import 'package:flutter/material.dart';
 import 'package:dotted_line/dotted_line.dart';
 import 'package:flutter/rendering.dart';
@@ -7,14 +8,16 @@ import 'package:flutter_markdown/flutter_markdown.dart';
 import 'package:render_metrics/render_metrics.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:boilerplate/widgets/measure_size.dart';
+// import 'package:flutter_inappwebview/flutter_inappwebview.dart';
 
 class ExpansionContent extends StatefulWidget {
-  const ExpansionContent({
+  ExpansionContent({
     Key? key,
     required this.renderManager,
   }) : super(key: key);
 
   final RenderParametersManager renderManager;
+  // final ChromeSafariBrowser browser = AppChromeSafariBrowser();
 
   @override
   State<ExpansionContent> createState() => _ExpansionContentState();
@@ -55,6 +58,26 @@ class _ExpansionContentState extends State<ExpansionContent> {
     );
   }
 
+  // void _openURLInChromeSafari(String url) async{
+  //   widget.browser.open(
+  //       url: Uri.parse(url),
+  //   options: ChromeSafariBrowserClassOptions(
+  //   android: AndroidChromeCustomTabsOptions(
+  //   shareState: CustomTabsShareState.SHARE_STATE_OFF),
+  //   ios: IOSSafariOptions(barCollapsingEnabled: true)));
+  // }
+
+  Future<void> _launchInWebViewOrVC(Uri url) async {
+    if (!await launchUrl(
+      url,
+      mode: LaunchMode.inAppWebView,
+      webViewConfiguration: const WebViewConfiguration(
+          headers: <String, String>{'my_header_key': 'my_header_value'}),
+    )) {
+      throw 'Could not launch $url';
+    }
+  }
+
   Widget _buildMarkdownExample(){ //Just for test
     return FutureBuilder(
       future: rootBundle.loadString("assets/markdown_test.md"),
@@ -62,7 +85,7 @@ class _ExpansionContentState extends State<ExpansionContent> {
         if (snapshot.hasData) {
           return Markdown(
             onTapLink: (text, url, title){
-              _launchURL(url!);
+              _launchInWebViewOrVC(Uri.parse(url!));
             },
             shrinkWrap: true,
             physics: NeverScrollableScrollPhysics(),
@@ -73,18 +96,5 @@ class _ExpansionContentState extends State<ExpansionContent> {
           child: CircularProgressIndicator(),
         );
       });
-  }
-
-  _launchURL(String url) async {
-    if (await canLaunch(url)) {
-      await launch(
-        url,
-        forceSafariVC: true,
-        forceWebView: true,
-        enableJavaScript: true,
-      );
-    } else {
-      throw 'Could not launch $url';
-    }
   }
 }

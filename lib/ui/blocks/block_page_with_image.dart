@@ -112,7 +112,9 @@ class _BlockPageWithImageState extends State<BlockPageWithImage> {
       toolbarHeight: Dimens.appBar["toolbarHeight"],
       titleSpacing: 0,
       leading: IconButton(
-        onPressed: () {},
+        onPressed: () {
+          Navigator.of(context).pop();
+        },
         icon: Icon(Icons.arrow_back_ios_new_rounded, color: Colors.white,),
       ),
       title: Row(
