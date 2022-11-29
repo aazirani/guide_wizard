@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import '../../constants/colors.dart';
 import '../tasklist/tasklist_timeline.dart';
 import '../../models/task/task.dart';
 import '../../utils/enums/enum.dart';
+import 'package:render_metrics/render_metrics.dart';
 
 class TaskList extends StatefulWidget {
   const TaskList({Key? key}) : super(key: key);
@@ -12,164 +14,121 @@ class TaskList extends StatefulWidget {
 }
 
 class _TaskListState extends State<TaskList> {
-  // List<Task> tasks = [
-  //   Task(
-  //       title: "Application Dates",
-  //       deadline: DateTime.now(),
-  //       status: TaskStatus.notDone),
-  //   Task(
-  //       title: "Requirements",
-  //       deadline: DateTime.now(),
-  //       status: TaskStatus.notDone),
-  //   Task(title: "Language Certificate", status: TaskStatus.Done),
-  //   Task(
-  //       title: "Private Housing",
-  //       deadline: DateTime.now(),
-  //       status: TaskStatus.Done),
-  // ];
+  List<Task> tasks = [
+    Task(
+        title: "Application Dates",
+        deadline: DateTime.now(),
+        status: TaskStatus.notDone),
+    Task(
+        title: "Requirements",
+        deadline: DateTime.now(),
+        status: TaskStatus.notDone),
+    Task(title: "Other", deadline: DateTime.now(), status: TaskStatus.notDone),
+    Task(title: "Another", status: TaskStatus.notDone),
+    Task(title: "Language Certificate", status: TaskStatus.Done),
+    Task(title: "Housing", deadline: DateTime.now(), status: TaskStatus.Done),
+    Task(title: "Health", deadline: DateTime.now(), status: TaskStatus.Done),
+    Task(title: "Another", status: TaskStatus.Done),
+  ];
 
-  List<Task> tasks = List<Task>.generate(
-      20,
-      (index) => Task(
-            title: "hi",
-          ));
+  // List<Task> tasks = List<Task>.generate(
+  //     20,
+  //     (index) => Task(
+  //           title: "hi",
+  //         ));
+
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-        backgroundColor: AppColors.main_color,
-        body: NestedScrollView(
-            headerSliverBuilder: (context, innerBoxIsScrolled) => [
-                  SliverAppBar(
-                    toolbarHeight: 60,
-                    title: Padding(
-                      padding: const EdgeInsets.only(top: 0.0),
-                      child: Row(
-                        children: [
-                          IconButton(
-                              color: Colors.white,
-                              icon: Icon(Icons.arrow_back_ios),
-                              onPressed: () {}),
-                          // SizedBox(height: 10),
-                          Text("University",
-                              style: TextStyle(
-                                  color: Colors.white,
-                                  fontSize: 18,
-                                  fontWeight: FontWeight.bold))
-                        ],
-                      ),
-                    ),
-                    floating: true,
-                    snap: true,
-                    pinned: true,
-                    expandedHeight: 170,
-                    collapsedHeight: 60,
-                    backgroundColor: AppColors.main_color.withOpacity(1),
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.vertical(
-                        bottom: Radius.circular(30),
-                      ),
-                    ),
-                    centerTitle: false,
-                    flexibleSpace: FlexibleSpaceBar(
-                      stretchModes: const <StretchMode>[
-                        StretchMode.zoomBackground,
-                        StretchMode.blurBackground,
-                        StretchMode.fadeTitle,
-                      ],
-                      background: SafeArea(
-                        child: Align(
-                          alignment: Alignment.bottomCenter,
-                          child: Container(
-                            height: 150,
-                            child: Column(
-                                mainAxisAlignment: MainAxisAlignment.center,
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                  Padding(
-                                      padding: const EdgeInsets.only(
-                                          left: 40.0, top: 80, bottom: 0),
-                                      child: Align(
-                                        alignment: Alignment.bottomLeft,
-                                        child: Text("4 tasks",
-                                            style: TextStyle(
-                                                fontSize: 15,
-                                                color: Colors.white)),
-                                      )),
-                                  Spacer(),
-                                  Align(
-                                      alignment: Alignment.bottomCenter,
-                                      child: _buildProgressBar()),
-                                ]),
-                          ),
-                        ),
-                      ),
-                    ),
-                  ),
-                ],
-            body: _buildBody(tasks)));
+    return Scaffold(appBar: _buildAppBar(), body: _buildBody(tasks));
   }
 
   //appBar methods .............................................................
   PreferredSizeWidget _buildAppBar() {
     return AppBar(
-      toolbarHeight: _getScreenHeight() / 4,
-      titleSpacing: 5,
-      backgroundColor: AppColors.main_color,
-      shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.vertical(
-          bottom: Radius.circular(40),
-        ),
-      ),
-      flexibleSpace: SafeArea(
-        child: Align(
-          alignment: Alignment.bottomCenter,
-          child: Container(
-            child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Padding(
-                    padding: const EdgeInsets.only(left: 8.0, top: 10),
-                    child: IconButton(
-                      onPressed: () {
-                        Navigator.pop(context);
-                      },
-                      icon: Icon(Icons.arrow_back_ios),
-                      color: Colors.white,
-                    ),
-                  ),
-                  Padding(
-                    padding:
-                        const EdgeInsets.only(left: 30.0, top: 60, bottom: 0),
-                    child: Column(
-                      mainAxisAlignment: MainAxisAlignment.start,
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Text("University",
-                            style: TextStyle(
-                                fontSize: 20,
-                                fontWeight: FontWeight.bold,
-                                color: Colors.white)),
-                        Text("4 tasks",
-                            style: TextStyle(fontSize: 15, color: Colors.white))
-                      ],
-                    ),
-                  ),
-                  Spacer(),
-                  Align(
-                      alignment: Alignment.bottomCenter,
-                      child: _buildProgressBar()),
-                ]),
-          ),
-        ),
-      ),
-    );
+        backgroundColor: AppColors.main_color,
+        titleSpacing: 0,
+        title: Text("University",
+            style: TextStyle(
+                color: Colors.white,
+                fontSize: 18,
+                fontWeight: FontWeight.bold)),
+        leading: Padding(
+          padding: const EdgeInsets.only(left: 20.0),
+          child: IconButton(
+              icon: Icon(Icons.arrow_back_ios),
+              onPressed: () {},
+              color: Colors.white),
+        ));
   }
 
   // body methods ..............................................................
 
   Widget _buildBody(tasks) {
-    return TaskListTimeLine(tasks: tasks);
+    return Stack(children: [
+      _buildTaskProgressBar(),
+      _buildExpandableTaskTimeline(),
+    ]);
+  }
+
+  Widget _buildTaskProgressBar() {
+    return Container(
+        height: 150,
+        color: AppColors.main_color,
+        child: Padding(
+            padding: EdgeInsets.only(top: 50, bottom: 0),
+            child: Align(
+              alignment: Alignment.bottomCenter,
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.start,
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Padding(
+                      padding: EdgeInsets.only(left: 10, bottom: 5),
+                      child: Text("4 tasks",
+                          style: TextStyle(color: Colors.white))),
+                  SizedBox(height: 5),
+                  _buildProgressBar(),
+                ],
+              ),
+            )));
+  }
+
+  Widget _buildExpandableTaskTimeline() {
+    return SizedBox.expand(
+      child: DraggableScrollableSheet(
+        snap: true,
+        initialChildSize: 0.87,
+        maxChildSize: 1,
+        minChildSize: 0.87,
+        builder: (BuildContext context, ScrollController scrollController) {
+          return Container(
+            color: AppColors.main_color,
+            child: Padding(
+              padding: const EdgeInsets.only(top: 15.0),
+              child: Container(
+                decoration: BoxDecoration(
+                    borderRadius: BorderRadius.only(
+                      topLeft: Radius.circular(25),
+                      topRight: Radius.circular(25),
+                    ),
+                    color: Colors.white),
+                child: Padding(
+                  padding: const EdgeInsets.only(top: 15.0, bottom: 8),
+                  child: ListView.builder(
+                    scrollDirection: Axis.vertical,
+                    controller: scrollController,
+                    itemCount: tasks.length,
+                    itemBuilder: (context, i) {
+                      return TaskListTimeLine(tasks: tasks, index: i);
+                    },
+                  ),
+                ),
+              ),
+            ),
+          );
+        },
+      ),
+    );
   }
 
   Widget _buildProgressBar() {

@@ -7,10 +7,9 @@ import '../../utils/enums/enum.dart';
 
 class TaskListTimeLine extends StatefulWidget {
   final List<Task> tasks;
-  TaskListTimeLine({
-    Key? key,
-    required this.tasks,
-  }) : super(key: key);
+  final int index;
+  TaskListTimeLine({Key? key, required this.tasks, required this.index})
+      : super(key: key);
 
   @override
   State<TaskListTimeLine> createState() => _TaskListTimeLineState();
@@ -19,65 +18,29 @@ class TaskListTimeLine extends StatefulWidget {
 class _TaskListTimeLineState extends State<TaskListTimeLine> {
   @override
   Widget build(BuildContext context) {
-    // final stepStore = Provider.of<StepStore>(context);
-    return _buildTimelineContainer();
+    return _buildTimeline(widget.index);
   }
 
-  Widget _buildTimelineContainer() {
-    return ClipRRect(
-      borderRadius: BorderRadius.only(
-          topLeft: Radius.circular(30), topRight: Radius.circular(30)),
-      child: Container(
-        height: MediaQuery.of(context).size.height,
-        width: MediaQuery.of(context).size.width,
-        decoration: BoxDecoration(
-          color: Color.fromARGB(255, 251, 251, 251),
-          borderRadius: BorderRadius.only(
-            topLeft: Radius.circular(30),
-            topRight: Radius.circular(30),
-          ),
-        ),
-        child: _buildTimeline(),
+  Widget _buildTimeline(index) {
+    return TimelineTile(
+      nodePosition: 0.05,
+      contents: _buildContents(index),
+      node: TimelineNode(
+        indicator: _buildIndicator(index),
+        startConnector: _buildConnector(),
+        endConnector: _buildConnector(),
       ),
-    ); 
-
-    // return Container(
-    //   padding: EdgeInsets.only(),
-    //   height: _getScreenHeight(),
-    //   width: double.infinity,
-    //   child: Align(
-    //     alignment: Alignment.topLeft,
-    //     child: _buildTimeline(),
-    //   ),
-    // );
-  }
-
-  Widget _buildTimeline() {
-    return Padding(
-      padding: EdgeInsets.only(top: 10),
-      child: Timeline.tileBuilder(
-          shrinkWrap: true,
-          theme: TimelineThemeData(
-            direction: Axis.vertical,
-            nodePosition: 0.05,
-          ),
-          builder: TimelineTileBuilder(
-            itemCount: 20,
-            itemExtent: 115,
-            contentsBuilder: (context, index) => _buildContents(index),
-            indicatorBuilder: (context, index) => _buildIndicator(),
-            startConnectorBuilder: (context, index) => _buildConnector(),
-            endConnectorBuilder: (context, index) => _buildConnector(),
-          )),
     );
   }
 
-  Widget _buildIndicator() {
+  Widget _buildIndicator(index) {
     return Container(
         color: Colors.transparent,
         width: 8,
         height: 8,
-        child: DiamondIndicator());
+        child: (_taskDone(index))
+            ? DiamondIndicator(fill: true)
+            : DiamondIndicator());
   }
 
   Widget _buildConnector() {
@@ -96,6 +59,14 @@ class _TaskListTimeLineState extends State<TaskListTimeLine> {
           padding: const EdgeInsets.all(16.0),
           decoration: BoxDecoration(
             color: Color.fromARGB(255, 246, 246, 246),
+            boxShadow: [
+              BoxShadow(
+                  color: Colors.purple,
+                  spreadRadius: 7,
+                  blurRadius: 30,
+                  offset: Offset(0, 3),
+                  blurStyle: BlurStyle.outer)
+            ],
             border: Border(
               left: BorderSide(
                   width: 25,
@@ -155,10 +126,11 @@ class _TaskListTimeLineState extends State<TaskListTimeLine> {
 
   Widget _buildDeadlineContainer(index) {
     return Container(
+        height: 10,
         decoration: BoxDecoration(
             borderRadius: BorderRadius.all(Radius.circular(20)),
             border: Border.all(
-                width: 2,
+                width: 1,
                 color: (_taskDone(index))
                     ? Color.fromARGB(255, 115, 213, 172)
                     : Color.fromARGB(255, 169, 25, 12))),
