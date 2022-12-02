@@ -1,8 +1,4 @@
-// abstract class Question {
-//   late String title, description;
-//   late List<Map<String, dynamic>> options;
-//   late bool multiChoice, isAnswered = false;
-// }
+import 'package:boilerplate/models/answer/answer.dart';
 
 class Question {
   //Server Values
@@ -21,7 +17,7 @@ class Question {
   String created_at;
   String updated_at;
   List<dynamic> step; //TODO
-  //List<Answer> answers; //TODO
+  List<Answer> answers;
 
   Question({
     required this.id,
@@ -39,7 +35,7 @@ class Question {
     required this.created_at,
     required this.updated_at,
     required this.step,
-    // required this.answers,
+    required this.answers,
   });
 
   factory Question.fromMap(Map<String, dynamic> json) {
@@ -73,7 +69,8 @@ class Question {
         creator_id: json["creator_id"],
         created_at: json["created_at"],
         updated_at: json["updated_at"],
-        step: json["step"]
+        step: json["step"],
+        answers: json["answers"].map((answer) => Answer.fromMap(answer)).toList().cast<Answer>(),
     );
   }
 
@@ -93,25 +90,26 @@ class Question {
       "created_at": created_at,
       "updated_at": updated_at,
       "step": step,
-      // "answers": answers,
+      "answers": answers,
     };
   }
 
-  // Answer getAnswer(int id) {
-  //   for (Answer answer in answers) {
-  //     if (answer.id == id) {
-  //       return answer;
-  //     }
-  //   }
-  //   return null;
-  // }
+  Answer? getAnswer(int id) {
+    for (Answer answer in answers) {
+      if (answer.id == id) {
+        return answer;
+      }
+    }
+    return null;
+  }
 
+  //TODO
   // void deselectAllAnswers() {
   //   for (Answer answer in answers) {
   //     answer.selected = false;
   //   }
   // }
-  //
+  //TODO
   // void selectAnswers(List<Answer> answersToBeSelected) {
   //   deselectAllAnswers();
   //   for (Answer answer in answersToBeSelected) {
