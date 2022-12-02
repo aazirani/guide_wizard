@@ -1,24 +1,48 @@
-import 'package:boilerplate/utils/enums/enum.dart';
-import '../task/task.dart';
+import 'package:boilerplate/models/title/title.dart';
 
 class Step {
-  late String title;
-  late StepStatus status;
-  late double percentage;
-  late int numTasks;
-  late List<Task> tasks;
-  Step(
-      {required this.title,
-      this.status = StepStatus.notStarted,
-      required this.percentage,
-      required this.numTasks,
-      required this.tasks});
+  int id;
+  Title name;
+  Title description;
+  int order;
+  String type;
+  int creator_id;
+  String created_at;
+  String updated_at;
 
-  void setStatus(StepStatus status) {
-    this.status = status;
+  Step({
+    required this.id,
+    required this.name,
+    required this.description,
+    required this.order,
+    required this.type,
+    required this.creator_id,
+    required this.created_at,
+    required this.updated_at,
+  });
+
+  factory Step.fromMap(Map<String, dynamic> json) {
+    return Step(
+      id: json["id"],
+      name: Title.fromMap(json["name"]),
+      description: Title.fromMap(json["description"]),
+      order: json["order"],
+      type: json["type"],
+      creator_id: json["creator_id"],
+      created_at: json["created_at"],
+      updated_at: json["updated_at"],
+    );
   }
 
-  void setPercentage(double percentage) {
-    this.percentage = percentage;
-  }
+  Map<String, dynamic> toMap() => {
+    "id": id,
+    "name": name,
+    "description": description,
+    "order": order,
+    "type": type,
+    "creator_id": creator_id,
+    "created_at": created_at,
+    "updated_at": updated_at,
+  };
+
 }
