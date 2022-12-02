@@ -1,5 +1,3 @@
-import 'package:flutter/cupertino.dart';
-
 class Title {
   int id;
   String technical_name;
