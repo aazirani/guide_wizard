@@ -1,5 +1,5 @@
 import 'package:boilerplate/data/network/constants/endpoints.dart';
-import 'package:flutter/material.dart';
+import 'package:boilerplate/models/title/title.dart';
 
 class Answer {
   int id;
