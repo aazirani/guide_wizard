@@ -4,20 +4,24 @@ import 'package:boilerplate/models/title/title.dart';
 class Task {
   int id;
   Title title;
+  String type;
   List<String>? image;
   List<SubTask> sub_tasks;
   String creator_id;
   String created_at;
   String updated_at;
+  int step_id;
 
   Task({
     required this.id,
     required this.title,
+    required this.type,
     this.image,
     required this.sub_tasks,
     required this.creator_id,
     required this.created_at,
     required this.updated_at,
+    required this.step_id,
   });
 
   factory Task.fromMap(Map<String, dynamic> json) {
@@ -37,11 +41,13 @@ class Task {
     return Task(
       id: json["id"],
       title: json["title"].cast<Title>(),
-      image: json["image"],
+      type: json["type"],
+      image: json["image"].cast<String>(),
       sub_tasks: json["sub_tasks"].cast<SubTask>(),
       creator_id: json["creator_id"],
       created_at: json["created_at"],
       updated_at: json["updated_at"],
+      step_id: json["step_id"],
     );
   }
 

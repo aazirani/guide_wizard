@@ -2,6 +2,7 @@ import 'package:boilerplate/models/title/title.dart';
 
 class SubTask {
   int id;
+  int task_id;
   Title title;
   String markdown;
   String creator_id;
@@ -10,6 +11,7 @@ class SubTask {
 
   SubTask({
     required this.id,
+    required this.task_id,
     required this.title,
     required this.markdown,
     required this.creator_id,
@@ -20,6 +22,7 @@ class SubTask {
   factory SubTask.fromMap(Map<String, dynamic> json) {
     return SubTask(
       id: json["id"],
+      task_id: json["task_id"],
       title: Title.fromMap(json["title"]),
       markdown: json["markdown"],
       creator_id: json["creator_id"],
@@ -30,6 +33,7 @@ class SubTask {
 
   Map<String, dynamic> toMap() => {
     "id": id,
+    "task_id": task_id,
     "title": title,
     "markdown": markdown,
     "creator_id": creator_id,
