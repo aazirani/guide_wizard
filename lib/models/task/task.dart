@@ -1,30 +1,26 @@
-import 'package:boilerplate/data/network/constants/endpoints.dart';
+import 'package:boilerplate/models/sub_task/sub_task.dart';
 import 'package:boilerplate/models/title/title.dart';
 
-class Answer {
+class Task {
   int id;
-  int question_id;
   Title title;
-  int order;
-  String? image;
-  bool is_enabled;
+  List<String>? image;
+  List<SubTask> sub_tasks;
   String creator_id;
   String created_at;
   String updated_at;
 
-  Answer({
+  Task({
     required this.id,
-    required this.question_id,
     required this.title,
-    required this.order,
     this.image,
-    required this.is_enabled,
+    required this.sub_tasks,
     required this.creator_id,
     required this.created_at,
     required this.updated_at,
   });
 
-  factory Answer.fromMap(Map<String, dynamic> json) {
+  factory Task.fromMap(Map<String, dynamic> json) {
     // return Answer(
     //   id: json["id"],
     //   title: json ["title"],
@@ -38,13 +34,11 @@ class Answer {
     //   is_enabled: json["is_enabled"] == 1 ? true : false,
     //   disabled_text: json ["disabled_text"],
     // );
-    return Answer(
+    return Task(
       id: json["id"],
-      question_id: json["question_id"],
       title: json["title"].cast<Title>(),
-      order: json["order"],
       image: json["image"],
-      is_enabled: json["is_enabled"] == 1 ? true : false,
+      sub_tasks: json["sub_tasks"].cast<SubTask>(),
       creator_id: json["creator_id"],
       created_at: json["created_at"],
       updated_at: json["updated_at"],
@@ -53,11 +47,9 @@ class Answer {
 
   Map<String, dynamic> toMap() => {
     "id": id,
-    "question_id": question_id,
     "title": title,
-    "order": order,
     "image": image,
-    "is_enabled": is_enabled ? 1 : 0,
+    "sub_tasks": sub_tasks,
     "creator_id": creator_id,
     "created_at": created_at,
     "updated_at": updated_at,
