@@ -1,22 +1,24 @@
 import 'package:boilerplate/models/answer/answer.dart';
+import 'package:boilerplate/models/title/title.dart';
+import 'package:boilerplate/models/step/step.dart';
 
 class Question {
   //Server Values
   int id;
-  List<dynamic> title; //TODO
-  List<dynamic> sub_title; //TODO
+  Title title;
+  Title sub_title;
   String type;
   int axis_count;
   bool is_multiple_choice;
-  List<dynamic> info_url; //TODO
-  List<dynamic> info_description; //TODO
+  Title info_url;
+  Title info_description;
   int answer_required;
   bool answers_selected_by_default;
   int step_id;
   int creator_id;
   String created_at;
   String updated_at;
-  List<dynamic> step; //TODO
+  Step step;
   List<Answer> answers;
 
   Question({
@@ -56,20 +58,20 @@ class Question {
     // );
     return Question(
         id: json["id"],
-        title: json["title"],
-        sub_title: json["sub_title"],
+        title: json["title"].cast<Title>(),
+        sub_title: json["sub_title"].cast<Title>(),
         type: json["type"],
         axis_count: json["axis_count"],
         is_multiple_choice: json["is_multiple_choice"] == 1  ? true : false,
-        info_url: json["info_url"],
-        info_description: json["info_description"],
+        info_url: json["info_url"].cast<Title>(),
+        info_description: json["info_description"].cast<Title>(),
         answer_required: json["answer_required"],
         answers_selected_by_default: json["answers_selected_by_default"] == 1  ? true : false,
         step_id: json["step_id"],
         creator_id: json["creator_id"],
         created_at: json["created_at"],
         updated_at: json["updated_at"],
-        step: json["step"],
+        step: json["step"].cast<Step>(),
         answers: json["answers"].map((answer) => Answer.fromMap(answer)).toList().cast<Answer>(),
     );
   }

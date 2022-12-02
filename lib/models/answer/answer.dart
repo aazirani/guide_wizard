@@ -1,9 +1,10 @@
 import 'package:boilerplate/data/network/constants/endpoints.dart';
+import 'package:flutter/material.dart';
 
 class Answer {
   int id;
   int question_id;
-  List<dynamic> title;
+  Title title;
   int order;
   String? image;
   bool is_enabled;
@@ -40,7 +41,7 @@ class Answer {
     return Answer(
       id: json["id"],
       question_id: json["question_id"],
-      title: json["title"],
+      title: json["title"].cast<Title>(),
       order: json["order"],
       image: json["image"],
       is_enabled: json["is_enabled"] == 1 ? true : false,
