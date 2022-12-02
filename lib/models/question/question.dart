@@ -3,8 +3,8 @@ import 'package:boilerplate/models/answer/answer.dart';
 class Question {
   //Server Values
   int id;
-  String title;
-  String sub_title;
+  List<dynamic> title; //TODO
+  List<dynamic> sub_title; //TODO
   String type;
   int axis_count;
   bool is_multiple_choice;
