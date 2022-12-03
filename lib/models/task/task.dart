@@ -25,19 +25,9 @@ class Task {
   });
 
   factory Task.fromMap(Map<String, dynamic> json) {
-    // return Answer(
-    //   id: json["id"],
-    //   title: json ["title"],
-    //   text: json["text"],
     //   image: Endpoints.domain +
     //       '/api/app/answers/img/${json["image"].toString().replaceAll(
     //           Endpoints.domain + '/api/app/answers/img/', '')}',
-    //   color: json["color"],
-    //   selected: (json["selected"] == null) ? false : json["selected"],
-    //   updated_at: json["updated_at"],
-    //   is_enabled: json["is_enabled"] == 1 ? true : false,
-    //   disabled_text: json ["disabled_text"],
-    // );
     return Task(
       id: json["id"],
       title: json["title"].cast<Title>(),
