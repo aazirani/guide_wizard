@@ -41,21 +41,6 @@ class Question {
   });
 
   factory Question.fromMap(Map<String, dynamic> json) {
-    //for Userfrosting
-    // return Question(
-    //   id: json["id"],
-    //   title: json["title"],
-    //   sub_title: json["sub_title"],
-    //   updated_at: json["updated_at"],
-    //   answers: json["answers"].map((answer) => Answer.fromMap(answer)).toList().cast<Answer>(),
-    //   type: json["type"],
-    //   is_multiple_choice: json["is_multiple_choice"] == 1  ? true : false,
-    //   axis_count: json["axis_count"],
-    //   info_url: json["info_url"],
-    //   info_description: json["info_description"],
-    //   show_on_startup: json["show_on_startup"] == 1  ? true : false,
-    //   answers_selected_by_default: json["answers_selected_by_default"] == 1  ? true : false,
-    // );
     return Question(
         id: json["id"],
         title: json["title"].cast<Title>(),
@@ -105,17 +90,16 @@ class Question {
     return null;
   }
 
-  //TODO
-  // void deselectAllAnswers() {
-  //   for (Answer answer in answers) {
-  //     answer.selected = false;
-  //   }
-  // }
-  //TODO
-  // void selectAnswers(List<Answer> answersToBeSelected) {
-  //   deselectAllAnswers();
-  //   for (Answer answer in answersToBeSelected) {
-  //     answer.selected = true;
-  //   }
-  // }
+  void deselectAllAnswers() {
+    for (Answer answer in answers) {
+      answer.selected = false;
+    }
+  }
+
+  void selectAnswers(List<Answer> answersToBeSelected) {
+    deselectAllAnswers();
+    for (Answer answer in answersToBeSelected) {
+      answer.selected = true;
+    }
+  }
 }
