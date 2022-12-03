@@ -2,10 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:provider/provider.dart';
 import 'package:timelines/timelines.dart';
-import '../../widgets/diamond_indicator.dart';
-import '../../constants/colors.dart';
-import '../../stores/step/step_store.dart';
-import '../../models/step/step.dart' as s;
+import 'package:boilerplate/widgets/diamond_indicator.dart';
+import 'package:boilerplate/constants/colors.dart';
+import 'package:boilerplate/stores/step/step_store.dart';
+import 'package:boilerplate/models/step/step.dart' as s;
 
 class CompressedBlocklistTimeline extends StatefulWidget {
   final List<s.Step> steps;

@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:provider/provider.dart';
-import '../../models/step/step.dart' as s;
-import '../../utils/enums/enum.dart';
-import '../../constants/colors.dart';
-import '../../stores/step/step_store.dart';
-import '../../constants/dimens.dart';
+import 'package:boilerplate/models/step/step.dart' as s;
+import 'package:boilerplate/utils/enums/enum.dart';
+import 'package:boilerplate/constants/colors.dart';
+import 'package:boilerplate/stores/step/step_store.dart';
+import 'package:boilerplate/constants/dimens.dart';
 
 class StepSliderWidget extends StatefulWidget {
   final List<s.Step> steps;

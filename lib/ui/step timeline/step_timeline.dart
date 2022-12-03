@@ -1,15 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:timelines/timelines.dart';
-import '../../models/step/step.dart' as s;
-import 'package:flutter/src/foundation/key.dart';
-import 'package:flutter/src/widgets/container.dart';
-import 'package:flutter/src/widgets/framework.dart';
-import '../../constants/colors.dart';
+import 'package:boilerplate/models/step/step.dart' as s;
+import 'package:boilerplate/constants/colors.dart';
 
 class StepTimeLine extends StatefulWidget {
-  List<s.Step> steps;
-  int pending;
-  int stepNo;
+  final List<s.Step> steps;
+  final int pending;
+  final int stepNo;
   StepTimeLine(
       {Key? key,
       required this.pending,
@@ -25,8 +22,7 @@ class _StepTimeLineState extends State<StepTimeLine> {
   int index = 3;
   late int pending = widget.pending;
   late int stepNo = widget.stepNo;
-  double _getScreenHeight() => MediaQuery.of(context).size.height;
-  double _getScreenWidth() => MediaQuery.of(context).size.width;
+  
   @override
   Widget build(BuildContext context) {
     print(widget.pending);
@@ -72,12 +68,6 @@ class _StepTimeLineState extends State<StepTimeLine> {
             ? _buildDoneIndicator()
             : _buildNotStartedIndicator();
   }
-
-  // Widget _buildDoneIndicator() {
-  //   return (index == widget.visit)
-  //       ? _buildPendingIndicator()
-  //       : const DotIndicator(size: 15, color: Colors.blue);
-  // }
 
   Widget _buildDoneIndicator() {
     return const DotIndicator(size: 10, color: AppColors.main_color);
@@ -179,4 +169,7 @@ class _StepTimeLineState extends State<StepTimeLine> {
                     : const SolidLineConnector(
                         thickness: 3, color: AppColors.main_color, indent: 10);
   }
+
+  double _getScreenWidth() => MediaQuery.of(context).size.width;
+
 }

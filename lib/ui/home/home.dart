@@ -1,14 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import '../../constants/colors.dart';
-import '../step slider/step_slider_widget.dart';
-import '../step timeline/step_timeline.dart';
-import '../../models/step/step.dart' as s;
-import '../../models/task/task.dart';
-import '../../utils/enums/enum.dart';
+import 'package:boilerplate/constants/colors.dart';
+import 'package:boilerplate/ui/step slider/step_slider_widget.dart';
+import 'package:boilerplate/ui/step timeline/step_timeline.dart';
+import 'package:boilerplate/models/step/step.dart' as s;
+import 'package:boilerplate/models/task/task.dart';
+import 'package:boilerplate/utils/enums/enum.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
-import '../../stores/step/step_store.dart';
-import '../compressed blocklist timeline/compressed_task_list_timeline.dart';
+import 'package:boilerplate/stores/step/step_store.dart';
+import 'package:boilerplate/ui/compressed blocklist timeline/compressed_task_list_timeline.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({Key? key}) : super(key: key);
