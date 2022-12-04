@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:timelines/timelines.dart';
-import '../../widgets/diamond_indicator.dart';
-import '../../constants/colors.dart';
-import '../../models/task/task.dart';
-import '../../utils/enums/enum.dart';
+import 'package:boilerplate/widgets/diamond_indicator.dart';
+import 'package:boilerplate/constants/colors.dart';
+import 'package:boilerplate/models/task/task.dart';
+import 'package:boilerplate/utils/enums/enum.dart';
 
 class TaskListTimeLine extends StatefulWidget {
   final List<Task> tasks;

@@ -1,10 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
-import '../../constants/colors.dart';
-import '../tasklist/tasklist_timeline.dart';
-import '../../models/task/task.dart';
-import '../../utils/enums/enum.dart';
-import 'package:render_metrics/render_metrics.dart';
+import 'package:boilerplate/constants/colors.dart';
+import 'package:boilerplate/ui/tasklist/tasklist_timeline.dart';
+import 'package:boilerplate/models/task/task.dart';
+import 'package:boilerplate/utils/enums/enum.dart';
 
 class TaskList extends StatefulWidget {
   const TaskList({Key? key}) : super(key: key);
