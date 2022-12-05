@@ -16,24 +16,46 @@ class AppColors {
     900: const Color(0xFFD56217)
   };
   static const Map<int, Color> green = const <int, Color>{
-    //Done and pending slider color
-    50: const Color.fromARGB(218, 206, 240, 229),
-    //progress bar and timeline indicator
-    100: Color.fromARGB(255, 47, 205, 144),
+    50: Color.fromARGB(218, 206, 240, 229),
+    100: Color.fromARGB(255, 115, 213, 172),
+    200: Color.fromARGB(255, 124, 222, 194),
+    300: Color.fromARGB(255, 47, 205, 144),
   };
 
   static const Map<int, Color> greys = const <int, Color>{
-    //white
-    50: Color.fromARGB(255, 255, 255, 255),
-    //notStartedSlider
+    50: Color.fromARGB(255, 239, 237, 237),
     100: const Color.fromARGB(255, 243, 241, 241),
-    //notStartedSlider border
     200: const Color.fromARGB(255, 177, 182, 186),
-
+    300: Color.fromARGB(255, 158, 158, 158),
   };
 
+  static const Map<int, Color> step_timeline_connector_gradient = const <int, Color>{
+    50: main_color,
+    100: const Color.fromARGB(159, 77, 172, 180),
+    200: Color.fromARGB(255, 115, 213, 172),
+  };
+  //step timeline
+  static Color stepTimelinePendingColor = green[100]!;
+  static Color stepTimelineNotStartedNodeColor = greys[300]!;
+  static Color stepTimelineNotStartedConnectorColor = greys[300]!;
+  static Color stepTimelineContainerColor = greys[50]!;
+  static Color stepTimelineContainerShadowColor = greys[300]!;
+  //step slider
+  static Color stepSliderAvailableColor = green[50]!;
+  static Color stepSliderUnavailableColor = greys[100]!;
+  static Color stepSliderUnavailableBorder = greys[200]!;
+  static Color stepSliderContinueButton = white;
+  //progress bar
+  static Color progressBarBackgroundColor = white;
+  static Color progressBarValueColor = green[300]!;
+  //compressed timeline
+  static Color timelineCompressedConnectorColor = green[100]!;
+
+  static const Color title_color = Colors.white;
   static const Color main_color = const Color.fromRGBO(0, 81, 158, 1);
   static const Color grey = const Color.fromRGBO(231, 231, 231, 1);
+  static const Color transparent = Colors.transparent;
+  static const Color white = Colors.white;
   static const Color button_background_color = const Color.fromRGBO(217, 217, 217, 0.15);
   static const Color bright_foreground_color = Colors.white;
   static const Color dotted_line_color = Colors.green;

@@ -8,7 +8,7 @@ import 'package:boilerplate/models/task/task.dart';
 import 'package:boilerplate/utils/enums/enum.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:boilerplate/stores/step/step_store.dart';
-import 'package:boilerplate/ui/compressed blocklist timeline/compressed_task_list_timeline.dart';
+import 'package:boilerplate/ui/compressed%20tasklist%20timeline/compressed_task_list_timeline.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({Key? key}) : super(key: key);
@@ -71,7 +71,7 @@ class _HomeScreenState extends State<HomeScreen> {
       title: Padding(
           padding: EdgeInsets.only(left: 10),
           child: Text("Welcome Guide",
-              style: TextStyle(color: Colors.white, fontSize: 20))),
+              style: TextStyle(color: AppColors.title_color, fontSize: 20))),
     );
   }
 

@@ -34,7 +34,7 @@ class _StepSliderWidgetState extends State<StepSliderWidget> {
   _buildCarouselSlider(stepStore) {
     return CarouselSlider(
       options: CarouselOptions(
-          onPageChanged: (index, reson) {
+          onPageChanged: (index, reason) {
             stepStore.increment(index);
           },
           height: _getScreenHeight() / 4,
@@ -83,8 +83,8 @@ class _StepSliderWidgetState extends State<StepSliderWidget> {
   Color _buildSliderColor(index) {
     return (widget.steps[index].status == StepStatus.isPending ||
             widget.steps[index].status == StepStatus.isDone)
-        ? AppColors.green[50]!
-        : AppColors.greys[100]!;
+        ? AppColors.stepSliderAvailableColor
+        : AppColors.stepSliderUnavailableColor;
   }
 
   Widget _buildAvatar() {
@@ -161,7 +161,7 @@ class _StepSliderWidgetState extends State<StepSliderWidget> {
         fixedSize: MaterialStateProperty.all(
             Size.fromWidth(MediaQuery.of(context).size.width / 4)),
         backgroundColor:
-            MaterialStateProperty.all(AppColors.greys[50]!.withOpacity(0.5)),
+            MaterialStateProperty.all(AppColors.stepSliderContinueButton.withOpacity(0.5)),
         shape: MaterialStateProperty.all<RoundedRectangleBorder>(
             RoundedRectangleBorder(
                 borderRadius: BorderRadius.circular(18.0),
@@ -178,8 +178,8 @@ class _StepSliderWidgetState extends State<StepSliderWidget> {
             child: LinearProgressIndicator(
                 // minHeight: 4,
                 value: percentage,
-                backgroundColor: AppColors.greys[50],
-                valueColor: AlwaysStoppedAnimation(AppColors.green[100])),
+                backgroundColor: AppColors.progressBarBackgroundColor,
+                valueColor: AlwaysStoppedAnimation(AppColors.progressBarValueColor)),
           )),
     );
   }
@@ -193,7 +193,7 @@ class _StepSliderWidgetState extends State<StepSliderWidget> {
   }
 
   Border _buildNotStartedBorder() {
-    return Border.all(width: 2, color: AppColors.greys[200]!);
+    return Border.all(width: 2, color: AppColors.stepSliderUnavailableBorder);
   }
 
   //general methods ............................................................

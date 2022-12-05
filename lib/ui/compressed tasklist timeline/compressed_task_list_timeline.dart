@@ -44,7 +44,6 @@ class _CompressedBlocklistTimelineState
         child: Timeline.tileBuilder(
             theme: TimelineThemeData(
               direction: Axis.vertical,
-              color: Colors.blue,
               nodePosition: 0.009,
             ),
             builder: TimelineTileBuilder(
@@ -61,7 +60,7 @@ class _CompressedBlocklistTimelineState
 
   Widget _buildIndicator() {
     return Container(
-        color: Colors.transparent,
+        color: AppColors.transparent,
         width: 8,
         height: 8,
         child: DiamondIndicator());
@@ -69,7 +68,7 @@ class _CompressedBlocklistTimelineState
 
   Widget _buildConnector() {
     return SolidLineConnector(
-        direction: Axis.vertical, color: Color.fromARGB(255, 115, 213, 172));
+        direction: Axis.vertical, color: AppColors.timelineCompressedConnectorColor);
   }
 
   Widget _buildContents(index, stepStore) {

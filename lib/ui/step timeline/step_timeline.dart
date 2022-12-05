@@ -22,7 +22,7 @@ class _StepTimeLineState extends State<StepTimeLine> {
   int index = 3;
   late int pending = widget.pending;
   late int stepNo = widget.stepNo;
-  
+
   @override
   Widget build(BuildContext context) {
     print(widget.pending);
@@ -36,11 +36,13 @@ class _StepTimeLineState extends State<StepTimeLine> {
         width: _getScreenWidth(),
         height: 40,
         decoration: BoxDecoration(
-            color: Color.fromARGB(255, 239, 237, 237),
+            color: AppColors.stepTimelineContainerColor,
             borderRadius: BorderRadius.all(Radius.circular(30)),
             boxShadow: [
               BoxShadow(
-                  color: Colors.grey, blurRadius: 0.3, offset: Offset(0, 2))
+                  color: AppColors.stepTimelineContainerShadowColor,
+                  blurRadius: 0.3,
+                  offset: Offset(0, 2))
             ]),
         child: _buildTimeline(),
       ),
@@ -74,9 +76,9 @@ class _StepTimeLineState extends State<StepTimeLine> {
   }
 
   Widget _buildNotStartedIndicator() {
-    return const DotIndicator(
+    return DotIndicator(
       size: 10,
-      color: Colors.grey,
+      color: AppColors.stepTimelineNotStartedNodeColor,
     );
   }
 
@@ -85,7 +87,7 @@ class _StepTimeLineState extends State<StepTimeLine> {
       child: Container(
           padding: const EdgeInsets.all(3),
           decoration: BoxDecoration(
-            color: Color.fromARGB(255, 255, 255, 255),
+            color: AppColors.transparent,
             shape: BoxShape.circle,
             border: Border.all(color: AppColors.main_color, width: 4),
           ),
@@ -93,8 +95,8 @@ class _StepTimeLineState extends State<StepTimeLine> {
               padding: const EdgeInsets.all(2),
               child: Container(
                   padding: const EdgeInsets.all(8),
-                  decoration: const BoxDecoration(
-                    color: Color.fromARGB(255, 115, 213, 172),
+                  decoration: BoxDecoration(
+                    color: AppColors.stepTimelinePendingColor,
                     shape: BoxShape.circle,
                   )))),
     );
@@ -106,19 +108,22 @@ class _StepTimeLineState extends State<StepTimeLine> {
         begin: Alignment.centerLeft,
         end: Alignment.centerRight,
         colors: [
-          const Color.fromARGB(159, 77, 172, 180),
-          Color.fromARGB(255, 124, 222, 194)
+          AppColors.step_timeline_connector_gradient[100]!,
+          AppColors.step_timeline_connector_gradient[200]!,
         ],
       ),
     );
   }
 
   BoxDecoration _buildEndGradient() {
-    return const BoxDecoration(
+    return BoxDecoration(
       gradient: LinearGradient(
         begin: Alignment.centerLeft,
         end: Alignment.centerRight,
-        colors: [AppColors.main_color, Color.fromARGB(159, 77, 172, 180)],
+        colors: [
+          AppColors.step_timeline_connector_gradient[50]!,
+          AppColors.step_timeline_connector_gradient[100]!
+        ],
       ),
     );
   }
@@ -137,39 +142,49 @@ class _StepTimeLineState extends State<StepTimeLine> {
   }
 
   Widget _buildNotStartedStartConnector() {
-    return const DashedLineConnector(
-        thickness: 3, color: Colors.grey, gap: 2, endIndent: 10);
+    return DashedLineConnector(
+        thickness: 3,
+        color: AppColors.stepTimelineNotStartedConnectorColor,
+        gap: 2,
+        endIndent: 10);
   }
 
   Widget _buildNotStartedEndConnector() {
-    return const DashedLineConnector(
-        thickness: 3, color: Colors.grey, gap: 2, indent: 10);
+    return DashedLineConnector(
+        thickness: 3,
+        color: AppColors.stepTimelineNotStartedConnectorColor,
+        gap: 2,
+        indent: 10);
   }
 
   Widget? _buildStartConnector(index) {
-    return (stepNo - index == stepNo)
-        ? null
-        : (index == widget.pending)
-            ? _buildPendingStartConnectorGradient()
-            : (index > widget.pending)
-                ? _buildNotStartedStartConnector()
-                : const SolidLineConnector(
-                    thickness: 3, color: AppColors.main_color, endIndent: 10);
+    if (index != 0 && index == widget.pending)
+      return _buildPendingStartConnectorGradient();
+    else if (index != 0 && index > widget.pending)
+      return _buildNotStartedStartConnector();
+    else if (index != 0 && index < widget.pending)
+      return SolidLineConnector(
+          thickness: 3, color: AppColors.main_color, endIndent: 10);
+
+    return null;
   }
 
+
   Widget? _buildEndConnector(index) {
-    return (index == stepNo)
-        ? null
-        : (index == widget.pending)
-            ? _buildNotStartedEndConnector()
-            : (index == widget.pending - 1)
-                ? _buildPendingEndConnectorGradient()
-                : (index > widget.pending)
-                    ? _buildNotStartedEndConnector()
-                    : const SolidLineConnector(
-                        thickness: 3, color: AppColors.main_color, indent: 10);
+    if (index != stepNo && index == widget.pending)
+      return _buildNotStartedEndConnector();
+    else if (index != stepNo && index == widget.pending - 1)
+      return _buildPendingEndConnectorGradient();
+    else if (index != stepNo && index > widget.pending)
+      return _buildNotStartedEndConnector();
+    else if (index != stepNo && index < widget.pending)
+      return SolidLineConnector(
+        thickness: 3,
+        color: AppColors.main_color,
+        indent: 10,
+      );
+    return null;
   }
 
   double _getScreenWidth() => MediaQuery.of(context).size.width;
-
 }
