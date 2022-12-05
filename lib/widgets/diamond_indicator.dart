@@ -1,6 +1,7 @@
 import 'dart:math' as math;
 
 import 'package:flutter/material.dart';
+import 'package:boilerplate/constants/colors.dart';
 
 class DiamondIndicator extends StatelessWidget {
   const DiamondIndicator({Key? key}) : super(key: key);
@@ -17,10 +18,10 @@ class DiamondIndicator extends StatelessWidget {
           ),
           child: Container(
             decoration: BoxDecoration(
-              color: Color.fromARGB(255, 115, 213, 172),
+              color: AppColors.green[100]!,
               border: Border.all(
                 width: 2,
-                color: Color.fromARGB(255, 115, 213, 172),
+                color: AppColors.green[100]!,
               ),
             ),
             child: InkWell(
@@ -30,7 +31,6 @@ class DiamondIndicator extends StatelessWidget {
                   transform: Matrix4.rotationZ(
                     -math.pi / 4,
                   ),
-                  
                 ),
               ),
             ),
