@@ -4,7 +4,9 @@ class SubTask {
   int id;
   int task_id;
   Title title;
-  String markdown;
+  Title markdown;
+  Title deadline;
+  int order;
   String creator_id;
   String created_at;
   String updated_at;
@@ -14,6 +16,8 @@ class SubTask {
     required this.task_id,
     required this.title,
     required this.markdown,
+    required this.deadline,
+    required this.order,
     required this.creator_id,
     required this.created_at,
     required this.updated_at,
@@ -24,7 +28,9 @@ class SubTask {
       id: json["id"],
       task_id: json["task_id"],
       title: Title.fromMap(json["title"]),
-      markdown: json["markdown"],
+      markdown: Title.fromMap(json["markdown"]),
+      deadline: Title.fromMap(json["deadline"]),
+      order: json["order"],
       creator_id: json["creator_id"],
       created_at: json["created_at"],
       updated_at: json["updated_at"],
@@ -34,8 +40,10 @@ class SubTask {
   Map<String, dynamic> toMap() => {
     "id": id,
     "task_id": task_id,
-    "title": title,
-    "markdown": markdown,
+    "title": title.toMap(),
+    "markdown": markdown.toMap(),
+    "deadline": deadline.toMap(),
+    "order": order,
     "creator_id": creator_id,
     "created_at": created_at,
     "updated_at": updated_at,

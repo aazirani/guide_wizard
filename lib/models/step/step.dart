@@ -7,7 +7,7 @@ class Step {
   Title description;
   int order;
   String? image;
-  List<Task>? tasks;
+  List<Task> tasks;
 
   Step({
     required this.id,
@@ -31,11 +31,11 @@ class Step {
 
   Map<String, dynamic> toMap() => {
     "id": id,
-    "name": name,
-    "description": description,
+    "name": name.toMap(),
+    "description": description.toMap(),
     "order": order,
     "image": image,
-    "tasks": tasks
+    "tasks": tasks.map((task) => task.toMap()).toList(),
   };
 
 }

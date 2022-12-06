@@ -36,6 +36,7 @@ class Answer {
       title: Title.fromMap(json["title"]),
       order: json["order"],
       image: json["image"],
+      selected: json["selected"] == 1 ? true : false,
       is_enabled: json["is_enabled"] == 1 ? true : false,
       creator_id: json["creator_id"],
       created_at: json["created_at"],
@@ -46,7 +47,7 @@ class Answer {
   Map<String, dynamic> toMap() => {
     "id": id,
     "question_id": question_id,
-    "title": title,
+    "title": title.toMap(),
     "order": order,
     "image": image,
     "selected": selected ? 1 : 0,
