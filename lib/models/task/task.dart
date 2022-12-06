@@ -23,6 +23,7 @@ class Task {
     required this.type,
     required this.image1,
     required this.image2,
+    required this.fa_icon,
     required this.sub_tasks,
     required this.creator_id,
     required this.created_at,
@@ -36,29 +37,34 @@ class Task {
     //           Endpoints.domain + '/api/app/answers/img/', '')}',
     return Task(
       id: json["id"],
-      text: json["text"].cast<Title>(),
-      description: json["description"].cast<Title>(),
+      text: Title.fromMap(json["text"]),
+      description: Title.fromMap(json["description"]),
       type: json["type"],
-      image1: json["image1"].cast<String>(),
-      image2: json["image2"].cast<String>(),
-      sub_tasks: json["sub_tasks"].cast<SubTask>(),
+      image1: json["image1"],
+      image2: json["image2"],
+      fa_icon: json["fa_icon"],
+      sub_tasks: List<SubTask>.from(
+          json["sub_tasks"].map((x) => SubTask.fromMap(x))),
       creator_id: json["creator_id"],
       created_at: json["created_at"],
       updated_at: json["updated_at"],
-      quesions: json["question"].cast<Question>(),
+      quesions: List<Question>.from(
+          json["questions"].map((x) => Question.fromMap(x))),
     );
   }
 
   Map<String, dynamic> toMap() => {
     "id": id,
-    "text": text,
+    "text": text.toMap(),
+    "description": description.toMap(),
+    "type": type,
     "image1": image1,
     "image2": image2,
-    "sub_tasks": sub_tasks,
+    "sub_tasks": sub_tasks.map((sub_task) => sub_task.toMap()).toList(),
     "creator_id": creator_id,
     "created_at": created_at,
     "updated_at": updated_at,
-    "question": quesions,
+    "quesions": quesions.map((question) => question.toMap()).toList(),
   };
 
 }

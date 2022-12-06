@@ -14,7 +14,6 @@ class Question {
   Title info_description;
   int answer_required;
   bool answers_selected_by_default;
-  int step_id;
   int creator_id;
   String created_at;
   String updated_at;
@@ -32,7 +31,6 @@ class Question {
     required this.info_description,
     required this.answer_required,
     required this.answers_selected_by_default,
-    required this.step_id,
     required this.creator_id,
     required this.created_at,
     required this.updated_at,
@@ -42,42 +40,42 @@ class Question {
 
   factory Question.fromMap(Map<String, dynamic> json) {
     return Question(
-        id: json["id"],
-        title: json["title"].cast<Title>(),
-        sub_title: json["sub_title"].cast<Title>(),
-        type: json["type"],
-        axis_count: json["axis_count"],
-        is_multiple_choice: json["is_multiple_choice"] == 1  ? true : false,
-        info_url: json["info_url"].cast<Title>(),
-        info_description: json["info_description"].cast<Title>(),
-        answer_required: json["answer_required"],
-        answers_selected_by_default: json["answers_selected_by_default"] == 1  ? true : false,
-        step_id: json["step_id"],
-        creator_id: json["creator_id"],
-        created_at: json["created_at"],
-        updated_at: json["updated_at"],
-        step: json["step"].cast<Step>(),
-        answers: json["answers"].map((answer) => Answer.fromMap(answer)).toList().cast<Answer>(),
+      id: json["id"],
+      title: Title.fromMap(json["title"]),
+      sub_title: Title.fromMap(json["sub_title"]),
+      type: json["type"],
+      axis_count: json["axis_count"],
+      is_multiple_choice: json["is_multiple_choice"] == 1 ? true : false,
+      info_url: Title.fromMap(json["info_url"]),
+      info_description: Title.fromMap(json["info_description"]),
+      answer_required: json["answer_required"],
+      answers_selected_by_default: json["answers_selected_by_default"] == 1 ? true : false,
+      creator_id: json["creator_id"],
+      created_at: json["created_at"],
+      updated_at: json["updated_at"],
+      step: Step.fromMap(json["step"]),
+      answers: List<Answer>.from(
+          json["answers"].map((x) => Answer.fromMap(x))),
     );
   }
 
   Map<String, dynamic> toMap() {
     return {
       "id": id,
-      "title": title,
-      "sub_title": sub_title,
+      "title": title.toMap(),
+      "sub_title": sub_title.toMap(),
       "type": type,
       "axis_count": axis_count,
-      "is_multiple_choice": is_multiple_choice,
-      "info_url": info_url,
-      "info_description": info_description,
+      "is_multiple_choice": is_multiple_choice ? 1 : 0,
+      "info_url": info_url.toMap(),
+      "info_description": info_description.toMap(),
       "answer_required": answer_required,
-      "answers_selected_by_default": answers_selected_by_default,
-      "step_id": step_id,
+      "answers_selected_by_default": answers_selected_by_default ? 1 : 0,
+      "creator_id": creator_id,
       "created_at": created_at,
       "updated_at": updated_at,
       "step": step,
-      "answers": answers,
+      "answers": List<dynamic>.from(answers.map((x) => x.toMap())),
     };
   }
 
