@@ -1,3 +1,4 @@
+import 'package:boilerplate/constants/colors.dart';
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
 import 'package:smooth_page_indicator/smooth_page_indicator.dart';
@@ -16,13 +17,24 @@ class _ImageSlideState extends State<ImageSlide> {
 
   int _slideIndex = 0;
 
+  List<Image> _imagesList = [
+    Image.asset('assets/images/patterns.png', fit: BoxFit.fitHeight,),
+    Image.asset('assets/images/patterns.png', fit: BoxFit.fitHeight,),
+    Image.asset('assets/images/patterns.png', fit: BoxFit.fitHeight,),
+    Image.asset('assets/images/patterns.png', fit: BoxFit.fitHeight,),
+    Image.asset('assets/images/patterns.png', fit: BoxFit.fitHeight,),
+  ];
+
   @override
   Widget build(BuildContext context) {
+
+    double screenHeight = MediaQuery.of(context).size.height;
+
     return Column(
         children: [
           CarouselSlider(
             options: CarouselOptions(
-              height: 250,
+              height: screenHeight / 4,
               viewportFraction: 1,
               autoPlay: true,
               enlargeCenterPage: true,
@@ -30,9 +42,7 @@ class _ImageSlideState extends State<ImageSlide> {
               onPageChanged: (index, reason) =>
                   setState(()=> _slideIndex=index),
             ),
-            items: [1,2,3,4,5].map((i) {
-              return Image.asset('assets/images/patterns.png', fit: BoxFit.fitHeight,);
-            }).toList(),
+            items: _imagesList,
           ),
           SizedBox(height: 15,),
           Stack(
@@ -51,17 +61,12 @@ class _ImageSlideState extends State<ImageSlide> {
                 padding: const EdgeInsets.only(top: 10),
                 child: Center(
                   child: AnimatedSmoothIndicator(
-                    // onDotClicked: (index){
-                    //   setState(() {
-                    //     _slideIndex=index;
-                    //   });
-                    // },
                     activeIndex: _slideIndex,
-                    count: 5,
+                    count: _imagesList.length,
                     textDirection: TextDirection.ltr,
                     effect: ScrollingDotsEffect(
-                      activeDotColor: Colors.white,
-                      dotColor: Colors.white70,
+                      activeDotColor: AppColors.bright_foreground_color,
+                      dotColor: AppColors.bright_foreground_color.withOpacity(0.7),
                       activeStrokeWidth: 2.6,
                       activeDotScale: 1.3,
                       maxVisibleDots: 5,
