@@ -1,3 +1,4 @@
+import 'package:boilerplate/constants/colors.dart';
 import 'package:boilerplate/constants/dimens.dart';
 import 'package:flutter/material.dart';
 import 'package:dotted_line/dotted_line.dart';
@@ -35,7 +36,7 @@ class _ExpansionContentState extends State<ExpansionContent> {
             dashLength: 15,
             dashGapLength: 15,
             lineThickness: 7,
-            dashColor: Colors.green,
+            dashColor: AppColors.dotted_line_color,
             direction: Axis.vertical,
             lineLength: widgetHeight,
           ),

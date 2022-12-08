@@ -17,5 +17,10 @@
 
 
   "next_question_button_text" : "Next question",
-  "next_stage_button_text" : "Next Stage"
+  "next_stage_button_text" : "Next Stage",
+  "questions_end": "-------------------------------------------------------------------------------------",
+
+  "done_button_text" : "Done",
+  "undone_button_text" : "Undone"
+
 }
