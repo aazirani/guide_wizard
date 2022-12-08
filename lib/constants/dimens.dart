@@ -3,16 +3,35 @@ import 'package:flutter/material.dart';
 class Dimens {
   Dimens._();
 
+  //number of steps 
+  static const int stepNo = 4;
   //for all screens
   static const double horizontal_padding = 12.0;
   static const double vertical_padding = 12.0;
 
+  //for Home screen - Carousel Slider
+  static const sliderContainerMargin = EdgeInsets.symmetric(horizontal: 10.0);
+  static const sliderContainerPadding = EdgeInsets.only(top: 10);
+  static const avatarBoyPadding = EdgeInsets.only(left: 140, bottom: 70);
+  static const avatarGirlPadding =
+      EdgeInsets.only(left: 200, bottom: 40, top: 20);
+  //compressed task list
+  static const contentLeftMargin = EdgeInsets.only(left: 20);
 
   static const questionButtonPadding = EdgeInsets.only(bottom: 20, top: 15);
-  static const questionDescriptionPadding = EdgeInsets.only(left: 10, right: 10, bottom: 10);
-  static const listTilePadding = EdgeInsets.symmetric(horizontal: 10, vertical: 5);
-  static const Map<String, double> appBar = {"toolbarHeight" : 80, "titleSpacing" : 10, "logoHeight" : 60,};
-  static const Map<String, double> buildQuestionsButtonStyle = {"pixels_smaller_than_screen_width" : 26, "height" : 55,};
+  static const questionDescriptionPadding =
+      EdgeInsets.only(left: 10, right: 10, bottom: 10);
+  static const listTilePadding =
+      EdgeInsets.symmetric(horizontal: 10, vertical: 5);
+  static const Map<String, double> appBar = {
+    "toolbarHeight": 70,
+    "titleSpacing": 5,
+    "logoHeight": 60,
+  };
+  static const Map<String, double> buildQuestionsButtonStyle = {
+    "pixels_smaller_than_screen_width": 26,
+    "height": 55,
+  };
   static const expansionContentPadding = EdgeInsets.only(top: 5);
   static const expansionDottedLinePadding = EdgeInsets.only(left: 20, top: 5, right: 15,);
 
