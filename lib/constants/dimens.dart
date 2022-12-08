@@ -15,7 +15,8 @@ class Dimens {
   static const avatarBoyPadding = EdgeInsets.only(left: 140, bottom: 70);
   static const avatarGirlPadding =
       EdgeInsets.only(left: 200, bottom: 40, top: 20);
-
+  //compressed task list
+  static const contentLeftMargin = EdgeInsets.only(left: 20);
 
   static const questionButtonPadding = EdgeInsets.only(bottom: 20, top: 15);
   static const questionDescriptionPadding =

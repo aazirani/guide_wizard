@@ -4,6 +4,7 @@ import 'package:provider/provider.dart';
 import 'package:timelines/timelines.dart';
 import 'package:boilerplate/widgets/diamond_indicator.dart';
 import 'package:boilerplate/constants/colors.dart';
+import 'package:boilerplate/constants/dimens.dart';
 import 'package:boilerplate/stores/step/step_store.dart';
 import 'package:boilerplate/models/step/step.dart' as s;
 
@@ -49,7 +50,8 @@ class _CompressedBlocklistTimelineState
             builder: TimelineTileBuilder(
               itemCount: widget.steps[(stepStore.currentStep) - 1].numTasks,
               itemExtent: 70,
-              contentsBuilder: (context, index) =>_buildContents(index, stepStore),
+              contentsBuilder: (context, index) =>
+                  _buildContents(index, stepStore),
               indicatorBuilder: (context, index) => _buildIndicator(),
               startConnectorBuilder: (context, index) => _buildConnector(),
               endConnectorBuilder: (context, index) => _buildConnector(),
@@ -68,14 +70,16 @@ class _CompressedBlocklistTimelineState
 
   Widget _buildConnector() {
     return SolidLineConnector(
-        direction: Axis.vertical, color: AppColors.timelineCompressedConnectorColor);
+        direction: Axis.vertical,
+        color: AppColors.timelineCompressedConnectorColor);
   }
 
   Widget _buildContents(index, stepStore) {
     return Container(
       width: _getScreenWidth() / 1.23,
       height: 60,
-      margin: EdgeInsets.only(left: 20),
+      // margin: EdgeInsets.only(left: 20),
+      margin: Dimens.contentLeftMargin,
       decoration: BoxDecoration(
           color: AppColors.timelineCompressedContainerColor,
           borderRadius: BorderRadius.all(Radius.circular(10)),

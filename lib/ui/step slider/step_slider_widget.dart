@@ -83,13 +83,6 @@ class _StepSliderWidgetState extends State<StepSliderWidget> {
     }
   }
 
-  // Color _buildSliderColor(index) {
-  //   return (widget.steps[index].status == StepStatus.isPending ||
-  //           widget.steps[index].status == StepStatus.isDone)
-  //       ? AppColors.stepSliderAvailableColor
-  //       : AppColors.stepSliderUnavailableColor;
-  // }
-
   Color _buildSliderColor(index) {
     switch (widget.steps[index].status) {
       case StepStatus.isPending:
