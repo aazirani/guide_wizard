@@ -14,19 +14,19 @@ class SubBlockModel{
     expanded = false;
   }
 
-  void _buildGlobalKey(){
+  void _buildGlobalKey() {
     globalKey = GlobalKey<AppExpansionTileState>();
   }
 
-  void rebuildGlobalKey(){
+  void rebuildGlobalKey() {
     _buildGlobalKey();
   }
 
-  void setExpanded(bool value){
+  void setExpanded(bool value) {
     expanded = value;
   }
 
-  void toggleExpanded(){
+  void toggleExpanded() {
     expanded = !expanded;
   }
 }

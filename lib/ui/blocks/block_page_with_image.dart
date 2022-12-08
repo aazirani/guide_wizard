@@ -8,7 +8,7 @@ import 'package:flutter/services.dart';
 import 'package:render_metrics/render_metrics.dart';
 import 'package:boilerplate/models/block/sub_block.dart';
 
-List<SubBlockModel> subBlocks=[
+List<SubBlockModel> subBlocks= [
   SubBlockModel(title: "Title",),
   SubBlockModel(title: "Title",),
   SubBlockModel(title: "Title",),
@@ -16,7 +16,7 @@ List<SubBlockModel> subBlocks=[
 
 class BlockPageWithImage extends StatefulWidget {
 
-  bool isDone=false;
+  bool isDone = false;
   BlockPageWithImage({Key? key}) : super(key: key);
 
   @override
