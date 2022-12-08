@@ -27,9 +27,12 @@ class AppColors {
     100: const Color.fromARGB(255, 243, 241, 241),
     200: const Color.fromARGB(255, 177, 182, 186),
     300: Color.fromARGB(255, 158, 158, 158),
+    400: Color.fromARGB(255, 247, 246, 246),
+    500: Color.fromARGB(255, 224, 222, 222),
   };
 
-  static const Map<int, Color> step_timeline_connector_gradient = const <int, Color>{
+  static const Map<int, Color> step_timeline_connector_gradient =
+      const <int, Color>{
     50: main_color,
     100: const Color.fromARGB(159, 77, 172, 180),
     200: Color.fromARGB(255, 115, 213, 172),
@@ -50,6 +53,11 @@ class AppColors {
   static Color progressBarValueColor = green[300]!;
   //compressed timeline
   static Color timelineCompressedConnectorColor = green[100]!;
+  static Color timelineCompressedContainerColor = greys[400]!;
+  static Color timelineCompressedContainerShadowColor = greys[500]!;
+  //diamond indicator
+  static Color diamondBorderColor = green[100]!;
+  static Color diamondColor = green[100]!;
 
   static const Color title_color = Colors.white;
   static const Color main_color = const Color.fromRGBO(0, 81, 158, 1);

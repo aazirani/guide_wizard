@@ -77,11 +77,11 @@ class _CompressedBlocklistTimelineState
       height: 60,
       margin: EdgeInsets.only(left: 20),
       decoration: BoxDecoration(
-          color: Color.fromARGB(255, 247, 246, 246),
+          color: AppColors.timelineCompressedContainerColor,
           borderRadius: BorderRadius.all(Radius.circular(10)),
           boxShadow: [
             BoxShadow(
-              color: Color.fromARGB(255, 224, 222, 222),
+              color: AppColors.timelineCompressedContainerShadowColor,
               blurRadius: 2,
               offset: Offset(1, 2),
               spreadRadius: 1,

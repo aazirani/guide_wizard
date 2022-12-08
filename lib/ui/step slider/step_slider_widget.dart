@@ -73,18 +73,31 @@ class _StepSliderWidgetState extends State<StepSliderWidget> {
   }
 
   BoxBorder _buildSliderBorder(index) {
-    return (widget.steps[index].status == StepStatus.isDone)
-        ? _buildDoneBorder()
-        : (widget.steps[index].status == StepStatus.isPending)
-            ? _buildPendingBorder()
-            : _buildNotStartedBorder();
+    switch (widget.steps[index].status) {
+      case StepStatus.isDone:
+        return _buildDoneBorder();
+      case StepStatus.isPending:
+        return _buildPendingBorder();
+      case StepStatus.notStarted:
+        return _buildNotStartedBorder();
+    }
   }
 
+  // Color _buildSliderColor(index) {
+  //   return (widget.steps[index].status == StepStatus.isPending ||
+  //           widget.steps[index].status == StepStatus.isDone)
+  //       ? AppColors.stepSliderAvailableColor
+  //       : AppColors.stepSliderUnavailableColor;
+  // }
+
   Color _buildSliderColor(index) {
-    return (widget.steps[index].status == StepStatus.isPending ||
-            widget.steps[index].status == StepStatus.isDone)
-        ? AppColors.stepSliderAvailableColor
-        : AppColors.stepSliderUnavailableColor;
+    switch (widget.steps[index].status) {
+      case StepStatus.isPending:
+      case StepStatus.isDone:
+        return AppColors.stepSliderAvailableColor;
+      default:
+        return AppColors.stepSliderUnavailableColor;
+    }
   }
 
   Widget _buildAvatar() {
@@ -160,8 +173,8 @@ class _StepSliderWidgetState extends State<StepSliderWidget> {
     return ButtonStyle(
         fixedSize: MaterialStateProperty.all(
             Size.fromWidth(MediaQuery.of(context).size.width / 4)),
-        backgroundColor:
-            MaterialStateProperty.all(AppColors.stepSliderContinueButton.withOpacity(0.5)),
+        backgroundColor: MaterialStateProperty.all(
+            AppColors.stepSliderContinueButton.withOpacity(0.5)),
         shape: MaterialStateProperty.all<RoundedRectangleBorder>(
             RoundedRectangleBorder(
                 borderRadius: BorderRadius.circular(18.0),
@@ -179,7 +192,8 @@ class _StepSliderWidgetState extends State<StepSliderWidget> {
                 // minHeight: 4,
                 value: percentage,
                 backgroundColor: AppColors.progressBarBackgroundColor,
-                valueColor: AlwaysStoppedAnimation(AppColors.progressBarValueColor)),
+                valueColor:
+                    AlwaysStoppedAnimation(AppColors.progressBarValueColor)),
           )),
     );
   }

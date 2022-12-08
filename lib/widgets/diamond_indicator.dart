@@ -18,10 +18,10 @@ class DiamondIndicator extends StatelessWidget {
           ),
           child: Container(
             decoration: BoxDecoration(
-              color: AppColors.green[100]!,
+              color: AppColors.diamondColor,
               border: Border.all(
                 width: 2,
-                color: AppColors.green[100]!,
+                color: AppColors.diamondBorderColor,
               ),
             ),
             child: InkWell(

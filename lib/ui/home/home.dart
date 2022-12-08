@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:boilerplate/constants/colors.dart';
+import 'package:boilerplate/constants/dimens.dart';
 import 'package:boilerplate/ui/step slider/step_slider_widget.dart';
 import 'package:boilerplate/ui/step timeline/step_timeline.dart';
 import 'package:boilerplate/models/step/step.dart' as s;
@@ -137,19 +138,19 @@ class _HomeScreenState extends State<HomeScreen> {
 
   Widget _buildCurrentStepText(stepStore) {
     return Observer(
-        builder: (_) => Text("${stepStore.currentStep}/4",
+        builder: (_) => Text("${stepStore.currentStep}/${Dimens.stepNo}",
             style: TextStyle(color: AppColors.main_color)));
   }
 
   Widget _buildInProgressText() {
     return Padding(
-            padding: EdgeInsets.only(left: 20, top: 10),
-            child: Align(
-                alignment: Alignment.centerLeft,
-                child: Text("In Progress",
-                    style: TextStyle(
-                        fontSize: 18,
-                        color: AppColors.main_color,
-                        fontWeight: FontWeight.bold)))); 
+        padding: EdgeInsets.only(left: 20, top: 10),
+        child: Align(
+            alignment: Alignment.centerLeft,
+            child: Text("In Progress",
+                style: TextStyle(
+                    fontSize: 18,
+                    color: AppColors.main_color,
+                    fontWeight: FontWeight.bold))));
   }
 }

@@ -55,7 +55,6 @@ class _StepTimeLineState extends State<StepTimeLine> {
       builder: TimelineTileBuilder(
         itemCount: 4,
         itemExtent: 90,
-        // contentsBuilder: (context, index) => _buildContents(),
         indicatorBuilder: (context, index) => _buildIndicator(index),
         startConnectorBuilder: (context, index) => _buildStartConnector(index),
         endConnectorBuilder: (context, index) => _buildEndConnector(index),
@@ -170,21 +169,41 @@ class _StepTimeLineState extends State<StepTimeLine> {
   }
 
 
-  Widget? _buildEndConnector(index) {
-    if (index != stepNo && index == widget.pending)
-      return _buildNotStartedEndConnector();
-    else if (index != stepNo && index == widget.pending - 1)
-      return _buildPendingEndConnectorGradient();
-    else if (index != stepNo && index > widget.pending)
-      return _buildNotStartedEndConnector();
-    else if (index != stepNo && index < widget.pending)
-      return SolidLineConnector(
-        thickness: 3,
-        color: AppColors.main_color,
-        indent: 10,
-      );
+  // Widget? _buildEndConnector(index) {
+  //   if (index != stepNo && index == widget.pending)
+  //     return _buildNotStartedEndConnector();
+  //   else if (index != stepNo && index == widget.pending - 1)
+  //     return _buildPendingEndConnectorGradient();
+  //   else if (index != stepNo && index > widget.pending)
+  //     return _buildNotStartedEndConnector();
+  //   else if (index != stepNo && index < widget.pending)
+  //     return SolidLineConnector(
+  //       thickness: 3,
+  //       color: AppColors.main_color,
+  //       indent: 10,
+  //     );
+  //   return null;
+  // }
+
+  Widget? _buildEndConnector(int index) {
+  if (index == stepNo) {
     return null;
   }
+  if (index == widget.pending) {
+    return _buildNotStartedEndConnector();
+  }
+  if (index == widget.pending - 1) {
+    return _buildPendingEndConnectorGradient();
+  }
+  if (index > widget.pending) {
+    return _buildNotStartedEndConnector();
+  }
+  return SolidLineConnector(
+    thickness: 3,
+    color: AppColors.main_color,
+    indent: 10,
+  );
+}
 
   double _getScreenWidth() => MediaQuery.of(context).size.width;
 }
