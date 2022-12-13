@@ -142,6 +142,7 @@ class _BlockPageWithImageState extends State<BlockPageWithImage> {
         ],
       ),
     );
+  }
   double _getHeightOfDraggableScrollableSheet(){
     double screenHeight = MediaQuery.of(context).size.height;
     return (screenHeight - (appBarSize.height + imageSlideSize.height)) / screenHeight;
