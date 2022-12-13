@@ -1,9 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:scrollable_positioned_list/scrollable_positioned_list.dart';
 import 'package:boilerplate/constants/colors.dart';
-import 'dart:math' as math;
 import 'package:boilerplate/models/question/image_questions.dart';
-import 'package:boilerplate/models/question/question.dart';
+import 'package:boilerplate/models/question/question_test.dart';
 import 'package:boilerplate/models/question/text_question.dart';
 import 'package:boilerplate/constants/dimens.dart';
 import 'question_widget.dart';
@@ -20,7 +19,7 @@ class _QuestionsListPageState extends State<QuestionsListPage> {
 
   late bool expanded;
   // late ExpandedTileController _controller;
-  late List<Question> questions;
+  late List<QuestionTest> questions;
   final itemScrollController = ItemScrollController();
 
   @override
@@ -79,8 +78,6 @@ class _QuestionsListPageState extends State<QuestionsListPage> {
     ];
     super.initState();
   }
-
-  double _getScreenWidth()=>MediaQuery.of(context).size.width;
 
   PreferredSizeWidget? _buildAppBar() {
     return AppBar(
