@@ -17,8 +17,6 @@ class DiamondIndicator extends StatelessWidget {
             math.pi / 4,
           ),
           child: Container(
-            // width: 100,
-            // height: 100,
             decoration: BoxDecoration(
               color: (fill) ? AppColors.diamondColor : AppColors.transparent,
               border: Border.all(
