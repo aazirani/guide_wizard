@@ -8,7 +8,18 @@ class Dimens {
   //for all screens
   static const double horizontal_padding = 12.0;
   static const double vertical_padding = 12.0;
-
+  //tasklist page
+  static const back_button = const EdgeInsets.only(left: 20.0);
+  static const taskProgressBarPadding = EdgeInsets.only(top: 50, bottom: 0);
+  static const numberOfTasksPadding = EdgeInsets.only(left: 10, bottom: 5);
+  static const contentPadding = const EdgeInsets.all(16.0);
+  static const contentContainerPadding =
+      const EdgeInsets.only(left: 20, top: 10);
+  static const contentContainerBorderRadius =
+      const BorderRadius.all(Radius.circular(16.0));
+  static const contentDeadlineTopPadding = EdgeInsets.only(top: 20);
+  static const contentDeadlineBorderRadius =
+      BorderRadius.all(Radius.circular(20));
   //for Home screen - Carousel Slider
   static const sliderContainerMargin = EdgeInsets.symmetric(horizontal: 10.0);
   static const sliderContainerPadding = EdgeInsets.only(top: 10);
