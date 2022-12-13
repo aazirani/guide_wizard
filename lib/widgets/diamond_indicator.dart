@@ -1,15 +1,15 @@
 import 'dart:math' as math;
-
+import 'package:boilerplate/constants/colors.dart';
 import 'package:flutter/material.dart';
 
 class DiamondIndicator extends StatelessWidget {
-  final bool fill; 
+  final bool fill;
   const DiamondIndicator({Key? key, this.fill = false}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.transparent,
+      backgroundColor: AppColors.transparent,
       body: Center(
         child: Transform(
           alignment: Alignment.center,
@@ -20,15 +20,13 @@ class DiamondIndicator extends StatelessWidget {
             // width: 100,
             // height: 100,
             decoration: BoxDecoration(
-              color: (fill) ? Color.fromARGB(255, 115, 213, 172) : Colors.transparent,
+              color: (fill) ? AppColors.diamondColor : AppColors.transparent,
               border: Border.all(
                 width: 2,
-                color: Color.fromARGB(255, 115, 213, 172),
+                color: AppColors.diamondBorderColor,
               ),
             ),
             child: InkWell(
-              splashColor: Colors.blueAccent,
-              // onTap: () {},
               child: Center(
                 child: Transform(
                   alignment: Alignment.center,
