@@ -4,6 +4,7 @@ import 'package:boilerplate/widgets/diamond_indicator.dart';
 import 'package:boilerplate/constants/colors.dart';
 import 'package:boilerplate/models/task/task.dart';
 import 'package:boilerplate/utils/enums/enum.dart';
+import 'package:boilerplate/constants/dimens.dart';
 
 class TaskListTimeLine extends StatefulWidget {
   final List<Task> tasks;
@@ -50,23 +51,15 @@ class _TaskListTimeLineState extends State<TaskListTimeLine> {
 
   Widget _buildContents(index) {
     return Padding(
-      padding: const EdgeInsets.only(left: 20, top: 10),
+      padding: Dimens.contentContainerPadding,
       child: ClipRRect(
-        borderRadius: const BorderRadius.all(Radius.circular(16.0)),
+        borderRadius: Dimens.contentContainerBorderRadius,
         child: Container(
           width: _getScreenWidth() / 1.23,
           height: 100,
-          padding: const EdgeInsets.all(16.0),
+          padding: Dimens.contentPadding,
           decoration: BoxDecoration(
             color: AppColors.contentColor,
-            boxShadow: [
-              BoxShadow(
-                  color: Colors.purple,
-                  spreadRadius: 7,
-                  blurRadius: 30,
-                  offset: Offset(0, 3),
-                  blurStyle: BlurStyle.outer)
-            ],
             border: Border(
                 left: BorderSide(
               width: 25,
@@ -82,8 +75,7 @@ class _TaskListTimeLineState extends State<TaskListTimeLine> {
   }
 
   Widget _buildInsideElements(index) {
-    return Padding(
-      padding: const EdgeInsets.only(left: 0),
+    return Container(
       child: Row(
         children: [
           Column(
@@ -116,7 +108,7 @@ class _TaskListTimeLineState extends State<TaskListTimeLine> {
 
   Widget _buildContentDeadline(index) {
     return Container(
-        padding: EdgeInsets.only(top: 20),
+        padding: Dimens.contentDeadlineTopPadding,
         width: 80,
         height: 40,
         child: (_deadLineAvailable(index))
@@ -128,7 +120,7 @@ class _TaskListTimeLineState extends State<TaskListTimeLine> {
     return Container(
         height: 10,
         decoration: BoxDecoration(
-            borderRadius: BorderRadius.all(Radius.circular(20)),
+            borderRadius: Dimens.contentDeadlineBorderRadius,
             border: Border.all(
                 width: 1,
                 color: (_taskDone(index))
