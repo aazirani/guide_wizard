@@ -1,6 +1,6 @@
-import 'package:boilerplate/models/question/question.dart';
+import 'package:boilerplate/models/question/question_test.dart';
 
-class TextQuestion implements Question{
+class TextQuestion implements QuestionTest{
   String title, description;
   List<Map<String, dynamic>> options;
   bool multiChoice, isAnswered = false;
@@ -13,6 +13,6 @@ class TextQuestion implements Question{
   });
 
   void answer(){
-    isAnswered = true;
+     isAnswered = true;
   }
 }

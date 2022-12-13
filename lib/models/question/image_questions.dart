@@ -1,6 +1,6 @@
-import 'package:boilerplate/models/question/question.dart';
+import 'package:boilerplate/models/question/question_test.dart';
 
-class ImageQuestion implements Question{
+class ImageQuestion implements QuestionTest{
   String title, description;
   List<Map<String, dynamic>> options;
   bool multiChoice, isAnswered = false;

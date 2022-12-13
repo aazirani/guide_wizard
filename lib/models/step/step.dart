@@ -1,24 +1,41 @@
-import 'package:boilerplate/utils/enums/enum.dart';
-import '../task/task.dart';
+import 'package:boilerplate/models/title/title.dart';
+import 'package:boilerplate/models/task/task.dart';
 
 class Step {
-  late String title;
-  late StepStatus status;
-  late double percentage;
-  late int numTasks;
-  late List<Task> tasks;
-  Step(
-      {required this.title,
-      this.status = StepStatus.notStarted,
-      required this.percentage,
-      required this.numTasks,
-      required this.tasks});
+  int id;
+  Title name;
+  Title description;
+  int order;
+  String? image;
+  List<Task> tasks;
 
-  void setStatus(StepStatus status) {
-    this.status = status;
+  Step({
+    required this.id,
+    required this.name,
+    required this.description,
+    required this.order,
+    required this.image,
+    required this.tasks
+  });
+
+  factory Step.fromMap(Map<String, dynamic> json) {
+    return Step(
+      id: json["id"],
+      name: Title.fromMap(json["name"]),
+      description: Title.fromMap(json["description"]),
+      order: json["order"],
+      image: json["image"],
+      tasks: json["tasks"].map((answer) => Task.fromMap(answer)).toList().cast<Task>(),
+    );
   }
 
-  void setPercentage(double percentage) {
-    this.percentage = percentage;
-  }
+  Map<String, dynamic> toMap() => {
+    "id": id,
+    "name": name.toMap(),
+    "description": description.toMap(),
+    "order": order,
+    "image": image,
+    "tasks": tasks.map((task) => task.toMap()).toList(),
+  };
+
 }
