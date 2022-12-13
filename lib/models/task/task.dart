@@ -32,9 +32,6 @@ class Task {
   });
 
   factory Task.fromMap(Map<String, dynamic> json) {
-    //   image: Endpoints.domain +
-    //       '/api/app/answers/img/${json["image"].toString().replaceAll(
-    //           Endpoints.domain + '/api/app/answers/img/', '')}',
     return Task(
       id: json["id"],
       text: Title.fromMap(json["text"]),
