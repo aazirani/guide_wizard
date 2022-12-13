@@ -35,7 +35,7 @@ class _TaskListTimeLineState extends State<TaskListTimeLine> {
 
   Widget _buildIndicator(index) {
     return Container(
-        color: Colors.transparent,
+        color: AppColors.transparent,
         width: 8,
         height: 8,
         child: (_taskDone(index))
@@ -45,7 +45,7 @@ class _TaskListTimeLineState extends State<TaskListTimeLine> {
 
   Widget _buildConnector() {
     return SolidLineConnector(
-        direction: Axis.vertical, color: Color.fromARGB(255, 115, 213, 172));
+        direction: Axis.vertical, color: AppColors.tasklistConnectorColor);
   }
 
   Widget _buildContents(index) {
@@ -58,7 +58,7 @@ class _TaskListTimeLineState extends State<TaskListTimeLine> {
           height: 100,
           padding: const EdgeInsets.all(16.0),
           decoration: BoxDecoration(
-            color: Color.fromARGB(255, 246, 246, 246),
+            color: AppColors.contentColor,
             boxShadow: [
               BoxShadow(
                   color: Colors.purple,
@@ -68,12 +68,12 @@ class _TaskListTimeLineState extends State<TaskListTimeLine> {
                   blurStyle: BlurStyle.outer)
             ],
             border: Border(
-              left: BorderSide(
-                  width: 25,
-                  color: (widget.tasks[index].status == TaskStatus.Done)
-                      ? Color.fromARGB(255, 47, 205, 144).withOpacity(0.2)
-                      : Color.fromARGB(255, 187, 100, 94).withOpacity(0.2)),
-            ),
+                left: BorderSide(
+              width: 25,
+              color: (widget.tasks[index].status == TaskStatus.Done)
+                  ? AppColors.contentDoneBorderColor
+                  : AppColors.contentUnDoneBorderColor,
+            )),
           ),
           child: _buildInsideElements(index),
         ),
@@ -132,15 +132,15 @@ class _TaskListTimeLineState extends State<TaskListTimeLine> {
             border: Border.all(
                 width: 1,
                 color: (_taskDone(index))
-                    ? Color.fromARGB(255, 115, 213, 172)
-                    : Color.fromARGB(255, 169, 25, 12))),
+                    ? AppColors.deadlineDoneBorderColor
+                    : AppColors.deadlineUnDoneBorderColor)),
         child: Center(
             child: Text("Deadline",
                 style: TextStyle(
                     fontSize: 13,
                     color: (_taskDone(index)
-                        ? Color.fromARGB(255, 115, 213, 172)
-                        : Color.fromARGB(255, 169, 25, 12))))));
+                        ? AppColors.deadlineTextDoneColor
+                        : AppColors.deadlineTextUnDoneColor)))));
   }
 
   Widget _buildContentMoreIcon() {
@@ -150,7 +150,6 @@ class _TaskListTimeLineState extends State<TaskListTimeLine> {
   }
 
   //general methods ............................................................
-  double _getScreenHeight() => MediaQuery.of(context).size.height;
   double _getScreenWidth() => MediaQuery.of(context).size.width;
   bool _deadLineAvailable(index) {
     switch (widget.tasks[index].deadline) {

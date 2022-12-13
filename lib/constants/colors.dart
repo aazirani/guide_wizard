@@ -15,6 +15,12 @@ class AppColors {
     800: const Color(0xFFDB7424),
     900: const Color(0xFFD56217)
   };
+
+  static const Map<int, Color> red = const <int, Color>{
+    50: Color.fromARGB(255, 187, 100, 94),
+    100: Color.fromARGB(255, 169, 25, 12),
+  };
+
   static const Map<int, Color> green = const <int, Color>{
     50: Color.fromARGB(218, 206, 240, 229),
     100: Color.fromARGB(255, 115, 213, 172),
@@ -29,6 +35,7 @@ class AppColors {
     300: Color.fromARGB(255, 158, 158, 158),
     400: Color.fromARGB(255, 247, 246, 246),
     500: Color.fromARGB(255, 224, 222, 222),
+    600: Color.fromARGB(255, 246, 246, 246),
   };
 
   static const Map<int, Color> step_timeline_connector_gradient =
@@ -58,6 +65,15 @@ class AppColors {
   //diamond indicator
   static Color diamondBorderColor = green[100]!;
   static Color diamondColor = green[100]!;
+  // tasklist
+  static Color tasklistConnectorColor = green[100]!;
+  static Color contentColor = greys[600]!;
+  static Color contentDoneBorderColor = green[300]!.withOpacity(0.2);
+  static Color contentUnDoneBorderColor = red[50]!.withOpacity(0.2);
+  static Color deadlineDoneBorderColor = green[100]!;
+  static Color deadlineUnDoneBorderColor = red[100]!;
+  static Color deadlineTextDoneColor = green[100]!;
+  static Color deadlineTextUnDoneColor = red[100]!;
 
   static const Color title_color = Colors.white;
   static const Color main_color = const Color.fromRGBO(0, 81, 158, 1);

@@ -29,12 +29,6 @@ class _TaskListState extends State<TaskList> {
     Task(title: "Another", status: TaskStatus.Done),
   ];
 
-  // List<Task> tasks = List<Task>.generate(
-  //     20,
-  //     (index) => Task(
-  //           title: "hi",
-  //         ));
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(appBar: _buildAppBar(), body: _buildBody(tasks));
@@ -47,7 +41,7 @@ class _TaskListState extends State<TaskList> {
         titleSpacing: 0,
         title: Text("University",
             style: TextStyle(
-                color: Colors.white,
+                color: AppColors.white,
                 fontSize: 18,
                 fontWeight: FontWeight.bold)),
         leading: Padding(
@@ -55,7 +49,7 @@ class _TaskListState extends State<TaskList> {
           child: IconButton(
               icon: Icon(Icons.arrow_back_ios),
               onPressed: () {},
-              color: Colors.white),
+              color: AppColors.white),
         ));
   }
 
@@ -83,7 +77,7 @@ class _TaskListState extends State<TaskList> {
                   Padding(
                       padding: EdgeInsets.only(left: 10, bottom: 5),
                       child: Text("4 tasks",
-                          style: TextStyle(color: Colors.white))),
+                          style: TextStyle(color: AppColors.white))),
                   SizedBox(height: 5),
                   _buildProgressBar(),
                 ],
@@ -109,7 +103,7 @@ class _TaskListState extends State<TaskList> {
                       topLeft: Radius.circular(25),
                       topRight: Radius.circular(25),
                     ),
-                    color: Colors.white),
+                    color: AppColors.white),
                 child: Padding(
                   padding: const EdgeInsets.only(top: 15.0, bottom: 8),
                   child: ListView.builder(
@@ -145,17 +139,13 @@ class _TaskListState extends State<TaskList> {
                   value: 0.2,
                   backgroundColor: Colors.white,
                   valueColor: AlwaysStoppedAnimation(
-                      Color.fromARGB(255, 47, 205, 144))),
+                      AppColors.progressBarValueColor)),
             )),
       ),
     );
   }
 
   // general methods ...........................................................
-  double _getScreenHeight() {
-    return MediaQuery.of(context).size.height;
-  }
-
   double _getScreenWidth() {
     return MediaQuery.of(context).size.width;
   }
