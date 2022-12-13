@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:boilerplate/constants/colors.dart';
+import 'package:boilerplate/constants/dimens.dart';
 import 'package:boilerplate/ui/tasklist/tasklist_timeline.dart';
 import 'package:boilerplate/models/task/task.dart';
 import 'package:boilerplate/utils/enums/enum.dart';
@@ -45,7 +46,7 @@ class _TaskListState extends State<TaskList> {
                 fontSize: 18,
                 fontWeight: FontWeight.bold)),
         leading: Padding(
-          padding: const EdgeInsets.only(left: 20.0),
+          padding: Dimens.back_button,
           child: IconButton(
               icon: Icon(Icons.arrow_back_ios),
               onPressed: () {},
@@ -67,7 +68,7 @@ class _TaskListState extends State<TaskList> {
         height: 150,
         color: AppColors.main_color,
         child: Padding(
-            padding: EdgeInsets.only(top: 50, bottom: 0),
+            padding: Dimens.taskProgressBarPadding,
             child: Align(
               alignment: Alignment.bottomCenter,
               child: Column(
@@ -75,7 +76,7 @@ class _TaskListState extends State<TaskList> {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Padding(
-                      padding: EdgeInsets.only(left: 10, bottom: 5),
+                      padding: Dimens.numberOfTasksPadding,
                       child: Text("4 tasks",
                           style: TextStyle(color: AppColors.white))),
                   SizedBox(height: 5),
@@ -138,8 +139,8 @@ class _TaskListState extends State<TaskList> {
                   // minHeight: 4,
                   value: 0.2,
                   backgroundColor: Colors.white,
-                  valueColor: AlwaysStoppedAnimation(
-                      AppColors.progressBarValueColor)),
+                  valueColor:
+                      AlwaysStoppedAnimation(AppColors.progressBarValueColor)),
             )),
       ),
     );
