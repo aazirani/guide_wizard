@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:timelines/timelines.dart';
 import 'package:boilerplate/widgets/diamond_indicator.dart';
 import 'package:boilerplate/constants/colors.dart';
-import 'package:boilerplate/models/task/task.dart';
+import 'package:boilerplate/models/test/task.dart';
 import 'package:boilerplate/utils/enums/enum.dart';
 import 'package:boilerplate/constants/dimens.dart';
 
