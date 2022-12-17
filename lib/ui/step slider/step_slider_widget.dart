@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:provider/provider.dart';
-import 'package:boilerplate/models/step/step.dart' as s;
+import 'package:boilerplate/models/test/step.dart' as s;
 import 'package:boilerplate/utils/enums/enum.dart';
 import 'package:boilerplate/constants/colors.dart';
 import 'package:boilerplate/stores/step/step_store.dart';
