@@ -90,15 +90,13 @@ class _TaskListState extends State<TaskList> {
     return SizedBox.expand(
       child: DraggableScrollableSheet(
         snap: true,
-        initialChildSize: 0.87,
+        initialChildSize: 0.85,
         maxChildSize: 1,
-        minChildSize: 0.87,
+        minChildSize: 0.85,
         builder: (BuildContext context, ScrollController scrollController) {
           return Container(
             color: AppColors.main_color,
-            child: Padding(
-              padding: const EdgeInsets.only(top: 15.0),
-              child: Container(
+            child: Container(
                 decoration: BoxDecoration(
                     borderRadius: BorderRadius.only(
                       topLeft: Radius.circular(25),
@@ -117,7 +115,7 @@ class _TaskListState extends State<TaskList> {
                   ),
                 ),
               ),
-            ),
+            
           );
         },
       ),
