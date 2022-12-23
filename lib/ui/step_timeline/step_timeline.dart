@@ -1,7 +1,7 @@
+import 'package:boilerplate/constants/colors.dart';
+import 'package:boilerplate/models/test/step.dart' as s;
 import 'package:flutter/material.dart';
 import 'package:timelines/timelines.dart';
-import 'package:boilerplate/models/test/step.dart' as s;
-import 'package:boilerplate/constants/colors.dart';
 
 class StepTimeLine extends StatefulWidget {
   final List<s.Step> steps;

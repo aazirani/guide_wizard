@@ -1,6 +1,6 @@
-import 'package:boilerplate/utils/enums/enum.dart';
 // import 'package:boilerplate/lib/models/test/task.dart';
 import 'package:boilerplate/models/test/task.dart';
+import 'package:boilerplate/utils/enums/enum.dart';
 
 class Step {
   late String title;

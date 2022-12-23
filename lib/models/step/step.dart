@@ -1,5 +1,5 @@
-import 'package:boilerplate/models/title/title.dart';
 import 'package:boilerplate/models/task/task.dart';
+import 'package:boilerplate/models/title/title.dart';
 
 class Step {
   int id;

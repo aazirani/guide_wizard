@@ -1,4 +1,3 @@
-import 'package:boilerplate/data/network/constants/endpoints.dart';
 import 'package:boilerplate/models/title/title.dart';
 
 class Answer {
@@ -19,7 +18,7 @@ class Answer {
     required this.title,
     required this.order,
     this.image,
-    this.selected=false,
+    this.selected = false,
     required this.is_enabled,
     required this.creator_id,
     required this.created_at,

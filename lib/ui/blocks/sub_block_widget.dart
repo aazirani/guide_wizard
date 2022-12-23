@@ -1,11 +1,11 @@
-import 'package:flutter/material.dart';
 import 'package:boilerplate/constants/colors.dart';
 import 'package:boilerplate/constants/dimens.dart';
+import 'package:boilerplate/models/block/sub_block.dart';
+import 'package:boilerplate/ui/blocks/expansion_content.dart';
+import 'package:boilerplate/widgets/app_expansiontile.dart';
+import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:render_metrics/render_metrics.dart';
-import 'package:boilerplate/widgets/app_expansiontile.dart';
-import 'package:boilerplate/ui/blocks/expansion_content.dart';
-import 'package:boilerplate/models/block/sub_block.dart';
 
 class SubBlock extends StatefulWidget {
   int index;

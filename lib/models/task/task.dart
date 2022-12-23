@@ -1,6 +1,6 @@
+import 'package:boilerplate/models/question/question.dart';
 import 'package:boilerplate/models/sub_task/sub_task.dart';
 import 'package:boilerplate/models/title/title.dart';
-import 'package:boilerplate/models/question/question.dart';
 
 class Task {
   int id;

@@ -1,7 +1,7 @@
 import 'dart:math' as math;
+
 import 'package:boilerplate/constants/colors.dart';
 import 'package:flutter/material.dart';
-import 'package:boilerplate/constants/colors.dart';
 
 class DiamondIndicator extends StatelessWidget {
   final bool fill;

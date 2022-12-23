@@ -1,14 +1,10 @@
 import 'package:boilerplate/constants/colors.dart';
-import 'package:boilerplate/constants/dimens.dart';
+import 'package:boilerplate/models/block/sub_block.dart';
 import 'package:boilerplate/ui/blocks/sub_block_widget.dart';
-import 'package:boilerplate/utils/locale/app_localization.dart';
 import 'package:boilerplate/widgets/blocks_appbar_widget.dart';
-import 'package:boilerplate/widgets/image_slide.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
-import 'package:flutter/services.dart';
 import 'package:render_metrics/render_metrics.dart';
-import 'package:boilerplate/models/block/sub_block.dart';
 
 List<SubBlockModel> subBlocks= [
   SubBlockModel(title: "Title",),
