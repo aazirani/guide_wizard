@@ -103,9 +103,7 @@ class _TaskListState extends State<TaskList> {
                       topRight: Radius.circular(25),
                     ),
                     color: AppColors.white),
-                child: Padding(
-                  padding: const EdgeInsets.only(top: 15.0, bottom: 8),
-                  child: ListView.builder(
+                child: ListView.builder(
                     scrollDirection: Axis.vertical,
                     controller: scrollController,
                     itemCount: tasks.length,
@@ -113,7 +111,7 @@ class _TaskListState extends State<TaskList> {
                       return TaskListTimeLine(tasks: tasks, index: i);
                     },
                   ),
-                ),
+                
               ),
             
           );
