@@ -1,11 +1,11 @@
-class Title {
+class TechnicalName {
   int id;
   String technical_name;
   int creator_id;
   String created_at;
   String updated_at;
 
-  Title({
+  TechnicalName({
     required this.id,
     required this.technical_name,
     required this.creator_id,
@@ -13,8 +13,12 @@ class Title {
     required this.updated_at,
   });
 
-  factory Title.fromMap(Map<String, dynamic> json) {
-    return Title(
+  String get string{
+    return technical_name;
+  }
+
+  factory TechnicalName.fromMap(Map<String, dynamic> json) {
+    return TechnicalName(
       id: json["id"],
       technical_name: json["technical_name"],
       creator_id: json["creator_id"],

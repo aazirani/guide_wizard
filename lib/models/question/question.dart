@@ -5,13 +5,13 @@ import 'package:boilerplate/models/title/title.dart';
 class Question {
   //Server Values
   int id;
-  Title title;
-  Title sub_title;
+  TechnicalName title;
+  TechnicalName sub_title;
   String type;
   int axis_count;
   bool is_multiple_choice;
-  Title info_url;
-  Title info_description;
+  TechnicalName info_url;
+  TechnicalName info_description;
   int answer_required;
   bool answers_selected_by_default;
   int creator_id;
@@ -38,16 +38,29 @@ class Question {
     required this.answers,
   });
 
+
+  String get getTitle{
+    return title.string;
+  }
+
+  String get getSubTitle{
+    return sub_title.string;
+  }
+
+  List<Answer> getAnswers(){
+    return answers;
+  }
+
   factory Question.fromMap(Map<String, dynamic> json) {
     return Question(
       id: json["id"],
-      title: Title.fromMap(json["title"]),
-      sub_title: Title.fromMap(json["sub_title"]),
+      title: TechnicalName.fromMap(json["title"]),
+      sub_title: TechnicalName.fromMap(json["sub_title"]),
       type: json["type"],
       axis_count: json["axis_count"],
       is_multiple_choice: json["is_multiple_choice"] == 1 ? true : false,
-      info_url: Title.fromMap(json["info_url"]),
-      info_description: Title.fromMap(json["info_description"]),
+      info_url: TechnicalName.fromMap(json["info_url"]),
+      info_description: TechnicalName.fromMap(json["info_description"]),
       answer_required: json["answer_required"],
       answers_selected_by_default: json["answers_selected_by_default"] == 1 ? true : false,
       creator_id: json["creator_id"],
@@ -79,13 +92,20 @@ class Question {
     };
   }
 
-  Answer? getAnswer(int id) {
+  bool get isImageQuestion{
+    return type=="IMAGE";
+  }
+  Answer? getAnswerByID(int id) {
     for (Answer answer in answers) {
       if (answer.id == id) {
         return answer;
       }
     }
     return null;
+  }
+
+  Answer getAnswerByIndex(int index) {
+    return answers.elementAt(index);
   }
 
   void deselectAllAnswers() {
@@ -100,4 +120,5 @@ class Question {
       answer.selected = true;
     }
   }
+
 }
