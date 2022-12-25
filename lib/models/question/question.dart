@@ -39,6 +39,13 @@ class Question {
   });
 
 
+  bool get answersHasTitle{
+    if(answers.length != 0){
+      return answers.elementAt(0).hasTitle;
+    }
+    return false;
+  }
+
   String get getTitle{
     return title.string;
   }

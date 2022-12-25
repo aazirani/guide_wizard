@@ -26,6 +26,10 @@ class Answer {
     required this.updated_at,
   });
 
+  bool get hasTitle{
+    return title.string != "";
+  }
+
   bool get isSelected{
     return selected;
   }
