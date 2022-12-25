@@ -15,6 +15,7 @@ class Task {
   String created_at;
   String updated_at;
   List<Question> quesions;
+  bool isDone;
 
   Task({
     required this.id,
@@ -29,6 +30,7 @@ class Task {
     required this.created_at,
     required this.updated_at,
     required this.quesions,
+    this.isDone = false,
   });
 
   factory Task.fromMap(Map<String, dynamic> json) {
@@ -64,4 +66,11 @@ class Task {
     "quesions": quesions.map((question) => question.toMap()).toList(),
   };
 
+  void setDone(bool value){
+    isDone = value;
+  }
+
+  void toggleDone(){
+    isDone = !isDone;
+  }
 }

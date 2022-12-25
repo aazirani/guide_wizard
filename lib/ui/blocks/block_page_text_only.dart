@@ -1,28 +1,21 @@
 import 'package:boilerplate/constants/colors.dart';
-import 'package:boilerplate/models/block/sub_block.dart';
+import 'package:boilerplate/models/sub_task_widget_state/sub_task_widget_state.dart';
+import 'package:boilerplate/models/task/task.dart';
 import 'package:boilerplate/ui/blocks/sub_block_widget.dart';
 import 'package:boilerplate/widgets/blocks_appbar_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:render_metrics/render_metrics.dart';
 
-List<SubBlockModel> subBlocks= [
-  SubBlockModel(title: "Title",),
-  SubBlockModel(title: "Title",),
-  SubBlockModel(title: "Title",),
-];
-
 class BlockPageTextOnly extends StatefulWidget {
-
-  bool isDone = false;
-  BlockPageTextOnly({Key? key}) : super(key: key);
+  Task task;
+  BlockPageTextOnly({Key? key, required this.task}) : super(key: key);
 
   @override
   State<BlockPageTextOnly> createState() => _BlockPageTextOnlyState();
 }
 
 class _BlockPageTextOnlyState extends State<BlockPageTextOnly> {
-
   RenderParametersManager renderManager = RenderParametersManager<dynamic>();
 
   @override
@@ -38,17 +31,21 @@ class _BlockPageTextOnlyState extends State<BlockPageTextOnly> {
           decoration: BoxDecoration(
               borderRadius: BorderRadius.only(
                 topLeft: Radius.circular(25),
-                topRight: Radius.circular(25),),
-              color: AppColors.bright_foreground_color
-          ),
+                topRight: Radius.circular(25),
+              ),
+              color: AppColors.bright_foreground_color),
           child: Padding(
             padding: const EdgeInsets.only(top: 25),
             child: ListView.builder(
               scrollDirection: Axis.vertical,
               shrinkWrap: true,
-              itemCount: subBlocks.length,
-              itemBuilder: (context, i){
-                return SubBlock(index: i, subBlockModelsList: subBlocks, renderManager: renderManager, );
+              itemCount: widget.task.sub_tasks.length,
+              itemBuilder: (context, i) {
+                return SubBlock(
+                  index: i,
+                  subTasks: widget.task.sub_tasks,
+                  renderManager: renderManager,
+                );
               },
             ),
           ),
@@ -61,7 +58,9 @@ class _BlockPageTextOnlyState extends State<BlockPageTextOnly> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: AppColors.main_color,
-      appBar: BlocksAppBarWidget(isDone: widget.isDone,) as PreferredSizeWidget?,
+      appBar: BlocksAppBarWidget(
+        isDone: widget.task.isDone,
+      ) as PreferredSizeWidget?,
       body: _buildScaffoldBody(),
     );
   }
