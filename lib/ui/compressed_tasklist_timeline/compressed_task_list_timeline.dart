@@ -20,25 +20,34 @@ class CompressedBlocklistTimeline extends StatefulWidget {
 
 class _CompressedBlocklistTimelineState
     extends State<CompressedBlocklistTimeline> {
+  late StepStore _stepStore; 
+
   @override
-  Widget build(BuildContext context) {
-    final stepStore = Provider.of<StepStore>(context);
-    return _buildTimelineContainer(stepStore);
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    // initializing stores
+    _stepStore = Provider.of<StepStore>(context);
   }
 
-  Widget _buildTimelineContainer(stepStore) {
+  @override
+  Widget build(BuildContext context) {
+    // final stepStore = Provider.of<StepStore>(context);
+    return _buildTimelineContainer();
+  }
+
+  Widget _buildTimelineContainer() {
     return Container(
       padding: EdgeInsets.only(left: 20, right: 20, top: 25),
       height: _getScreenHeight() / 2.8,
       width: double.infinity,
       child: Align(
         alignment: Alignment.topLeft,
-        child: _buildTimeline(stepStore),
+        child: _buildTimeline(),
       ),
     );
   }
 
-  Widget _buildTimeline(stepStore) {
+  Widget _buildTimeline() {
     return Observer(
       builder: (_) => Align(
         alignment: Alignment.topLeft,
@@ -48,10 +57,10 @@ class _CompressedBlocklistTimelineState
               nodePosition: 0.009,
             ),
             builder: TimelineTileBuilder(
-              itemCount: widget.steps[(stepStore.currentStep) - 1].numTasks,
+              itemCount: widget.steps[(_stepStore.currentStep) - 1].numTasks,
               itemExtent: 70,
               contentsBuilder: (context, index) =>
-                  _buildContents(index, stepStore),
+                  _buildContents(index, _stepStore),
               indicatorBuilder: (context, index) => _buildIndicator(),
               startConnectorBuilder: (context, index) => _buildConnector(),
               endConnectorBuilder: (context, index) => _buildConnector(),

@@ -2,6 +2,9 @@ import 'package:boilerplate/constants/colors.dart';
 import 'package:boilerplate/models/test/step.dart' as s;
 import 'package:flutter/material.dart';
 import 'package:timelines/timelines.dart';
+import 'package:flutter_mobx/flutter_mobx.dart';
+import 'package:provider/provider.dart';
+import 'package:boilerplate/stores/step/step_store.dart';
 
 class StepTimeLine extends StatefulWidget {
   final List<s.Step> steps;
@@ -22,6 +25,14 @@ class _StepTimeLineState extends State<StepTimeLine> {
   int index = 3;
   late int pending = widget.pending;
   late int stepNo = widget.stepNo;
+  late StepStore _stepStore;
+
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    // initializing stores
+    _stepStore = Provider.of<StepStore>(context);
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -54,6 +65,7 @@ class _StepTimeLineState extends State<StepTimeLine> {
       direction: Axis.horizontal,
       builder: TimelineTileBuilder(
         itemCount: 4,
+        // itemExtent: (_getScreenWidth() - 50 )/4,
         itemExtent: 90,
         indicatorBuilder: (context, index) => _buildIndicator(index),
         startConnectorBuilder: (context, index) => _buildStartConnector(index),
@@ -168,7 +180,6 @@ class _StepTimeLineState extends State<StepTimeLine> {
     return null;
   }
 
-
   // Widget? _buildEndConnector(index) {
   //   if (index != stepNo && index == widget.pending)
   //     return _buildNotStartedEndConnector();
@@ -186,24 +197,24 @@ class _StepTimeLineState extends State<StepTimeLine> {
   // }
 
   Widget? _buildEndConnector(int index) {
-  if (index == stepNo) {
-    return null;
+    if (index == stepNo) {
+      return null;
+    }
+    if (index == widget.pending) {
+      return _buildNotStartedEndConnector();
+    }
+    if (index == widget.pending - 1) {
+      return _buildPendingEndConnectorGradient();
+    }
+    if (index > widget.pending) {
+      return _buildNotStartedEndConnector();
+    }
+    return SolidLineConnector(
+      thickness: 3,
+      color: AppColors.main_color,
+      indent: 10,
+    );
   }
-  if (index == widget.pending) {
-    return _buildNotStartedEndConnector();
-  }
-  if (index == widget.pending - 1) {
-    return _buildPendingEndConnectorGradient();
-  }
-  if (index > widget.pending) {
-    return _buildNotStartedEndConnector();
-  }
-  return SolidLineConnector(
-    thickness: 3,
-    color: AppColors.main_color,
-    indent: 10,
-  );
-}
 
   double _getScreenWidth() => MediaQuery.of(context).size.width;
 }

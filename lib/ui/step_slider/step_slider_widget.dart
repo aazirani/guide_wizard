@@ -16,22 +16,31 @@ class StepSliderWidget extends StatefulWidget {
 }
 
 class _StepSliderWidgetState extends State<StepSliderWidget> {
+  late StepStore stepStore;
+  
   @override
-  Widget build(BuildContext context) {
-    final stepStore = Provider.of<StepStore>(context);
-    return _buildCarouselSliderContainer(stepStore);
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    // initializing stores
+    stepStore = Provider.of<StepStore>(context);
   }
 
-  Widget _buildCarouselSliderContainer(stepStore) {
+  @override
+  Widget build(BuildContext context) {
+    // final stepStore = Provider.of<StepStore>(context);
+    return _buildCarouselSliderContainer();
+  }
+
+  Widget _buildCarouselSliderContainer() {
     return Container(
       alignment: Alignment.topRight,
       padding: EdgeInsets.only(top: 20),
       height: MediaQuery.of(context).size.height / 3.2,
-      child: _buildCarouselSlider(stepStore),
+      child: _buildCarouselSlider(),
     );
   }
 
-  _buildCarouselSlider(stepStore) {
+  _buildCarouselSlider() {
     return CarouselSlider(
       options: CarouselOptions(
           onPageChanged: (index, reason) {
