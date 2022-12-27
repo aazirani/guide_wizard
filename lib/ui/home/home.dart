@@ -23,13 +23,13 @@ class _HomeScreenState extends State<HomeScreen> {
     s.Step(
         title: "Info",
         numTasks: 20,
-        percentage: 0.2,
+        percentage: 1,
         status: StepStatus.isDone,
         tasks: List<Task>.generate(20, (index) => Task(title: 'task $index'))),
     s.Step(
         title: "Documents",
         numTasks: 4,
-        percentage: 1,
+        percentage: 0.2,
         status: StepStatus.isPending,
         tasks: [
           Task(title: "Application Dates"),
@@ -99,17 +99,12 @@ class _HomeScreenState extends State<HomeScreen> {
   Widget _buildScreenElements(stepStore) {
     return Column(
       children: [
-        //steps (/)
         _buildCurrentStepIndicator(stepStore),
-        //step slider
         StepSliderWidget(steps: steps),
-        //step timeline
         StepTimeLine(pending: 1, stepNo: 3, steps: steps),
         SizedBox(height: 25),
-        //in progress
         _buildInProgressText(),
         SizedBox(height: 10),
-        //task compressed timeline
         CompressedBlocklistTimeline(steps: steps),
       ],
     );

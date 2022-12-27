@@ -21,6 +21,11 @@ class Dimens {
   static const contentDeadlineTopPadding = EdgeInsets.only(top: 20);
   static const contentDeadlineBorderRadius =
       BorderRadius.all(Radius.circular(20));
+  //for Home Screen - step timeline
+  static const stepTimelineContainerBorderRadius = BorderRadius.all(Radius.circular(30));
+  static const stepTimelineContainerPadding = const EdgeInsets.only(left: 25, right: 25);
+  static const stepTimelineCurrentStepOuterCirclePadding = const EdgeInsets.all(2);
+  static const stepTimelineCurrentStepInnerCirclePadding = const EdgeInsets.all(8);
   //for Home screen - Carousel Slider
   static const sliderContainerMargin = EdgeInsets.symmetric(horizontal: 10.0);
   static const sliderContainerPadding = EdgeInsets.only(top: 10);
@@ -29,7 +34,7 @@ class Dimens {
       EdgeInsets.only(left: 200, bottom: 40, top: 20);
   //compressed task list
   static const contentLeftMargin = EdgeInsets.only(left: 20);
-
+  
   static const questionButtonPadding = EdgeInsets.only(bottom: 20, top: 15);
   static const questionDescriptionPadding =
       EdgeInsets.only(left: 10, right: 10, bottom: 10);
