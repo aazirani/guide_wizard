@@ -15,8 +15,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:provider/provider.dart';
-import 'package:boilerplate/models/task/task.dart';
-import 'package:boilerplate/models/technical_name/technical_name.dart';
+import 'package:boilerplate/stores/step/step_store.dart';
 
 class MyApp extends StatelessWidget {
   // This widget is the root of your application.
