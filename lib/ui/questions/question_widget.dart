@@ -137,7 +137,7 @@ class _QuestionWidgetState extends State<QuestionWidget> {
     }
 
     Widget _buildImageOptionSubtitle(int index){
-      if(widget.question.answersHasTitle){
+      if(widget.question.answersHasTitle) {
         return Padding(
           padding: const EdgeInsets.only(top: 5),
           child: Row(
@@ -146,7 +146,7 @@ class _QuestionWidgetState extends State<QuestionWidget> {
                 child: SizedBox(
                   child: Checkbox(
                     value: widget.question.getAnswerByIndex(index).isSelected,
-                    onChanged: (value){
+                    onChanged: (value) {
                       setState(() {
                         widget.question.getAnswerByIndex(index).setSelected(value!);
                       });
@@ -179,12 +179,12 @@ class _QuestionWidgetState extends State<QuestionWidget> {
 
 
     Widget _buildImageCheckBox(int index){
-      if(widget.question.answersHasTitle){
+      if(widget.question.answersHasTitle) {
         return SizedBox();
       }
       return Checkbox(
         value: widget.question.getAnswerByIndex(index).isSelected,
-        onChanged: (value){
+        onChanged: (value) {
           setState(() {
             widget.question.getAnswerByIndex(index).setSelected(value!);
           });
@@ -196,7 +196,7 @@ class _QuestionWidgetState extends State<QuestionWidget> {
       );
     }
 
-    Widget _buildSingleImageOption(int index){
+    Widget _buildSingleImageOption(int index) {
       return Flexible(
         child: Stack(
           alignment: AlignmentDirectional.topEnd,
@@ -244,21 +244,21 @@ class _QuestionWidgetState extends State<QuestionWidget> {
       );
     }
 
-    Widget _buildImageOptions(){
+    Widget _buildImageOptions() {
       return Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          for(int row=0; row<=widget.question.answers.length/widget.question.axis_count; row++)
-            _buildAImageOptionsRow(row*widget.question.axis_count, math.min((row+1)*widget.question.axis_count, widget.question.answers.length)),
+          for(int row=0; row <= widget.question.answers.length / widget.question.axis_count; row++)
+            _buildAImageOptionsRow(row * widget.question.axis_count, math.min((row + 1) * widget.question.axis_count, widget.question.answers.length)),
         ],
       );
     }
 
-    Widget _buildOptions(){
-      if(widget.question.isImageQuestion){
+    Widget _buildOptions() {
+      if(widget.question.isImageQuestion) {
         return _buildImageOptions();
       }
-      else{
+      else {
         return _buildTextOptions();
       }
     }

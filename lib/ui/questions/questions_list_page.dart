@@ -163,7 +163,7 @@ class _QuestionsListPageState extends State<QuestionsListPage> {
       itemScrollController: itemScrollController,
       question: questions.elementAt(index),
       expanded: false,
-      isLastQuestion: index==questions.length-1
+      isLastQuestion: index == questions.length - 1
     );
   }
 

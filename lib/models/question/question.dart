@@ -39,22 +39,22 @@ class Question {
   });
 
 
-  bool get answersHasTitle{
-    if(answers.length != 0){
+  bool get answersHasTitle {
+    if(answers.length != 0) {
       return answers.elementAt(0).hasTitle;
     }
     return false;
   }
 
-  String get getTitle{
+  String get getTitle {
     return title.string;
   }
 
-  String get getSubTitle{
+  String get getSubTitle {
     return sub_title.string;
   }
 
-  List<Answer> getAnswers(){
+  List<Answer> getAnswers() {
     return answers;
   }
 
@@ -65,7 +65,7 @@ class Question {
       sub_title: TechnicalName.fromMap(json["sub_title"]),
       type: json["type"],
       axis_count: json["axis_count"],
-      is_multiple_choice: json["is_multiple_choice"] == 1 ? true : false,
+      is_multiple_choice: (json["is_multiple_choice"] == 1) ? true : false,
       info_url: TechnicalName.fromMap(json["info_url"]),
       info_description: TechnicalName.fromMap(json["info_description"]),
       answer_required: json["answer_required"],
@@ -100,7 +100,7 @@ class Question {
   }
 
   bool get isImageQuestion{
-    return type=="IMAGE";
+    return type == "IMAGE";
   }
   Answer? getAnswerByID(int id) {
     for (Answer answer in answers) {

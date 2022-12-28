@@ -7,11 +7,11 @@ class QuestionList {
     required this.questions,
   });
 
-  int get length{
+  int get length {
     return questions.length;
   }
 
-  Question elementAt(int index){
+  Question elementAt(int index) {
     return questions.elementAt(index);
   }
 
