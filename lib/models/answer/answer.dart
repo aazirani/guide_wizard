@@ -1,9 +1,10 @@
 import 'package:boilerplate/models/title/title.dart';
+import 'package:flutter/material.dart';
 
 class Answer {
   int id;
   int question_id;
-  Title title;
+  TechnicalName title;
   int order;
   String? image;
   bool selected;
@@ -25,6 +26,30 @@ class Answer {
     required this.updated_at,
   });
 
+  bool get hasTitle{
+    return title.string != "";
+  }
+
+  bool get isSelected{
+    return selected;
+  }
+
+  void setSelected(bool value){
+    selected = value;
+  }
+
+  void toggleSelected(){
+    selected = !selected;
+  }
+
+  Image getImage(){
+    return Image.network(image!);
+  }
+
+  String get getTitle{
+    return title.string;
+  }
+
   factory Answer.fromMap(Map<String, dynamic> json) {
     //   image: Endpoints.domain +
     //       '/api/app/answers/img/${json["image"].toString().replaceAll(
@@ -32,7 +57,7 @@ class Answer {
     return Answer(
       id: json["id"],
       question_id: json["question_id"],
-      title: Title.fromMap(json["title"]),
+      title: TechnicalName.fromMap(json["title"]),
       order: json["order"],
       image: json["image"],
       selected: json["selected"] == 1 ? true : false,

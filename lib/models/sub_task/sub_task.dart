@@ -3,9 +3,9 @@ import 'package:boilerplate/models/title/title.dart';
 class SubTask {
   int id;
   int task_id;
-  Title title;
-  Title markdown;
-  Title deadline;
+  TechnicalName title;
+  TechnicalName markdown;
+  TechnicalName deadline;
   int order;
   String creator_id;
   String created_at;
@@ -27,9 +27,9 @@ class SubTask {
     return SubTask(
       id: json["id"],
       task_id: json["task_id"],
-      title: Title.fromMap(json["title"]),
-      markdown: Title.fromMap(json["markdown"]),
-      deadline: Title.fromMap(json["deadline"]),
+      title: TechnicalName.fromMap(json["title"]),
+      markdown: TechnicalName.fromMap(json["markdown"]),
+      deadline: TechnicalName.fromMap(json["deadline"]),
       order: json["order"],
       creator_id: json["creator_id"],
       created_at: json["created_at"],

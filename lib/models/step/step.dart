@@ -3,8 +3,8 @@ import 'package:boilerplate/models/title/title.dart';
 
 class Step {
   int id;
-  Title name;
-  Title description;
+  TechnicalName name;
+  TechnicalName description;
   int order;
   String? image;
   List<Task> tasks;
@@ -21,8 +21,8 @@ class Step {
   factory Step.fromMap(Map<String, dynamic> json) {
     return Step(
       id: json["id"],
-      name: Title.fromMap(json["name"]),
-      description: Title.fromMap(json["description"]),
+      name: TechnicalName.fromMap(json["name"]),
+      description: TechnicalName.fromMap(json["description"]),
       order: json["order"],
       image: json["image"],
       tasks: json["tasks"].map((answer) => Task.fromMap(answer)).toList().cast<Task>(),
