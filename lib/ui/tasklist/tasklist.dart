@@ -98,9 +98,6 @@ class _TaskListState extends State<TaskList> {
     );
   }
 
-  double _getProgressBarHeight() {
-    return (_getScreenHeight() - (progressBarSize.height + _getStatusBarHeight())) /_getScreenHeight();
-  }
 
   Widget _buildExpandableTaskTimeline() {
     return SizedBox.expand(
@@ -152,6 +149,10 @@ class _TaskListState extends State<TaskList> {
   }
 
   // general methods ...........................................................
+   double _getProgressBarHeight() {
+    return (_getScreenHeight() - (progressBarSize.height + _getStatusBarHeight())) /_getScreenHeight();
+  }
+  
   double _getScreenWidth() {
     return MediaQuery.of(context).size.width;
   }
