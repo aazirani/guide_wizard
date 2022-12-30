@@ -19,6 +19,14 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _HomeScreenState extends State<HomeScreen> {
+  late StepStore _stepStore; 
+
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    // initializing stores
+    _stepStore = Provider.of<StepStore>(context);
+  }
   List<s.Step> steps = [
     s.Step(
         title: "Info",
@@ -55,11 +63,11 @@ class _HomeScreenState extends State<HomeScreen> {
 
   @override
   Widget build(BuildContext context) {
-    final stepStore = Provider.of<StepStore>(context);
+    // final stepStore = Provider.of<StepStore>(context);
     return Scaffold(
       backgroundColor: AppColors.main_color,
       appBar: _buildAppBar(),
-      body: _buildBody(stepStore),
+      body: _buildBody(),
     );
   }
 
@@ -77,7 +85,7 @@ class _HomeScreenState extends State<HomeScreen> {
   }
 
 //body build methods ...........................................................
-  Widget _buildBody(stepStore) {
+  Widget _buildBody() {
     return ClipRRect(
       borderRadius: BorderRadius.only(
           topLeft: Radius.circular(30), topRight: Radius.circular(30)),
@@ -91,15 +99,15 @@ class _HomeScreenState extends State<HomeScreen> {
             topRight: Radius.circular(30),
           ),
         ),
-        child: _buildScreenElements(stepStore),
+        child: _buildScreenElements(),
       ),
     );
   }
 
-  Widget _buildScreenElements(stepStore) {
+  Widget _buildScreenElements() {
     return Column(
       children: [
-        _buildCurrentStepIndicator(stepStore),
+        _buildCurrentStepIndicator(),
         StepSliderWidget(steps: steps),
         StepTimeLine(pending: 1, stepNo: 3, steps: steps),
         SizedBox(height: 25),
@@ -110,7 +118,7 @@ class _HomeScreenState extends State<HomeScreen> {
     );
   }
 
-  Widget _buildCurrentStepIndicator(stepStore) {
+  Widget _buildCurrentStepIndicator() {
     return Padding(
         padding: EdgeInsets.only(
           top: 30,
@@ -119,7 +127,7 @@ class _HomeScreenState extends State<HomeScreen> {
         child: Row(children: [
           _buildStepsText(),
           SizedBox(width: 10),
-          _buildCurrentStepText(stepStore),
+          _buildCurrentStepText(_stepStore),
         ]));
   }
 
