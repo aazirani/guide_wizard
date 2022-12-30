@@ -38,4 +38,9 @@ class Step {
     "tasks": tasks.map((task) => task.toMap()).toList(),
   };
 
+  int get numTasks{
+    return tasks.length;
+  }
+  
+
 }

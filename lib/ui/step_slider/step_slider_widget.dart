@@ -1,6 +1,6 @@
 import 'package:boilerplate/constants/colors.dart';
 import 'package:boilerplate/constants/dimens.dart';
-import 'package:boilerplate/models/test/step.dart' as s;
+import 'package:boilerplate/models/step/step_list.dart';
 import 'package:boilerplate/stores/step/step_store.dart';
 import 'package:boilerplate/utils/enums/enum.dart';
 import 'package:carousel_slider/carousel_slider.dart';
@@ -8,8 +8,8 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 class StepSliderWidget extends StatefulWidget {
-  final List<s.Step> steps;
-  const StepSliderWidget({Key? key, required this.steps}) : super(key: key);
+  final StepList stepList;
+  const StepSliderWidget({Key? key, required this.stepList}) : super(key: key);
 
   @override
   State<StepSliderWidget> createState() => _StepSliderWidgetState();
@@ -48,12 +48,12 @@ class _StepSliderWidgetState extends State<StepSliderWidget> {
           height: _getScreenHeight() / 4,
           enlargeCenterPage: false,
           enableInfiniteScroll: false),
-      items: List<int>.generate(Dimens.stepNo, (index) => index).map((index) {
+      items: List<int>.generate(widget.stepList.steps.length, (index) => index).map((index) {
         return Builder(
           builder: (BuildContext context) {
             return GestureDetector(
               onTap: () {},
-              child: _buildSliderContainer(index),
+              child: _buildSliderContainer(index, stepStore),
             );
           },
         );
@@ -61,15 +61,15 @@ class _StepSliderWidgetState extends State<StepSliderWidget> {
     );
   }
 
-  Widget _buildSliderContainer(index) {
+  Widget _buildSliderContainer(index, stepStore) {
     return Container(
         alignment: Alignment.topLeft,
         width: _getScreenWidth(),
         margin: Dimens.sliderContainerMargin,
         padding: Dimens.sliderContainerPadding,
         decoration: BoxDecoration(
-          color: _buildSliderColor(index),
-          border: _buildSliderBorder(index),
+          color: _buildSliderColor(index, stepStore),
+          border: _buildSliderBorder(index, stepStore),
           borderRadius: BorderRadius.all(Radius.circular(20)),
         ),
         child: Stack(
@@ -80,8 +80,8 @@ class _StepSliderWidgetState extends State<StepSliderWidget> {
         ));
   }
 
-  BoxBorder _buildSliderBorder(index) {
-    switch (widget.steps[index].status) {
+  BoxBorder _buildSliderBorder(index, stepStore) {
+    switch (_getStepStatus(index, stepStore)) {
       case StepStatus.isDone:
         return _buildDoneBorder();
       case StepStatus.isPending:
@@ -91,8 +91,8 @@ class _StepSliderWidgetState extends State<StepSliderWidget> {
     }
   }
 
-  Color _buildSliderColor(index) {
-    switch (widget.steps[index].status) {
+  Color _buildSliderColor(index, stepStore) {
+    switch (_getStepStatus(index, stepStore)) {
       case StepStatus.isPending:
       case StepStatus.isDone:
         return AppColors.stepSliderAvailableColor;
@@ -134,20 +134,21 @@ class _StepSliderWidgetState extends State<StepSliderWidget> {
             SizedBox(height: 20),
             _buildContinueButton(),
             SizedBox(height: 10),
-            _buildProgressBar(widget.steps[currentStepNo].percentage),
+            // _buildProgressBar(widget.stepList.steps[currentStepNo].percentage),
+            _buildProgressBar(0.2),
           ]),
     );
   }
 
   Widget _buildStepTitle(currentStepNo) {
     return Text(
-      "${widget.steps[currentStepNo].title}",
+      "${widget.stepList.steps[currentStepNo].name.technical_name.toString()}",
       style: TextStyle(fontSize: 17, color: AppColors.main_color),
     );
   }
 
   Widget _buildStepNoOfTasks(currentStepNo) {
-    return Text("${widget.steps[currentStepNo].numTasks} tasks",
+    return Text("${widget.stepList.steps[currentStepNo].numTasks} tasks",
         style: TextStyle(fontSize: 15, color: AppColors.main_color));
   }
 
@@ -214,4 +215,12 @@ class _StepSliderWidgetState extends State<StepSliderWidget> {
   //general methods ............................................................
   double _getScreenHeight() => MediaQuery.of(context).size.height;
   double _getScreenWidth() => MediaQuery.of(context).size.width;
+  StepStatus _getStepStatus(index, stepStore) {
+    if (stepStore.pending == index) {
+      return StepStatus.isPending;
+    } else if (index < stepStore.pending) {
+      return StepStatus.isDone;
+    }
+    return StepStatus.notStarted; 
+  }
 }

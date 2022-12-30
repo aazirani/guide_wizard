@@ -1,6 +1,6 @@
 import 'package:boilerplate/constants/colors.dart';
 import 'package:boilerplate/constants/dimens.dart';
-import 'package:boilerplate/models/test/step.dart' as s;
+import 'package:boilerplate/models/step/step_list.dart';
 import 'package:boilerplate/stores/step/step_store.dart';
 import 'package:boilerplate/widgets/diamond_indicator.dart';
 import 'package:flutter/material.dart';
@@ -9,8 +9,8 @@ import 'package:provider/provider.dart';
 import 'package:timelines/timelines.dart';
 
 class CompressedBlocklistTimeline extends StatefulWidget {
-  final List<s.Step> steps;
-  CompressedBlocklistTimeline({Key? key, required this.steps})
+  final StepList stepList;
+  CompressedBlocklistTimeline({Key? key, required this.stepList})
       : super(key: key);
 
   @override
@@ -56,7 +56,7 @@ class _CompressedBlocklistTimelineState
               nodePosition: 0.009,
             ),
             builder: TimelineTileBuilder(
-              itemCount: widget.steps[(_stepStore.currentStep) - 1].numTasks,
+              itemCount: widget.stepList.steps[(stepStore.currentStep) - 1].numTasks,
               itemExtent: 70,
               contentsBuilder: (context, index) =>
                   _buildContents(index, _stepStore),
@@ -120,7 +120,7 @@ class _CompressedBlocklistTimelineState
     return Align(
       alignment: Alignment.centerLeft,
       child:
-          Text("${widget.steps[stepStore.currentStep - 1].tasks[index].title}",
+          Text("${widget.stepList.steps[stepStore.currentStep - 1].tasks[index].text.technical_name}",
               style: TextStyle(
                 color: AppColors.main_color,
                 fontSize: 16,

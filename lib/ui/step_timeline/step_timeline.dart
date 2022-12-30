@@ -1,5 +1,5 @@
 import 'package:boilerplate/constants/colors.dart';
-import 'package:boilerplate/models/test/step.dart' as s;
+import 'package:boilerplate/models/step/step_list.dart';
 import 'package:flutter/material.dart';
 import 'package:timelines/timelines.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
@@ -8,14 +8,14 @@ import 'package:boilerplate/stores/step/step_store.dart';
 import 'package:boilerplate/constants/dimens.dart';
 
 class StepTimeLine extends StatefulWidget {
-  final List<s.Step> steps;
+  final StepList stepList;
   final int pending;
   final int stepNo;
   StepTimeLine(
       {Key? key,
       required this.pending,
       required this.stepNo,
-      required this.steps})
+      required this.stepList})
       : super(key: key);
 
   @override

@@ -7,6 +7,7 @@ part 'step_store.g.dart';
 class StepStore = _StepStore with _$StepStore;
 
 abstract class _StepStore with Store {
+  final int pending = 1;
   @observable
   int currentStep = 1;
 
