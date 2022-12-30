@@ -1,10 +1,12 @@
 import 'package:boilerplate/constants/colors.dart';
 import 'package:boilerplate/constants/dimens.dart';
-import 'package:boilerplate/models/question/image_questions.dart';
-import 'package:boilerplate/models/question/question_test.dart';
-import 'package:boilerplate/models/question/text_question.dart';
+import 'package:boilerplate/models/answer/answer.dart';
 import 'package:flutter/material.dart';
 import 'package:scrollable_positioned_list/scrollable_positioned_list.dart';
+import 'package:boilerplate/models/question/question.dart';
+import 'package:boilerplate/models/question/question_list.dart';
+import 'package:boilerplate/models/step/step.dart' as StepModel;
+import 'package:boilerplate/models/title/title.dart';
 
 import 'question_widget.dart';
 
@@ -20,63 +22,96 @@ class _QuestionsListPageState extends State<QuestionsListPage> {
 
   late bool expanded;
   // late ExpandedTileController _controller;
-  late List<QuestionTest> questions;
+  late QuestionList questions;
   final itemScrollController = ItemScrollController();
 
   @override
   void initState() {
     expanded=true;
     // _controller = ExpandedTileController(isExpanded:true);
-    questions=[
-      TextQuestion(
-          title: "Question Title",
-          description: "description description description description description description description",
-          options: [
-            {"title": "option1", "selected":false},
-            {"title": "option2", "selected":false},
-            {"title": "option3", "selected":false},
-          ],
-          multiChoice: true,
-      ),
-      TextQuestion(
-          title: "What is up?",
-          description: "description description description description description description description",
-          options: [
-            {"title": "option1", "selected":false},
-            {"title": "option2", "selected":false},
-            {"title": "option3", "selected":false},
-          ],
-          multiChoice: true,
-      ),
-      ImageQuestion(
-        title: "Image with subtitle",
-        description: "description description description description description description description",
-        options: [
-          {"image": Image.asset("assets/images/test_image.jpg"), "subtitle":"image subtitle!", "selected":false},
-          {"image": Image.asset("assets/images/test_image.jpg"), "subtitle":"image subtitle!", "selected":false},
-          {"image": Image.asset("assets/images/test_image.jpg"), "subtitle":"image subtitle!", "selected":false},
-          {"image": Image.asset("assets/images/test_image.jpg"), "subtitle":"image subtitle!", "selected":false},
+
+
+    /*
+      Test objects
+     */
+    questions = QuestionList(questions: [
+      Question(
+        id: 0,
+        title: TechnicalName(id: 0, technical_name: "Question 1", creator_id: 1, created_at: '', updated_at: '', ),
+        sub_title: TechnicalName(id: 0, technical_name: "Sub Title 1", creator_id: 1, created_at: '', updated_at: '', ),
+        type: "TEXT",
+        axis_count: 1,
+        is_multiple_choice: false,
+        info_url: TechnicalName(id: 0, technical_name: "Info URL 1", creator_id: 1, created_at: '', updated_at: '', ),
+        info_description: TechnicalName(id: 0, technical_name: "Info Description 1", creator_id: 1, created_at: '', updated_at: '', ),
+        answer_required: 1,
+        answers_selected_by_default: false,
+        creator_id: 1,
+        created_at: "2021-09-01 00:00:00",
+        updated_at: '2021-09-01 00:00:00',
+        step: StepModel.Step(id: 0, name: TechnicalName(id: 0, technical_name: "Info URL 1", creator_id: 1, created_at: '', updated_at: '', ),
+          description: TechnicalName(id: 0, technical_name: "Info URL 1", creator_id: 1, created_at: '', updated_at: '', ),
+          order: 1, image: '', tasks: []),
+        answers: [
+          Answer(id: 0, question_id: 1, title: TechnicalName(id: 0, technical_name: "Title", creator_id: 1, created_at: '', updated_at: '', ), order: 1, is_enabled: true, creator_id: '', created_at: '', updated_at: ''),
+          Answer(id: 0, question_id: 1, title: TechnicalName(id: 0, technical_name: "Title", creator_id: 1, created_at: '', updated_at: '', ), order: 1, is_enabled: true, creator_id: '', created_at: '', updated_at: ''),
+          Answer(id: 0, question_id: 1, title: TechnicalName(id: 0, technical_name: "Title", creator_id: 1, created_at: '', updated_at: '', ), order: 1, is_enabled: true, creator_id: '', created_at: '', updated_at: ''),
+          Answer(id: 0, question_id: 1, title: TechnicalName(id: 0, technical_name: "Title", creator_id: 1, created_at: '', updated_at: '', ), order: 1, is_enabled: true, creator_id: '', created_at: '', updated_at: ''),
         ],
-        multiChoice: true,
-        columns: 2,
-        // height: 150,
-        // width: 150,
       ),
-      ImageQuestion(
-        title: "Image without subtitle!",
-        description: "description description description description description description description",
-        options: [
-          {"image": Image.asset("assets/images/test_image.jpg"), "selected":false},
-          {"image": Image.asset("assets/images/test_image.jpg"), "selected":false},
-          {"image": Image.asset("assets/images/test_image.jpg"), "selected":false},
-          {"image": Image.asset("assets/images/test_image.jpg"), "selected":false},
+      Question(
+        id: 0,
+        title: TechnicalName(id: 0, technical_name: "Question 1", creator_id: 1, created_at: '', updated_at: '', ),
+        sub_title: TechnicalName(id: 0, technical_name: "Sub Title 1", creator_id: 1, created_at: '', updated_at: '', ),
+        type: "IMAGE",
+        axis_count: 2,
+        is_multiple_choice: false,
+        info_url: TechnicalName(id: 0, technical_name: "Info URL 1", creator_id: 1, created_at: '', updated_at: '', ),
+        info_description: TechnicalName(id: 0, technical_name: "Info Description 1", creator_id: 1, created_at: '', updated_at: '', ),
+        answer_required: 1,
+        answers_selected_by_default: false,
+        creator_id: 1,
+        created_at: "2021-09-01 00:00:00",
+        updated_at: '2021-09-01 00:00:00',
+        step: StepModel.Step(id: 0, name: TechnicalName(id: 0, technical_name: "Info URL 1", creator_id: 1, created_at: '', updated_at: '', ),
+            description: TechnicalName(id: 0, technical_name: "Info URL 1", creator_id: 1, created_at: '', updated_at: '', ),
+            order: 1, image: '', tasks: []),
+        answers: [
+          Answer(id: 0, question_id: 1, title: TechnicalName(id: 0, technical_name: "Title", creator_id: 1, created_at: '', updated_at: '', ), order: 1, is_enabled: true, creator_id: '', created_at: '', updated_at: '', image: 'https://play-lh.googleusercontent.com/5e7z5YCt7fplN4qndpYzpJjYmuzM2WSrfs35KxnEw-Ku1sClHRWHoIDSw3a3YS5WpGcI'),
+          Answer(id: 0, question_id: 1, title: TechnicalName(id: 0, technical_name: "Title", creator_id: 1, created_at: '', updated_at: '', ), order: 1, is_enabled: true, creator_id: '', created_at: '', updated_at: '', image: 'https://play-lh.googleusercontent.com/5e7z5YCt7fplN4qndpYzpJjYmuzM2WSrfs35KxnEw-Ku1sClHRWHoIDSw3a3YS5WpGcI'),
+          Answer(id: 0, question_id: 1, title: TechnicalName(id: 0, technical_name: "Title", creator_id: 1, created_at: '', updated_at: '', ), order: 1, is_enabled: true, creator_id: '', created_at: '', updated_at: '', image: 'https://play-lh.googleusercontent.com/5e7z5YCt7fplN4qndpYzpJjYmuzM2WSrfs35KxnEw-Ku1sClHRWHoIDSw3a3YS5WpGcI'),
+          Answer(id: 0, question_id: 1, title: TechnicalName(id: 0, technical_name: "Title", creator_id: 1, created_at: '', updated_at: '', ), order: 1, is_enabled: true, creator_id: '', created_at: '', updated_at: '', image: 'https://play-lh.googleusercontent.com/5e7z5YCt7fplN4qndpYzpJjYmuzM2WSrfs35KxnEw-Ku1sClHRWHoIDSw3a3YS5WpGcI'),
         ],
-        multiChoice: true,
-        columns: 2,
-        // height: 150,
-        // width: 150,
       ),
-    ];
+      Question(
+        id: 0,
+        title: TechnicalName(id: 0, technical_name: "Question 1", creator_id: 1, created_at: '', updated_at: '', ),
+        sub_title: TechnicalName(id: 0, technical_name: "Sub Title 1", creator_id: 1, created_at: '', updated_at: '', ),
+        type: "IMAGE",
+        axis_count: 2,
+        is_multiple_choice: false,
+        info_url: TechnicalName(id: 0, technical_name: "Info URL 1", creator_id: 1, created_at: '', updated_at: '', ),
+        info_description: TechnicalName(id: 0, technical_name: "Info Description 1", creator_id: 1, created_at: '', updated_at: '', ),
+        answer_required: 1,
+        answers_selected_by_default: false,
+        creator_id: 1,
+        created_at: "2021-09-01 00:00:00",
+        updated_at: '2021-09-01 00:00:00',
+        step: StepModel.Step(id: 0, name: TechnicalName(id: 0, technical_name: "Info URL 1", creator_id: 1, created_at: '', updated_at: '', ),
+            description: TechnicalName(id: 0, technical_name: "Info URL 1", creator_id: 1, created_at: '', updated_at: '', ),
+            order: 1, image: '', tasks: []),
+        answers: [
+          Answer(id: 0, question_id: 1, title: TechnicalName(id: 0, technical_name: "", creator_id: 1, created_at: '', updated_at: '', ), order: 1, is_enabled: true, creator_id: '', created_at: '', updated_at: '', image: 'https://play-lh.googleusercontent.com/5e7z5YCt7fplN4qndpYzpJjYmuzM2WSrfs35KxnEw-Ku1sClHRWHoIDSw3a3YS5WpGcI'),
+          Answer(id: 0, question_id: 1, title: TechnicalName(id: 0, technical_name: "", creator_id: 1, created_at: '', updated_at: '', ), order: 1, is_enabled: true, creator_id: '', created_at: '', updated_at: '', image: 'https://play-lh.googleusercontent.com/5e7z5YCt7fplN4qndpYzpJjYmuzM2WSrfs35KxnEw-Ku1sClHRWHoIDSw3a3YS5WpGcI'),
+          Answer(id: 0, question_id: 1, title: TechnicalName(id: 0, technical_name: "", creator_id: 1, created_at: '', updated_at: '', ), order: 1, is_enabled: true, creator_id: '', created_at: '', updated_at: '', image: 'https://play-lh.googleusercontent.com/5e7z5YCt7fplN4qndpYzpJjYmuzM2WSrfs35KxnEw-Ku1sClHRWHoIDSw3a3YS5WpGcI'),
+          Answer(id: 0, question_id: 1, title: TechnicalName(id: 0, technical_name: "", creator_id: 1, created_at: '', updated_at: '', ), order: 1, is_enabled: true, creator_id: '', created_at: '', updated_at: '', image: 'https://play-lh.googleusercontent.com/5e7z5YCt7fplN4qndpYzpJjYmuzM2WSrfs35KxnEw-Ku1sClHRWHoIDSw3a3YS5WpGcI'),
+        ],
+      ),
+    ]);
+    /*
+      End of testing objects
+     */
+
     super.initState();
   }
 
@@ -126,9 +161,9 @@ class _QuestionsListPageState extends State<QuestionsListPage> {
     return QuestionWidget(
       index: index,
       itemScrollController: itemScrollController,
-      question: questions[index],
+      question: questions.elementAt(index),
       expanded: false,
-      isLastQuestion: index==questions.length-1
+      isLastQuestion: index == questions.length - 1
     );
   }
 

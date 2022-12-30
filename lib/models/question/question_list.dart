@@ -7,6 +7,15 @@ class QuestionList {
     required this.questions,
   });
 
+  int get length {
+    return questions.length;
+  }
+
+  Question elementAt(int index) {
+    return questions.elementAt(index);
+  }
+
+
   factory QuestionList.fromJson(List<dynamic> json) {
     List<Question> questions = json.map((question) => Question.fromMap(question)).toList();
 

@@ -2,15 +2,13 @@ import 'dart:math' as math;
 
 import 'package:boilerplate/constants/colors.dart';
 import 'package:boilerplate/constants/dimens.dart';
-import 'package:boilerplate/models/question/image_questions.dart';
-import 'package:boilerplate/models/question/question_test.dart';
-import 'package:boilerplate/models/question/text_question.dart';
+import 'package:boilerplate/models/question/question.dart';
 import 'package:boilerplate/utils/locale/app_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:scrollable_positioned_list/scrollable_positioned_list.dart';
 
 class QuestionWidget extends StatefulWidget {
-  QuestionTest question;
+  Question question;
   bool expanded, isLastQuestion;
   int index;
   ItemScrollController itemScrollController;
@@ -99,7 +97,7 @@ class _QuestionWidgetState extends State<QuestionWidget> {
                 width: 15,
               ),
               Text(
-                widget.question.title,
+                widget.question.getTitle,
                 style: TextStyle(fontSize: 20, fontWeight: FontWeight.w500),
               ),
             ],
@@ -113,22 +111,22 @@ class _QuestionWidgetState extends State<QuestionWidget> {
 
     Widget _buildTextOptions(){
       return Column(
-        children: widget.question.options.map((option) =>
+        children: widget.question.getAnswers().map((option) =>
             Container(
               margin: const EdgeInsets.only(left: 15, right: 15, top: 10),
               child: CheckboxListTile(
                 shape: RoundedRectangleBorder(
-                  side: BorderSide(color: option["selected"] ? Colors.black:Colors.transparent, width: 2),
+                  side: BorderSide(color: option.isSelected ? Colors.black:Colors.transparent, width: 2),
                   borderRadius: BorderRadius.circular(5),
                 ),
                 checkboxShape: CircleBorder(),
-                value: option["selected"],
+                value: option.isSelected,
                 onChanged: (value) {
                   setState(() {
-                    widget.question.options.elementAt(widget.question.options.indexOf(option))["selected"]=value;
+                    widget.question.getAnswers().elementAt(widget.question.getAnswers().indexOf(option)).setSelected(value!);
                   });
                 },
-                title: Text(option["title"]),
+                title: Text(option.getTitle),
                 controlAffinity: ListTileControlAffinity.leading,
                 tileColor: AppColors.grey,
                 activeColor: Colors.black,
@@ -139,7 +137,7 @@ class _QuestionWidgetState extends State<QuestionWidget> {
     }
 
     Widget _buildImageOptionSubtitle(int index){
-      if(widget.question.options.elementAt(index)["subtitle"]!=null){
+      if(widget.question.answersHasTitle) {
         return Padding(
           padding: const EdgeInsets.only(top: 5),
           child: Row(
@@ -147,10 +145,10 @@ class _QuestionWidgetState extends State<QuestionWidget> {
               Transform.scale(
                 child: SizedBox(
                   child: Checkbox(
-                    value: widget.question.options.elementAt(index)["selected"],
-                    onChanged: (value){
+                    value: widget.question.getAnswerByIndex(index).isSelected,
+                    onChanged: (value) {
                       setState(() {
-                        widget.question.options.elementAt(index)["selected"]=value;
+                        widget.question.getAnswerByIndex(index).setSelected(value!);
                       });
                     },
                     checkColor: Colors.white,
@@ -164,7 +162,7 @@ class _QuestionWidgetState extends State<QuestionWidget> {
               ),
               Flexible(
                   child: Text(
-                    widget.question.options.elementAt(index)["subtitle"],
+                    widget.question.getAnswerByIndex(index).getTitle,
                     style: TextStyle(
                       fontSize: 13,
                     ),
@@ -181,46 +179,46 @@ class _QuestionWidgetState extends State<QuestionWidget> {
 
 
     Widget _buildImageCheckBox(int index){
-      if(widget.question.options.elementAt(index)["subtitle"]==null)
-        return Checkbox(
-          value: widget.question.options.elementAt(index)["selected"],
-          onChanged: (value){
-            setState(() {
-              widget.question.options.elementAt(index)["selected"]=value;
-            });
-          },
-          checkColor: Colors.white,
-          activeColor: Colors.black87,
-          shape: CircleBorder(),
-          side: BorderSide(color: Colors.transparent),
-        );
-      return SizedBox();
+      if(widget.question.answersHasTitle) {
+        return SizedBox();
+      }
+      return Checkbox(
+        value: widget.question.getAnswerByIndex(index).isSelected,
+        onChanged: (value) {
+          setState(() {
+            widget.question.getAnswerByIndex(index).setSelected(value!);
+          });
+        },
+        checkColor: Colors.white,
+        activeColor: Colors.black87,
+        shape: CircleBorder(),
+        side: BorderSide(color: Colors.transparent),
+      );
     }
 
-    Widget _buildSingleImageOption(int index){
-      ImageQuestion imageQuestion=widget.question as ImageQuestion;
+    Widget _buildSingleImageOption(int index) {
       return Flexible(
         child: Stack(
           alignment: AlignmentDirectional.topEnd,
           children: [
             Container(
             margin: const EdgeInsets.all(8),
-            height: imageQuestion.height,
-              width: imageQuestion.width,
+            // height: imageQuestion.height, //TODO: fix this
+            //   width: imageQuestion.width, //TODO: fix this
               child: ListTile(
-                onTap: (){
+                onTap: () {
                   setState(() {
-                    imageQuestion.options.elementAt(index)["selected"] =! imageQuestion.options.elementAt(index)["selected"];
+                    widget.question.getAnswerByIndex(index).toggleSelected();
                   });
                 },
                 shape: RoundedRectangleBorder(
-                  side: BorderSide(color: imageQuestion.options.elementAt(index)["selected"] ? Colors.black:Colors.transparent, width: 2),
+                  side: BorderSide(color: widget.question.getAnswerByIndex(index).isSelected ? Colors.black:Colors.transparent, width: 2),
                   borderRadius: BorderRadius.circular(5),
                 ),
                 // checkboxShape: CircleBorder(),
                 title: Column(
                   children: [
-                    imageQuestion.options.elementAt(index)["image"],
+                    widget.question.getAnswerByIndex(index).getImage(),
                     _buildImageOptionSubtitle(index),
                   ],
                 ),
@@ -246,25 +244,22 @@ class _QuestionWidgetState extends State<QuestionWidget> {
       );
     }
 
-    Widget _buildImageOptions(){
-      ImageQuestion imageQuestion=widget.question as ImageQuestion;
+    Widget _buildImageOptions() {
       return Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          for(int row=0; row<=imageQuestion.options.length/imageQuestion.columns; row++)
-            _buildAImageOptionsRow(row*imageQuestion.columns, math.min((row+1)*imageQuestion.columns, imageQuestion.options.length)),
+          for(int row=0; row <= widget.question.answers.length / widget.question.axis_count; row++)
+            _buildAImageOptionsRow(row * widget.question.axis_count, math.min((row + 1) * widget.question.axis_count, widget.question.answers.length)),
         ],
       );
     }
 
-    Widget _buildOptions(){
-      switch(widget.question.runtimeType){
-        case TextQuestion:
-          return _buildTextOptions();
-        case ImageQuestion:
-          return _buildImageOptions();
-        default:
-          return SizedBox();
+    Widget _buildOptions() {
+      if(widget.question.isImageQuestion) {
+        return _buildImageOptions();
+      }
+      else {
+        return _buildTextOptions();
       }
     }
 
@@ -289,7 +284,7 @@ class _QuestionWidgetState extends State<QuestionWidget> {
       return Container(
         margin: Dimens.questionDescriptionPadding,
         child: Text(
-          widget.question.description,
+          widget.question.getSubTitle,
         ),
       );
     }

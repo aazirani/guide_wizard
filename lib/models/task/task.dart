@@ -4,8 +4,8 @@ import 'package:boilerplate/models/title/title.dart';
 
 class Task {
   int id;
-  Title text;
-  Title description;
+  TechnicalName text;
+  TechnicalName description;
   String type;
   String? image1;
   String? image2;
@@ -36,8 +36,8 @@ class Task {
   factory Task.fromMap(Map<String, dynamic> json) {
     return Task(
       id: json["id"],
-      text: Title.fromMap(json["text"]),
-      description: Title.fromMap(json["description"]),
+      text: TechnicalName.fromMap(json["text"]),
+      description: TechnicalName.fromMap(json["description"]),
       type: json["type"],
       image1: json["image1"],
       image2: json["image2"],
