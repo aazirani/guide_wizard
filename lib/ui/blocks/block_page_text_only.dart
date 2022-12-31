@@ -1,5 +1,4 @@
 import 'package:boilerplate/constants/colors.dart';
-import 'package:boilerplate/models/sub_task_widget_state/sub_task_widget_state.dart';
 import 'package:boilerplate/models/task/task.dart';
 import 'package:boilerplate/ui/blocks/sub_block_widget.dart';
 import 'package:boilerplate/widgets/blocks_appbar_widget.dart';
@@ -9,6 +8,7 @@ import 'package:render_metrics/render_metrics.dart';
 
 class BlockPageTextOnly extends StatefulWidget {
   Task task;
+
   BlockPageTextOnly({Key? key, required this.task}) : super(key: key);
 
   @override
@@ -34,20 +34,25 @@ class _BlockPageTextOnlyState extends State<BlockPageTextOnly> {
                 topRight: Radius.circular(25),
               ),
               color: AppColors.bright_foreground_color),
-          child: Padding(
-            padding: const EdgeInsets.only(top: 25),
-            child: ListView.builder(
-              scrollDirection: Axis.vertical,
-              shrinkWrap: true,
-              itemCount: widget.task.sub_tasks.length,
-              itemBuilder: (context, i) {
-                return SubBlock(
-                  index: i,
-                  subTasks: widget.task.sub_tasks,
-                  renderManager: renderManager,
-                );
-              },
-            ),
+          child: ListView(
+            children: [
+              Padding(
+                padding: const EdgeInsets.only(top: 25, left: 30, right: 30, bottom: 20),
+                child: Text(widget.task.description.string, style: TextStyle(fontSize: 20),),
+              ),
+              ListView.builder(
+                physics: ScrollPhysics(),
+                shrinkWrap: true,
+                itemCount: widget.task.sub_tasks.length,
+                itemBuilder: (context, i) {
+                  return SubBlock(
+                    index: i,
+                    subTasks: widget.task.sub_tasks,
+                    renderManager: renderManager,
+                  );
+                },
+              ),
+            ],
           ),
         ),
       ),
@@ -60,7 +65,9 @@ class _BlockPageTextOnlyState extends State<BlockPageTextOnly> {
       backgroundColor: AppColors.main_color,
       appBar: BlocksAppBarWidget(
         isDone: widget.task.isDone,
-      ) as PreferredSizeWidget?,
+        appBarSize: 70.0,
+        title: widget.task.text.string,
+      ),
       body: _buildScaffoldBody(),
     );
   }
