@@ -1,21 +1,21 @@
 import 'package:boilerplate/constants/colors.dart';
 import 'package:boilerplate/models/task/task.dart';
-import 'package:boilerplate/ui/blocks/sub_block_widget.dart';
+import 'package:boilerplate/widgets/sub_task_widget.dart';
 import 'package:boilerplate/widgets/blocks_appbar_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:render_metrics/render_metrics.dart';
 
-class BlockPageTextOnly extends StatefulWidget {
+class TaskPageTextOnly extends StatefulWidget {
   Task task;
 
-  BlockPageTextOnly({Key? key, required this.task}) : super(key: key);
+  TaskPageTextOnly({Key? key, required this.task}) : super(key: key);
 
   @override
-  State<BlockPageTextOnly> createState() => _BlockPageTextOnlyState();
+  State<TaskPageTextOnly> createState() => _TaskPageTextOnlyState();
 }
 
-class _BlockPageTextOnlyState extends State<BlockPageTextOnly> {
+class _TaskPageTextOnlyState extends State<TaskPageTextOnly> {
   RenderParametersManager renderManager = RenderParametersManager<dynamic>();
 
   @override
@@ -45,7 +45,7 @@ class _BlockPageTextOnlyState extends State<BlockPageTextOnly> {
                 shrinkWrap: true,
                 itemCount: widget.task.sub_tasks.length,
                 itemBuilder: (context, i) {
-                  return SubBlock(
+                  return SubTaskWidget(
                     index: i,
                     subTasks: widget.task.sub_tasks,
                     renderManager: renderManager,

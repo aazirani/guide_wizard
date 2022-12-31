@@ -2,7 +2,7 @@ import 'package:boilerplate/constants/colors.dart';
 import 'package:boilerplate/constants/dimens.dart';
 import 'package:boilerplate/models/sub_task/sub_task.dart';
 import 'package:boilerplate/models/task/task.dart';
-import 'package:boilerplate/ui/blocks/sub_block_widget.dart';
+import 'package:boilerplate/widgets/sub_task_widget.dart';
 import 'package:boilerplate/widgets/blocks_appbar_widget.dart';
 import 'package:boilerplate/widgets/image_slide.dart';
 import 'package:boilerplate/widgets/measure_size.dart';
@@ -11,15 +11,15 @@ import 'package:flutter/rendering.dart';
 import 'package:flutter/services.dart';
 import 'package:render_metrics/render_metrics.dart';
 
-class BlockPageWithImage extends StatefulWidget {
+class TaskPageWithImage extends StatefulWidget {
   Task task;
-  BlockPageWithImage({Key? key, required this.task}) : super(key: key);
+  TaskPageWithImage({Key? key, required this.task}) : super(key: key);
 
   @override
-  State<BlockPageWithImage> createState() => _BlockPageWithImageState();
+  State<TaskPageWithImage> createState() => _TaskPageWithImageState();
 }
 
-class _BlockPageWithImageState extends State<BlockPageWithImage> {
+class _TaskPageWithImageState extends State<TaskPageWithImage> {
   RenderParametersManager renderManager = RenderParametersManager<dynamic>();
 
   double appBarSize = 70.0;
@@ -59,7 +59,7 @@ class _BlockPageWithImageState extends State<BlockPageWithImage> {
                   controller: scrollController,
                   itemCount: widget.task.subTaskCount,
                   itemBuilder: (context, i) {
-                    return SubBlock(
+                    return SubTaskWidget(
                       index: i,
                       subTasks: widget.task.sub_tasks,
                       renderManager: renderManager,

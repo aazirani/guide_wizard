@@ -1,23 +1,23 @@
 import 'package:boilerplate/constants/colors.dart';
 import 'package:boilerplate/constants/dimens.dart';
 import 'package:boilerplate/models/sub_task/sub_task.dart';
-import 'package:boilerplate/ui/blocks/expansion_content.dart';
+import 'package:boilerplate/widgets/expansion_content.dart';
 import 'package:boilerplate/widgets/app_expansiontile.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:render_metrics/render_metrics.dart';
 
-class SubBlock extends StatefulWidget {
+class SubTaskWidget extends StatefulWidget {
   int index;
   List<SubTask> subTasks;
   RenderParametersManager renderManager;
-  SubBlock({Key? key,required this.index , required this.subTasks, required this.renderManager,}) : super(key: key);
+  SubTaskWidget({Key? key,required this.index , required this.subTasks, required this.renderManager,}) : super(key: key);
 
   @override
-  State<SubBlock> createState() => SubBlockState();
+  State<SubTaskWidget> createState() => SubTaskWidgetState();
 }
 
-class SubBlockState extends State<SubBlock> with AutomaticKeepAliveClientMixin {
+class SubTaskWidgetState extends State<SubTaskWidget> with AutomaticKeepAliveClientMixin {
 
     void _runAtExpanding() {
       setState(() {
