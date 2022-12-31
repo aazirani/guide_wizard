@@ -5,9 +5,9 @@ import 'package:smooth_page_indicator/smooth_page_indicator.dart';
 
 class ImageSlide extends StatefulWidget {
 
-  List<Image> images;
-
-  ImageSlide({Key? key, required this.images}) : super(key: key);
+  List<String?> images;
+  String description;
+  ImageSlide({Key? key, required this.images, required this.description}) : super(key: key);
 
   @override
   State<ImageSlide> createState() => _ImageSlideState();
@@ -16,14 +16,13 @@ class ImageSlide extends StatefulWidget {
 class _ImageSlideState extends State<ImageSlide> {
 
   int _slideIndex = 0;
+  late List<Image> _imagesList;
 
-  List<Image> _imagesList = [
-    Image.asset('assets/images/patterns.png', fit: BoxFit.fitHeight,),
-    Image.asset('assets/images/patterns.png', fit: BoxFit.fitHeight,),
-    Image.asset('assets/images/patterns.png', fit: BoxFit.fitHeight,),
-    Image.asset('assets/images/patterns.png', fit: BoxFit.fitHeight,),
-    Image.asset('assets/images/patterns.png', fit: BoxFit.fitHeight,),
-  ];
+  @override
+  void initState() {
+    super.initState();
+    _imagesList = widget.images.map((e) => Image.network(e!, fit: BoxFit.fitHeight,),).toList();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -52,7 +51,7 @@ class _ImageSlideState extends State<ImageSlide> {
                 child: Padding(
                   padding: const EdgeInsets.only(left: 35,),
                   child: Text(
-                    "Info",
+                    widget.description,
                     style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold, fontSize: 25),
                   ),
                 ),

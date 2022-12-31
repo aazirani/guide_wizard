@@ -1,4 +1,4 @@
-import 'package:boilerplate/models/title/title.dart';
+import 'package:boilerplate/models/technical_name/technical_name.dart';
 import 'package:flutter/material.dart';
 
 class Answer {

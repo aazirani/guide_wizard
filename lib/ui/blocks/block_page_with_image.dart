@@ -22,17 +22,17 @@ class BlockPageWithImage extends StatefulWidget {
 class _BlockPageWithImageState extends State<BlockPageWithImage> {
   RenderParametersManager renderManager = RenderParametersManager<dynamic>();
 
-
-  var appBarSize = Size.zero, imageSlideSize = Size.zero;
+  double appBarSize = 70.0;
+  var imageSlideSize = Size.zero;
 
   @override
   void initState() {
     super.initState();
   }
 
-  double _getHeightOfDraggableScrollableSheet(){
+    double _getHeightOfDraggableScrollableSheet(){ //TODO: This function should get fixed
     double screenHeight = MediaQuery.of(context).size.height;
-    return (screenHeight - (appBarSize.height + imageSlideSize.height)) / screenHeight;
+    return (screenHeight - (appBarSize + imageSlideSize.height * 0.33)) / screenHeight;
   }
 
   Widget _buildDraggableScrollableSheet() {
@@ -57,7 +57,7 @@ class _BlockPageWithImageState extends State<BlockPageWithImage> {
                   scrollDirection: Axis.vertical,
                   shrinkWrap: true,
                   controller: scrollController,
-                  itemCount: widget.task.sub_tasks.length,
+                  itemCount: widget.task.subTaskCount,
                   itemBuilder: (context, i) {
                     return SubBlock(
                       index: i,
@@ -75,7 +75,7 @@ class _BlockPageWithImageState extends State<BlockPageWithImage> {
   }
 
   Widget _buildImageSlide() {
-    return ImageSlide(images: []);
+    return ImageSlide(images: [widget.task.image1, widget.task.image2], description: widget.task.description.string);
   }
 
   Widget _buildScaffoldBody() {
@@ -97,19 +97,11 @@ class _BlockPageWithImageState extends State<BlockPageWithImage> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: AppColors.main_color,
-      // appBar: MeasureSize(
-      //   onChange: (Size size) {
-      //     setState(() {
-      //       appBarSize = size;
-      //     });
-      //   },
-      //   child: BlocksAppBarWidget(
-      //     isDone: widget.task.isDone,
-      //   ),
-      // ) as PreferredSizeWidget?,
       appBar: BlocksAppBarWidget(
+        title: widget.task.text.string,
+        appBarSize: appBarSize,
         isDone: widget.task.isDone,
-      ) as PreferredSizeWidget?,
+      ),
       body: _buildScaffoldBody(),
     );
   }

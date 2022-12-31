@@ -1,6 +1,6 @@
 import 'package:boilerplate/models/question/question.dart';
 import 'package:boilerplate/models/sub_task/sub_task.dart';
-import 'package:boilerplate/models/title/title.dart';
+import 'package:boilerplate/models/technical_name/technical_name.dart';
 
 class Task {
   int id;
@@ -72,5 +72,13 @@ class Task {
 
   void toggleDone(){
     isDone = !isDone;
+  }
+
+  bool get isImageTask{
+    return type == 'IMAGE';
+  }
+
+  int get subTaskCount{
+    return sub_tasks.length;
   }
 }
