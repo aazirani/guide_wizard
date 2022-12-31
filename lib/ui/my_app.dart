@@ -73,7 +73,7 @@ class MyApp extends StatelessWidget {
                       updated_at: ''),
                   description: TechnicalName(
                       id: 0,
-                      technical_name: "test",
+                      technical_name: "Info",
                       creator_id: 0,
                       created_at: '',
                       updated_at: ''),

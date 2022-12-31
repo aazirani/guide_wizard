@@ -32,7 +32,7 @@ class _BlockPageWithImageState extends State<BlockPageWithImage> {
 
     double _getHeightOfDraggableScrollableSheet(){ //TODO: This function should get fixed
     double screenHeight = MediaQuery.of(context).size.height;
-    return (screenHeight - (appBarSize + imageSlideSize.height * 0.33)) / screenHeight;
+    return (screenHeight - (appBarSize + imageSlideSize.height * 0.44)) / screenHeight;
   }
 
   Widget _buildDraggableScrollableSheet() {

@@ -31,17 +31,19 @@ class _ImageSlideState extends State<ImageSlide> {
 
     return Column(
         children: [
-          CarouselSlider(
-            options: CarouselOptions(
-              height: screenHeight / 4,
-              viewportFraction: 1,
-              autoPlay: true,
-              enlargeCenterPage: true,
-              enableInfiniteScroll: false,
-              onPageChanged: (index, reason) =>
-                  setState(()=> _slideIndex=index),
+          Flexible(
+            child: CarouselSlider(
+              options: CarouselOptions(
+                height: screenHeight / 3,
+                viewportFraction: 1,
+                autoPlay: true,
+                enlargeCenterPage: true,
+                enableInfiniteScroll: false,
+                onPageChanged: (index, reason) =>
+                    setState(()=> _slideIndex=index),
+              ),
+              items: _imagesList,
             ),
-            items: _imagesList,
           ),
           SizedBox(height: 15,),
           Stack(
