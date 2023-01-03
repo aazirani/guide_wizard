@@ -3,7 +3,7 @@ import 'package:boilerplate/constants/dimens.dart';
 import 'package:boilerplate/utils/locale/app_localization.dart';
 import 'package:flutter/material.dart';
 
-class BlocksAppBarWidget extends StatefulWidget implements PreferredSizeWidget{
+class BlocksAppBarWidget extends StatefulWidget implements PreferredSizeWidget {
   bool isDone;
   double appBarSize;
   String title;
@@ -71,7 +71,7 @@ class _BlocksAppBarWidgetState extends State<BlocksAppBarWidget> {
     );
   }
 
-  Widget _buildDoneButton(){
+  Widget _buildDoneButton() {
     return _buildButton(
       buttonStyle: _buildDoneButtonStyle(),
       text: AppLocalizations.of(context).translate('done_button_text'),
@@ -79,7 +79,7 @@ class _BlocksAppBarWidgetState extends State<BlocksAppBarWidget> {
     );
   }
 
-  Widget _buildUndoneButton(){
+  Widget _buildUndoneButton() {
     return _buildButton(
         buttonStyle: _buildUndoneButtonStyle(),
         text: AppLocalizations.of(context).translate('undone_button_text'),
