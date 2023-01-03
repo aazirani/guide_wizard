@@ -40,7 +40,7 @@ class _ImageSlideState extends State<ImageSlide> {
                 enlargeCenterPage: true,
                 enableInfiniteScroll: false,
                 onPageChanged: (index, reason) =>
-                    setState(()=> _slideIndex=index),
+                    setState(() => _slideIndex = index),
               ),
               items: _imagesList,
             ),
