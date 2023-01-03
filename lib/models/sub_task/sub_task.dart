@@ -44,16 +44,16 @@ class SubTask {
   }
 
   Map<String, dynamic> toMap() => {
-        "id": id,
-        "task_id": task_id,
-        "title": title.toMap(),
-        "markdown": markdown.toMap(),
-        "deadline": deadline.toMap(),
-        "order": order,
-        "creator_id": creator_id,
-        "created_at": created_at,
-        "updated_at": updated_at,
-      };
+    "id": id,
+    "task_id": task_id,
+    "title": title.toMap(),
+    "markdown": markdown.toMap(),
+    "deadline": deadline.toMap(),
+    "order": order,
+    "creator_id": creator_id,
+    "created_at": created_at,
+    "updated_at": updated_at,
+  };
 
   void _buildGlobalKey() {
     globalKey = GlobalKey<AppExpansionTileState>();

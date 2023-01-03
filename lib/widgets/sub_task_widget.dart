@@ -31,50 +31,62 @@ class SubTaskWidgetState extends State<SubTaskWidget> with AutomaticKeepAliveCli
       });
     }
 
-    Widget _getExpansionContent(String markdown) {
+    Widget _buildExpansionContent(String markdown) {
       return ExpansionContent(renderManager: widget.renderManager, markdown: markdown,);
     }
 
-    Widget _buildExpansionTile(
-        {required GlobalKey<AppExpansionTileState> key}) {
-      return Padding(
-        padding: Dimens.expansionPadding,
-        child: ClipRRect(
+    Widget _buildAppExpansionTileWidget() {
+      return AppExpansionTile(
+        onExpansionChanged: ((isNewState) {
+          if (isNewState) {
+            _runAtExpanding();
+          }
+        }),
+        maintainState: true,
+        textColor: AppColors.main_color,
+        iconColor: AppColors.main_color,
+        title: Text(widget.subTasks[widget.index].title.string,),
+        key: widget.subTasks[widget.index].globalKey,
+        children: <Widget>[
+          _buildExpansionContent(widget.subTasks[widget.index].markdown.string),
+        ],
+      );
+    }
+
+    Widget _buildAppExpansionTileWidgetWithCustomTheme() {
+      return ListTileTheme(
+        shape: RoundedRectangleBorder(
           borderRadius: Dimens.expansionTileBorderRadius,
-          child: Card(
+          side: BorderSide(color: AppColors.main_color, width: 2),
+        ),
+        tileColor: AppColors.button_background_color,
+        textColor: AppColors.main_color,
+        contentPadding: Dimens.listTilePadding,
+        dense: false,
+        horizontalTitleGap: 0.0,
+        minLeadingWidth: 0,
+        child: _buildAppExpansionTileWidget(),
+      );
+    }
+
+
+    Widget _buildRoundedExpansionTile() {
+      return ClipRRect(
+        borderRadius: Dimens.expansionTileBorderRadius,
+        child: Card(
             elevation: 0,
             shape: RoundedRectangleBorder(
               borderRadius: Dimens.expansionTileBorderRadius,
             ),
-            child: ListTileTheme(
-              shape: RoundedRectangleBorder(
-                borderRadius: Dimens.expansionTileBorderRadius,
-                side: BorderSide(color: AppColors.main_color, width: 2),
-              ),
-              tileColor: AppColors.button_background_color,
-              textColor: AppColors.main_color,
-              contentPadding: Dimens.listTilePadding,
-              dense: false,
-              horizontalTitleGap: 0.0,
-              minLeadingWidth: 0,
-              child: AppExpansionTile(
-                onExpansionChanged: ((isNewState) {
-                  if (isNewState) {
-                    _runAtExpanding();
-                  }
-                }),
-                maintainState: true,
-                textColor: AppColors.main_color,
-                iconColor: AppColors.main_color,
-                title: Text(widget.subTasks[widget.index].title.string,),
-                key: widget.subTasks[widget.index].globalKey,
-                children: <Widget>[
-                  _getExpansionContent(widget.subTasks[widget.index].markdown.string),
-                ],
-              ),
-            ),
-          ),
+            child: _buildAppExpansionTileWidgetWithCustomTheme()
         ),
+      );
+    }
+
+    Widget _buildExpansionTile({required GlobalKey<AppExpansionTileState> key}) {
+      return Padding(
+        padding: Dimens.expansionPadding,
+        child: _buildRoundedExpansionTile(),
       );
     }
 

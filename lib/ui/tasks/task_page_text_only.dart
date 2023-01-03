@@ -1,4 +1,5 @@
 import 'package:boilerplate/constants/colors.dart';
+import 'package:boilerplate/constants/dimens.dart';
 import 'package:boilerplate/models/task/task.dart';
 import 'package:boilerplate/widgets/sub_task_widget.dart';
 import 'package:boilerplate/widgets/blocks_appbar_widget.dart';
@@ -23,6 +24,39 @@ class _TaskPageTextOnlyState extends State<TaskPageTextOnly> {
     super.initState();
   }
 
+
+
+  _buildDescription(){
+    return Padding(
+      padding: Dimens.taskPageTextOnlyListViewPadding,
+      child: Text(widget.task.description.string, style: TextStyle(fontSize: 20),),
+    );
+  }
+
+  _buildSubTasksList(){
+    return ListView.builder(
+      physics: ScrollPhysics(),
+      shrinkWrap: true,
+      itemCount: widget.task.sub_tasks.length,
+      itemBuilder: (context, i) {
+        return SubTaskWidget(
+          index: i,
+          subTasks: widget.task.sub_tasks,
+          renderManager: renderManager,
+        );
+      },
+    );
+  }
+
+  _buildPageContent(){
+    return ListView(
+      children: [
+        _buildDescription(),
+        _buildSubTasksList(),
+      ],
+    );
+  }
+
   Widget _buildScaffoldBody() {
     return SizedBox.expand(
       child: Container(
@@ -34,26 +68,7 @@ class _TaskPageTextOnlyState extends State<TaskPageTextOnly> {
                 topRight: Radius.circular(25),
               ),
               color: AppColors.bright_foreground_color),
-          child: ListView(
-            children: [
-              Padding(
-                padding: const EdgeInsets.only(top: 25, left: 30, right: 30, bottom: 20),
-                child: Text(widget.task.description.string, style: TextStyle(fontSize: 20),),
-              ),
-              ListView.builder(
-                physics: ScrollPhysics(),
-                shrinkWrap: true,
-                itemCount: widget.task.sub_tasks.length,
-                itemBuilder: (context, i) {
-                  return SubTaskWidget(
-                    index: i,
-                    subTasks: widget.task.sub_tasks,
-                    renderManager: renderManager,
-                  );
-                },
-              ),
-            ],
-          ),
+          child: _buildPageContent(),
         ),
       ),
     );
