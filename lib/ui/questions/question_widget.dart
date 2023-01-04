@@ -26,7 +26,10 @@ class QuestionWidget extends StatefulWidget {
   State<QuestionWidget> createState() => _QuestionWidgetState();
 }
 
-class _QuestionWidgetState extends State<QuestionWidget> {
+class _QuestionWidgetState extends State<QuestionWidget> with AutomaticKeepAliveClientMixin{
+  @override
+  bool get wantKeepAlive => true;
+
   double _getScreenWidth() => MediaQuery.of(context).size.width;
 
   Future scrollToItem(int index) async {
