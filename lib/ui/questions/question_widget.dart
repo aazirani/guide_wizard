@@ -102,8 +102,8 @@ class _QuestionWidgetState extends State<QuestionWidget> {
               ),
             ],
           ),
-          // widget.expanded ? _buildHelpButton():SizedBox(),
-          _buildHelpButton(),
+          widget.expanded ? _buildHelpButton():SizedBox(),
+          // _buildHelpButton(),
         ],
       );
     }
@@ -301,8 +301,12 @@ class _QuestionWidgetState extends State<QuestionWidget> {
           iconColor: AppColors.main_color,
           initiallyExpanded: widget.expanded,
           title: _buildTitle(),
+          onExpansionChanged: (value) {
+            setState(() {
+              widget.expanded = value;
+            });
+          },
           controlAffinity: ListTileControlAffinity.leading,
-
           children: <Widget>[
             _buildDescription(),
             _buildOptions(),
