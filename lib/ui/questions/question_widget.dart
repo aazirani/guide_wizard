@@ -196,6 +196,21 @@ class _QuestionWidgetState extends State<QuestionWidget> {
       );
     }
 
+    Widget _buildImageLoader(String imageURL){
+      return Image.network(imageURL ,fit: BoxFit.cover,
+        loadingBuilder: (BuildContext context, Widget child,ImageChunkEvent? loadingProgress) {
+          if (loadingProgress == null) return child;
+          return Center(
+            child: CircularProgressIndicator(
+              value: loadingProgress.expectedTotalBytes != null ?
+              loadingProgress.cumulativeBytesLoaded / loadingProgress.expectedTotalBytes!
+                  : null,
+            ),
+          );
+        },
+      );
+    }
+
     Widget _buildSingleImageOption(int index) {
       return Flexible(
         child: Stack(
@@ -203,9 +218,13 @@ class _QuestionWidgetState extends State<QuestionWidget> {
           children: [
             Container(
             margin: const EdgeInsets.all(8),
-            // height: imageQuestion.height, //TODO: fix this
-            //   width: imageQuestion.width, //TODO: fix this
+            // height: 200, //TODO: fix this
+            //   width: 200, //TODO: fix this
               child: ListTile(
+                horizontalTitleGap: 0,
+                minVerticalPadding: 0,
+                minLeadingWidth: 0,
+                contentPadding: EdgeInsets.zero,
                 onTap: () {
                   setState(() {
                     widget.question.getAnswerByIndex(index).toggleSelected();
@@ -218,7 +237,7 @@ class _QuestionWidgetState extends State<QuestionWidget> {
                 // checkboxShape: CircleBorder(),
                 title: Column(
                   children: [
-                    widget.question.getAnswerByIndex(index).getImage(),
+                    _buildImageLoader(widget.question.getAnswerByIndex(index).getImage),
                     _buildImageOptionSubtitle(index),
                   ],
                 ),

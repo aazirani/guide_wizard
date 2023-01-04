@@ -38,7 +38,7 @@ class _QuestionsListPageState extends State<QuestionsListPage> {
       Question(
         id: 0,
         title: TechnicalName(id: 0, technical_name: "Question 1", creator_id: 1, created_at: '', updated_at: '', ),
-        sub_title: TechnicalName(id: 0, technical_name: "Sub Title 1", creator_id: 1, created_at: '', updated_at: '', ),
+        sub_title: TechnicalName(id: 0, technical_name: "Sub Title 1Sub Title 1Sub Title 1Sub Title 1Sub Title 1Sub Title 1Sub Title 1Sub Title 1Sub Title 1Sub Title 1", creator_id: 1, created_at: '', updated_at: '', ),
         type: "TEXT",
         axis_count: 1,
         is_multiple_choice: false,
@@ -62,7 +62,7 @@ class _QuestionsListPageState extends State<QuestionsListPage> {
       Question(
         id: 0,
         title: TechnicalName(id: 0, technical_name: "Question 1", creator_id: 1, created_at: '', updated_at: '', ),
-        sub_title: TechnicalName(id: 0, technical_name: "Sub Title 1", creator_id: 1, created_at: '', updated_at: '', ),
+        sub_title: TechnicalName(id: 0, technical_name: "Sub Title 1Sub Title 1Sub Title 1Sub Title 1Sub Title 1Sub Title 1Sub Title 1Sub Title 1Sub Title 1", creator_id: 1, created_at: '', updated_at: '', ),
         type: "IMAGE",
         axis_count: 2,
         is_multiple_choice: false,
@@ -86,7 +86,7 @@ class _QuestionsListPageState extends State<QuestionsListPage> {
       Question(
         id: 0,
         title: TechnicalName(id: 0, technical_name: "Question 1", creator_id: 1, created_at: '', updated_at: '', ),
-        sub_title: TechnicalName(id: 0, technical_name: "Sub Title 1", creator_id: 1, created_at: '', updated_at: '', ),
+        sub_title: TechnicalName(id: 0, technical_name: " Sub Title 1Sub Title 1Sub Title 1Sub Title 1Sub Title 1Sub Title 1Sub Title 1", creator_id: 1, created_at: '', updated_at: '', ),
         type: "IMAGE",
         axis_count: 2,
         is_multiple_choice: false,
