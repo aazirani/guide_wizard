@@ -42,8 +42,8 @@ class Task {
       image1: json["image1"],
       image2: json["image2"],
       fa_icon: json["fa_icon"],
-      sub_tasks: List<SubTask>.from(
-          json["sub_tasks"].map((x) => SubTask.fromMap(x))),
+      sub_tasks:
+          List<SubTask>.from(json["sub_tasks"].map((x) => SubTask.fromMap(x))),
       creator_id: json["creator_id"],
       created_at: json["created_at"],
       updated_at: json["updated_at"],
@@ -53,18 +53,18 @@ class Task {
   }
 
   Map<String, dynamic> toMap() => {
-    "id": id,
-    "text": text.toMap(),
-    "description": description.toMap(),
-    "type": type,
-    "image1": image1,
-    "image2": image2,
-    "sub_tasks": sub_tasks.map((sub_task) => sub_task.toMap()).toList(),
-    "creator_id": creator_id,
-    "created_at": created_at,
-    "updated_at": updated_at,
-    "quesions": quesions.map((question) => question.toMap()).toList(),
-  };
+        "id": id,
+        "text": text.toMap(),
+        "description": description.toMap(),
+        "type": type,
+        "image1": image1,
+        "image2": image2,
+        "sub_tasks": sub_tasks.map((sub_task) => sub_task.toMap()).toList(),
+        "creator_id": creator_id,
+        "created_at": created_at,
+        "updated_at": updated_at,
+        "quesions": quesions.map((question) => question.toMap()).toList(),
+      };
 
   void setDone(bool value){
     isDone = value;
@@ -80,5 +80,13 @@ class Task {
 
   int get subTaskCount{
     return sub_tasks.length;
+  }
+  get deadLine {
+    for (var sb = 0; sb <= sub_tasks.length; sb++) {
+      if (sub_tasks[sb].deadline.technical_name != "") {
+        return true;
+      }
+    }
+    return null;
   }
 }

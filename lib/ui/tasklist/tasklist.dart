@@ -1,8 +1,11 @@
 import 'package:boilerplate/constants/colors.dart';
 import 'package:boilerplate/constants/dimens.dart';
-import 'package:boilerplate/models/test/task.dart';
+import 'package:boilerplate/models/task/task.dart';
 import 'package:boilerplate/ui/tasklist/tasklist_timeline.dart';
 import 'package:boilerplate/utils/enums/enum.dart';
+import 'package:boilerplate/models/technical_name/technical_name.dart';
+import 'package:boilerplate/models/sub_task/sub_task.dart';
+import 'package:boilerplate/models/task/task_list.dart' as tl;
 import 'package:flutter/material.dart';
 import 'package:boilerplate/widgets/measure_size.dart';
 import 'package:boilerplate/utils/locale/app_localization.dart';
@@ -17,29 +20,64 @@ class TaskList extends StatefulWidget {
 class _TaskListState extends State<TaskList> {
   var progressBarSize = Size.zero;
 
-  List<Task> tasks = [
-    Task(
-        title: "Application Dates",
-        deadline: DateTime.now(),
-        status: TaskStatus.notDone),
-    Task(
-        title: "Requirements",
-        deadline: DateTime.now(),
-        status: TaskStatus.notDone),
-    Task(title: "Other", deadline: DateTime.now(), status: TaskStatus.notDone),
-    Task(title: "Another", status: TaskStatus.notDone),
-    Task(title: "Language Certificate", status: TaskStatus.Done),
-    Task(title: "Housing", deadline: DateTime.now(), status: TaskStatus.Done),
-    Task(title: "Health", deadline: DateTime.now(), status: TaskStatus.Done),
-    Task(title: "Another", status: TaskStatus.Done),
-  ];
+  tl.TaskList taskList = tl.TaskList(
+      tasks: List<Task>.generate(
+    10,
+    (index) => Task(
+      id: 0,
+      text: TechnicalName(
+          id: 1,
+          technical_name: "Housing",
+          creator_id: 1,
+          created_at: "0",
+          updated_at: "0"),
+      description: TechnicalName(
+          id: 1,
+          technical_name: "Housing",
+          creator_id: 1,
+          created_at: "0",
+          updated_at: "0"),
+      type: "sth",
+      sub_tasks: List<SubTask>.generate(
+          10,
+          (index) => SubTask(
+              id: 1,
+              task_id: 0,
+              title: TechnicalName(
+                  id: 0,
+                  technical_name: "Dorm",
+                  creator_id: 1,
+                  created_at: "0",
+                  updated_at: "0"),
+              markdown: TechnicalName(
+                  id: 1,
+                  technical_name: "markdown",
+                  creator_id: 1,
+                  created_at: "0",
+                  updated_at: "0"),
+              deadline: TechnicalName(
+                  id: 1,
+                  technical_name: "deadline",
+                  creator_id: 1,
+                  created_at: "0",
+                  updated_at: "0"),
+              order: 1,
+              creator_id: "1",
+              created_at: "0",
+              updated_at: "0")),
+      creator_id: "1",
+      created_at: "0",
+      updated_at: "0",
+      image1: null,
+      image2: null,
+      fa_icon: null,
+      quesions: [],
+    ),
+  ));
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-        backgroundColor: AppColors.main_color,
-        appBar: _buildAppBar(),
-        body: _buildBody(tasks));
+    return Scaffold(appBar: _buildAppBar(), body: _buildBody(taskList));
   }
 
   //appBar methods .............................................................
@@ -89,7 +127,7 @@ class _TaskListState extends State<TaskList> {
           children: [
             Padding(
                 padding: Dimens.numberOfTasksPadding,
-                child: Text("${tasks.length} ${AppLocalizations.of(context).translate('tasks')}",
+                child: Text("${taskList.numTasks} ${AppLocalizations.of(context).translate('tasks')}",
                     style: TextStyle(color: AppColors.white))),
             SizedBox(height: 5),
             _buildProgressBar(),
@@ -119,9 +157,9 @@ class _TaskListState extends State<TaskList> {
               child: ListView.builder(
                 scrollDirection: Axis.vertical,
                 controller: scrollController,
-                itemCount: tasks.length,
+                itemCount: taskList.numTasks,
                 itemBuilder: (context, i) {
-                  return TaskListTimeLine(tasks: tasks, index: i);
+                  return TaskListTimeLine(taskList: taskList, index: i);
                 },
               ),
             ),

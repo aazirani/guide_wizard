@@ -1,16 +1,16 @@
 import 'package:boilerplate/constants/colors.dart';
 import 'package:boilerplate/constants/dimens.dart';
-import 'package:boilerplate/models/test/task.dart';
 import 'package:boilerplate/utils/enums/enum.dart';
 import 'package:boilerplate/widgets/diamond_indicator.dart';
 import 'package:flutter/material.dart';
 import 'package:timelines/timelines.dart';
 import 'package:boilerplate/utils/locale/app_localization.dart';
+import 'package:boilerplate/models/task/task_list.dart';
 
 class TaskListTimeLine extends StatefulWidget {
-  final List<Task> tasks;
+  final TaskList taskList;
   final int index;
-  TaskListTimeLine({Key? key, required this.tasks, required this.index})
+  TaskListTimeLine({Key? key, required this.taskList, required this.index})
       : super(key: key);
 
   @override
@@ -64,7 +64,7 @@ class _TaskListTimeLineState extends State<TaskListTimeLine> {
             border: Border(
                 left: BorderSide(
               width: 25,
-              color: (widget.tasks[index].status == TaskStatus.Done)
+              color: (widget.taskList.tasks[index].isDone == true)
                   ? AppColors.contentDoneBorderColor
                   : AppColors.contentUnDoneBorderColor,
             )),
@@ -99,7 +99,7 @@ class _TaskListTimeLineState extends State<TaskListTimeLine> {
   Widget _buildContentTitle(index) {
     return Align(
       alignment: Alignment.centerLeft,
-      child: Text("${widget.tasks[index].title}",
+      child: Text("${widget.taskList.tasks[index].text.technical_name}",
           style: TextStyle(
             color: AppColors.main_color,
             fontSize: 16,
@@ -145,7 +145,7 @@ class _TaskListTimeLineState extends State<TaskListTimeLine> {
   //general methods ............................................................
   double _getScreenWidth() => MediaQuery.of(context).size.width;
   bool _deadLineAvailable(index) {
-    switch (widget.tasks[index].deadline) {
+    switch (widget.taskList.tasks[index].deadLine) {
       case null:
         return false;
     }
@@ -153,11 +153,10 @@ class _TaskListTimeLineState extends State<TaskListTimeLine> {
   }
 
   bool _taskDone(index) {
-    switch (widget.tasks[index].status) {
-      case TaskStatus.Done:
+    switch (widget.taskList.tasks[index].isDone) {
+      case true:
         return true;
-      case TaskStatus.notDone:
-        return false;
     }
+    return false;
   }
 }
