@@ -206,31 +206,7 @@ class _QuestionsListPageState extends State<QuestionsListPage> {
     );
   }
 
-
-  // List<Widget> _buildQuestionsWidgetList(){
-  //   List<Widget> questionsWidgets=questions.map<Widget>((question){
-  //     return Container(
-  //       // key: itemKey,
-  //       child: QuestionWidget(
-  //         question: question,
-  //         expanded: false,
-  //       ),
-  //     );
-  //   }
-  //   ).toList();
-  //   questionsWidgets.addAll(
-  //     [
-  //       SizedBox(height: 80,),
-  //     ]
-  //   );
-  //
-  //   return questionsWidgets;
-  // }
-
   Widget _buildQuestionWidget(int index){
-    if(index==questions.length){
-      return SizedBox(height: _getScreenHeight(),);
-    }
     return QuestionWidget(
       index: index,
       itemScrollController: itemScrollController,
@@ -245,12 +221,10 @@ class _QuestionsListPageState extends State<QuestionsListPage> {
     return Scaffold(
       appBar: _buildAppBar(),
       body: ScrollablePositionedList.builder(
-        itemCount: questions.length+1,
+        itemCount: questions.length,
         itemBuilder: (context, index) => _buildQuestionWidget(index),
         itemScrollController: itemScrollController,
       ),
-      // floatingActionButton: _buildNextStageButton(),
-      // floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
     );
   }
 }

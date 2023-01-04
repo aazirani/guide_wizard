@@ -35,7 +35,7 @@ class _QuestionWidgetState extends State<QuestionWidget> with AutomaticKeepAlive
   Future scrollToItem(int index) async {
     widget.itemScrollController.scrollTo(
       index: index,
-      duration: Duration(milliseconds: 700),
+      duration: Duration(milliseconds: 500),
     );
   }
 
