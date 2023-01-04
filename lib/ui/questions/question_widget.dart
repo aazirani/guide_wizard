@@ -13,15 +13,14 @@ class QuestionWidget extends StatefulWidget {
   int index;
   ItemScrollController itemScrollController;
 
-  QuestionWidget(
-      {Key? key,
-      required this.index,
-      required this.itemScrollController,
-      required this.question,
-      required this.expanded,
-      required this.isLastQuestion,
-      })
-      : super(key: key);
+  QuestionWidget({
+    Key? key,
+    required this.index,
+    required this.itemScrollController,
+    required this.question,
+    required this.expanded,
+    required this.isLastQuestion,
+  }) : super(key: key);
 
   @override
   State<QuestionWidget> createState() => _QuestionWidgetState();
@@ -30,7 +29,7 @@ class QuestionWidget extends StatefulWidget {
 class _QuestionWidgetState extends State<QuestionWidget> {
   double _getScreenWidth() => MediaQuery.of(context).size.width;
 
-  Future scrollToItem(int index) async{
+  Future scrollToItem(int index) async {
     widget.itemScrollController.scrollTo(
       index: index,
       duration: Duration(milliseconds: 700),
@@ -39,10 +38,15 @@ class _QuestionWidgetState extends State<QuestionWidget> {
 
   @override
   Widget build(BuildContext context) {
-
-    ButtonStyle _buildQuestionsButtonStyle(Color color){
+    ButtonStyle _buildQuestionsButtonStyle(Color color) {
       return ButtonStyle(
-        minimumSize: MaterialStateProperty.all(Size(math.max(_getScreenWidth()-Dimens.buildQuestionsButtonStyle["pixels_smaller_than_screen_width"]!, 0),Dimens.buildQuestionsButtonStyle["height"]!)),
+        minimumSize: MaterialStateProperty.all(Size(
+            math.max(
+                _getScreenWidth() -
+                    Dimens.buildQuestionsButtonStyle[
+                        "pixels_smaller_than_screen_width"]!,
+                0),
+            Dimens.buildQuestionsButtonStyle["height"]!)),
         backgroundColor: MaterialStateProperty.all<Color>(color),
         shape: MaterialStateProperty.all<RoundedRectangleBorder>(
           RoundedRectangleBorder(
@@ -57,9 +61,9 @@ class _QuestionWidgetState extends State<QuestionWidget> {
         padding: Dimens.questionButtonPadding,
         child: TextButton(
           style: _buildQuestionsButtonStyle(Colors.green.shade600),
-          onPressed: () {  },
+          onPressed: () {},
           child: Text(
-              AppLocalizations.of(context).translate('next_stage_button_text'),
+            AppLocalizations.of(context).translate('next_stage_button_text'),
             style: TextStyle(color: Colors.white, fontSize: 15),
           ),
         ),
@@ -102,44 +106,52 @@ class _QuestionWidgetState extends State<QuestionWidget> {
               ),
             ],
           ),
-          widget.expanded ? _buildHelpButton():SizedBox(),
+          widget.expanded ? _buildHelpButton() : SizedBox(),
           // _buildHelpButton(),
         ],
       );
     }
 
-
-    Widget _buildTextOptions(){
+    Widget _buildTextOptions() {
       return Column(
-        children: widget.question.getAnswers().map((option) =>
-            Container(
-              margin: const EdgeInsets.only(left: 15, right: 15, top: 10),
-              child: CheckboxListTile(
-                shape: RoundedRectangleBorder(
-                  side: BorderSide(color: option.isSelected ? Colors.black:Colors.transparent, width: 2),
-                  borderRadius: BorderRadius.circular(5),
-                ),
-                checkboxShape: CircleBorder(),
-                value: option.isSelected,
-                onChanged: (value) {
-                  setState(() {
-                    widget.question.getAnswers().elementAt(widget.question.getAnswers().indexOf(option)).setSelected(value!);
-                  });
-                },
-                title: Text(option.getTitle),
-                controlAffinity: ListTileControlAffinity.leading,
-                tileColor: AppColors.grey,
-                activeColor: Colors.black,
-              ),
-            )
-        ).toList(),
+        children: widget.question
+            .getAnswers()
+            .map((option) => Container(
+                  margin: const EdgeInsets.only(left: 15, right: 15, top: 10),
+                  child: CheckboxListTile(
+                    shape: RoundedRectangleBorder(
+                      side: BorderSide(
+                          color: option.isSelected
+                              ? Colors.black
+                              : Colors.transparent,
+                          width: 2),
+                      borderRadius: BorderRadius.circular(5),
+                    ),
+                    checkboxShape: CircleBorder(),
+                    value: option.isSelected,
+                    onChanged: (value) {
+                      setState(() {
+                        widget.question
+                            .getAnswers()
+                            .elementAt(
+                                widget.question.getAnswers().indexOf(option))
+                            .setSelected(value!);
+                      });
+                    },
+                    title: Text(option.getTitle),
+                    controlAffinity: ListTileControlAffinity.leading,
+                    tileColor: AppColors.grey,
+                    activeColor: Colors.black,
+                  ),
+                ))
+            .toList(),
       );
     }
 
-    Widget _buildImageOptionSubtitle(int index){
-      if(widget.question.answersHasTitle) {
+    Widget _buildImageOptionSubtitle(int index) {
+      if (widget.question.answersHasTitle) {
         return Padding(
-          padding: const EdgeInsets.only(top: 5),
+          padding: const EdgeInsets.only(top: 5, bottom: 5),
           child: Row(
             children: [
               Transform.scale(
@@ -148,7 +160,9 @@ class _QuestionWidgetState extends State<QuestionWidget> {
                     value: widget.question.getAnswerByIndex(index).isSelected,
                     onChanged: (value) {
                       setState(() {
-                        widget.question.getAnswerByIndex(index).setSelected(value!);
+                        widget.question
+                            .getAnswerByIndex(index)
+                            .setSelected(value!);
                       });
                     },
                     checkColor: Colors.white,
@@ -161,25 +175,23 @@ class _QuestionWidgetState extends State<QuestionWidget> {
                 scale: 0.8,
               ),
               Flexible(
-                  child: Text(
-                    widget.question.getAnswerByIndex(index).getTitle,
-                    style: TextStyle(
-                      fontSize: 13,
-                    ),
+                child: Text(
+                  widget.question.getAnswerByIndex(index).getTitle,
+                  style: TextStyle(
+                    fontSize: 15,
                   ),
+                ),
               ),
             ],
           ),
         );
-      }
-      else{
+      } else {
         return SizedBox();
       }
     }
 
-
-    Widget _buildImageCheckBox(int index){
-      if(widget.question.answersHasTitle) {
+    Widget _buildImageCheckBox(int index) {
+      if (widget.question.answersHasTitle) {
         return SizedBox();
       }
       return Checkbox(
@@ -196,15 +208,22 @@ class _QuestionWidgetState extends State<QuestionWidget> {
       );
     }
 
-    Widget _buildImageLoader(String imageURL){
-      return Image.network(imageURL ,fit: BoxFit.cover,
-        loadingBuilder: (BuildContext context, Widget child,ImageChunkEvent? loadingProgress) {
+    Widget _buildImageLoader(String imageURL) {
+      return Image.network(
+        imageURL,
+        fit: BoxFit.cover,
+        loadingBuilder: (BuildContext context, Widget child, ImageChunkEvent? loadingProgress) {
           if (loadingProgress == null) return child;
-          return Center(
-            child: CircularProgressIndicator(
-              value: loadingProgress.expectedTotalBytes != null ?
-              loadingProgress.cumulativeBytesLoaded / loadingProgress.expectedTotalBytes!
-                  : null,
+          return Padding(
+            padding: const EdgeInsets.all(20),
+            child: Center(
+              child: CircularProgressIndicator(
+                value: loadingProgress.expectedTotalBytes != null
+                    ? loadingProgress.cumulativeBytesLoaded /
+                        loadingProgress.expectedTotalBytes!
+                    : null,
+                valueColor:AlwaysStoppedAnimation<Color>(AppColors.main_color),
+              ),
             ),
           );
         },
@@ -217,9 +236,9 @@ class _QuestionWidgetState extends State<QuestionWidget> {
           alignment: AlignmentDirectional.topEnd,
           children: [
             Container(
-            margin: const EdgeInsets.all(8),
-            // height: 200, //TODO: fix this
-            //   width: 200, //TODO: fix this
+              margin: const EdgeInsets.all(8),
+              // height: 200, //TODO: fix this
+              //   width: 200, //TODO: fix this
               child: ListTile(
                 horizontalTitleGap: 0,
                 minVerticalPadding: 0,
@@ -231,13 +250,18 @@ class _QuestionWidgetState extends State<QuestionWidget> {
                   });
                 },
                 shape: RoundedRectangleBorder(
-                  side: BorderSide(color: widget.question.getAnswerByIndex(index).isSelected ? Colors.black:Colors.transparent, width: 2),
+                  side: BorderSide(
+                      color: widget.question.getAnswerByIndex(index).isSelected
+                          ? Colors.black
+                          : Colors.transparent,
+                      width: 2),
                   borderRadius: BorderRadius.circular(5),
                 ),
                 // checkboxShape: CircleBorder(),
                 title: Column(
                   children: [
-                    _buildImageLoader(widget.question.getAnswerByIndex(index).getImage),
+                    _buildImageLoader(
+                        widget.question.getAnswerByIndex(index).getImage),
                     _buildImageOptionSubtitle(index),
                   ],
                 ),
@@ -250,13 +274,13 @@ class _QuestionWidgetState extends State<QuestionWidget> {
       );
     }
 
-    Widget _buildAImageOptionsRow(int begin, int end){
+    Widget _buildAImageOptionsRow(int begin, int end) {
       return Padding(
         padding: const EdgeInsets.symmetric(horizontal: 10),
         child: Row(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            for(int index=begin; index<end; index++)
+            for (int index = begin; index < end; index++)
               _buildSingleImageOption(index),
           ],
         ),
@@ -267,21 +291,25 @@ class _QuestionWidgetState extends State<QuestionWidget> {
       return Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          for(int row=0; row <= widget.question.answers.length / widget.question.axis_count; row++)
-            _buildAImageOptionsRow(row * widget.question.axis_count, math.min((row + 1) * widget.question.axis_count, widget.question.answers.length)),
+          for (int row = 0;
+              row <=
+                  widget.question.answers.length / widget.question.axis_count;
+              row++)
+            _buildAImageOptionsRow(
+                row * widget.question.axis_count,
+                math.min((row + 1) * widget.question.axis_count,
+                    widget.question.answers.length)),
         ],
       );
     }
 
     Widget _buildOptions() {
-      if(widget.question.isImageQuestion) {
+      if (widget.question.isImageQuestion) {
         return _buildImageOptions();
-      }
-      else {
+      } else {
         return _buildTextOptions();
       }
     }
-
 
     Widget _buildNextQuestionButton() {
       return Padding(
@@ -289,7 +317,7 @@ class _QuestionWidgetState extends State<QuestionWidget> {
         child: TextButton(
           style: _buildQuestionsButtonStyle(AppColors.main_color),
           onPressed: () {
-            scrollToItem(widget.index+1);
+            scrollToItem(widget.index + 1);
           },
           child: Text(
             AppLocalizations.of(context).translate('next_question_button_text'),
@@ -299,7 +327,7 @@ class _QuestionWidgetState extends State<QuestionWidget> {
       );
     }
 
-    Widget _buildDescription(){
+    Widget _buildDescription() {
       return Container(
         margin: Dimens.questionDescriptionPadding,
         child: Text(
@@ -329,7 +357,9 @@ class _QuestionWidgetState extends State<QuestionWidget> {
           children: <Widget>[
             _buildDescription(),
             _buildOptions(),
-            widget.isLastQuestion ? _buildNextStageButton():_buildNextQuestionButton(),
+            widget.isLastQuestion
+                ? _buildNextStageButton()
+                : _buildNextQuestionButton(),
           ],
         ),
       ),
