@@ -1,14 +1,13 @@
 import 'package:boilerplate/constants/colors.dart';
 import 'package:boilerplate/constants/dimens.dart';
 import 'package:boilerplate/models/answer/answer.dart';
+import 'package:boilerplate/widgets/question_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:scrollable_positioned_list/scrollable_positioned_list.dart';
 import 'package:boilerplate/models/question/question.dart';
 import 'package:boilerplate/models/question/question_list.dart';
 import 'package:boilerplate/models/step/step.dart' as StepModel;
-import 'package:boilerplate/models/title/title.dart';
-
-import 'question_widget.dart';
+import 'package:boilerplate/models/technical_name/technical_name.dart';
 
 class QuestionsListPage extends StatefulWidget {
   const QuestionsListPage({Key? key}) : super(key: key);

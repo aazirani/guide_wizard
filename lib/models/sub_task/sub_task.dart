@@ -1,4 +1,6 @@
-import 'package:boilerplate/models/title/title.dart';
+import 'package:boilerplate/models/technical_name/technical_name.dart';
+import 'package:boilerplate/widgets/app_expansiontile.dart';
+import 'package:flutter/material.dart';
 
 class SubTask {
   int id;
@@ -10,6 +12,8 @@ class SubTask {
   String creator_id;
   String created_at;
   String updated_at;
+  late GlobalKey<AppExpansionTileState> globalKey;
+  bool expanded = false;
 
   SubTask({
     required this.id,
@@ -21,7 +25,9 @@ class SubTask {
     required this.creator_id,
     required this.created_at,
     required this.updated_at,
-  });
+  }) {
+    _buildGlobalKey();
+  }
 
   factory SubTask.fromMap(Map<String, dynamic> json) {
     return SubTask(
@@ -49,4 +55,19 @@ class SubTask {
     "updated_at": updated_at,
   };
 
+  void _buildGlobalKey() {
+    globalKey = GlobalKey<AppExpansionTileState>();
+  }
+
+  void rebuildGlobalKey() {
+    _buildGlobalKey();
+  }
+
+  void setExpanded(bool value) {
+    expanded = value;
+  }
+
+  void toggleExpanded() {
+    expanded = !expanded;
+  }
 }

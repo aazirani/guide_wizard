@@ -11,12 +11,16 @@ import 'package:url_launcher/url_launcher.dart';
 // import 'package:flutter_inappwebview/flutter_inappwebview.dart';
 
 class ExpansionContent extends StatefulWidget {
+  String markdown;
+
   ExpansionContent({
     Key? key,
     required this.renderManager,
+    required this.markdown,
   }) : super(key: key);
 
   final RenderParametersManager renderManager;
+
   // final ChromeSafariBrowser browser = AppChromeSafariBrowser();
 
   @override
@@ -24,7 +28,6 @@ class ExpansionContent extends StatefulWidget {
 }
 
 class _ExpansionContentState extends State<ExpansionContent> {
-
   double widgetHeight = 0;
 
   @override
@@ -46,12 +49,13 @@ class _ExpansionContentState extends State<ExpansionContent> {
         Flexible(
           child: Padding(
             padding: Dimens.expansionContentPadding,
-            child: MeasureSize(onChange: (Size size) {
-              setState(() {
-                widgetHeight = size.height;
-              });
-            },
-            child: _buildMarkdownExample()),
+            child: MeasureSize(
+                onChange: (Size size) {
+                  setState(() {
+                    widgetHeight = size.height;
+                  });
+                },
+                child: _buildMarkdownContent()),
           ),
         ),
       ],
@@ -78,23 +82,13 @@ class _ExpansionContentState extends State<ExpansionContent> {
     }
   }
 
-  Widget _buildMarkdownExample(){ //Just for test
-    return FutureBuilder(
-      future: rootBundle.loadString("assets/markdown_test.md"),
-      builder: (BuildContext context, AsyncSnapshot<String> snapshot) {
-        if (snapshot.hasData) {
-          return Markdown(
-            onTapLink: (text, url, title){
-              _launchInWebViewOrVC(Uri.parse(url!));
-            },
-            shrinkWrap: true,
-            physics: NeverScrollableScrollPhysics(),
-            data: snapshot.data!
-          );
-        }
-        return Center(
-          child: CircularProgressIndicator(),
-        );
-      });
+  Widget _buildMarkdownContent() {
+    return Markdown(
+        onTapLink: (text, url, title) {
+          _launchInWebViewOrVC(Uri.parse(url!));
+        },
+        shrinkWrap: true,
+        physics: NeverScrollableScrollPhysics(),
+        data: widget.markdown);
   }
 }

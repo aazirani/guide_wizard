@@ -1,3 +1,4 @@
+import 'package:boilerplate/ui/tasks/task_page_text_only.dart';
 import 'package:flutter/material.dart';
 
 class Dimens {
@@ -50,4 +51,5 @@ class Dimens {
   static BorderRadiusGeometry expansionTileBorderRadius = BorderRadius.circular(16);
   static BorderRadiusGeometry blockPageAppBarButtonBorderRadius = BorderRadius.circular(10.0);
 
+  static const taskPageTextOnlyListViewPadding = EdgeInsets.only(top: 25, left: 30, right: 30, bottom: 20);
 }

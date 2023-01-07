@@ -3,12 +3,19 @@ import 'package:boilerplate/constants/dimens.dart';
 import 'package:boilerplate/utils/locale/app_localization.dart';
 import 'package:flutter/material.dart';
 
-class BlocksAppBarWidget extends StatefulWidget {
+class BlocksAppBarWidget extends StatefulWidget implements PreferredSizeWidget {
   bool isDone;
-  BlocksAppBarWidget({Key? key, required this.isDone}) : super(key: key);
+  double appBarSize;
+  String title;
+  BlocksAppBarWidget({Key? key, required this.isDone, required this.appBarSize, required this.title}) : super(key: key);
 
   @override
   State<BlocksAppBarWidget> createState() => _BlocksAppBarWidgetState();
+
+  @override
+  Size get preferredSize {
+    return new Size.fromHeight(appBarSize);
+  }
 }
 
 class _BlocksAppBarWidgetState extends State<BlocksAppBarWidget> {
@@ -38,7 +45,7 @@ class _BlocksAppBarWidgetState extends State<BlocksAppBarWidget> {
     );
   }
 
-  Widget _buildButton({required ButtonStyle? buttonStyle, required String text}) {
+  Widget _buildButton({required ButtonStyle? buttonStyle, required String text, required IconData? icon}) {
     return TextButton(
       onPressed: () {
         setState(() {
@@ -57,24 +64,26 @@ class _BlocksAppBarWidgetState extends State<BlocksAppBarWidget> {
               ),
             ),
             SizedBox(width: 3,),
-            Icon(Icons.close_rounded, color: AppColors.bright_foreground_color),
+            Icon(icon, color: AppColors.bright_foreground_color),
           ],
         ),
       ),
     );
   }
 
-  Widget _buildDoneButton(){
+  Widget _buildDoneButton() {
     return _buildButton(
       buttonStyle: _buildDoneButtonStyle(),
-      text: AppLocalizations.of(context).translate('done_button_text')
+      text: AppLocalizations.of(context).translate('done_button_text'),
+      icon: Icons.done_rounded
     );
   }
 
-  Widget _buildUndoneButton(){
+  Widget _buildUndoneButton() {
     return _buildButton(
         buttonStyle: _buildUndoneButtonStyle(),
-        text: AppLocalizations.of(context).translate('undone_button_text')
+        text: AppLocalizations.of(context).translate('undone_button_text'),
+        icon: Icons.close_rounded,
     );
   }
 
@@ -97,7 +106,7 @@ class _BlocksAppBarWidgetState extends State<BlocksAppBarWidget> {
         children: [
           Flexible(
             child: Text(
-              "Private Housing",
+              widget.title,
               style: TextStyle(
                 color: AppColors.bright_foreground_color,
                 fontSize: 22,
