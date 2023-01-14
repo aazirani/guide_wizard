@@ -5,6 +5,7 @@ import 'package:boilerplate/ui/tasklist/tasklist_timeline.dart';
 import 'package:boilerplate/utils/enums/enum.dart';
 import 'package:flutter/material.dart';
 import 'package:boilerplate/widgets/measure_size.dart';
+import 'package:boilerplate/utils/locale/app_localization.dart';
 
 class TaskList extends StatefulWidget {
   const TaskList({Key? key}) : super(key: key);
@@ -81,23 +82,22 @@ class _TaskListState extends State<TaskList> {
       heightFactor: 1,
       child: FittedBox(
           child: Padding(
-              padding: Dimens.taskProgressBarPadding,
-              child: Column(
-                  mainAxisAlignment: MainAxisAlignment.start,
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Padding(
-                        padding: Dimens.numberOfTasksPadding,
-                        child: Text("${tasks.length} tasks",
-                            style: TextStyle(color: AppColors.white))),
-                    SizedBox(height: 5),
-                    _buildProgressBar(),
-                  ],
-                ),
-              )),
+        padding: Dimens.taskProgressBarPadding,
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.start,
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Padding(
+                padding: Dimens.numberOfTasksPadding,
+                child: Text("${tasks.length} ${AppLocalizations.of(context).translate('tasks')}",
+                    style: TextStyle(color: AppColors.white))),
+            SizedBox(height: 5),
+            _buildProgressBar(),
+          ],
+        ),
+      )),
     );
   }
-
 
   Widget _buildExpandableTaskTimeline() {
     return SizedBox.expand(
@@ -141,7 +141,7 @@ class _TaskListState extends State<TaskList> {
             borderRadius: BorderRadius.all(Radius.circular(10)),
             child: LinearProgressIndicator(
                 value: 0.2,
-                backgroundColor: Colors.white,
+                backgroundColor: AppColors.white,
                 valueColor:
                     AlwaysStoppedAnimation(AppColors.progressBarValueColor)),
           )),
@@ -149,10 +149,12 @@ class _TaskListState extends State<TaskList> {
   }
 
   // general methods ...........................................................
-   double _getProgressBarHeight() {
-    return (_getScreenHeight() - (progressBarSize.height + _getStatusBarHeight())) /_getScreenHeight();
+  double _getProgressBarHeight() {
+    return (_getScreenHeight() -
+            (progressBarSize.height + _getStatusBarHeight())) /
+        _getScreenHeight();
   }
-  
+
   double _getScreenWidth() {
     return MediaQuery.of(context).size.width;
   }

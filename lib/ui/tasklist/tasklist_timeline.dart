@@ -5,6 +5,7 @@ import 'package:boilerplate/utils/enums/enum.dart';
 import 'package:boilerplate/widgets/diamond_indicator.dart';
 import 'package:flutter/material.dart';
 import 'package:timelines/timelines.dart';
+import 'package:boilerplate/utils/locale/app_localization.dart';
 
 class TaskListTimeLine extends StatefulWidget {
   final List<Task> tasks;
@@ -127,7 +128,7 @@ class _TaskListTimeLineState extends State<TaskListTimeLine> {
                     ? AppColors.deadlineDoneBorderColor
                     : AppColors.deadlineUnDoneBorderColor)),
         child: Center(
-            child: Text("Deadline",
+            child: Text("${AppLocalizations.of(context).translate('deadline')}",
                 style: TextStyle(
                     fontSize: 13,
                     color: (_taskDone(index)

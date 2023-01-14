@@ -21,6 +21,9 @@
   "questions_end": "-------------------------------------------------------------------------------------",
 
   "done_button_text" : "Done",
-  "undone_button_text" : "Undone"
+  "undone_button_text" : "Undone",
+
+  "tasks": "tasks",
+  "deadline": "Deadline"
 
 }
