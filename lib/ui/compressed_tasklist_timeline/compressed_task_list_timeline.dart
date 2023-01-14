@@ -56,7 +56,7 @@ class _CompressedBlocklistTimelineState
               nodePosition: 0.009,
             ),
             builder: TimelineTileBuilder(
-              itemCount: widget.stepList.steps[(stepStore.currentStep) - 1].numTasks,
+              itemCount: widget.stepList.steps[(_stepStore.currentStep) - 1].numTasks,
               itemExtent: 70,
               contentsBuilder: (context, index) =>
                   _buildContents(index, _stepStore),
