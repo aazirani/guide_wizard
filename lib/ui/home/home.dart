@@ -63,7 +63,6 @@ class _HomeScreenState extends State<HomeScreen> {
 
   @override
   Widget build(BuildContext context) {
-    // final stepStore = Provider.of<StepStore>(context);
     return Scaffold(
       backgroundColor: AppColors.main_color,
       appBar: _buildAppBar(),

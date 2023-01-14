@@ -73,12 +73,14 @@ class _StepTimeLineState extends State<StepTimeLine> {
   }
 
   Widget _buildIndicator(index) {
+    
     if (_isCurrentStep(index)) {
       return _buildCurrent(index);
     }
     if (_isPendingStep(index)) {
       return _buildPendingIndicator();
     }
+  
     if (_isDoneStep(index)) {
       return _buildDoneIndicator();
     }
@@ -236,18 +238,18 @@ class _StepTimeLineState extends State<StepTimeLine> {
   double _getScreenWidth() => MediaQuery.of(context).size.width;
 
   _isCurrentStep(index) {
-    return (index == _stepStore.currentStep - 1) ? true : false;
+    return index == _stepStore.currentStep - 1;
   }
 
   _isPendingStep(index) {
-    return (index == widget.pending) ? true : false;
+    return index == widget.pending;
   }
 
   _isDoneStep(index) {
-    return (index < widget.pending) ? true : false;
+    return index < widget.pending;
   }
 
   _isNotStartedStep(index) {
-    return (index > widget.pending) ? true : false;
+    return index > widget.pending;
   }
 }

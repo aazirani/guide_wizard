@@ -31,7 +31,6 @@ class _CompressedBlocklistTimelineState
 
   @override
   Widget build(BuildContext context) {
-    // final stepStore = Provider.of<StepStore>(context);
     return _buildTimelineContainer();
   }
 

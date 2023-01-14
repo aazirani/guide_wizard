@@ -27,7 +27,6 @@ class _StepSliderWidgetState extends State<StepSliderWidget> {
 
   @override
   Widget build(BuildContext context) {
-    // final stepStore = Provider.of<StepStore>(context);
     return _buildCarouselSliderContainer();
   }
 
