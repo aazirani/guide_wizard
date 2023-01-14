@@ -134,7 +134,7 @@ class _StepSliderWidgetState extends State<StepSliderWidget> {
             SizedBox(height: 20),
             _buildContinueButton(),
             SizedBox(height: 10),
-            // _buildProgressBar(widget.stepList.steps[currentStepNo].percentage),
+            //TODO: get the progress percentage from json
             _buildProgressBar(0.2),
           ]),
     );
