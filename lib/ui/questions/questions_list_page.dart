@@ -10,7 +10,7 @@ import 'package:boilerplate/models/question/question.dart';
 import 'package:boilerplate/models/question/question_list.dart';
 import 'package:boilerplate/models/step/step.dart' as StepModel;
 import 'package:boilerplate/models/title/title.dart';
-import 'package:boilerplate/models/expansion_tile_state/expansion_tile_state.dart';
+import 'package:boilerplate/stores/question_widget_state/question_widget_state.dart';
 import 'question_widget.dart';
 
 class QuestionsListPage extends StatefulWidget {

@@ -7,7 +7,7 @@ import 'package:boilerplate/utils/locale/app_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:scrollable_positioned_list/scrollable_positioned_list.dart';
-import 'package:boilerplate/models/expansion_tile_state/expansion_tile_state.dart';
+import 'package:boilerplate/stores/question_widget_state/question_widget_state.dart';
 
 class QuestionWidget extends StatefulWidget {
   Question question;
