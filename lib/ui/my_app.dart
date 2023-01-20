@@ -2,6 +2,7 @@ import 'package:boilerplate/constants/app_theme.dart';
 import 'package:boilerplate/constants/strings.dart';
 import 'package:boilerplate/data/repository.dart';
 import 'package:boilerplate/di/components/service_locator.dart';
+import 'package:boilerplate/models/expansion_tile_state/expansion_tile_state.dart';
 import 'package:boilerplate/stores/language/language_store.dart';
 import 'package:boilerplate/stores/post/post_store.dart';
 import 'package:boilerplate/stores/step/step_store.dart';
@@ -35,6 +36,7 @@ class MyApp extends StatelessWidget {
         Provider<PostStore>(create: (_) => _postStore),
         Provider<LanguageStore>(create: (_) => _languageStore),
         Provider<StepStore>(create: (_) => _stepStore),
+        ListenableProvider<QuestionsWidgetState>(create: (_) => QuestionsWidgetState(activeIndex: 0)),
       ],
       child: Observer(
         name: 'global-observer',

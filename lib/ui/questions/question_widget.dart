@@ -5,42 +5,45 @@ import 'package:boilerplate/constants/dimens.dart';
 import 'package:boilerplate/models/question/question.dart';
 import 'package:boilerplate/utils/locale/app_localization.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import 'package:scrollable_positioned_list/scrollable_positioned_list.dart';
+import 'package:boilerplate/models/expansion_tile_state/expansion_tile_state.dart';
 
 class QuestionWidget extends StatefulWidget {
   Question question;
-  bool expanded, isLastQuestion;
+  bool isLastQuestion;
   int index;
   ItemScrollController itemScrollController;
 
-  QuestionWidget({
-    Key? key,
-    required this.index,
-    required this.itemScrollController,
-    required this.question,
-    required this.expanded,
-    required this.isLastQuestion,
-  }) : super(key: key);
+  QuestionWidget(
+      {Key? key,
+      required this.index,
+      required this.itemScrollController,
+      required this.question,
+      required this.isLastQuestion,
+      })
+      : super(key: key);
 
   @override
   State<QuestionWidget> createState() => _QuestionWidgetState();
 }
 
-class _QuestionWidgetState extends State<QuestionWidget> with AutomaticKeepAliveClientMixin{
+class _QuestionWidgetState extends State<QuestionWidget>
+    with AutomaticKeepAliveClientMixin {
   @override
   bool get wantKeepAlive => true;
-
   double _getScreenWidth() => MediaQuery.of(context).size.width;
 
   Future scrollToItem(int index) async {
     widget.itemScrollController.scrollTo(
       index: index,
-      duration: Duration(milliseconds: 500),
+      duration: Duration(milliseconds: 1000),
     );
   }
 
   @override
   Widget build(BuildContext context) {
+    super.build(context);
     ButtonStyle _buildQuestionsButtonStyle(Color color) {
       return ButtonStyle(
         minimumSize: MaterialStateProperty.all(Size(
@@ -95,23 +98,21 @@ class _QuestionWidgetState extends State<QuestionWidget> with AutomaticKeepAlive
     }
 
     Widget _buildTitle() {
-      return Row(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        children: [
-          Row(
-            children: [
-              SizedBox(
-                width: 15,
-              ),
-              Text(
-                widget.question.getTitle,
-                style: TextStyle(fontSize: 20, fontWeight: FontWeight.w500),
-              ),
-            ],
-          ),
-          widget.expanded ? _buildHelpButton() : SizedBox(),
-          // _buildHelpButton(),
-        ],
+      return Padding(
+        padding: const EdgeInsets.only(top: 20, bottom: 20, left: 15),
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            Text(
+              widget.question.getTitle,
+              style: TextStyle(fontSize: 22, fontWeight: FontWeight.w500),
+            ),
+            Provider.of<QuestionsWidgetState>(context).isWidgetExpanded(widget.index)
+                ? _buildHelpButton()
+                : SizedBox(),
+            // _buildHelpButton(),
+          ],
+        ),
       );
     }
 
@@ -215,7 +216,8 @@ class _QuestionWidgetState extends State<QuestionWidget> with AutomaticKeepAlive
       return Image.network(
         imageURL,
         fit: BoxFit.cover,
-        loadingBuilder: (BuildContext context, Widget child, ImageChunkEvent? loadingProgress) {
+        loadingBuilder: (BuildContext context, Widget child,
+            ImageChunkEvent? loadingProgress) {
           if (loadingProgress == null) return child;
           return Padding(
             padding: const EdgeInsets.all(20),
@@ -225,7 +227,7 @@ class _QuestionWidgetState extends State<QuestionWidget> with AutomaticKeepAlive
                     ? loadingProgress.cumulativeBytesLoaded /
                         loadingProgress.expectedTotalBytes!
                     : null,
-                valueColor:AlwaysStoppedAnimation<Color>(AppColors.main_color),
+                valueColor: AlwaysStoppedAnimation<Color>(AppColors.main_color),
               ),
             ),
           );
@@ -240,8 +242,8 @@ class _QuestionWidgetState extends State<QuestionWidget> with AutomaticKeepAlive
           children: [
             Container(
               margin: const EdgeInsets.all(8),
-              // height: 200, //TODO: fix this
-              //   width: 200, //TODO: fix this
+              // height: 200, //TODO: can admin set height manually?
+              //   width: 200, //TODO: can admin set width manually?
               child: ListTile(
                 horizontalTitleGap: 0,
                 minVerticalPadding: 0,
@@ -315,18 +317,24 @@ class _QuestionWidgetState extends State<QuestionWidget> with AutomaticKeepAlive
     }
 
     Widget _buildNextQuestionButton() {
-      return Padding(
-        padding: Dimens.questionButtonPadding,
-        child: TextButton(
-          style: _buildQuestionsButtonStyle(AppColors.main_color),
-          onPressed: () {
-            scrollToItem(widget.index + 1);
-          },
-          child: Text(
-            AppLocalizations.of(context).translate('next_question_button_text'),
-            style: TextStyle(color: Colors.white, fontSize: 15),
-          ),
-        ),
+      return Consumer<QuestionsWidgetState>(
+          builder: (context, builder, child) {
+            return Padding(
+              padding: Dimens.questionButtonPadding,
+              child: TextButton(
+                style: _buildQuestionsButtonStyle(AppColors.main_color),
+                onPressed: () async => {
+                  await builder.setActiveIndex(widget.index + 1),
+                  scrollToItem(widget.index + 1),
+                },
+                child: Text(
+                  AppLocalizations.of(context).translate(
+                      'next_question_button_text'),
+                  style: TextStyle(color: Colors.white, fontSize: 15),
+                ),
+              ),
+            );
+          }
       );
     }
 
@@ -339,33 +347,73 @@ class _QuestionWidgetState extends State<QuestionWidget> with AutomaticKeepAlive
       );
     }
 
-    return Card(
-      child: ListTileTheme(
-        contentPadding: Dimens.listTilePadding,
-        dense: false,
-        horizontalTitleGap: 0.0,
-        minLeadingWidth: 0,
-        child: ExpansionTile(
-          tilePadding: Dimens.listTilePadding,
-          textColor: AppColors.main_color,
-          iconColor: AppColors.main_color,
-          initiallyExpanded: widget.expanded,
-          title: _buildTitle(),
-          onExpansionChanged: (value) {
-            setState(() {
-              widget.expanded = value;
-            });
-          },
-          controlAffinity: ListTileControlAffinity.leading,
-          children: <Widget>[
-            _buildDescription(),
-            _buildOptions(),
-            widget.isLastQuestion
-                ? _buildNextStageButton()
-                : _buildNextQuestionButton(),
-          ],
-        ),
-      ),
+    // return Consumer<QuestionsWidgetState>(
+    //     builder: (context, builder, child) {
+    //       return Card(
+    //         child: ListTileTheme(
+    //           contentPadding: Dimens.listTilePadding,
+    //           dense: false,
+    //           horizontalTitleGap: 0.0,
+    //           minLeadingWidth: 0,
+    //           child: ExpansionTile(
+    //             initiallyExpanded: builder.isWidgetExpanded(widget.index),
+    //             onExpansionChanged: (newState) {
+    //               if (newState) {
+    //                 builder.setActiveIndex(widget.index);
+    //               }
+    //             },
+    //             tilePadding: Dimens.listTilePadding,
+    //             textColor: AppColors.main_color,
+    //             iconColor: AppColors.main_color,
+    //             title: _buildTitle(),
+    //             controlAffinity: ListTileControlAffinity.leading,
+    //             children: <Widget>[
+    //               _buildDescription(),
+    //               _buildOptions(),
+    //               widget.isLastQuestion
+    //                   ? _buildNextStageButton()
+    //                   : _buildNextQuestionButton(),
+    //             ],
+    //           ),
+    //         ),
+    //       );
+    //     }
+    // );
+
+    return Consumer<QuestionsWidgetState>(
+      builder: (context, builder, child){
+        return Padding(
+          padding: const EdgeInsets.fromLTRB(5, 5, 5, 0),
+          child: ExpansionPanelList(
+            expandedHeaderPadding: EdgeInsets.zero,
+            elevation: 0,
+            expansionCallback: (int index, bool isExpanded) {
+              setState(() {
+                builder.setActiveIndex(widget.index);
+              });
+            },
+            children: [
+              ExpansionPanel(
+                canTapOnHeader: true,
+                headerBuilder: (BuildContext context, bool isExpanded) {
+                  return _buildTitle();
+                },
+                body: Column(
+                  children: [
+                    _buildDescription(),
+                    _buildOptions(),
+                    widget.isLastQuestion
+                        ? _buildNextStageButton()
+                        : _buildNextQuestionButton(),
+                  ],
+                ),
+                isExpanded:
+                builder.isWidgetExpanded(widget.index),
+              ),
+            ],
+          ),
+        );
+      }
     );
   }
 }
