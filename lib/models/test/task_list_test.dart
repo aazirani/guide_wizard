@@ -1,7 +1,8 @@
+import 'package:boilerplate/models/sub_task/sub_task.dart';
+import 'package:boilerplate/models/task/task.dart';
 import 'package:boilerplate/models/task/task_list.dart' as tl;
 import 'package:boilerplate/models/technical_name/technical_name.dart';
-import 'package:boilerplate/models/task/task.dart';
-import 'package:boilerplate/models/sub_task/sub_task.dart';
+import 'package:boilerplate/models/translation/translation_list.dart';
 
 tl.TaskList taskList = tl.TaskList(
     tasks: List<Task>.generate(
@@ -11,12 +12,14 @@ tl.TaskList taskList = tl.TaskList(
     text: TechnicalName(
         id: 1,
         technical_name: "Housing",
+        translations: TranslationList(translations: []),
         creator_id: 1,
         created_at: "0",
         updated_at: "0"),
     description: TechnicalName(
         id: 1,
         technical_name: "Housing",
+        translations: TranslationList(translations: []),
         creator_id: 1,
         created_at: "0",
         updated_at: "0"),
@@ -29,18 +32,21 @@ tl.TaskList taskList = tl.TaskList(
             title: TechnicalName(
                 id: 0,
                 technical_name: "Dorm",
+                translations: TranslationList(translations: []),
                 creator_id: 1,
                 created_at: "0",
                 updated_at: "0"),
             markdown: TechnicalName(
                 id: 1,
                 technical_name: "markdown",
+                translations: TranslationList(translations: []),
                 creator_id: 1,
                 created_at: "0",
                 updated_at: "0"),
             deadline: TechnicalName(
                 id: 1,
                 technical_name: "deadline",
+                translations: TranslationList(translations: []),
                 creator_id: 1,
                 created_at: "0",
                 updated_at: "0"),
