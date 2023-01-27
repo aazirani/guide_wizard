@@ -1,3 +1,5 @@
+import 'dart:math';
+
 import 'package:boilerplate/constants/colors.dart';
 import 'package:boilerplate/constants/dimens.dart';
 import 'package:boilerplate/models/answer/answer.dart';
@@ -11,107 +13,19 @@ import 'package:flutter/material.dart';
 import 'package:scrollable_positioned_list/scrollable_positioned_list.dart';
 
 class QuestionsListPage extends StatefulWidget {
-  const QuestionsListPage({Key? key}) : super(key: key);
+  QuestionList questionList;
+  QuestionsListPage({Key? key, required this.questionList}) : super(key: key);
 
   @override
   State<QuestionsListPage> createState() => _QuestionsListPageState();
 }
 
 class _QuestionsListPageState extends State<QuestionsListPage> {
-  double _getScreenHeight() => MediaQuery.of(context).size.height;
-
-  late bool expanded;
-  // late ExpandedTileController _controller;
-  late QuestionList questions;
-  final itemScrollController = ItemScrollController();
+  late final itemScrollController;
 
   @override
   void initState() {
-    expanded=true;
-    // _controller = ExpandedTileController(isExpanded:true);
-
-
-    /*
-      Test objects
-     */
-    questions = QuestionList(questions: [
-      Question(
-        id: 0,
-        title: TechnicalName(id: 0, technical_name: "Question 1", translations: TranslationList(translations: []), creator_id: 1, created_at: '', updated_at: '', ),
-        sub_title: TechnicalName(id: 0, technical_name: "Sub Title 1", translations: TranslationList(translations: []), creator_id: 1, created_at: '', updated_at: '', ),
-        type: "TEXT",
-        axis_count: 1,
-        is_multiple_choice: false,
-        info_url: TechnicalName(id: 0, technical_name: "Info URL 1", translations: TranslationList(translations: []), creator_id: 1, created_at: '', updated_at: '', ),
-        info_description: TechnicalName(id: 0, technical_name: "Info Description 1", translations: TranslationList(translations: []), creator_id: 1, created_at: '', updated_at: '', ),
-        answer_required: 1,
-        answers_selected_by_default: false,
-        creator_id: 1,
-        created_at: "2021-09-01 00:00:00",
-        updated_at: '2021-09-01 00:00:00',
-        step: StepModel.Step(id: 0, name: TechnicalName(id: 0, technical_name: "Info URL 1", translations: TranslationList(translations: []), creator_id: 1, created_at: '', updated_at: '', ),
-          description: TechnicalName(id: 0, technical_name: "Info URL 1", translations: TranslationList(translations: []), creator_id: 1, created_at: '', updated_at: '', ),
-          order: 1, image: '', tasks: []),
-        answers: [
-          Answer(id: 0, question_id: 1, title: TechnicalName(id: 0, technical_name: "Title", translations: TranslationList(translations: []), creator_id: 1, created_at: '', updated_at: '', ), order: 1, is_enabled: true, creator_id: '', created_at: '', updated_at: ''),
-          Answer(id: 0, question_id: 1, title: TechnicalName(id: 0, technical_name: "Title", translations: TranslationList(translations: []), creator_id: 1, created_at: '', updated_at: '', ), order: 1, is_enabled: true, creator_id: '', created_at: '', updated_at: ''),
-          Answer(id: 0, question_id: 1, title: TechnicalName(id: 0, technical_name: "Title", translations: TranslationList(translations: []), creator_id: 1, created_at: '', updated_at: '', ), order: 1, is_enabled: true, creator_id: '', created_at: '', updated_at: ''),
-          Answer(id: 0, question_id: 1, title: TechnicalName(id: 0, technical_name: "Title", translations: TranslationList(translations: []), creator_id: 1, created_at: '', updated_at: '', ), order: 1, is_enabled: true, creator_id: '', created_at: '', updated_at: ''),
-        ],
-      ),
-      Question(
-        id: 0,
-        title: TechnicalName(id: 0, technical_name: "Question 1", translations: TranslationList(translations: []), creator_id: 1, created_at: '', updated_at: '', ),
-        sub_title: TechnicalName(id: 0, technical_name: "Sub Title 1", translations: TranslationList(translations: []), creator_id: 1, created_at: '', updated_at: '', ),
-        type: "IMAGE",
-        axis_count: 2,
-        is_multiple_choice: false,
-        info_url: TechnicalName(id: 0, technical_name: "Info URL 1", translations: TranslationList(translations: []), creator_id: 1, created_at: '', updated_at: '', ),
-        info_description: TechnicalName(id: 0, technical_name: "Info Description 1", translations: TranslationList(translations: []), creator_id: 1, created_at: '', updated_at: '', ),
-        answer_required: 1,
-        answers_selected_by_default: false,
-        creator_id: 1,
-        created_at: "2021-09-01 00:00:00",
-        updated_at: '2021-09-01 00:00:00',
-        step: StepModel.Step(id: 0, name: TechnicalName(id: 0, technical_name: "Info URL 1", translations: TranslationList(translations: []), creator_id: 1, created_at: '', updated_at: '', ),
-            description: TechnicalName(id: 0, technical_name: "Info URL 1", translations: TranslationList(translations: []), creator_id: 1, created_at: '', updated_at: '', ),
-            order: 1, image: '', tasks: []),
-        answers: [
-          Answer(id: 0, question_id: 1, title: TechnicalName(id: 0, technical_name: "Title", translations: TranslationList(translations: []), creator_id: 1, created_at: '', updated_at: '', ), order: 1, is_enabled: true, creator_id: '', created_at: '', updated_at: '', image: 'https://play-lh.googleusercontent.com/5e7z5YCt7fplN4qndpYzpJjYmuzM2WSrfs35KxnEw-Ku1sClHRWHoIDSw3a3YS5WpGcI'),
-          Answer(id: 0, question_id: 1, title: TechnicalName(id: 0, technical_name: "Title", translations: TranslationList(translations: []), creator_id: 1, created_at: '', updated_at: '', ), order: 1, is_enabled: true, creator_id: '', created_at: '', updated_at: '', image: 'https://play-lh.googleusercontent.com/5e7z5YCt7fplN4qndpYzpJjYmuzM2WSrfs35KxnEw-Ku1sClHRWHoIDSw3a3YS5WpGcI'),
-          Answer(id: 0, question_id: 1, title: TechnicalName(id: 0, technical_name: "Title", translations: TranslationList(translations: []), creator_id: 1, created_at: '', updated_at: '', ), order: 1, is_enabled: true, creator_id: '', created_at: '', updated_at: '', image: 'https://play-lh.googleusercontent.com/5e7z5YCt7fplN4qndpYzpJjYmuzM2WSrfs35KxnEw-Ku1sClHRWHoIDSw3a3YS5WpGcI'),
-          Answer(id: 0, question_id: 1, title: TechnicalName(id: 0, technical_name: "Title", translations: TranslationList(translations: []), creator_id: 1, created_at: '', updated_at: '', ), order: 1, is_enabled: true, creator_id: '', created_at: '', updated_at: '', image: 'https://play-lh.googleusercontent.com/5e7z5YCt7fplN4qndpYzpJjYmuzM2WSrfs35KxnEw-Ku1sClHRWHoIDSw3a3YS5WpGcI'),
-        ],
-      ),
-      Question(
-        id: 0,
-        title: TechnicalName(id: 0, technical_name: "Question 1", translations: TranslationList(translations: []), creator_id: 1, created_at: '', updated_at: '', ),
-        sub_title: TechnicalName(id: 0, technical_name: "Sub Title 1", translations: TranslationList(translations: []), creator_id: 1, created_at: '', updated_at: '', ),
-        type: "IMAGE",
-        axis_count: 2,
-        is_multiple_choice: false,
-        info_url: TechnicalName(id: 0, technical_name: "Info URL 1", translations: TranslationList(translations: []), creator_id: 1, created_at: '', updated_at: '', ),
-        info_description: TechnicalName(id: 0, technical_name: "Info Description 1", translations: TranslationList(translations: []), creator_id: 1, created_at: '', updated_at: '', ),
-        answer_required: 1,
-        answers_selected_by_default: false,
-        creator_id: 1,
-        created_at: "2021-09-01 00:00:00",
-        updated_at: '2021-09-01 00:00:00',
-        step: StepModel.Step(id: 0, name: TechnicalName(id: 0, technical_name: "Info URL 1", translations: TranslationList(translations: []), creator_id: 1, created_at: '', updated_at: '', ),
-            description: TechnicalName(id: 0, technical_name: "Info URL 1", translations: TranslationList(translations: []), creator_id: 1, created_at: '', updated_at: '', ),
-            order: 1, image: '', tasks: []),
-        answers: [
-          Answer(id: 0, question_id: 1, title: TechnicalName(id: 0, technical_name: "", translations: TranslationList(translations: []), creator_id: 1, created_at: '', updated_at: '', ), order: 1, is_enabled: true, creator_id: '', created_at: '', updated_at: '', image: 'https://play-lh.googleusercontent.com/5e7z5YCt7fplN4qndpYzpJjYmuzM2WSrfs35KxnEw-Ku1sClHRWHoIDSw3a3YS5WpGcI'),
-          Answer(id: 0, question_id: 1, title: TechnicalName(id: 0, technical_name: "", translations: TranslationList(translations: []), creator_id: 1, created_at: '', updated_at: '', ), order: 1, is_enabled: true, creator_id: '', created_at: '', updated_at: '', image: 'https://play-lh.googleusercontent.com/5e7z5YCt7fplN4qndpYzpJjYmuzM2WSrfs35KxnEw-Ku1sClHRWHoIDSw3a3YS5WpGcI'),
-          Answer(id: 0, question_id: 1, title: TechnicalName(id: 0, technical_name: "", translations: TranslationList(translations: []), creator_id: 1, created_at: '', updated_at: '', ), order: 1, is_enabled: true, creator_id: '', created_at: '', updated_at: '', image: 'https://play-lh.googleusercontent.com/5e7z5YCt7fplN4qndpYzpJjYmuzM2WSrfs35KxnEw-Ku1sClHRWHoIDSw3a3YS5WpGcI'),
-          Answer(id: 0, question_id: 1, title: TechnicalName(id: 0, technical_name: "", translations: TranslationList(translations: []), creator_id: 1, created_at: '', updated_at: '', ), order: 1, is_enabled: true, creator_id: '', created_at: '', updated_at: '', image: 'https://play-lh.googleusercontent.com/5e7z5YCt7fplN4qndpYzpJjYmuzM2WSrfs35KxnEw-Ku1sClHRWHoIDSw3a3YS5WpGcI'),
-        ],
-      ),
-    ]);
-    /*
-      End of testing objects
-     */
-
+    itemScrollController = ItemScrollController();
     super.initState();
   }
 
@@ -133,37 +47,12 @@ class _QuestionsListPageState extends State<QuestionsListPage> {
     );
   }
 
-
-  // List<Widget> _buildQuestionsWidgetList(){
-  //   List<Widget> questionsWidgets=questions.map<Widget>((question){
-  //     return Container(
-  //       // key: itemKey,
-  //       child: QuestionWidget(
-  //         question: question,
-  //         expanded: false,
-  //       ),
-  //     );
-  //   }
-  //   ).toList();
-  //   questionsWidgets.addAll(
-  //     [
-  //       SizedBox(height: 80,),
-  //     ]
-  //   );
-  //
-  //   return questionsWidgets;
-  // }
-
-  Widget _buildQuestionWidget(int index){
-    if(index==questions.length){
-      return SizedBox(height: _getScreenHeight(),);
-    }
+  Widget _buildQuestionWidget(int index) {
     return QuestionWidget(
       index: index,
       itemScrollController: itemScrollController,
-      question: questions.elementAt(index),
-      expanded: false,
-      isLastQuestion: index == questions.length - 1
+      question: widget.questionList.elementAt(index),
+      isLastQuestion: index == widget.questionList.length - 1,
     );
   }
 
@@ -172,12 +61,10 @@ class _QuestionsListPageState extends State<QuestionsListPage> {
     return Scaffold(
       appBar: _buildAppBar(),
       body: ScrollablePositionedList.builder(
-        itemCount: questions.length+1,
+        itemCount: widget.questionList.length,
         itemBuilder: (context, index) => _buildQuestionWidget(index),
         itemScrollController: itemScrollController,
       ),
-      // floatingActionButton: _buildNextStageButton(),
-      // floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
     );
   }
 }

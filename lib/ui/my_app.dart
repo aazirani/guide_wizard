@@ -2,18 +2,24 @@ import 'package:boilerplate/constants/app_theme.dart';
 import 'package:boilerplate/constants/strings.dart';
 import 'package:boilerplate/data/repository.dart';
 import 'package:boilerplate/di/components/service_locator.dart';
+import 'package:boilerplate/providers/question_widget_state/question_widget_state.dart';
 import 'package:boilerplate/stores/language/language_store.dart';
 import 'package:boilerplate/stores/post/post_store.dart';
 import 'package:boilerplate/stores/step/step_store.dart';
 import 'package:boilerplate/stores/theme/theme_store.dart';
 import 'package:boilerplate/stores/user/user_store.dart';
 import 'package:boilerplate/ui/home/home.dart';
+import 'package:boilerplate/ui/tasklist/tasklist.dart';
+import 'package:boilerplate/ui/home/home.dart';
 import 'package:boilerplate/utils/locale/app_localization.dart';
 import 'package:boilerplate/utils/routes/routes.dart';
+import 'package:boilerplate/widgets/question_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:provider/provider.dart';
+import 'package:boilerplate/ui/questions/questions_list_page.dart';
+import 'package:boilerplate/models/test/question.dart';
 
 class MyApp extends StatelessWidget {
   // This widget is the root of your application.
@@ -33,6 +39,7 @@ class MyApp extends StatelessWidget {
         Provider<PostStore>(create: (_) => _postStore),
         Provider<LanguageStore>(create: (_) => _languageStore),
         Provider<StepStore>(create: (_) => _stepStore),
+        ListenableProvider<QuestionsWidgetState>(create: (_) => QuestionsWidgetState(activeIndex: 0)),
       ],
       child: Observer(
         name: 'global-observer',
@@ -58,7 +65,7 @@ class MyApp extends StatelessWidget {
               // Built-in localization of basic text for Cupertino widgets
               GlobalCupertinoLocalizations.delegate,
             ],
-            home: HomeScreen(),
+            home: QuestionsListPage(questionList: QuestionTest().questions,),
           );
         },
       ),

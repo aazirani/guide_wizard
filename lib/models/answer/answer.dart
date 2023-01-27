@@ -42,8 +42,12 @@ class Answer {
     selected = !selected;
   }
 
-  Image getImage(){
+  Image getImageWidget(){
     return Image.network(image!);
+  }
+
+  String get getImage{
+    return image!;
   }
 
   String get getTitle{
