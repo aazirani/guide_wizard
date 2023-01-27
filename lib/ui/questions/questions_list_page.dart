@@ -5,7 +5,7 @@ import 'package:boilerplate/constants/dimens.dart';
 import 'package:flutter/material.dart';
 import 'package:scrollable_positioned_list/scrollable_positioned_list.dart';
 import 'package:boilerplate/models/question/question_list.dart';
-import 'question_widget.dart';
+import 'package:boilerplate/widgets/question_widget.dart';
 
 class QuestionsListPage extends StatefulWidget {
   QuestionList questionList;

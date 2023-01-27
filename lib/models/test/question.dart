@@ -1,7 +1,7 @@
 import 'package:boilerplate/models/answer/answer.dart';
 import 'package:boilerplate/models/question/question.dart';
 import 'package:boilerplate/models/question/question_list.dart';
-import 'package:boilerplate/models/title/title.dart';
+import 'package:boilerplate/models/technical_name/technical_name.dart';
 import 'package:boilerplate/models/step/step.dart' as StepModel;
 
 class QuestionTest {
