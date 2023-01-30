@@ -6,7 +6,7 @@ import 'package:sembast/sembast.dart';
 class TaskDataSource {
   // A Store with int keys and Map<String, dynamic> values.
   // This Store acts like a persistent map, values of which are Flogs objects converted to Map
-  final _tasksStore = intMapStoreFactory.store(DBConstants.STORE_NAME);
+  final _tasksStore = intMapStoreFactory.store(DBConstants.STORE_NAME_TASK);
 
   // Private getter to shorten the amount of code needed to get the
   // singleton instance of an opened database.
@@ -47,7 +47,7 @@ class TaskDataSource {
     }).toList();
   }
 
-  Future<TaskList> getPostsFromDb() async {
+  Future<TaskList> getTasksFromDb() async {
 
     print('Loading from database');
 
@@ -84,8 +84,8 @@ class TaskDataSource {
     );
   }
 
-  Future<int> delete(Task post) async {
-    final finder = Finder(filter: Filter.byKey(post.id));
+  Future<int> delete(Task task) async {
+    final finder = Finder(filter: Filter.byKey(task.id));
     return await _tasksStore.delete(
       _db,
       finder: finder,

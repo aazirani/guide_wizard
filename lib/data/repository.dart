@@ -1,6 +1,8 @@
 import 'dart:async';
 
 import 'package:boilerplate/data/local/datasources/post/post_datasource.dart';
+import 'package:boilerplate/data/local/datasources/step/step_datasource.dart';
+import 'package:boilerplate/data/local/datasources/question/question_datasource.dart';
 import 'package:boilerplate/data/sharedpref/shared_preference_helper.dart';
 import 'package:boilerplate/models/post/post.dart';
 import 'package:boilerplate/models/post/post_list.dart';
@@ -8,19 +10,50 @@ import 'package:sembast/sembast.dart';
 
 import 'local/constants/db_constants.dart';
 import 'network/apis/posts/post_api.dart';
+import 'network/apis/app_data/app_data_api.dart';
+import 'package:boilerplate/models/step/step.dart';
+import 'package:boilerplate/models/step/step_list.dart';
 
 class Repository {
   // data source object
   final PostDataSource _postDataSource;
+  final StepDataSource _stepDataSource;
 
   // api objects
   final PostApi _postApi;
+  final StepApi _stepApi;
 
   // shared pref object
   final SharedPreferenceHelper _sharedPrefsHelper;
 
   // constructor
-  Repository(this._postApi, this._sharedPrefsHelper, this._postDataSource);
+  Repository(this._postApi, this._stepApi, this._sharedPrefsHelper,
+      this._postDataSource, this._stepDataSource);
+
+  // Step: ---------------------------------------------------------------------
+  Future<StepList> getSteps() async {
+    return await _stepApi.getSteps().then((stepsList) {
+      stepsList.steps.forEach((step) {
+        _stepDataSource.insert(step);
+      });
+      return stepsList;
+    }).catchError((error) => throw error);
+  }
+
+  Future<int> insertStep(Step step) => _stepDataSource
+      .insert(step)
+      .then((id) => id)
+      .catchError((error) => throw error);
+
+  Future<int> updateStep(Step step) => _stepDataSource
+      .update(step)
+      .then((id) => id)
+      .catchError((error) => throw error);
+
+  Future<int> deleteStep(Step step) => _stepDataSource
+      .update(step)
+      .then((id) => id)
+      .catchError((error) => throw error);
 
   // Post: ---------------------------------------------------------------------
   Future<PostList> getPosts() async {
@@ -66,10 +99,9 @@ class Repository {
       .then((id) => id)
       .catchError((error) => throw error);
 
-
   // Login:---------------------------------------------------------------------
   Future<bool> login(String email, String password) async {
-    return await Future.delayed(Duration(seconds: 2), ()=> true);
+    return await Future.delayed(Duration(seconds: 2), () => true);
   }
 
   Future<void> saveIsLoggedIn(bool value) =>

@@ -6,7 +6,7 @@ import 'package:sembast/sembast.dart';
 class StepDataSource {
   // A Store with int keys and Map<String, dynamic> values.
   // This Store acts like a persistent map, values of which are Flogs objects converted to Map
-  final _stepsStore = intMapStoreFactory.store(DBConstants.STORE_NAME);
+  final _stepsStore = intMapStoreFactory.store(DBConstants.STORE_NAME_STEP);
 
   // Private getter to shorten the amount of code needed to get the
   // singleton instance of an opened database.

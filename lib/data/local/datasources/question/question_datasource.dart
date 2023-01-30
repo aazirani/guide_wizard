@@ -1,99 +1,95 @@
 import 'package:boilerplate/data/local/constants/db_constants.dart';
-import 'package:boilerplate/models/step/step.dart';
-import 'package:boilerplate/models/step/step_list.dart';
+import 'package:boilerplate/models/question/question.dart';
+import 'package:boilerplate/models/question/question_list.dart';
 import 'package:sembast/sembast.dart';
 
-class StepDataSource {
+class QuestionDataSource {
   // A Store with int keys and Map<String, dynamic> values.
   // This Store acts like a persistent map, values of which are Flogs objects converted to Map
-  final _stepsStore = intMapStoreFactory.store(DBConstants.STORE_NAME);
-
-  // Private getter to shorten the amount of code needed to get the
-  // singleton instance of an opened database.
-//  Future<Database> get _db async => await AppDatabase.instance.database;
+  final _questionsStore = intMapStoreFactory.store(DBConstants.STORE_NAME_QUESTION);
 
   // database instance
   final Database _db;
 
   // Constructor
-  StepDataSource(this._db);
+  QuestionDataSource(this._db);
 
   // DB functions:--------------------------------------------------------------
-  Future<int> insert(Step step) async {
-    return await _stepsStore.add(_db, step.toMap());
+  Future<int> insert(Question step) async {
+    return await _questionsStore.add(_db, step.toMap());
   }
 
   Future<int> count() async {
-    return await _stepsStore.count(_db);
+    return await _questionsStore.count(_db);
   }
 
-  Future<List<Step>> getAllSortedByFilter({List<Filter>? filters}) async {
+  Future<List<Question>> getAllSortedByFilter({List<Filter>? filters}) async {
     //creating finder
     final finder = Finder(
         filter: filters != null ? Filter.and(filters) : null,
         sortOrders: [SortOrder(DBConstants.FIELD_ID)]);
 
-    final recordSnapshots = await _stepsStore.find(
+    final recordSnapshots = await _questionsStore.find(
       _db,
       finder: finder,
     );
 
     // Making a List<Post> out of List<RecordSnapshot>
     return recordSnapshots.map((snapshot) {
-      final step = Step.fromMap(snapshot.value);
+      final question = Question.fromMap(snapshot.value);
       // An ID is a key of a record from the database.
-      step.id = snapshot.key;
-      return step;
+      question.id = snapshot.key;
+      return question;
     }).toList();
   }
 
-  Future<StepList> getPostsFromDb() async {
+  Future<QuestionList> getPostsFromDb() async {
 
     print('Loading from database');
 
     // post list
-    var stepsList;
+    var questionsList;
 
     // fetching data
-    final recordSnapshots = await _stepsStore.find(
+    final recordSnapshots = await _questionsStore.find(
       _db,
     );
 
     // Making a List<Post> out of List<RecordSnapshot>
     if(recordSnapshots.length > 0) {
-      stepsList = StepList(
-          steps: recordSnapshots.map((snapshot) {
-            final step = Step.fromMap(snapshot.value);
+      questionsList = QuestionList(
+          questions: recordSnapshots.map((snapshot) {
+            final question = Question.fromMap(snapshot.value);
             // An ID is a key of a record from the database.
-            step.id = snapshot.key;
-            return step;
+            question.id = snapshot.key;
+            return question;
           }).toList());
     }
 
-    return stepsList;
+    return questionsList;
   }
 
-  Future<int> update(Step step) async {
+  Future<int> update(Question question) async {
     // For filtering by key (ID), RegEx, greater than, and many other criteria,
     // we use a Finder.
-    final finder = Finder(filter: Filter.byKey(step.id));
-    return await _stepsStore.update(
+    final finder = Finder(filter: Filter.byKey(question.id));
+    return await _questionsStore.update(
       _db,
-      step.toMap(),
+      question.toMap(),
       finder: finder,
     );
   }
 
-  Future<int> delete(Step post) async {
-    final finder = Finder(filter: Filter.byKey(post.id));
-    return await _stepsStore.delete(
+  Future<int> delete(Question question) async {
+    final finder = Finder(filter: Filter.byKey(question.id));
+    return await _questionsStore.delete(
       _db,
       finder: finder,
     );
   }
 
   Future deleteAll() async {
-    await _stepsStore.drop(
+    await _questionsStore.drop(
       _db,
     );
   }

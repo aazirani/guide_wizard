@@ -2,6 +2,8 @@ import 'package:boilerplate/models/answer/answer.dart';
 import 'package:boilerplate/models/question/question.dart';
 import 'package:boilerplate/models/question/question_list.dart';
 import 'package:boilerplate/models/technical_name/technical_name.dart';
+import 'package:boilerplate/models/translation/translation.dart';
+import 'package:boilerplate/models/translation/translation_list.dart';
 import 'package:boilerplate/models/step/step.dart' as StepModel;
 
 class QuestionTest {
@@ -11,6 +13,7 @@ class QuestionTest {
       title: TechnicalName(
         id: 0,
         technical_name: "Question",
+        translations: TranslationList(translations: []),
         creator_id: 1,
         created_at: '',
         updated_at: '',
@@ -19,6 +22,7 @@ class QuestionTest {
         id: 0,
         technical_name:
             "Sub Title 1Sub Title 1Sub Title 1Sub Title 1Sub Title 1Sub Title 1Sub Title 1",
+        translations: TranslationList(translations: []),
         creator_id: 1,
         created_at: '',
         updated_at: '',
@@ -29,6 +33,7 @@ class QuestionTest {
       info_url: TechnicalName(
         id: 0,
         technical_name: "Info URL 1",
+        translations: TranslationList(translations: []),
         creator_id: 1,
         created_at: '',
         updated_at: '',
@@ -36,6 +41,7 @@ class QuestionTest {
       info_description: TechnicalName(
         id: 0,
         technical_name: "Info Description 1",
+        translations: TranslationList(translations: []),
         creator_id: 1,
         created_at: '',
         updated_at: '',
@@ -50,6 +56,7 @@ class QuestionTest {
           name: TechnicalName(
             id: 0,
             technical_name: "Info URL 1",
+            translations: TranslationList(translations: []),
             creator_id: 1,
             created_at: '',
             updated_at: '',
@@ -57,6 +64,7 @@ class QuestionTest {
           description: TechnicalName(
             id: 0,
             technical_name: "Info URL 1",
+            translations: TranslationList(translations: []),
             creator_id: 1,
             created_at: '',
             updated_at: '',
@@ -71,6 +79,7 @@ class QuestionTest {
             title: TechnicalName(
               id: 0,
               technical_name: "Title",
+              translations: TranslationList(translations: []),
               creator_id: 1,
               created_at: '',
               updated_at: '',
@@ -86,6 +95,7 @@ class QuestionTest {
             title: TechnicalName(
               id: 0,
               technical_name: "Title",
+              translations: TranslationList(translations: []),
               creator_id: 1,
               created_at: '',
               updated_at: '',
@@ -101,6 +111,7 @@ class QuestionTest {
             title: TechnicalName(
               id: 0,
               technical_name: "Title",
+              translations: TranslationList(translations: []),
               creator_id: 1,
               created_at: '',
               updated_at: '',
@@ -116,6 +127,7 @@ class QuestionTest {
             title: TechnicalName(
               id: 0,
               technical_name: "Title",
+              translations: TranslationList(translations: []),
               creator_id: 1,
               created_at: '',
               updated_at: '',
@@ -132,6 +144,7 @@ class QuestionTest {
       title: TechnicalName(
         id: 0,
         technical_name: "Question",
+        translations: TranslationList(translations: []),
         creator_id: 1,
         created_at: '',
         updated_at: '',
@@ -140,6 +153,7 @@ class QuestionTest {
         id: 0,
         technical_name:
             "Sub Title 1Sub Title 1Sub Title 1Sub Title 1Sub Title 1Sub Title 1Sub Title 1Sub Title 1Sub Title 1",
+        translations: TranslationList(translations: []),
         creator_id: 1,
         created_at: '',
         updated_at: '',
@@ -150,6 +164,7 @@ class QuestionTest {
       info_url: TechnicalName(
         id: 0,
         technical_name: "Info URL 1",
+        translations: TranslationList(translations: []),
         creator_id: 1,
         created_at: '',
         updated_at: '',
@@ -157,6 +172,7 @@ class QuestionTest {
       info_description: TechnicalName(
         id: 0,
         technical_name: "Info Description 1",
+        translations: TranslationList(translations: []),
         creator_id: 1,
         created_at: '',
         updated_at: '',
@@ -171,6 +187,7 @@ class QuestionTest {
           name: TechnicalName(
             id: 0,
             technical_name: "Info URL 1",
+            translations: TranslationList(translations: []),
             creator_id: 1,
             created_at: '',
             updated_at: '',
@@ -178,6 +195,7 @@ class QuestionTest {
           description: TechnicalName(
             id: 0,
             technical_name: "Info URL 1",
+            translations: TranslationList(translations: []),
             creator_id: 1,
             created_at: '',
             updated_at: '',
@@ -192,6 +210,7 @@ class QuestionTest {
             title: TechnicalName(
               id: 0,
               technical_name: "Title",
+              translations: TranslationList(translations: []),
               creator_id: 1,
               created_at: '',
               updated_at: '',
@@ -209,6 +228,7 @@ class QuestionTest {
             title: TechnicalName(
               id: 0,
               technical_name: "Title",
+              translations: TranslationList(translations: []),
               creator_id: 1,
               created_at: '',
               updated_at: '',
@@ -226,6 +246,7 @@ class QuestionTest {
             title: TechnicalName(
               id: 0,
               technical_name: "Title",
+              translations: TranslationList(translations: []),
               creator_id: 1,
               created_at: '',
               updated_at: '',
@@ -243,6 +264,7 @@ class QuestionTest {
             title: TechnicalName(
               id: 0,
               technical_name: "Title",
+              translations: TranslationList(translations: []),
               creator_id: 1,
               created_at: '',
               updated_at: '',
@@ -261,6 +283,7 @@ class QuestionTest {
       title: TechnicalName(
         id: 0,
         technical_name: "Question",
+        translations: TranslationList(translations: []),
         creator_id: 1,
         created_at: '',
         updated_at: '',
@@ -269,6 +292,7 @@ class QuestionTest {
         id: 0,
         technical_name:
             "Sub Title 1Sub Title 1Sub Title 1Sub Title 1Sub Title 1Sub Title 1Sub Title 1Sub Title 1Sub Title 1",
+        translations: TranslationList(translations: []),
         creator_id: 1,
         created_at: '',
         updated_at: '',
@@ -279,6 +303,7 @@ class QuestionTest {
       info_url: TechnicalName(
         id: 0,
         technical_name: "Info URL 1",
+        translations: TranslationList(translations: []),
         creator_id: 1,
         created_at: '',
         updated_at: '',
@@ -286,6 +311,7 @@ class QuestionTest {
       info_description: TechnicalName(
         id: 0,
         technical_name: "Info Description 1",
+        translations: TranslationList(translations: []),
         creator_id: 1,
         created_at: '',
         updated_at: '',
@@ -300,6 +326,7 @@ class QuestionTest {
           name: TechnicalName(
             id: 0,
             technical_name: "Info URL 1",
+            translations: TranslationList(translations: []),
             creator_id: 1,
             created_at: '',
             updated_at: '',
@@ -307,6 +334,7 @@ class QuestionTest {
           description: TechnicalName(
             id: 0,
             technical_name: "Info URL 1",
+            translations: TranslationList(translations: []),
             creator_id: 1,
             created_at: '',
             updated_at: '',
@@ -321,6 +349,7 @@ class QuestionTest {
             title: TechnicalName(
               id: 0,
               technical_name: "Title",
+              translations: TranslationList(translations: []),
               creator_id: 1,
               created_at: '',
               updated_at: '',
@@ -338,6 +367,7 @@ class QuestionTest {
             title: TechnicalName(
               id: 0,
               technical_name: "Title",
+              translations: TranslationList(translations: []),
               creator_id: 1,
               created_at: '',
               updated_at: '',
@@ -355,6 +385,7 @@ class QuestionTest {
             title: TechnicalName(
               id: 0,
               technical_name: "Title",
+              translations: TranslationList(translations: []),
               creator_id: 1,
               created_at: '',
               updated_at: '',
@@ -372,6 +403,7 @@ class QuestionTest {
             title: TechnicalName(
               id: 0,
               technical_name: "Title",
+              translations: TranslationList(translations: []),
               creator_id: 1,
               created_at: '',
               updated_at: '',
@@ -390,6 +422,7 @@ class QuestionTest {
       title: TechnicalName(
         id: 0,
         technical_name: "Question",
+        translations: TranslationList(translations: []),
         creator_id: 1,
         created_at: '',
         updated_at: '',
@@ -398,6 +431,7 @@ class QuestionTest {
         id: 0,
         technical_name:
             "Sub Title 1Sub Title 1Sub Title 1Sub Title 1Sub Title 1Sub Title 1Sub Title 1Sub Title 1Sub Title 1",
+        translations: TranslationList(translations: []),
         creator_id: 1,
         created_at: '',
         updated_at: '',
@@ -408,6 +442,7 @@ class QuestionTest {
       info_url: TechnicalName(
         id: 0,
         technical_name: "Info URL 1",
+        translations: TranslationList(translations: []),
         creator_id: 1,
         created_at: '',
         updated_at: '',
@@ -415,6 +450,7 @@ class QuestionTest {
       info_description: TechnicalName(
         id: 0,
         technical_name: "Info Description 1",
+        translations: TranslationList(translations: []),
         creator_id: 1,
         created_at: '',
         updated_at: '',
@@ -429,6 +465,7 @@ class QuestionTest {
           name: TechnicalName(
             id: 0,
             technical_name: "Info URL 1",
+            translations: TranslationList(translations: []),
             creator_id: 1,
             created_at: '',
             updated_at: '',
@@ -436,6 +473,7 @@ class QuestionTest {
           description: TechnicalName(
             id: 0,
             technical_name: "Info URL 1",
+            translations: TranslationList(translations: []),
             creator_id: 1,
             created_at: '',
             updated_at: '',
@@ -450,6 +488,7 @@ class QuestionTest {
             title: TechnicalName(
               id: 0,
               technical_name: "Title",
+              translations: TranslationList(translations: []),
               creator_id: 1,
               created_at: '',
               updated_at: '',
@@ -467,6 +506,7 @@ class QuestionTest {
             title: TechnicalName(
               id: 0,
               technical_name: "Title",
+              translations: TranslationList(translations: []),
               creator_id: 1,
               created_at: '',
               updated_at: '',
@@ -484,6 +524,7 @@ class QuestionTest {
             title: TechnicalName(
               id: 0,
               technical_name: "Title",
+              translations: TranslationList(translations: []),
               creator_id: 1,
               created_at: '',
               updated_at: '',
@@ -501,6 +542,7 @@ class QuestionTest {
             title: TechnicalName(
               id: 0,
               technical_name: "Title",
+              translations: TranslationList(translations: []),
               creator_id: 1,
               created_at: '',
               updated_at: '',
@@ -519,6 +561,7 @@ class QuestionTest {
       title: TechnicalName(
         id: 0,
         technical_name: "Question",
+        translations: TranslationList(translations: []),
         creator_id: 1,
         created_at: '',
         updated_at: '',
@@ -527,6 +570,7 @@ class QuestionTest {
         id: 0,
         technical_name:
             "Sub Title 1Sub Title 1Sub Title 1Sub Title 1Sub Title 1Sub Title 1Sub Title 1Sub Title 1Sub Title 1",
+        translations: TranslationList(translations: []),
         creator_id: 1,
         created_at: '',
         updated_at: '',
@@ -537,6 +581,7 @@ class QuestionTest {
       info_url: TechnicalName(
         id: 0,
         technical_name: "Info URL 1",
+        translations: TranslationList(translations: []),
         creator_id: 1,
         created_at: '',
         updated_at: '',
@@ -544,6 +589,7 @@ class QuestionTest {
       info_description: TechnicalName(
         id: 0,
         technical_name: "Info Description 1",
+        translations: TranslationList(translations: []),
         creator_id: 1,
         created_at: '',
         updated_at: '',
@@ -558,6 +604,7 @@ class QuestionTest {
           name: TechnicalName(
             id: 0,
             technical_name: "Info URL 1",
+            translations: TranslationList(translations: []),
             creator_id: 1,
             created_at: '',
             updated_at: '',
@@ -565,6 +612,7 @@ class QuestionTest {
           description: TechnicalName(
             id: 0,
             technical_name: "Info URL 1",
+            translations: TranslationList(translations: []),
             creator_id: 1,
             created_at: '',
             updated_at: '',
@@ -579,6 +627,7 @@ class QuestionTest {
             title: TechnicalName(
               id: 0,
               technical_name: "Title",
+              translations: TranslationList(translations: []),
               creator_id: 1,
               created_at: '',
               updated_at: '',
@@ -596,6 +645,7 @@ class QuestionTest {
             title: TechnicalName(
               id: 0,
               technical_name: "Title",
+              translations: TranslationList(translations: []),
               creator_id: 1,
               created_at: '',
               updated_at: '',
@@ -613,6 +663,7 @@ class QuestionTest {
             title: TechnicalName(
               id: 0,
               technical_name: "Title",
+              translations: TranslationList(translations: []),
               creator_id: 1,
               created_at: '',
               updated_at: '',
@@ -630,6 +681,7 @@ class QuestionTest {
             title: TechnicalName(
               id: 0,
               technical_name: "Title",
+              translations: TranslationList(translations: []),
               creator_id: 1,
               created_at: '',
               updated_at: '',
@@ -648,6 +700,7 @@ class QuestionTest {
       title: TechnicalName(
         id: 0,
         technical_name: "Question",
+        translations: TranslationList(translations: []),
         creator_id: 1,
         created_at: '',
         updated_at: '',
@@ -656,6 +709,7 @@ class QuestionTest {
         id: 0,
         technical_name:
             " Sub Title 1Sub Title 1Sub Title 1Sub Title 1Sub Title 1Sub Title 1Sub Title 1",
+        translations: TranslationList(translations: []),
         creator_id: 1,
         created_at: '',
         updated_at: '',
@@ -666,6 +720,7 @@ class QuestionTest {
       info_url: TechnicalName(
         id: 0,
         technical_name: "Info URL 1",
+        translations: TranslationList(translations: []),
         creator_id: 1,
         created_at: '',
         updated_at: '',
@@ -673,6 +728,7 @@ class QuestionTest {
       info_description: TechnicalName(
         id: 0,
         technical_name: "Info Description 1",
+        translations: TranslationList(translations: []),
         creator_id: 1,
         created_at: '',
         updated_at: '',
@@ -687,6 +743,7 @@ class QuestionTest {
           name: TechnicalName(
             id: 0,
             technical_name: "Info URL 1",
+            translations: TranslationList(translations: []),
             creator_id: 1,
             created_at: '',
             updated_at: '',
@@ -694,6 +751,7 @@ class QuestionTest {
           description: TechnicalName(
             id: 0,
             technical_name: "Info URL 1",
+            translations: TranslationList(translations: []),
             creator_id: 1,
             created_at: '',
             updated_at: '',
@@ -708,6 +766,7 @@ class QuestionTest {
             title: TechnicalName(
               id: 0,
               technical_name: "",
+              translations: TranslationList(translations: []),
               creator_id: 1,
               created_at: '',
               updated_at: '',
@@ -725,6 +784,7 @@ class QuestionTest {
             title: TechnicalName(
               id: 0,
               technical_name: "",
+              translations: TranslationList(translations: []),
               creator_id: 1,
               created_at: '',
               updated_at: '',
@@ -742,6 +802,7 @@ class QuestionTest {
             title: TechnicalName(
               id: 0,
               technical_name: "",
+              translations: TranslationList(translations: []),
               creator_id: 1,
               created_at: '',
               updated_at: '',
@@ -759,6 +820,7 @@ class QuestionTest {
             title: TechnicalName(
               id: 0,
               technical_name: "",
+              translations: TranslationList(translations: []),
               creator_id: 1,
               created_at: '',
               updated_at: '',
