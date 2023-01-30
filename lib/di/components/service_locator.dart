@@ -1,6 +1,8 @@
 
 import 'package:boilerplate/data/local/datasources/post/post_datasource.dart';
+import 'package:boilerplate/data/local/datasources/translation/translation_datasource.dart';
 import 'package:boilerplate/data/network/apis/posts/post_api.dart';
+import 'package:boilerplate/data/network/apis/tranlsation/translation_api.dart';
 import 'package:boilerplate/data/network/dio_client.dart';
 import 'package:boilerplate/data/network/rest_client.dart';
 import 'package:boilerplate/data/repository.dart';
@@ -46,6 +48,8 @@ Future<void> setupLocator() async {
     getIt<PostApi>(),
     getIt<SharedPreferenceHelper>(),
     getIt<PostDataSource>(),
+    getIt<TranslationApi>(),
+    getIt<TranslationDataSource>(),
   ));
 
   // stores:--------------------------------------------------------------------
