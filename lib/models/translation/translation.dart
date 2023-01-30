@@ -29,5 +29,15 @@ class Translation {
     );
   }
 
-
+  Map<String, dynamic> toMap() {
+    return {
+      "id": id,
+      "text_id": text_id,
+      "translated_text": translated_text,
+      "language_code": language_code,
+      "creator_id": creator_id,
+      "created_at": created_at,
+      "updated_at": updated_at,
+    };
+  }
 }

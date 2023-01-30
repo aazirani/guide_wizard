@@ -1,9 +1,11 @@
 import 'package:boilerplate/data/local/datasources/post/post_datasource.dart';
+import 'package:boilerplate/data/local/datasources/translation/translation_datasource.dart';
 import 'package:boilerplate/data/local/datasources/question/question_datasource.dart';
 import 'package:boilerplate/data/local/datasources/task/task_datasource.dart';
 import 'package:boilerplate/data/local/datasources/sub_task/sub_task_datasource.dart';
 import 'package:boilerplate/data/network/apis/posts/post_api.dart';
 import 'package:boilerplate/data/network/apis/app_data/app_data_api.dart';
+import 'package:boilerplate/data/network/apis/tranlsation/translation_api.dart';
 import 'package:boilerplate/data/network/dio_client.dart';
 import 'package:boilerplate/data/network/rest_client.dart';
 import 'package:boilerplate/data/repository.dart';
@@ -62,6 +64,8 @@ Future<void> setupLocator() async {
     getIt<TaskDataSource>(),
     getIt<SubTaskDataSource>(),
     getIt<QuestionDataSource>(),
+    getIt<TranslationApi>(),
+    getIt<TranslationDataSource>(),
   ));
 
   // stores:--------------------------------------------------------------------

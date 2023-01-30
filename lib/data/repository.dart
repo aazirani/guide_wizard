@@ -5,9 +5,13 @@ import 'package:boilerplate/data/local/datasources/step/step_datasource.dart';
 import 'package:boilerplate/data/local/datasources/task/task_datasource.dart';
 import 'package:boilerplate/data/local/datasources/sub_task/sub_task_datasource.dart';
 import 'package:boilerplate/data/local/datasources/question/question_datasource.dart';
+import 'package:boilerplate/data/local/datasources/translation/translation_datasource.dart';
+import 'package:boilerplate/data/network/apis/tranlsation/translation_api.dart';
 import 'package:boilerplate/data/sharedpref/shared_preference_helper.dart';
 import 'package:boilerplate/models/post/post.dart';
 import 'package:boilerplate/models/post/post_list.dart';
+import 'package:boilerplate/models/translation/translation.dart';
+import 'package:boilerplate/models/translation/translation_list.dart';
 import 'package:sembast/sembast.dart';
 
 import 'package:boilerplate/models/answer/answer.dart';
@@ -26,6 +30,7 @@ import 'package:boilerplate/models/question/question.dart';
 class Repository {
   // data source object
   final PostDataSource _postDataSource;
+  final TranslationDataSource _translationDataSource;
   final StepDataSource _stepDataSource;
   final TaskDataSource _taskDataSource;
   final SubTaskDataSource _subTaskDataSource;
@@ -33,6 +38,7 @@ class Repository {
 
   // api objects
   final PostApi _postApi;
+  final TranslationApi _translationApi;
   final StepApi _stepApi;
 
   // shared pref object
@@ -47,7 +53,10 @@ class Repository {
       this._stepDataSource,
       this._taskDataSource,
       this._subTaskDataSource,
-      this._questionDataSource);
+      this._questionDataSource,
+      this._translationApi,
+      this._translationDataSource,
+      );
 
   // Step: ---------------------------------------------------------------------
   Future<StepList> getStep() async {
@@ -328,6 +337,51 @@ class Repository {
 
   Future<int> delete(Post post) => _postDataSource
       .update(post)
+      .then((id) => id)
+      .catchError((error) => throw error);
+
+
+  // Translation: ---------------------------------------------------------------------
+  Future<TranslationList> getTranslations() async {
+    // check to see if posts are present in database, then fetch from database
+    // else make a network call to get all posts, store them into database for
+    // later use
+    return await _translationApi.getTranslations().then((translationsList) {
+      translationsList.translations?.forEach((translation) {
+        _translationDataSource.insert(translation);
+      });
+
+      return translationsList;
+    }).catchError((error) => throw error);
+  }
+
+  Future<List<Translation>> findTranslationById(int id) {
+    //creating filter
+    List<Filter> filters = [];
+
+    //check to see if dataLogsType is not null
+    Filter dataLogTypeFilter = Filter.equals(DBConstants.FIELD_ID, id);
+    filters.add(dataLogTypeFilter);
+
+    //making db call
+    return _translationDataSource
+        .getAllSortedByFilter(filters: filters)
+        .then((translations) => translations)
+        .catchError((error) => throw error);
+  }
+
+  Future<int?> insertTranslation(Translation translation) => _translationDataSource
+      .insert(translation)
+      .then((id) => id)
+      .catchError((error) => throw error);
+
+  Future<int> updateTranslation(Translation translation) => _translationDataSource
+      .update(translation)
+      .then((id) => id)
+      .catchError((error) => throw error);
+
+  Future<int> deleteTranslation(Translation translation) => _translationDataSource
+      .update(translation)
       .then((id) => id)
       .catchError((error) => throw error);
 
