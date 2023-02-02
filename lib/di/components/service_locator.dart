@@ -1,6 +1,7 @@
 
 import 'package:boilerplate/data/local/datasources/post/post_datasource.dart';
 import 'package:boilerplate/data/local/datasources/translation/translation_datasource.dart';
+import 'package:boilerplate/data/local/datasources/translation/translations_with_step_name_datasource.dart';
 import 'package:boilerplate/data/network/apis/posts/post_api.dart';
 import 'package:boilerplate/data/network/apis/tranlsation/translation_api.dart';
 import 'package:boilerplate/data/network/dio_client.dart';
@@ -39,9 +40,12 @@ Future<void> setupLocator() async {
 
   // api's:---------------------------------------------------------------------
   getIt.registerSingleton(PostApi(getIt<DioClient>(), getIt<RestClient>()));
+  getIt.registerSingleton(TranslationApi(getIt<DioClient>(), getIt<RestClient>()));
 
   // data sources
   getIt.registerSingleton(PostDataSource(await getIt.getAsync<Database>()));
+  getIt.registerSingleton(TranslationDataSource(await getIt.getAsync<Database>()));
+  getIt.registerSingleton(TranslationsWithStepNameDataSource(await getIt.getAsync<Database>()));
 
   // repository:----------------------------------------------------------------
   getIt.registerSingleton(Repository(
@@ -50,6 +54,7 @@ Future<void> setupLocator() async {
     getIt<PostDataSource>(),
     getIt<TranslationApi>(),
     getIt<TranslationDataSource>(),
+    getIt<TranslationsWithStepNameDataSource>(),
   ));
 
   // stores:--------------------------------------------------------------------
