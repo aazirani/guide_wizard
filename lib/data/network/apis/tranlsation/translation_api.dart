@@ -5,6 +5,7 @@ import 'package:boilerplate/data/network/dio_client.dart';
 import 'package:boilerplate/data/network/rest_client.dart';
 import 'package:boilerplate/models/post/post_list.dart';
 import 'package:boilerplate/models/translation/translation_list.dart';
+import 'package:boilerplate/models/translation/translations_with_step_name_list.dart';
 
 class TranslationApi {
   // dio instance
@@ -16,14 +17,24 @@ class TranslationApi {
   // injecting dio instance
   TranslationApi(this._dioClient, this._restClient);
 
-  /// Returns list of post in response
-  Future<TranslationList> getTranslations() async {
+  // Future<TranslationList> getTranslations() async {
+  //   try {
+  //     final res = await _dioClient.get(Endpoints.getTranslations);
+  //     return TranslationList.fromJson(res["rows"]);
+  //   } catch (e) {
+  //     print(e.toString());
+  //     throw e;
+  //   }
+  // }
+
+  Future<TranslationsWithStepNameList> getTranslationsWithStepName() async {
     try {
       final res = await _dioClient.get(Endpoints.getTranslations);
-      return TranslationList.fromJson(res["rows"]);
+      return TranslationsWithStepNameList.fromJson(res["rows"]);
     } catch (e) {
       print(e.toString());
       throw e;
     }
   }
+
 }
