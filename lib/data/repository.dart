@@ -10,10 +10,10 @@ import 'package:boilerplate/models/post/post.dart';
 import 'package:boilerplate/models/post/post_list.dart';
 import 'package:sembast/sembast.dart';
 
-import '../models/answer/answer.dart';
-import '../models/question/question_list.dart';
-import '../models/sub_task/sub_task_list.dart';
-import '../models/task/task_list.dart';
+import 'package:boilerplate/models/answer/answer.dart';
+import 'package:boilerplate/models/question/question_list.dart';
+import 'package:boilerplate/models/sub_task/sub_task_list.dart';
+import 'package:boilerplate/models/task/task_list.dart';
 import 'local/constants/db_constants.dart';
 import 'network/apis/posts/post_api.dart';
 import 'network/apis/app_data/app_data_api.dart';
