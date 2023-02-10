@@ -1,4 +1,7 @@
 import 'package:boilerplate/data/local/datasources/post/post_datasource.dart';
+import 'package:boilerplate/data/local/datasources/question/question_datasource.dart';
+import 'package:boilerplate/data/local/datasources/task/task_datasource.dart';
+import 'package:boilerplate/data/local/datasources/sub_task/sub_task_datasource.dart';
 import 'package:boilerplate/data/network/apis/posts/post_api.dart';
 import 'package:boilerplate/data/network/apis/app_data/app_data_api.dart';
 import 'package:boilerplate/data/network/dio_client.dart';
@@ -42,10 +45,13 @@ Future<void> setupLocator() async {
 
   // api's:---------------------------------------------------------------------
   getIt.registerSingleton(PostApi(getIt<DioClient>(), getIt<RestClient>()));
-
+  getIt.registerSingleton(StepApi(getIt<DioClient>(), getIt<RestClient>()));
   // data sources
   getIt.registerSingleton(PostDataSource(await getIt.getAsync<Database>()));
-
+  getIt.registerSingleton(StepDataSource(await getIt.getAsync<Database>()));
+  getIt.registerSingleton(TaskDataSource(await getIt.getAsync<Database>()));
+  getIt.registerSingleton(SubTaskDataSource(await getIt.getAsync<Database>()));
+  getIt.registerSingleton(QuestionDataSource(await getIt.getAsync<Database>()));
   // repository:----------------------------------------------------------------
   getIt.registerSingleton(Repository(
     getIt<PostApi>(),
@@ -53,6 +59,9 @@ Future<void> setupLocator() async {
     getIt<SharedPreferenceHelper>(),
     getIt<PostDataSource>(),
     getIt<StepDataSource>(),
+    getIt<TaskDataSource>(),
+    getIt<SubTaskDataSource>(),
+    getIt<QuestionDataSource>(),
   ));
 
   // stores:--------------------------------------------------------------------

@@ -9,14 +9,13 @@ class Step {
   String? image;
   List<Task> tasks;
 
-  Step({
-    required this.id,
-    required this.name,
-    required this.description,
-    required this.order,
-    required this.image,
-    required this.tasks
-  });
+  Step(
+      {required this.id,
+      required this.name,
+      required this.description,
+      required this.order,
+      required this.image,
+      required this.tasks});
 
   factory Step.fromMap(Map<String, dynamic> json) {
     return Step(
@@ -25,22 +24,21 @@ class Step {
       description: TechnicalName.fromMap(json["description"]),
       order: json["order"],
       image: json["image"],
-      tasks: json["tasks"].map((answer) => Task.fromMap(answer)).toList().cast<Task>(),
+      tasks:
+          json["tasks"].map((task) => Task.fromMap(task)).toList().cast<Task>(),
     );
   }
 
   Map<String, dynamic> toMap() => {
-    "id": id,
-    "name": name.toMap(),
-    "description": description.toMap(),
-    "order": order,
-    "image": image,
-    "tasks": tasks.map((task) => task.toMap()).toList(),
-  };
+        "id": id,
+        "name": name.toMap(),
+        "description": description.toMap(),
+        "order": order,
+        "image": image,
+        "tasks": tasks.map((task) => task.toMap()).toList(),
+      };
 
-  int get numTasks{
+  int get numTasks {
     return tasks.length;
   }
-  
-
 }
