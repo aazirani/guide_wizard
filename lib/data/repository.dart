@@ -50,29 +50,6 @@ class Repository {
       this._questionDataSource);
 
   // Step: ---------------------------------------------------------------------
-
-  Future<StepList> getData() async {
-    return await _stepApi.getSteps().then((stepsList) {
-      stepsList.steps.forEach((step) {
-        // _stepDataSource.insert(step);
-        insertStep(step);
-        step.tasks.forEach((task) {
-          // _taskDataSource.insert(task);
-          insertTask(task);
-          task.questions.forEach((question) {
-            // _questionDataSource.insert(question);
-            insertQuestion(question);
-          });
-          task.sub_tasks.forEach((subTask) {
-            // _subTaskDataSource.insert(subTask);
-            insertSubTask(subTask);
-          });
-        });
-      });
-      return stepsList;
-    }).catchError((error) => throw error);
-  }
-
   Future<StepList> getStep() async {
     return await _stepDataSource.count() > 0
         ? _stepDataSource.getStepsFromDb()
