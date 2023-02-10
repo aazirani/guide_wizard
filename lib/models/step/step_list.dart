@@ -15,4 +15,7 @@ class StepList {
       steps: steps,
     );
   }
+  List<s.Step> get listStep {
+    return steps;
+  }
 }

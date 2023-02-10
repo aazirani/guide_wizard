@@ -1,7 +1,7 @@
 import 'package:boilerplate/models/sub_task/sub_task.dart';
 
 class SubTaskList {
-  final List<SubTask> subTasks;
+  List<SubTask> subTasks;
   SubTaskList({required this.subTasks});
 
   factory SubTaskList.fromJson(List<dynamic> json) {
@@ -16,5 +16,9 @@ class SubTaskList {
 
   int get numSubTasks {
     return subTasks.length;
+  }
+
+  set setSubTasks(List<SubTask> subTasks) {
+    subTasks = subTasks; 
   }
 }

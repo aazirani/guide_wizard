@@ -17,7 +17,7 @@ class Question {
   int creator_id;
   String created_at;
   String updated_at;
-  Step step;
+  // Step step;
   List<Answer> answers;
 
   Question({
@@ -34,7 +34,7 @@ class Question {
     required this.creator_id,
     required this.created_at,
     required this.updated_at,
-    required this.step,
+    // required this.step,
     required this.answers,
   });
 
@@ -73,7 +73,7 @@ class Question {
       creator_id: json["creator_id"],
       created_at: json["created_at"],
       updated_at: json["updated_at"],
-      step: Step.fromMap(json["step"]),
+      // step: Step.fromMap(json["step"]),
       answers: List<Answer>.from(
           json["answers"].map((x) => Answer.fromMap(x))),
     );
@@ -94,7 +94,7 @@ class Question {
       "creator_id": creator_id,
       "created_at": created_at,
       "updated_at": updated_at,
-      "step": step,
+      // "step": step,
       "answers": List<dynamic>.from(answers.map((x) => x.toMap())),
     };
   }

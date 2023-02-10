@@ -26,4 +26,8 @@ class TaskList {
     }
     return null;
   }
+
+  set setTasks(List<Task> tasks) {
+    tasks = tasks;
+  }
 }

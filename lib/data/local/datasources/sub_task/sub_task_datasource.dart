@@ -44,7 +44,7 @@ class SubTaskDataSource {
     }).toList();
   }
 
-  Future<SubTaskList> getTasksFromDb() async {
+  Future<SubTaskList> getSubTasksFromDb() async {
     print('Loading from database');
 
     // post list
