@@ -85,18 +85,7 @@ class Repository {
     //if already exists, get tasks from the database, otherwise, do the Api call.
     return await _taskDataSource.count() > 0
         ? _taskDataSource.getTasksFromDb()
-        : getStepFromApi().then((stepList) {
-            List<Task> tasks = [];
-            TaskList tasksList = TaskList(tasks: []);
-            stepList.steps.forEach((step) {
-              step.tasks.forEach((task) {
-                tasks.add(task);
-                insertTask(task);
-              });
-            });
-            tasksList.setTasks = tasks;
-            return tasksList;
-          });
+        : getTasksFromApi();
   }
 
   Future<TaskList> getTasksFromApi() async {
@@ -271,10 +260,8 @@ class Repository {
     //creating filter
     List<Filter> filters = [];
 
- 
     Filter dataLogTypeFilter = Filter.equals(DBConstants.FIELD_ID, id);
     filters.add(dataLogTypeFilter);
-    
 
     //making db call
     return _questionDataSource
