@@ -251,7 +251,7 @@ class Repository {
 
   Future<QuestionList> getUpdatedQuestion() async {
     List<Question> questions = [];
-    QuestionList questionList = QuestionList(questions: []);
+    QuestionList questionsList = QuestionList(questions: []);
     return await getQuestionsFromApi().then((questionList) async {
       questionList.questions.forEach((question) async {
         questions.add(question);
@@ -285,7 +285,7 @@ class Repository {
           _questionDataSource.insert(question);
         }
       });
-      questionList.setQuestions = questions;
+      questionsList.setQuestions = questions;
       return questionList;
     });
   }
