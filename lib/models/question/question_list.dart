@@ -1,7 +1,7 @@
 import 'package:boilerplate/models/question/question.dart';
 
 class QuestionList {
-  final List<Question> questions;
+  List<Question> questions;
 
   QuestionList({
     required this.questions,
@@ -15,12 +15,16 @@ class QuestionList {
     return questions.elementAt(index);
   }
 
-
   factory QuestionList.fromJson(List<dynamic> json) {
-    List<Question> questions = json.map((question) => Question.fromMap(question)).toList();
+    List<Question> questions =
+        json.map((question) => Question.fromMap(question)).toList();
 
     return QuestionList(
       questions: questions,
     );
+  }
+
+  set setQuestions(List<Question> questions) {
+    questions = questions;
   }
 }

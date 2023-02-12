@@ -6,22 +6,22 @@ class Task {
   int id;
   TechnicalName text;
   TechnicalName description;
-  String type;
+  // String type;
   String? image1;
   String? image2;
   String? fa_icon;
   List<SubTask> sub_tasks;
-  String creator_id;
+  int creator_id;
   String created_at;
   String updated_at;
-  List<Question> quesions;
+  List<Question> questions;
   bool isDone;
 
   Task({
     required this.id,
     required this.text,
     required this.description,
-    required this.type,
+    // required this.type,
     required this.image1,
     required this.image2,
     required this.fa_icon,
@@ -29,7 +29,7 @@ class Task {
     required this.creator_id,
     required this.created_at,
     required this.updated_at,
-    required this.quesions,
+    required this.questions,
     this.isDone = false,
   });
 
@@ -38,17 +38,17 @@ class Task {
       id: json["id"],
       text: TechnicalName.fromMap(json["text"]),
       description: TechnicalName.fromMap(json["description"]),
-      type: json["type"],
+      // type: json["type"],
       image1: json["image1"],
       image2: json["image2"],
       fa_icon: json["fa_icon"],
-      sub_tasks:
-          List<SubTask>.from(json["sub_tasks"].map((x) => SubTask.fromMap(x))),
       creator_id: json["creator_id"],
       created_at: json["created_at"],
       updated_at: json["updated_at"],
-      quesions: List<Question>.from(
+      questions: List<Question>.from(
           json["questions"].map((x) => Question.fromMap(x))),
+      sub_tasks:
+          List<SubTask>.from(json["sub_tasks"].map((x) => SubTask.fromMap(x))),
     );
   }
 
@@ -56,31 +56,32 @@ class Task {
         "id": id,
         "text": text.toMap(),
         "description": description.toMap(),
-        "type": type,
+        // "type": type,
         "image1": image1,
         "image2": image2,
         "sub_tasks": sub_tasks.map((sub_task) => sub_task.toMap()).toList(),
         "creator_id": creator_id,
         "created_at": created_at,
         "updated_at": updated_at,
-        "quesions": quesions.map((question) => question.toMap()).toList(),
+        "quesions": questions.map((question) => question.toMap()).toList(),
       };
 
-  void setDone(bool value){
+  void setDone(bool value) {
     isDone = value;
   }
 
-  void toggleDone(){
+  void toggleDone() {
     isDone = !isDone;
   }
 
-  bool get isImageTask{
-    return type == 'IMAGE';
-  }
+  // bool get isImageTask{
+  //   return type == 'IMAGE';
+  // }
 
-  int get subTaskCount{
+  int get subTaskCount {
     return sub_tasks.length;
   }
+
   get deadLine {
     for (var sb = 0; sb <= sub_tasks.length; sb++) {
       if (sub_tasks[sb].deadline.technical_name != "") {

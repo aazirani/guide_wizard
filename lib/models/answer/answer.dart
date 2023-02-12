@@ -9,7 +9,7 @@ class Answer {
   String? image;
   bool selected;
   bool is_enabled;
-  String creator_id;
+  int creator_id;
   String created_at;
   String updated_at;
 
