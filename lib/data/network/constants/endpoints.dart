@@ -16,3 +16,6 @@ class Endpoints {
 
   static const String getAppData = baseUrl + "/2nd_sample_hierarchy";
 }
+  static const String getTranslations = baseUrl + "/sample_technical_names.json";
+}
+
