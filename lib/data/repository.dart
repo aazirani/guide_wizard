@@ -38,6 +38,11 @@ class Repository {
   final TaskDataSource _taskDataSource;
   final SubTaskDataSource _subTaskDataSource;
   final QuestionDataSource _questionDataSource;
+
+  // api objects
+  final PostApi _postApi;
+  final StepApi _stepApi;
+  final TranslationDataSource _translationDataSource;
   final TranslationsWithStepNameDataSource _translationsWithStepNameDataSource;
 
   // api objects
@@ -214,6 +219,12 @@ class Repository {
       .catchError((error) => throw error);
 
   // Question: -----------------------------------------------------------------
+  Future<QuestionList> getQuestions() async {
+    return await _questionDataSource.count() > 0
+        ? _questionDataSource.getQuestionsFromDb()
+        : getQuestionsFromApi();
+  }
+
   Future<QuestionList> getQuestionsFromApi() async {
     List<Question> questions = [];
     QuestionList questionList = QuestionList(questions: []);
@@ -345,7 +356,6 @@ class Repository {
       .then((id) => id)
       .catchError((error) => throw error);
 
-
 //   // Translation: ---------------------------------------------------------------------
 //   Future<TranslationList> getTranslations() async {
 //     // check to see if posts are present in database, then fetch from database
@@ -414,7 +424,8 @@ class Repository {
 // }
 
   // TranslationsWithTechnicalName: ---------------------------------------------------------------------
-  Future<TranslationsWithStepNameList> getTranslationsWithTechnicalName() async {
+  Future<TranslationsWithStepNameList>
+      getTranslationsWithTechnicalName() async {
     // check to see if posts are present in database, then fetch from database
     // else make a network call to get all posts, store them into database for
     // later use
@@ -442,20 +453,24 @@ class Repository {
         .catchError((error) => throw error);
   }
 
-  Future<int?> insertTranslationWithStepName(TranslationsWithStepName translation) => _translationsWithStepNameDataSource
-      .insert(translation)
-      .then((id) => id)
-      .catchError((error) => throw error);
+  Future<int?> insertTranslationWithStepName(
+          TranslationsWithStepName translation) =>
+      _translationsWithStepNameDataSource
+          .insert(translation)
+          .then((id) => id)
+          .catchError((error) => throw error);
 
   Future<int> updateTranslationWithStepName(TranslationsWithStepName translation) => _translationsWithStepNameDataSource
       .update(translation)
       .then((id) => id)
       .catchError((error) => throw error);
 
-  Future<int> deleteTranslationWithStepName(TranslationsWithStepName translation) => _translationsWithStepNameDataSource
-      .update(translation)
-      .then((id) => id)
-      .catchError((error) => throw error);
+  Future<int> deleteTranslationWithStepName(
+          TranslationsWithStepName translation) =>
+      _translationsWithStepNameDataSource
+          .update(translation)
+          .then((id) => id)
+          .catchError((error) => throw error);
 
   // Login:---------------------------------------------------------------------
   Future<bool> login(String email, String password) async {
