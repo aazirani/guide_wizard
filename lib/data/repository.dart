@@ -45,7 +45,6 @@ class Repository {
   final TranslationsWithStepNameDataSource _translationsWithStepNameDataSource;
 
   // api objects
-  final PostApi _postApi;
   final TranslationApi _translationApi;
 
   // shared pref object
@@ -60,9 +59,9 @@ class Repository {
       this._stepDataSource,
       this._taskDataSource,
       this._subTaskDataSource,
-      this._questionDataSource
-      this._translationApi, 
-      this._translationDataSource, 
+      this._questionDataSource,
+      this._translationApi,
+      this._translationDataSource,
       this._translationsWithStepNameDataSource);
 
   // Step: ---------------------------------------------------------------------
@@ -216,6 +215,12 @@ class Repository {
       .catchError((error) => throw error);
 
   // Question: -----------------------------------------------------------------
+  Future<QuestionList> getQuestions() async {
+    return await _questionDataSource.count() > 0
+        ? _questionDataSource.getQuestionsFromDb()
+        : getQuestionsFromApi();
+  }
+
   Future<QuestionList> getQuestionsFromApi() async {
     List<Question> questions = [];
     QuestionList questionList = QuestionList(questions: []);
@@ -415,7 +420,8 @@ class Repository {
 // }
 
   // TranslationsWithTechnicalName: ---------------------------------------------------------------------
-  Future<TranslationsWithStepNameList> getTranslationsWithTechnicalName() async {
+  Future<TranslationsWithStepNameList>
+      getTranslationsWithTechnicalName() async {
     // check to see if posts are present in database, then fetch from database
     // else make a network call to get all posts, store them into database for
     // later use
@@ -443,21 +449,27 @@ class Repository {
         .catchError((error) => throw error);
   }
 
-  Future<int?> insertTranslationWithStepName(TranslationsWithStepName translation) => _translationsWithStepNameDataSource
-      .insert(translation)
-      .then((id) => id)
-      .catchError((error) => throw error);
+  Future<int?> insertTranslationWithStepName(
+          TranslationsWithStepName translation) =>
+      _translationsWithStepNameDataSource
+          .insert(translation)
+          .then((id) => id)
+          .catchError((error) => throw error);
 
-  Future<int> updateTranslationWithStepName(TranslationsWithStepName translation) => _translationsWithStepNameDataSource
-      .update(translation)
-      .then((id) => id)
-      .catchError((error) => throw error);
+  Future<int> updateTranslationWithStepName(
+          TranslationsWithStepName translation) =>
+      _translationsWithStepNameDataSource
+          .update(translation)
+          .then((id) => id)
+          .catchError((error) => throw error);
 
-  Future<int> deleteTranslationWithStepName(TranslationsWithStepName translation) => _translationsWithStepNameDataSource
-      .update(translation)
-      .then((id) => id)
-      .catchError((error) => throw error);
-      
+  Future<int> deleteTranslationWithStepName(
+          TranslationsWithStepName translation) =>
+      _translationsWithStepNameDataSource
+          .update(translation)
+          .then((id) => id)
+          .catchError((error) => throw error);
+
   // Login:---------------------------------------------------------------------
   Future<bool> login(String email, String password) async {
     return await Future.delayed(Duration(seconds: 2), () => true);

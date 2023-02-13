@@ -15,8 +15,8 @@ class QuestionDataSource {
   QuestionDataSource(this._db);
 
   // DB functions:--------------------------------------------------------------
-  Future<int> insert(Question step) async {
-    return await _questionsStore.add(_db, step.toMap());
+  Future<int> insert(Question question) async {
+    return await _questionsStore.add(_db, question.toMap());
   }
 
   Future<int> count() async {
@@ -43,7 +43,7 @@ class QuestionDataSource {
     }).toList();
   }
 
-  Future<QuestionList> getPostsFromDb() async {
+  Future<QuestionList> getQuestionsFromDb() async {
 
     print('Loading from database');
 
