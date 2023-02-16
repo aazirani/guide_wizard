@@ -75,19 +75,19 @@ class TranslationsWithStepNameDataSource {
     return translationsWithStepNameList;
   }
 
-  Future<int> update(TranslationsWithStepName translation) async {
+  Future<int> update(TranslationsWithStepName translationWithStepName) async {
     // For filtering by key (ID), RegEx, greater than, and many other criteria,
     // we use a Finder.
-    final finder = Finder(filter: Filter.byKey(translation.id));
+    final finder = Finder(filter: Filter.byKey(translationWithStepName.id));
     return await _translationsWithStepNameStore.update(
       _db,
-      translation.toMap(),
+      translationWithStepName.toMap(),
       finder: finder,
     );
   }
 
-  Future<int> delete(TranslationsWithStepName translation) async {
-    final finder = Finder(filter: Filter.byKey(translation.id));
+  Future<int> delete(TranslationsWithStepName translationWithStepName) async {
+    final finder = Finder(filter: Filter.byKey(translationWithStepName.id));
     return await _translationsWithStepNameStore.delete(
       _db,
       finder: finder,
