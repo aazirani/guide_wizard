@@ -1,7 +1,7 @@
 import 'package:boilerplate/models/task/task.dart';
 
 class TaskList {
-  final List<Task> tasks;
+  List<Task> tasks;
   TaskList({required this.tasks});
 
   factory TaskList.fromJson(List<dynamic> json) {
@@ -16,5 +16,9 @@ class TaskList {
 
   int get numTasks {
     return tasks.length;
+  }
+
+  set setTasks(List<Task> tasks) {
+    tasks = tasks; 
   }
 }

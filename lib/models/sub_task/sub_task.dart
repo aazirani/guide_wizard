@@ -4,20 +4,21 @@ import 'package:flutter/material.dart';
 
 class SubTask {
   int id;
-  int task_id;
+  // TODO: add task ID
+  // int task_id;
   TechnicalName title;
   TechnicalName markdown;
   TechnicalName deadline;
   int order;
-  String creator_id;
+  int creator_id;
   String created_at;
   String updated_at;
   late GlobalKey<AppExpansionTileState> globalKey;
   bool expanded = false;
-
+  
   SubTask({
     required this.id,
-    required this.task_id,
+    // required this.task_id,
     required this.title,
     required this.markdown,
     required this.deadline,
@@ -32,7 +33,7 @@ class SubTask {
   factory SubTask.fromMap(Map<String, dynamic> json) {
     return SubTask(
       id: json["id"],
-      task_id: json["task_id"],
+      // task_id: json["task_id"],
       title: TechnicalName.fromMap(json["title"]),
       markdown: TechnicalName.fromMap(json["markdown"]),
       deadline: TechnicalName.fromMap(json["deadline"]),
@@ -44,16 +45,16 @@ class SubTask {
   }
 
   Map<String, dynamic> toMap() => {
-    "id": id,
-    "task_id": task_id,
-    "title": title.toMap(),
-    "markdown": markdown.toMap(),
-    "deadline": deadline.toMap(),
-    "order": order,
-    "creator_id": creator_id,
-    "created_at": created_at,
-    "updated_at": updated_at,
-  };
+        "id": id,
+        // "task_id": task_id,
+        "title": title.toMap(),
+        "markdown": markdown.toMap(),
+        "deadline": deadline.toMap(),
+        "order": order,
+        "creator_id": creator_id,
+        "created_at": created_at,
+        "updated_at": updated_at,
+      };
 
   void _buildGlobalKey() {
     globalKey = GlobalKey<AppExpansionTileState>();

@@ -1,27 +1,313 @@
 import 'dart:async';
 
 import 'package:boilerplate/data/local/datasources/post/post_datasource.dart';
+import 'package:boilerplate/data/local/datasources/step/step_datasource.dart';
+import 'package:boilerplate/data/local/datasources/task/task_datasource.dart';
+import 'package:boilerplate/data/local/datasources/sub_task/sub_task_datasource.dart';
+import 'package:boilerplate/data/local/datasources/question/question_datasource.dart';
+import 'package:boilerplate/data/local/datasources/translation/translation_datasource.dart';
+import 'package:boilerplate/data/local/datasources/translation/translations_with_step_name_datasource.dart';
+import 'package:boilerplate/data/network/apis/tranlsation/translation_api.dart';
 import 'package:boilerplate/data/sharedpref/shared_preference_helper.dart';
 import 'package:boilerplate/models/post/post.dart';
 import 'package:boilerplate/models/post/post_list.dart';
+import 'package:boilerplate/models/translation/translation.dart';
+import 'package:boilerplate/models/translation/translation_list.dart';
+import 'package:boilerplate/models/translation/translations_with_step_name.dart';
+import 'package:boilerplate/models/translation/translations_with_step_name_list.dart';
 import 'package:sembast/sembast.dart';
 
+import 'package:boilerplate/models/answer/answer.dart';
+import 'package:boilerplate/models/question/question_list.dart';
+import 'package:boilerplate/models/sub_task/sub_task_list.dart';
+import 'package:boilerplate/models/task/task_list.dart';
 import 'local/constants/db_constants.dart';
 import 'network/apis/posts/post_api.dart';
+import 'network/apis/app_data/app_data_api.dart';
+import 'package:boilerplate/models/step/step.dart';
+import 'package:boilerplate/models/step/step_list.dart';
+import 'package:boilerplate/models/task/task.dart';
+import 'package:boilerplate/models/sub_task/sub_task.dart';
+import 'package:boilerplate/models/question/question.dart';
 
 class Repository {
   // data source object
   final PostDataSource _postDataSource;
+  final StepDataSource _stepDataSource;
+  final TaskDataSource _taskDataSource;
+  final SubTaskDataSource _subTaskDataSource;
+  final QuestionDataSource _questionDataSource;
 
   // api objects
   final PostApi _postApi;
+  final StepApi _stepApi;
+  final TranslationDataSource _translationDataSource;
+  final TranslationsWithStepNameDataSource _translationsWithStepNameDataSource;
+
+  // api objects
+  final TranslationApi _translationApi;
 
   // shared pref object
   final SharedPreferenceHelper _sharedPrefsHelper;
 
   // constructor
-  Repository(this._postApi, this._sharedPrefsHelper, this._postDataSource);
+  Repository(
+      this._postApi,
+      this._stepApi,
+      this._sharedPrefsHelper,
+      this._postDataSource,
+      this._stepDataSource,
+      this._taskDataSource,
+      this._subTaskDataSource,
+      this._questionDataSource,
+      this._translationApi,
+      this._translationDataSource,
+      this._translationsWithStepNameDataSource);
 
+  // Step: ---------------------------------------------------------------------
+  Future<StepList> getStep() async {
+    return await _stepDataSource.count() > 0
+        ? _stepDataSource.getStepsFromDb()
+        : getStepFromApi();
+  }
+
+  Future<StepList> getStepFromApi() async {
+    return await _stepApi.getSteps().then((stepList) {
+      stepList.steps.forEach((step) {
+        _stepDataSource.insert(step);
+      });
+      return stepList;
+    });
+  }
+
+  Future<int> insertStep(Step step) => _stepDataSource
+      .insert(step)
+      .then((id) => id)
+      .catchError((error) => throw error);
+
+  Future<int> updateStep(Step step) => _stepDataSource
+      .update(step)
+      .then((id) => id)
+      .catchError((error) => throw error);
+
+  Future<int> deleteStep(Step step) => _stepDataSource
+      .update(step)
+      .then((id) => id)
+      .catchError((error) => throw error);
+
+  // Task: ---------------------------------------------------------------------
+  Future<TaskList> getTasks() async {
+    //if already exists, get tasks from the database, otherwise, do the Api call.
+    return await _taskDataSource.count() > 0
+        ? _taskDataSource.getTasksFromDb()
+        : getTasksFromApi();
+  }
+
+  Future<TaskList> getTasksFromApi() async {
+    return await getStepFromApi().then((stepList) {
+      List<Task> tasks = [];
+      TaskList taskList = TaskList(tasks: []);
+      stepList.steps.forEach((step) {
+        step.tasks.forEach((task) {
+          tasks.add(task);
+        });
+      });
+      taskList.setTasks = tasks;
+      return taskList;
+    });
+  }
+
+  Future<TaskList> getUpdatedTask() async {
+    return await getTasksFromApi().then((taskList) async {
+      List<int> taskID = [];
+      taskList.tasks.forEach((task) async {
+        await findTaskById(task.id).then((value) {
+          if (value.length > 0) {
+            if (value.first.isDone) {
+              taskID.add(task.id);
+            }
+          }
+        });
+      });
+      if (taskID.length > 0) {
+        for (Task task in taskList.tasks) {
+          if (taskID.contains(task.id)) {
+            task.isDone = true;
+          }
+        }
+      }
+      await truncateTask().then((value) {
+        for (Task task in taskList.tasks) {
+          _taskDataSource.insert(task);
+        }
+      });
+      return taskList;
+    });
+  }
+
+  Future<List<Task>> findTaskById(int id) {
+    //creating filter
+    List<Filter> filters = [];
+
+    //check to see if dataLogsType is not null
+
+    Filter dataLogTypeFilter = Filter.equals(DBConstants.FIELD_ID, id);
+    filters.add(dataLogTypeFilter);
+
+    //making db call
+    return _taskDataSource
+        .getAllSortedByFilter(filters: filters)
+        .then((tasks) => tasks)
+        .catchError((error) => throw error);
+  }
+
+  Future truncateTask() =>
+      _taskDataSource.deleteAll().catchError((error) => throw error);
+
+  Future<int> insertTask(Task task) => _taskDataSource
+      .insert(task)
+      .then((id) => id)
+      .catchError((error) => throw error);
+
+  Future<int> updateTask(Task task) => _taskDataSource
+      .update(task)
+      .then((id) => id)
+      .catchError((error) => throw error);
+
+  Future<int> deleteTask(Task task) => _taskDataSource
+      .update(task)
+      .then((id) => id)
+      .catchError((error) => throw error);
+
+  // SubTask: ------------------------------------------------------------------
+  Future<SubTaskList> getSubTask() async {
+    return await _subTaskDataSource.count() > 0
+        ? _subTaskDataSource.getSubTasksFromDb()
+        : getStepFromApi().then((stepList) {
+            List<SubTask> subTasks = [];
+            SubTaskList subTaskList = SubTaskList(subTasks: []);
+            stepList.steps.forEach((step) {
+              step.tasks.forEach((task) {
+                task.sub_tasks.forEach((subTask) {
+                  subTasks.add(subTask);
+                  insertSubTask(subTask);
+                });
+              });
+            });
+            subTaskList.setSubTasks = subTasks;
+            return subTaskList;
+          });
+  }
+
+  Future<int> insertSubTask(SubTask subTask) => _subTaskDataSource
+      .insert(subTask)
+      .then((id) => id)
+      .catchError((error) => throw error);
+
+  Future<int> updateSubTask(SubTask subTask) => _subTaskDataSource
+      .update(subTask)
+      .then((id) => id)
+      .catchError((error) => throw error);
+
+  Future<int> deleteSubTask(SubTask subTask) => _subTaskDataSource
+      .update(subTask)
+      .then((id) => id)
+      .catchError((error) => throw error);
+
+  // Question: -----------------------------------------------------------------
+  Future<QuestionList> getQuestions() async {
+    return await _questionDataSource.count() > 0
+        ? _questionDataSource.getQuestionsFromDb()
+        : getQuestionsFromApi();
+  }
+
+  Future<QuestionList> getQuestionsFromApi() async {
+    List<Question> questions = [];
+    QuestionList questionList = QuestionList(questions: []);
+    return await getTasks().then((taskList) {
+      taskList.tasks.forEach((task) {
+        task.questions.forEach((question) {
+          questions.add(question);
+          _questionDataSource.insert(question);
+        });
+      });
+      questionList.setQuestions = questions;
+      return questionList;
+    });
+  }
+
+  Future<QuestionList> getUpdatedQuestion() async {
+    List<Question> questions = [];
+    QuestionList questionsList = QuestionList(questions: []);
+    return await getQuestionsFromApi().then((questionList) async {
+      questionList.questions.forEach((question) async {
+        questions.add(question);
+        List<int> selectedAnswers = [];
+        await findQuestionByID(question.id).then((value) async {
+          if (value.length > 0) {
+            for (Answer answer in value.first.answers) {
+              if (answer.selected) {
+                selectedAnswers.add(answer.id);
+              }
+            }
+          }
+          if (selectedAnswers.length > 0) {
+            for (Answer answer in question.answers) {
+              if (selectedAnswers.contains(answer.id)) {
+                answer.selected = true;
+              }
+            }
+          } else {
+            for (Answer answer in question.answers) {
+              if (answer.is_enabled) {
+                answer.selected = true;
+                break;
+              }
+            }
+          }
+        });
+      });
+      await truncateQuestions().then((value) {
+        for (Question question in questionList.questions) {
+          _questionDataSource.insert(question);
+        }
+      });
+      questionsList.setQuestions = questions;
+      return questionList;
+    });
+  }
+
+  Future<List<Question>> findQuestionByID(int id) {
+    //creating filter
+    List<Filter> filters = [];
+
+    Filter dataLogTypeFilter = Filter.equals(DBConstants.FIELD_ID, id);
+    filters.add(dataLogTypeFilter);
+
+    //making db call
+    return _questionDataSource
+        .getAllSortedByFilter(filters: filters)
+        .then((questions) => questions)
+        .catchError((error) => throw error);
+  }
+
+  Future<int> insertQuestion(Question question) => _questionDataSource
+      .insert(question)
+      .then((id) => id)
+      .catchError((error) => throw error);
+
+  Future<int> updateQuestion(Question question) => _questionDataSource
+      .update(question)
+      .then((id) => id)
+      .catchError((error) => throw error);
+
+  Future<int> deleteQuestion(Question question) => _questionDataSource
+      .update(question)
+      .then((id) => id)
+      .catchError((error) => throw error);
+
+  Future truncateQuestions() =>
+      _questionDataSource.deleteAll().catchError((error) => throw error);
   // Post: ---------------------------------------------------------------------
   Future<PostList> getPosts() async {
     // check to see if posts are present in database, then fetch from database
@@ -66,10 +352,127 @@ class Repository {
       .then((id) => id)
       .catchError((error) => throw error);
 
+//   // Translation: ---------------------------------------------------------------------
+//   Future<TranslationList> getTranslations() async {
+//     // check to see if posts are present in database, then fetch from database
+//     // else make a network call to get all posts, store them into database for
+//     // later use
+//     return await _translationApi.getTranslations().then((translationsList) {
+//       translationsList.translations?.forEach((translation) {
+//         _translationDataSource.insert(translation);
+//       });
+//
+//       return translationsList;
+//     }).catchError((error) => throw error);
+//   }
+//
+//   Future<List<Translation>> findTranslationById(int id) {
+//     //creating filter
+//     List<Filter> filters = [];
+//
+//     //check to see if dataLogsType is not null
+//     Filter dataLogTypeFilter = Filter.equals(DBConstants.FIELD_ID, id);
+//     filters.add(dataLogTypeFilter);
+//
+//     //making db call
+//     return _translationDataSource
+//         .getAllSortedByFilter(filters: filters)
+//         .then((translations) => translations)
+//         .catchError((error) => throw error);
+//   }
+//
+//   Future<int?> insertTranslation(Translation translation) => _translationDataSource
+//       .insert(translation)
+//       .then((id) => id)
+//       .catchError((error) => throw error);
+//
+//   Future<int> updateTranslation(Translation translation) => _translationDataSource
+//       .update(translation)
+//       .then((id) => id)
+//       .catchError((error) => throw error);
+//
+//   Future<int> deleteTranslation(Translation translation) => _translationDataSource
+//       .update(translation)
+//       .then((id) => id)
+//       .catchError((error) => throw error);
+//
+//   // Login:---------------------------------------------------------------------
+//   Future<bool> login(String email, String password) async {
+//     return await Future.delayed(Duration(seconds: 2), ()=> true);
+//   }
+//
+//   Future<void> saveIsLoggedIn(bool value) =>
+//       _sharedPrefsHelper.saveIsLoggedIn(value);
+//
+//   Future<bool> get isLoggedIn => _sharedPrefsHelper.isLoggedIn;
+//
+//   // Theme: --------------------------------------------------------------------
+//   Future<void> changeBrightnessToDark(bool value) =>
+//       _sharedPrefsHelper.changeBrightnessToDark(value);
+//
+//   bool get isDarkMode => _sharedPrefsHelper.isDarkMode;
+//
+//   // Language: -----------------------------------------------------------------
+//   Future<void> changeLanguage(String value) =>
+//       _sharedPrefsHelper.changeLanguage(value);
+//
+//   String? get currentLanguage => _sharedPrefsHelper.currentLanguage;
+// }
+
+  // TranslationsWithTechnicalName: ---------------------------------------------------------------------
+  Future<TranslationsWithStepNameList>
+      getTranslationsWithTechnicalName() async {
+    // check to see if posts are present in database, then fetch from database
+    // else make a network call to get all posts, store them into database for
+    // later use
+    return await _translationApi.getTranslationsWithStepName().then((t) {
+      t.translationsWithStepName?.forEach((translation) {
+        _translationsWithStepNameDataSource.insert(translation);
+      });
+
+      return t;
+    }).catchError((error) => throw error);
+  }
+
+  Future<List<Translation>> findTranslationWithStepNameById(int id) {
+    //creating filter
+    List<Filter> filters = [];
+
+    //check to see if dataLogsType is not null
+    Filter dataLogTypeFilter = Filter.equals(DBConstants.FIELD_ID, id);
+    filters.add(dataLogTypeFilter);
+
+    //making db call
+    return _translationsWithStepNameDataSource
+        .getAllSortedByFilter(filters: filters)
+        .then((translations) => translations)
+        .catchError((error) => throw error);
+  }
+
+  Future<int?> insertTranslationWithStepName(
+          TranslationsWithStepName translation) =>
+      _translationsWithStepNameDataSource
+          .insert(translation)
+          .then((id) => id)
+          .catchError((error) => throw error);
+
+  Future<int> updateTranslationWithStepName(
+          TranslationsWithStepName translation) =>
+      _translationsWithStepNameDataSource
+          .update(translation)
+          .then((id) => id)
+          .catchError((error) => throw error);
+
+  Future<int> deleteTranslationWithStepName(
+          TranslationsWithStepName translation) =>
+      _translationsWithStepNameDataSource
+          .update(translation)
+          .then((id) => id)
+          .catchError((error) => throw error);
 
   // Login:---------------------------------------------------------------------
   Future<bool> login(String email, String password) async {
-    return await Future.delayed(Duration(seconds: 2), ()=> true);
+    return await Future.delayed(Duration(seconds: 2), () => true);
   }
 
   Future<void> saveIsLoggedIn(bool value) =>
