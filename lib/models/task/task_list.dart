@@ -17,4 +17,13 @@ class TaskList {
   int get numTasks {
     return tasks.length;
   }
+
+  Task? getTask(int id) {
+    for(Task task in tasks){
+      if(task.id == id){
+        return task;
+      }
+    }
+    return null;
+  }
 }

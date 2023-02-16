@@ -1,14 +1,15 @@
 import 'package:boilerplate/data/repository.dart';
+import 'package:boilerplate/models/sub_task/sub_task.dart';
 import 'package:boilerplate/models/task/task_list.dart';
 import 'package:boilerplate/stores/error/error_store.dart';
 import 'package:boilerplate/utils/dio/dio_error_util.dart';
 import 'package:mobx/mobx.dart';
 
-part 'tasks_store.g.dart';
+part 'sub_task_store.g.dart';
 
-class TasksStore = TasksStore with _$TasksStore;
+class SubTaskStore = SubTaskStore with _$SubTaskStore;
 
-abstract class _TasksStore with Store {
+abstract class _SubTaskStore with Store {
   // repository instance
   Repository _repository;
 
@@ -16,7 +17,7 @@ abstract class _TasksStore with Store {
   final ErrorStore errorStore = ErrorStore();
 
   // constructor:---------------------------------------------------------------
-  _TasksStore(Repository repository) : this._repository = repository;
+  _SubTaskStore(Repository repository) : this._repository = repository;
 
   // store variables:-----------------------------------------------------------
   static ObservableFuture<TaskList?> emptyTaskResponse =
@@ -33,7 +34,7 @@ abstract class _TasksStore with Store {
   ObservableFuture<dynamic>(emptyTruncateTaskResponse);
 
   @observable
-  TaskList? taskList;
+  List<SubTask>? subTasks;
 
   @observable
   bool success = false;
@@ -46,41 +47,19 @@ abstract class _TasksStore with Store {
 
   // actions:-------------------------------------------------------------------
   @action
-  Future getTasks() async {
+  Future getSubTasks(int task_id) async {
     final future = _repository.getTasks();
     fetchTasksFuture = ObservableFuture(future);
 
     future.then((taskList) {
-      this.taskList = taskList;
+      taskList.tasks.forEach((task) {
+        if(task.id == task_id){
+          this.subTasks = task.subTasks;
+        }
+      });
     }).catchError((error) {
       errorStore.errorMessage = DioErrorUtil.handleError(error);
     });
-
     return future;
   }
-
-  Future truncateTable() async {
-    final future = _repository.truncateTasks();
-    truncateQuestionsFuture = ObservableFuture(future);
-
-    future.catchError((error) {
-      errorStore.errorMessage = DioErrorUtil.handleError(error);
-    });
-
-    return future;
-  }
-
-  Future updateTasks() async {
-    final future = _repository.getTasksForUpdate();
-    fetchTasksFuture = ObservableFuture(future);
-
-    future.then((taskList) {
-      this.taskList = taskList;
-    }).catchError((error) {
-      errorStore.errorMessage = DioErrorUtil.handleError(error);
-    });
-
-    return future;
-  }
-
 }
