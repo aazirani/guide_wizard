@@ -9,6 +9,8 @@ import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:provider/provider.dart';
 import 'package:boilerplate/models/test/step_list_test.dart';
 
+import '../../stores/step/steps_store.dart';
+
 class HomeScreen extends StatefulWidget {
   const HomeScreen({
     Key? key,
@@ -20,15 +22,16 @@ class HomeScreen extends StatefulWidget {
 
 class _HomeScreenState extends State<HomeScreen> {
   late StepStore _stepStore;
+  late StepsStore _stepsStore; 
 
   @override
   void didChangeDependencies() {
     super.didChangeDependencies();
     // initializing stores
     _stepStore = Provider.of<StepStore>(context);
+    _stepsStore = Provider.of<StepsStore>(context);
   }
 
-  
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -77,14 +80,15 @@ class _HomeScreenState extends State<HomeScreen> {
         //steps (/)
         _buildCurrentStepIndicator(),
         //step slider
-        StepSliderWidget(stepList: stepList),
+        Observer(builder: (_) => StepSliderWidget(stepList: _stepsStore.stepList)),
         //step timeline
-        StepTimeLine(pending: 1, stepNo: 3, stepList: stepList),
+        //TODO: save current and pending steps in shared preferences
+        Observer(builder: (_) => StepTimeLine(pending: 1, stepNo: 3, stepList: _stepsStore.stepList)),
         SizedBox(height: 25),
         _buildInProgressText(),
         SizedBox(height: 10),
         //task compressed timeline
-        CompressedBlocklistTimeline(stepList: stepList),
+        Observer(builder: (_) => CompressedBlocklistTimeline(stepList: _stepsStore.stepList)),
       ],
     );
   }
