@@ -71,7 +71,7 @@ abstract class _QuestionsStore with Store {
   }
 
   Future updateQuestions() async {
-    final future = _repository.getQuestionsForUpdate();
+    final future = _repository.getUpdatedQuestion();
     fetchQuestionsFuture = ObservableFuture(future);
 
     future.then((questionList) {
