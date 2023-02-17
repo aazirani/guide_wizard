@@ -7,7 +7,7 @@ import 'package:mobx/mobx.dart';
 
 part 'sub_task_store.g.dart';
 
-class SubTaskStore = SubTaskStore with _$SubTaskStore;
+class SubTaskStore = _SubTaskStore with _$SubTaskStore;
 
 abstract class _SubTaskStore with Store {
   // repository instance
@@ -54,7 +54,7 @@ abstract class _SubTaskStore with Store {
     future.then((taskList) {
       taskList.tasks.forEach((task) {
         if(task.id == task_id){
-          this.subTasks = task.subTasks;
+          this.subTasks = task.sub_tasks;
         }
       });
     }).catchError((error) {

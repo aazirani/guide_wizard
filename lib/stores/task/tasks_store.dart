@@ -6,7 +6,7 @@ import 'package:mobx/mobx.dart';
 
 part 'tasks_store.g.dart';
 
-class TasksStore = TasksStore with _$TasksStore;
+class TasksStore = _TasksStore with _$TasksStore;
 
 abstract class _TasksStore with Store {
   // repository instance
@@ -60,7 +60,7 @@ abstract class _TasksStore with Store {
   }
 
   Future truncateTable() async {
-    final future = _repository.truncateTasks();
+    final future = _repository.truncateTask();
     truncateQuestionsFuture = ObservableFuture(future);
 
     future.catchError((error) {
@@ -71,7 +71,7 @@ abstract class _TasksStore with Store {
   }
 
   Future updateTasks() async {
-    final future = _repository.getTasksForUpdate();
+    final future = _repository.getUpdatedTask();
     fetchTasksFuture = ObservableFuture(future);
 
     future.then((taskList) {

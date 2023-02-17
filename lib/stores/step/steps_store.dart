@@ -33,7 +33,7 @@ abstract class _StepsStore with Store {
 
   @action
   Future getProducts() async {
-    final future = _repository.getSteps();
+    final future = _repository.getStep();
     fetchStepsFuture = ObservableFuture(future);
 
     future.then((stepList) {

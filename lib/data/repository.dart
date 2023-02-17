@@ -42,13 +42,10 @@ class Repository {
   // api objects
   final PostApi _postApi;
   final StepApi _stepApi;
-  final TranslationDataSource _translationDataSource;
   final TranslationsWithStepNameDataSource _translationsWithStepNameDataSource;
 
   // api objects
-  final PostApi _postApi;
   final TranslationApi _translationApi;
-  final StepApi _stepApi;
 
   // shared pref object
   final SharedPreferenceHelper _sharedPrefsHelper;

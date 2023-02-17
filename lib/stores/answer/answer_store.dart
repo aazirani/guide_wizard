@@ -9,7 +9,7 @@ import 'package:mobx/mobx.dart';
 
 part 'answer_store.g.dart';
 
-class AnswerStore = AnswerStore with _$AnswerStore;
+class AnswerStore = _AnswerStore with _$AnswerStore;
 
 abstract class _AnswerStore with Store {
   // repository instance
@@ -22,7 +22,7 @@ abstract class _AnswerStore with Store {
   _AnswerStore(Repository repository) : this._repository = repository;
 
   @observable
-  List<Answer> answers;
+  List<Answer> answers = [];
 
   @observable
   bool success = false;
@@ -31,12 +31,12 @@ abstract class _AnswerStore with Store {
   get getAnswers => answers;
 
   Future updateAnswers() async {
-    final future = _repository.getSteps();
+    final future = _repository.getStep();
     answers = [];
     future.then((stepList) {
-      for(Step step in stepList) {
+      for(Step step in stepList.steps) {
         for(Task task in step.tasks) {
-          for(Question question in task.quesions) {
+          for(Question question in task.questions) {
             for(Answer answer in question.answers) {
               if(answer.selected) {
                 answers.add(answer);
