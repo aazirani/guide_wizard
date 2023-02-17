@@ -32,6 +32,8 @@ import 'package:provider/provider.dart';
 import 'package:boilerplate/ui/questions/questions_list_page.dart';
 import 'package:boilerplate/models/test/question.dart';
 import 'package:flutter/services.dart' show rootBundle;
+import 'package:boilerplate/stores/step/steps_store.dart';
+import 'package:boilerplate/stores/task_list/task_list_store.dart';
 
 class MyApp extends StatelessWidget {
   // This widget is the root of your application.
@@ -42,6 +44,8 @@ class MyApp extends StatelessWidget {
   final LanguageStore _languageStore = LanguageStore(getIt<Repository>());
   final UserStore _userStore = UserStore(getIt<Repository>());
   final StepStore _stepStore = StepStore();
+  final StepsStore _stepsStore = StepsStore(getIt<Repository>());
+  final TaskListStore _taskListStore = TaskListStore(getIt<Repository>());
 
   @override
   Widget build(BuildContext context) {
@@ -51,7 +55,10 @@ class MyApp extends StatelessWidget {
         Provider<PostStore>(create: (_) => _postStore),
         Provider<LanguageStore>(create: (_) => _languageStore),
         Provider<StepStore>(create: (_) => _stepStore),
-        ListenableProvider<QuestionsWidgetState>(create: (_) => QuestionsWidgetState(activeIndex: 0)),
+        Provider<StepsStore>(create: (_) => _stepsStore),
+        Provider<TaskListStore>(create: (_) => _taskListStore),
+        ListenableProvider<QuestionsWidgetState>(
+            create: (_) => QuestionsWidgetState(activeIndex: 0)),
       ],
       child: Observer(
         name: 'global-observer',
@@ -77,7 +84,7 @@ class MyApp extends StatelessWidget {
               // Built-in localization of basic text for Cupertino widgets
               GlobalCupertinoLocalizations.delegate,
             ],
-            home: QuestionsListPage(questionList: QuestionTest().questions,),
+            home: HomeScreen(),
           );
         },
       ),

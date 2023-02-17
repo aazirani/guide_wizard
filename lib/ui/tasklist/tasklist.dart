@@ -4,7 +4,9 @@ import 'package:boilerplate/ui/tasklist/tasklist_timeline.dart';
 import 'package:flutter/material.dart';
 import 'package:boilerplate/widgets/measure_size.dart';
 import 'package:boilerplate/utils/locale/app_localization.dart';
-import 'package:boilerplate/models/test/task_list_test.dart';
+import 'package:flutter_mobx/flutter_mobx.dart';
+import 'package:boilerplate/stores/task_list/task_list_store.dart';
+import 'package:provider/provider.dart';
 
 class TaskList extends StatefulWidget {
   const TaskList({Key? key}) : super(key: key);
@@ -14,11 +16,19 @@ class TaskList extends StatefulWidget {
 }
 
 class _TaskListState extends State<TaskList> {
+  late TaskListStore _taskListStore;
+
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    // initializing stores
+    _taskListStore = Provider.of<TaskListStore>(context);
+  }
   var progressBarSize = Size.zero;
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(backgroundColor: AppColors.main_color, appBar: _buildAppBar(), body: _buildBody(taskList));
+    return Scaffold(backgroundColor: AppColors.main_color, appBar: _buildAppBar(), body: _buildBody());
   }
 
   //appBar methods .............................................................
@@ -42,7 +52,7 @@ class _TaskListState extends State<TaskList> {
 
   // body methods ..............................................................
 
-  Widget _buildBody(tasks) {
+  Widget _buildBody() {
     return Stack(children: [
       MeasureSize(
           onChange: (Size size) {
@@ -68,8 +78,10 @@ class _TaskListState extends State<TaskList> {
           children: [
             Padding(
                 padding: Dimens.numberOfTasksPadding,
-                child: Text("${taskList.numTasks} ${AppLocalizations.of(context).translate('tasks')}",
-                    style: TextStyle(color: AppColors.white))),
+                child: Observer(
+                  builder: (_) => Text("${_taskListStore.taskList.numTasks} ${AppLocalizations.of(context).translate('tasks')}",
+                      style: TextStyle(color: AppColors.white)),
+                )),
             SizedBox(height: 5),
             _buildProgressBar(),
           ],
@@ -95,13 +107,15 @@ class _TaskListState extends State<TaskList> {
                     topRight: Radius.circular(25),
                   ),
                   color: AppColors.white),
-              child: ListView.builder(
-                scrollDirection: Axis.vertical,
-                controller: scrollController,
-                itemCount: taskList.numTasks,
-                itemBuilder: (context, i) {
-                  return TaskListTimeLine(taskList: taskList, index: i);
-                },
+              child: Observer(
+                builder: (_) => ListView.builder(
+                  scrollDirection: Axis.vertical,
+                  controller: scrollController,
+                  itemCount: _taskListStore.taskList.numTasks,
+                  itemBuilder: (context, i) {
+                    return TaskListTimeLine(taskList: _taskListStore.taskList, index: i);
+                  },
+                ),
               ),
             ),
           );
