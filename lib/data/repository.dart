@@ -437,7 +437,7 @@ class Repository {
     // else make a network call to get all posts, store them into database for
     // later use
     return await _translationApi.getTranslationsWithStepName().then((t) {
-      t.translationsWithStepName?.forEach((translation) {
+      t.translationsWithStepName.forEach((translation) {
         _translationsWithStepNameDataSource.insert(translation);
       });
 

@@ -7,8 +7,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:provider/provider.dart';
 import 'package:timelines/timelines.dart';
-
-import '../../stores/step/steps_store.dart';
+import 'package:boilerplate/stores/step/steps_store.dart';
 
 class CompressedBlocklistTimeline extends StatefulWidget {
   final StepList stepList;
@@ -61,7 +60,6 @@ class _CompressedBlocklistTimelineState
             ),
             builder: TimelineTileBuilder(
               itemCount:
-                  // widget.stepList.steps[(_stepStore.currentStep) - 1].numTasks,
                   _stepsStore.stepList.steps[(_stepStore.currentStep) - 1].numTasks,
               itemExtent: 70,
               contentsBuilder: (context, index) =>

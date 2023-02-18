@@ -12,8 +12,6 @@ abstract class _StepsStore with Store {
 
   Repository _repository;
   _StepsStore(Repository repo) : this._repository = repo; 
-  
-  //TODO: add step_list to store
 
   static ObservableFuture<StepList?> emptyStepsResponse =
       ObservableFuture.value(null);

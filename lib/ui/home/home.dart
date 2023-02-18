@@ -7,9 +7,7 @@ import 'package:boilerplate/ui/step_timeline/step_timeline.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:provider/provider.dart';
-import 'package:boilerplate/models/test/step_list_test.dart';
-
-import '../../stores/step/steps_store.dart';
+import 'package:boilerplate/stores/step/steps_store.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({
