@@ -52,18 +52,18 @@ class Repository {
 
   // constructor
   Repository(
-      this._postApi,
-      this._stepApi,
-      this._sharedPrefsHelper,
-      this._postDataSource,
-      this._stepDataSource,
-      this._taskDataSource,
-      this._subTaskDataSource,
-      this._questionDataSource,
-      this._translationApi,
-      this._translationDataSource,
-      this._translationsWithStepNameDataSource,
-      );
+    this._postApi,
+    this._stepApi,
+    this._sharedPrefsHelper,
+    this._postDataSource,
+    this._stepDataSource,
+    this._taskDataSource,
+    this._subTaskDataSource,
+    this._questionDataSource,
+    this._translationApi,
+    this._translationDataSource,
+    this._translationsWithStepNameDataSource,
+  );
 
   // Step: ---------------------------------------------------------------------
   Future<StepList> getStep() async {
@@ -76,9 +76,19 @@ class Repository {
     return await _stepApi.getSteps().then((stepList) {
       stepList.steps.forEach((step) {
         _stepDataSource.insert(step);
+        step.tasks.forEach((task) {
+          _taskDataSource.insert(task);
+          task.sub_tasks.forEach((subTask) {
+            _subTaskDataSource.insert(subTask);
+          });
+          task.questions.forEach((question) {
+            
+            _questionDataSource.insert(question);
+          });
+        });
       });
       return stepList;
-    });
+    }); 
   }
 
   Future<int> insertStep(Step step) => _stepDataSource
@@ -427,7 +437,7 @@ class Repository {
     // else make a network call to get all posts, store them into database for
     // later use
     return await _translationApi.getTranslationsWithStepName().then((t) {
-      t.translationsWithStepName?.forEach((translation) {
+      t.translationsWithStepName.forEach((translation) {
         _translationsWithStepNameDataSource.insert(translation);
       });
 
@@ -457,10 +467,12 @@ class Repository {
           .then((id) => id)
           .catchError((error) => throw error);
 
-  Future<int> updateTranslationWithStepName(TranslationsWithStepName translation) => _translationsWithStepNameDataSource
-      .update(translation)
-      .then((id) => id)
-      .catchError((error) => throw error);
+  Future<int> updateTranslationWithStepName(
+          TranslationsWithStepName translation) =>
+      _translationsWithStepNameDataSource
+          .update(translation)
+          .then((id) => id)
+          .catchError((error) => throw error);
 
   Future<int> deleteTranslationWithStepName(
           TranslationsWithStepName translation) =>

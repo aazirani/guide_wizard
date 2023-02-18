@@ -1,36 +1,20 @@
-import 'dart:convert';
-import 'dart:io';
-
 import 'package:boilerplate/constants/app_theme.dart';
 import 'package:boilerplate/constants/strings.dart';
-import 'package:boilerplate/data/network/apis/tranlsation/translation_api.dart';
-import 'package:boilerplate/data/network/constants/endpoints.dart';
-import 'package:boilerplate/data/network/dio_client.dart';
 import 'package:boilerplate/data/repository.dart';
 import 'package:boilerplate/di/components/service_locator.dart';
-import 'package:boilerplate/models/translation/translation.dart';
-import 'package:boilerplate/models/translation/translation_list.dart';
-import 'package:boilerplate/models/translation/translations_with_step_name_list.dart';
 import 'package:boilerplate/providers/question_widget_state/question_widget_state.dart';
 import 'package:boilerplate/stores/language/language_store.dart';
 import 'package:boilerplate/stores/post/post_store.dart';
 import 'package:boilerplate/stores/step/step_store.dart';
 import 'package:boilerplate/stores/theme/theme_store.dart';
 import 'package:boilerplate/stores/user/user_store.dart';
-import 'package:boilerplate/ui/home/home.dart';
-import 'package:boilerplate/ui/tasklist/tasklist.dart';
-import 'package:boilerplate/ui/home/home.dart';
+import 'package:boilerplate/ui/splash/splash.dart';
 import 'package:boilerplate/utils/locale/app_localization.dart';
 import 'package:boilerplate/utils/routes/routes.dart';
-import 'package:boilerplate/widgets/question_widget.dart';
-import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
-import 'package:path_provider/path_provider.dart';
 import 'package:provider/provider.dart';
-import 'package:boilerplate/ui/questions/questions_list_page.dart';
-import 'package:boilerplate/models/test/question.dart';
 import 'package:flutter/services.dart' show rootBundle;
 import 'package:boilerplate/stores/step/steps_store.dart';
 import 'package:boilerplate/stores/task_list/task_list_store.dart';
@@ -84,7 +68,7 @@ class MyApp extends StatelessWidget {
               // Built-in localization of basic text for Cupertino widgets
               GlobalCupertinoLocalizations.delegate,
             ],
-            home: HomeScreen(),
+            home: SplashScreen(),
           );
         },
       ),

@@ -7,6 +7,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:provider/provider.dart';
 import 'package:timelines/timelines.dart';
+import 'package:boilerplate/stores/step/steps_store.dart';
 
 class CompressedBlocklistTimeline extends StatefulWidget {
   final StepList stepList;
@@ -20,13 +21,15 @@ class CompressedBlocklistTimeline extends StatefulWidget {
 
 class _CompressedBlocklistTimelineState
     extends State<CompressedBlocklistTimeline> {
-  late StepStore _stepStore; 
+  late StepStore _stepStore;
+  late StepsStore _stepsStore;
 
   @override
   void didChangeDependencies() {
     super.didChangeDependencies();
     // initializing stores
     _stepStore = Provider.of<StepStore>(context);
+    _stepsStore = Provider.of<StepsStore>(context);
   }
 
   @override
@@ -56,7 +59,8 @@ class _CompressedBlocklistTimelineState
               nodePosition: 0.009,
             ),
             builder: TimelineTileBuilder(
-              itemCount: widget.stepList.steps[(_stepStore.currentStep) - 1].numTasks,
+              itemCount:
+                  _stepsStore.stepList.steps[(_stepStore.currentStep) - 1].numTasks,
               itemExtent: 70,
               contentsBuilder: (context, index) =>
                   _buildContents(index, _stepStore),
@@ -119,12 +123,12 @@ class _CompressedBlocklistTimelineState
   Widget _buildContentTitle(index, stepStore) {
     return Align(
       alignment: Alignment.centerLeft,
-      child:
-          Text("${widget.stepList.steps[stepStore.currentStep - 1].tasks[index].text.technical_name}",
-              style: TextStyle(
-                color: AppColors.main_color,
-                fontSize: 16,
-              )),
+      child: Text(
+          "${widget.stepList.steps[stepStore.currentStep - 1].tasks[index].text.technical_name}",
+          style: TextStyle(
+            color: AppColors.main_color,
+            fontSize: 16,
+          )),
     );
   }
 
