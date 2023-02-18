@@ -18,6 +18,7 @@ import 'package:boilerplate/stores/step/step_store.dart';
 import 'package:boilerplate/stores/theme/theme_store.dart';
 import 'package:boilerplate/stores/user/user_store.dart';
 import 'package:boilerplate/ui/home/home.dart';
+import 'package:boilerplate/ui/splash/splash.dart';
 import 'package:boilerplate/ui/tasklist/tasklist.dart';
 import 'package:boilerplate/ui/home/home.dart';
 import 'package:boilerplate/utils/locale/app_localization.dart';
@@ -84,7 +85,7 @@ class MyApp extends StatelessWidget {
               // Built-in localization of basic text for Cupertino widgets
               GlobalCupertinoLocalizations.delegate,
             ],
-            home: HomeScreen(),
+            home: SplashScreen(),
           );
         },
       ),

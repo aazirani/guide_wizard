@@ -15,12 +15,12 @@ abstract class _StepsStore with Store {
   
   //TODO: add step_list to store
 
-  static ObservableFuture<StepList> emptyStepsResponse =
-      ObservableFuture.value(StepList(steps: []));
+  static ObservableFuture<StepList?> emptyStepsResponse =
+      ObservableFuture.value(null);
 
   @observable
-  ObservableFuture<StepList> fetchStepsFuture =
-      ObservableFuture<StepList>(emptyStepsResponse);
+  ObservableFuture<StepList?> fetchStepsFuture =
+      ObservableFuture<StepList?>(emptyStepsResponse);
 
   @observable
   StepList stepList = StepList(steps: []);
@@ -32,7 +32,7 @@ abstract class _StepsStore with Store {
   bool get loading => fetchStepsFuture.status == FutureStatus.pending;
 
   @action
-  Future getProducts() async {
+  Future getSteps() async {
     final future = _repository.getStep();
     fetchStepsFuture = ObservableFuture(future);
 

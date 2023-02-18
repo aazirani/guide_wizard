@@ -13,10 +13,10 @@ abstract class _TaskListStore with Store {
 
   _TaskListStore(Repository repository) : this._repository = repository;
 
-  static ObservableFuture<TaskList> emptyTaskList = ObservableFuture.value(TaskList(tasks: []));
+  static ObservableFuture<TaskList?> emptyTaskList = ObservableFuture.value(null);
 
   @observable
-  ObservableFuture<TaskList> fetchTasksFuture = ObservableFuture<TaskList>(emptyTaskList);
+  ObservableFuture<TaskList?> fetchTasksFuture = ObservableFuture<TaskList?>(emptyTaskList);
 
   @observable
   TaskList taskList = TaskList(tasks: []);
