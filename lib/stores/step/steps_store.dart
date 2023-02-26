@@ -32,7 +32,7 @@ abstract class _StepsStore with Store {
   bool get loading => fetchStepsFuture.status == FutureStatus.pending;
 
   @action
-  Future getProducts() async {
+  Future getSteps() async {
     final future = _repository.getStep();
     fetchStepsFuture = ObservableFuture(future);
 

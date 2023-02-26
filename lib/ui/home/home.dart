@@ -1,15 +1,17 @@
+import 'dart:io';
 import 'package:boilerplate/constants/colors.dart';
 import 'package:boilerplate/constants/dimens.dart';
+import 'package:boilerplate/data/network/constants/endpoints.dart';
 import 'package:boilerplate/stores/step/step_store.dart';
 import 'package:boilerplate/ui/compressed_tasklist_timeline/compressed_task_list_timeline.dart';
 import 'package:boilerplate/ui/step_slider/step_slider_widget.dart';
 import 'package:boilerplate/ui/step_timeline/step_timeline.dart';
+import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:provider/provider.dart';
-import 'package:boilerplate/models/test/step_list_test.dart';
-
-import '../../stores/step/steps_store.dart';
+import 'package:simple_fontellico_progress_dialog/simple_fontico_loading.dart';
+import 'package:boilerplate/stores/step/steps_store.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({
@@ -22,7 +24,15 @@ class HomeScreen extends StatefulWidget {
 
 class _HomeScreenState extends State<HomeScreen> {
   late StepStore _stepStore;
-  late StepsStore _stepsStore; 
+  late StepsStore _stepsStore;
+
+  @override
+  void initState() {
+    Future.delayed(Duration.zero,() {
+      _loadDataAndShowLoadingDialog(context);
+    });
+    super.initState();
+  }
 
   @override
   void didChangeDependencies() {
@@ -32,12 +42,100 @@ class _HomeScreenState extends State<HomeScreen> {
     _stepsStore = Provider.of<StepsStore>(context);
   }
 
+  SimpleFontelicoProgressDialog? _dialog;
+
+  Future<bool> _canConnectToServer() async {
+    late bool canConnect;
+    try {
+      final result = await InternetAddress.lookup(Endpoints.baseUrl);
+      if (result.isNotEmpty && result[0].rawAddress.isNotEmpty) {
+        canConnect = true;
+      }
+    } on SocketException catch (_) {
+      canConnect = false;
+    }
+    return canConnect;
+  }
+
+  Future<bool> _isConnectedToInternet() async{
+    Map _source = {ConnectivityResult.none: false};
+    bool hasConnection;
+    switch (_source.keys.toList()[0]) {
+      case ConnectivityResult.mobile:
+      case ConnectivityResult.wifi:
+        hasConnection = true;
+        break;
+      case ConnectivityResult.none:
+      default:
+        hasConnection = false;
+    }
+    return hasConnection;
+  }
+
+  void _showNoInternetConnectionDialog(BuildContext context){
+    _showAlertDialog(context, 'No Internet Connection', 'Please check your internet connection and try again.', 'Try Again', _loadDataAndShowLoadingDialog);
+  }
+
+  void _showCantConnectToServer(BuildContext context){
+    _showAlertDialog(context, 'Can not connect to Server', 'There was a problem connecting to the server. Please check your internet connection and try again.', 'Try Again', _loadDataAndShowLoadingDialog);
+  }
+
+  void _showAlertDialog(BuildContext context, String title, String content, String buttonText, void Function(BuildContext context) onPressedFunction) {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: Text(title),
+          content: Text(content),
+          actions: <Widget>[
+            TextButton(
+              child: Text(buttonText),
+              onPressed: () {
+                Navigator.of(context).pop(); // close the dialog
+                onPressedFunction(context);
+              },
+            ),
+          ],
+        );
+      },
+    );
+  }
+
+  void _loadDataAndShowLoadingDialog(BuildContext context) async {
+    _dialog ??= SimpleFontelicoProgressDialog(context: context);
+    _dialog!.show(
+        message: 'Loading...',
+        type: SimpleFontelicoProgressDialogType.normal,
+        horizontal: true,
+        width: 175.0,
+        height: 75.0,
+        hideText: false,
+        indicatorColor: AppColors.main_color);
+    if(await _isConnectedToInternet()){
+      if(await _canConnectToServer()){
+        await Future.delayed(Duration(seconds: 1),() {
+          if(!_stepsStore.loading) {
+            _stepsStore.getSteps();
+          }
+        });
+        _dialog!.hide();
+      } else {
+        _dialog!.hide();
+        _showCantConnectToServer(context);
+      }
+    }
+    else{
+      _dialog!.hide();
+      _showNoInternetConnectionDialog(context);
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: AppColors.main_color,
       appBar: _buildAppBar(),
-      body: _buildBody(),
+      body: _buildBody(context),
     );
   }
 
@@ -55,7 +153,7 @@ class _HomeScreenState extends State<HomeScreen> {
   }
 
 //body build methods ...........................................................
-  Widget _buildBody() {
+  Widget _buildBody(BuildContext context) {
     return ClipRRect(
       borderRadius: BorderRadius.only(
           topLeft: Radius.circular(30), topRight: Radius.circular(30)),
@@ -80,15 +178,20 @@ class _HomeScreenState extends State<HomeScreen> {
         //steps (/)
         _buildCurrentStepIndicator(),
         //step slider
-        Observer(builder: (_) => StepSliderWidget(stepList: _stepsStore.stepList)),
+        Observer(
+            builder: (_) => StepSliderWidget(stepList: _stepsStore.stepList)),
         //step timeline
         //TODO: save current and pending steps in shared preferences
-        Observer(builder: (_) => StepTimeLine(pending: 1, stepNo: 3, stepList: _stepsStore.stepList)),
+        Observer(
+            builder: (_) => StepTimeLine(
+                pending: 1, stepNo: 3, stepList: _stepsStore.stepList)),
         SizedBox(height: 25),
         _buildInProgressText(),
         SizedBox(height: 10),
         //task compressed timeline
-        Observer(builder: (_) => CompressedBlocklistTimeline(stepList: _stepsStore.stepList)),
+        Observer(
+            builder: (_) =>
+                CompressedBlocklistTimeline(stepList: _stepsStore.stepList)),
       ],
     );
   }
