@@ -84,4 +84,10 @@ class StepDataSource {
     );
   }
 
+  Future deleteAll() async {
+    await _stepsStore.drop(
+      _db,
+    );
+  }
+
 }

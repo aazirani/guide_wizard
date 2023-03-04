@@ -30,6 +30,7 @@ final StepList stepList = StepList(
               10,
               (index) => Task(
                 id: 0,
+                step_id: 1,
                 text: TechnicalName(
                     id: 1,
                     technical_name: "Housing",
@@ -49,7 +50,7 @@ final StepList stepList = StepList(
                     10,
                     (index) => SubTask(
                         id: 1,
-                        // task_id: 0,
+                        task_id: 0,
                         title: TechnicalName(
                             id: 0,
                             technical_name: "Dorm",
@@ -80,7 +81,7 @@ final StepList stepList = StepList(
                 updated_at: "0",
                 image1: null,
                 image2: null,
-                fa_icon: null,
+                // fa_icon: null,
                 questions: [],
               ),
             ))));

@@ -25,6 +25,8 @@ import 'package:get_it/get_it.dart';
 import 'package:sembast/sembast.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
+import '../../stores/step/step_store.dart';
+
 final getIt = GetIt.instance;
 
 Future<void> setupLocator() async {
@@ -48,7 +50,8 @@ Future<void> setupLocator() async {
   // api's:---------------------------------------------------------------------
   getIt.registerSingleton(PostApi(getIt<DioClient>(), getIt<RestClient>()));
   getIt.registerSingleton(StepApi(getIt<DioClient>(), getIt<RestClient>()));
-  getIt.registerSingleton(TranslationApi(getIt<DioClient>(), getIt<RestClient>()));
+  getIt.registerSingleton(
+      TranslationApi(getIt<DioClient>(), getIt<RestClient>()));
 
   // data sources
   getIt.registerSingleton(PostDataSource(await getIt.getAsync<Database>()));
@@ -56,8 +59,10 @@ Future<void> setupLocator() async {
   getIt.registerSingleton(TaskDataSource(await getIt.getAsync<Database>()));
   getIt.registerSingleton(SubTaskDataSource(await getIt.getAsync<Database>()));
   getIt.registerSingleton(QuestionDataSource(await getIt.getAsync<Database>()));
-  getIt.registerSingleton(TranslationDataSource(await getIt.getAsync<Database>()));
-  getIt.registerSingleton(TranslationsWithStepNameDataSource(await getIt.getAsync<Database>()));
+  getIt.registerSingleton(
+      TranslationDataSource(await getIt.getAsync<Database>()));
+  getIt.registerSingleton(
+      TranslationsWithStepNameDataSource(await getIt.getAsync<Database>()));
 
   // repository:----------------------------------------------------------------
   getIt.registerSingleton(Repository(
@@ -79,4 +84,5 @@ Future<void> setupLocator() async {
   getIt.registerSingleton(PostStore(getIt<Repository>()));
   getIt.registerSingleton(ThemeStore(getIt<Repository>()));
   getIt.registerSingleton(UserStore(getIt<Repository>()));
+  getIt.registerSingleton(StepStore());
 }

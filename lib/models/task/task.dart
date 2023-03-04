@@ -4,6 +4,7 @@ import 'package:boilerplate/models/technical_name/technical_name.dart';
 
 class Task {
   int id;
+  int step_id;
   TechnicalName text;
   TechnicalName description;
   // String type;
@@ -19,12 +20,13 @@ class Task {
 
   Task({
     required this.id,
+    required this.step_id,
     required this.text,
     required this.description,
     // required this.type,
     required this.image1,
     required this.image2,
-    required this.fa_icon,
+    // required this.fa_icon,
     required this.sub_tasks,
     required this.creator_id,
     required this.created_at,
@@ -36,12 +38,13 @@ class Task {
   factory Task.fromMap(Map<String, dynamic> json) {
     return Task(
       id: json["id"],
+      step_id: json["step_id"],
       text: TechnicalName.fromMap(json["text"]),
       description: TechnicalName.fromMap(json["description"]),
       // type: json["type"],
       image1: json["image1"],
       image2: json["image2"],
-      fa_icon: json["fa_icon"],
+      // fa_icon: json["fa_icon"],
       creator_id: json["creator_id"],
       created_at: json["created_at"],
       updated_at: json["updated_at"],
@@ -54,6 +57,7 @@ class Task {
 
   Map<String, dynamic> toMap() => {
         "id": id,
+        "step_id": step_id,
         "text": text.toMap(),
         "description": description.toMap(),
         // "type": type,
@@ -63,7 +67,7 @@ class Task {
         "creator_id": creator_id,
         "created_at": created_at,
         "updated_at": updated_at,
-        "quesions": questions.map((question) => question.toMap()).toList(),
+        "questions": questions.map((question) => question.toMap()).toList(),
       };
 
   void setDone(bool value) {
@@ -83,9 +87,11 @@ class Task {
   }
 
   get deadLine {
-    for (var sb = 0; sb <= sub_tasks.length; sb++) {
-      if (sub_tasks[sb].deadline.technical_name != "") {
-        return true;
+    if (sub_tasks.isEmpty == false) {
+      for (var sb = 0; sb <= sub_tasks.length; sb++) {
+        if (sub_tasks[sb].deadline.technical_name != "") {
+          return true;
+        }
       }
     }
     return null;

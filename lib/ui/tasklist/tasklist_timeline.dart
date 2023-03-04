@@ -1,16 +1,17 @@
 import 'package:boilerplate/constants/colors.dart';
 import 'package:boilerplate/constants/dimens.dart';
-import 'package:boilerplate/utils/enums/enum.dart';
 import 'package:boilerplate/widgets/diamond_indicator.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_mobx/flutter_mobx.dart';
+import 'package:provider/provider.dart';
 import 'package:timelines/timelines.dart';
 import 'package:boilerplate/utils/locale/app_localization.dart';
-import 'package:boilerplate/models/task/task_list.dart';
+import 'package:boilerplate/stores/task_list/task_list_store.dart';
 
 class TaskListTimeLine extends StatefulWidget {
-  final TaskList taskList;
+  // final TaskList taskList;
   final int index;
-  TaskListTimeLine({Key? key, required this.taskList, required this.index})
+  TaskListTimeLine({Key? key, required this.index})
       : super(key: key);
 
   @override
@@ -18,6 +19,15 @@ class TaskListTimeLine extends StatefulWidget {
 }
 
 class _TaskListTimeLineState extends State<TaskListTimeLine> {
+  late TaskListStore taskListStore; 
+
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    // initializing stores
+    taskListStore = Provider.of<TaskListStore>(context);
+  }
+  
   @override
   Widget build(BuildContext context) {
     return _buildTimeline(widget.index);
@@ -64,7 +74,7 @@ class _TaskListTimeLineState extends State<TaskListTimeLine> {
             border: Border(
                 left: BorderSide(
               width: 25,
-              color: (widget.taskList.tasks[index].isDone == true)
+              color: (taskListStore.taskList.tasks[index].isDone == true)
                   ? AppColors.contentDoneBorderColor
                   : AppColors.contentUnDoneBorderColor,
             )),
@@ -99,11 +109,13 @@ class _TaskListTimeLineState extends State<TaskListTimeLine> {
   Widget _buildContentTitle(index) {
     return Align(
       alignment: Alignment.centerLeft,
-      child: Text("${widget.taskList.tasks[index].text.technical_name}",
-          style: TextStyle(
-            color: AppColors.main_color,
-            fontSize: 16,
-          )),
+      child: Observer(
+        builder: (_) => Text("${taskListStore.taskList.tasks[index].text.technical_name}",
+            style: TextStyle(
+              color: AppColors.main_color,
+              fontSize: 16,
+            )),
+      ),
     );
   }
 
@@ -145,7 +157,7 @@ class _TaskListTimeLineState extends State<TaskListTimeLine> {
   //general methods ............................................................
   double _getScreenWidth() => MediaQuery.of(context).size.width;
   bool _deadLineAvailable(index) {
-    switch (widget.taskList.tasks[index].deadLine) {
+    switch (taskListStore.taskList.tasks[index].deadLine) {
       case null:
         return false;
     }
@@ -153,7 +165,7 @@ class _TaskListTimeLineState extends State<TaskListTimeLine> {
   }
 
   bool _taskDone(index) {
-    switch (widget.taskList.tasks[index].isDone) {
+    switch (taskListStore.taskList.tasks[index].isDone) {
       case true:
         return true;
     }

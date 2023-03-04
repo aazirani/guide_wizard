@@ -2,10 +2,12 @@ import 'package:boilerplate/constants/colors.dart';
 import 'package:boilerplate/constants/dimens.dart';
 import 'package:boilerplate/models/step/step_list.dart';
 import 'package:boilerplate/stores/step/step_store.dart';
+import 'package:boilerplate/stores/task_list/task_list_store.dart';
 import 'package:boilerplate/utils/enums/enum.dart';
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:boilerplate/ui/tasklist/tasklist.dart';
 
 class StepSliderWidget extends StatefulWidget {
   final StepList stepList;
@@ -17,12 +19,14 @@ class StepSliderWidget extends StatefulWidget {
 
 class _StepSliderWidgetState extends State<StepSliderWidget> {
   late StepStore stepStore;
-  
+  late TaskListStore _taskListStore;
+
   @override
   void didChangeDependencies() {
     super.didChangeDependencies();
     // initializing stores
     stepStore = Provider.of<StepStore>(context);
+    _taskListStore = Provider.of<TaskListStore>(context);
   }
 
   @override
@@ -48,7 +52,8 @@ class _StepSliderWidgetState extends State<StepSliderWidget> {
           height: _getScreenHeight() / 4,
           enlargeCenterPage: false,
           enableInfiniteScroll: false),
-      items: List<int>.generate(widget.stepList.steps.length, (index) => index).map((index) {
+      items: List<int>.generate(widget.stepList.steps.length, (index) => index)
+          .map((index) {
         return Builder(
           builder: (BuildContext context) {
             return GestureDetector(
@@ -156,7 +161,13 @@ class _StepSliderWidgetState extends State<StepSliderWidget> {
     return Container(
       child: TextButton(
         style: _buildButtonStyle(),
-        onPressed: () {},
+        onPressed: () {
+          print("step store current");
+          print(stepStore.currentStep);
+          _taskListStore.getTaskList();
+          Navigator.push(context,
+              MaterialPageRoute(builder: (context) => const TaskList()));
+        },
         child: Row(mainAxisAlignment: MainAxisAlignment.center, children: [
           Text("Continue",
               style: TextStyle(fontSize: 12, color: AppColors.main_color)),
@@ -221,6 +232,6 @@ class _StepSliderWidgetState extends State<StepSliderWidget> {
     } else if (index < stepStore.pending) {
       return StepStatus.isDone;
     }
-    return StepStatus.notStarted; 
+    return StepStatus.notStarted;
   }
 }

@@ -4,7 +4,7 @@ class Endpoints {
   // base url
   // static const String baseUrl = "http://jsonplaceholder.typicode.com";
   // static const String baseUrl = "https://collegiality.de";
-  static const String baseUrl = "https://glamapp.ir/collegiality/";
+  static const String baseUrl = "https://glamapp.ir/collegiality";
 
   // receiveTimeout
   static const int receiveTimeout = 15000;

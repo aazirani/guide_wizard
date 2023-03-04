@@ -1,5 +1,6 @@
 import 'package:boilerplate/constants/colors.dart';
 import 'package:boilerplate/constants/dimens.dart';
+import 'package:boilerplate/ui/home/home.dart';
 import 'package:boilerplate/ui/tasklist/tasklist_timeline.dart';
 import 'package:flutter/material.dart';
 import 'package:boilerplate/widgets/measure_size.dart';
@@ -7,6 +8,8 @@ import 'package:boilerplate/utils/locale/app_localization.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:boilerplate/stores/task_list/task_list_store.dart';
 import 'package:provider/provider.dart';
+import 'package:boilerplate/stores/step/steps_store.dart';
+import 'package:boilerplate/stores/step/step_store.dart';
 
 class TaskList extends StatefulWidget {
   const TaskList({Key? key}) : super(key: key);
@@ -17,18 +20,26 @@ class TaskList extends StatefulWidget {
 
 class _TaskListState extends State<TaskList> {
   late TaskListStore _taskListStore;
+  late StepsStore _stepsStore;
+  late StepStore _stepStore;
 
   @override
   void didChangeDependencies() {
     super.didChangeDependencies();
     // initializing stores
     _taskListStore = Provider.of<TaskListStore>(context);
+    _stepsStore = Provider.of<StepsStore>(context);
+    _stepStore = Provider.of<StepStore>(context);
   }
+
   var progressBarSize = Size.zero;
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(backgroundColor: AppColors.main_color, appBar: _buildAppBar(), body: _buildBody());
+    return Scaffold(
+        backgroundColor: AppColors.main_color,
+        appBar: _buildAppBar(),
+        body: _buildBody());
   }
 
   //appBar methods .............................................................
@@ -36,16 +47,23 @@ class _TaskListState extends State<TaskList> {
     return AppBar(
         backgroundColor: AppColors.main_color,
         titleSpacing: 0,
-        title: Text("University",
-            style: TextStyle(
-                color: AppColors.white,
-                fontSize: 18,
-                fontWeight: FontWeight.bold)),
+        title: Observer(
+          builder: (_) => Text("${_stepsStore.stepList.steps[_stepStore.currentStep-1].name.technical_name}",
+              style: TextStyle(
+                  color: AppColors.white,
+                  fontSize: 18,
+                  fontWeight: FontWeight.bold)),
+        ),
         leading: Padding(
           padding: Dimens.back_button,
           child: IconButton(
               icon: Icon(Icons.arrow_back_ios),
-              onPressed: () {},
+              onPressed: () {
+                Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                        builder: (context) => const HomeScreen()));
+              },
               color: AppColors.white),
         ));
   }
@@ -79,7 +97,8 @@ class _TaskListState extends State<TaskList> {
             Padding(
                 padding: Dimens.numberOfTasksPadding,
                 child: Observer(
-                  builder: (_) => Text("${_taskListStore.taskList.numTasks} ${AppLocalizations.of(context).translate('tasks')}",
+                  builder: (_) => Text(
+                      "${_taskListStore.taskList.numTasks} ${AppLocalizations.of(context).translate('tasks')}",
                       style: TextStyle(color: AppColors.white)),
                 )),
             SizedBox(height: 5),
@@ -113,7 +132,7 @@ class _TaskListState extends State<TaskList> {
                   controller: scrollController,
                   itemCount: _taskListStore.taskList.numTasks,
                   itemBuilder: (context, i) {
-                    return TaskListTimeLine(taskList: _taskListStore.taskList, index: i);
+                    return TaskListTimeLine(index: i);
                   },
                 ),
               ),
@@ -133,7 +152,7 @@ class _TaskListState extends State<TaskList> {
           child: ClipRRect(
             borderRadius: BorderRadius.all(Radius.circular(10)),
             child: LinearProgressIndicator(
-                value: 0.2,
+                value: _taskListStore.taskList.noOfDoneTasks()/100,
                 backgroundColor: AppColors.white,
                 valueColor:
                     AlwaysStoppedAnimation(AppColors.progressBarValueColor)),

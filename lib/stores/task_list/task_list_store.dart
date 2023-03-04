@@ -2,6 +2,10 @@ import 'package:mobx/mobx.dart';
 import 'package:boilerplate/data/repository.dart';
 import 'package:boilerplate/models/task/task_list.dart';
 
+import '../../di/components/service_locator.dart';
+import '../../models/task/task.dart';
+import '../step/step_store.dart';
+
 // // Include generated file
 part 'task_list_store.g.dart';
 
@@ -10,13 +14,17 @@ class TaskListStore = _TaskListStore with _$TaskListStore;
 
 abstract class _TaskListStore with Store {
   Repository _repository;
+  // StepStore _stepStore = StepStore();
+  StepStore _stepStore = getIt<StepStore>();
 
   _TaskListStore(Repository repository) : this._repository = repository;
 
-  static ObservableFuture<TaskList?> emptyTaskList = ObservableFuture.value(null);
+  static ObservableFuture<TaskList?> emptyTaskList =
+      ObservableFuture.value(null);
 
   @observable
-  ObservableFuture<TaskList?> fetchTasksFuture = ObservableFuture<TaskList?>(emptyTaskList);
+  ObservableFuture<TaskList?> fetchTasksFuture =
+      ObservableFuture<TaskList?>(emptyTaskList);
 
   @observable
   TaskList taskList = TaskList(tasks: []);
@@ -28,12 +36,23 @@ abstract class _TaskListStore with Store {
   bool get loading => fetchTasksFuture.status == FutureStatus.pending;
 
   @action
-  Future getProducts() async {
+  Future getTaskList() async {
+    print(_stepStore.currentStep);
     final future = _repository.getTasks();
     fetchTasksFuture = ObservableFuture(future);
-
+    TaskList temp = TaskList(tasks: []);
+    List<Task> relatedTasks = [];
     future.then((taskList) {
-      this.taskList = taskList;
+      taskList.tasks.forEach((task) {
+        if (task.step_id == _stepStore.currentStep) {
+          print("there are stuff in here");
+          print(_stepStore.currentStep);
+          print(task.step_id);
+          relatedTasks.add(task);
+        }
+      });
+      temp.setTasks = relatedTasks;
+      this.taskList = temp;
     });
   }
 }

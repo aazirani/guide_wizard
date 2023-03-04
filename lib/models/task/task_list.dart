@@ -1,7 +1,7 @@
 import 'package:boilerplate/models/task/task.dart';
 
 class TaskList {
-  final List<Task> tasks;
+  List<Task> tasks;
   TaskList({required this.tasks});
 
   factory TaskList.fromJson(List<dynamic> json) {
@@ -19,8 +19,8 @@ class TaskList {
   }
 
   Task? getTask(int id) {
-    for(Task task in tasks){
-      if(task.id == id){
+    for (Task task in tasks) {
+      if (task.id == id) {
         return task;
       }
     }
@@ -28,6 +28,16 @@ class TaskList {
   }
 
   set setTasks(List<Task> tasks) {
-    tasks = tasks;
+    this.tasks = tasks;
+  }
+
+  int noOfDoneTasks() {
+    var no = 0; 
+    for (var task = 0; task < numTasks; task++) {
+      if (tasks[task].isDone == true) {
+        no ++; 
+      }
+    }
+    return no; 
   }
 }

@@ -82,15 +82,15 @@ class Repository {
             _subTaskDataSource.insert(subTask);
           });
           task.questions.forEach((question) {
-            
             _questionDataSource.insert(question);
           });
         });
       });
       return stepList;
-    }); 
+    });
   }
 
+  
   Future<int> insertStep(Step step) => _stepDataSource
       .insert(step)
       .then((id) => id)
@@ -105,15 +105,24 @@ class Repository {
       .update(step)
       .then((id) => id)
       .catchError((error) => throw error);
+  
+  Future truncateStep() =>
+      _stepDataSource.deleteAll().catchError((error) => throw error);
+
 
   // Task: ---------------------------------------------------------------------
   Future<TaskList> getTasks() async {
-    //if already exists, get tasks from the database, otherwise, do the Api call.
-    return await _taskDataSource.count() > 0
-        ? _taskDataSource.getTasksFromDb()
-        : getTasksFromApi();
+    return await _taskDataSource.getTasksFromDb();
   }
 
+  // Future<TaskList> getTasks() async {
+  //   //if already exists, get tasks from the database, otherwise, do the Api call.
+  //   return await _taskDataSource.count() > 0
+  //       ? _taskDataSource.getTasksFromDb()
+  //       : getTasksFromApi();
+  // }
+
+  //redundant code :
   Future<TaskList> getTasksFromApi() async {
     return await getStepFromApi().then((stepList) {
       List<Task> tasks = [];
