@@ -7,6 +7,7 @@ import 'package:boilerplate/utils/locale/app_localization.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:boilerplate/stores/task_list/task_list_store.dart';
 import 'package:provider/provider.dart';
+import 'package:boilerplate/ui/home/home.dart';
 
 class TaskList extends StatefulWidget {
   const TaskList({Key? key}) : super(key: key);
@@ -44,8 +45,13 @@ class _TaskListState extends State<TaskList> {
         leading: Padding(
           padding: Dimens.back_button,
           child: IconButton(
-              icon: Icon(Icons.arrow_back_ios),
-              onPressed: () {},
+              icon: Icon(Icons.arrow_back),
+              onPressed: () {
+                Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                        builder: (context) => const HomeScreen()));
+              },
               color: AppColors.white),
         ));
   }
@@ -79,7 +85,7 @@ class _TaskListState extends State<TaskList> {
             Padding(
                 padding: Dimens.numberOfTasksPadding,
                 child: Observer(
-                  builder: (_) => Text("${_taskListStore.taskList!.numTasks} ${AppLocalizations.of(context).translate('tasks')}",
+                  builder: (_) => Text("${_taskListStore.taskList.numTasks} ${AppLocalizations.of(context).translate('tasks')}",
                       style: TextStyle(color: AppColors.white)),
                 )),
             SizedBox(height: 5),
@@ -111,9 +117,9 @@ class _TaskListState extends State<TaskList> {
                 builder: (_) => ListView.builder(
                   scrollDirection: Axis.vertical,
                   controller: scrollController,
-                  itemCount: _taskListStore.taskList!.numTasks,
+                  itemCount: _taskListStore.taskList.numTasks,
                   itemBuilder: (context, i) {
-                    return TaskListTimeLine(taskList: _taskListStore.taskList!, index: i);
+                    return TaskListTimeLine(taskList: _taskListStore.taskList, index: i);
                   },
                 ),
               ),
