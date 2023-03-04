@@ -36,7 +36,7 @@ abstract class _TaskListStore with Store {
   bool get loading => fetchTasksFuture.status == FutureStatus.pending;
 
   @action
-  Future getTaskList() async {
+  Future getTaskList(int id) async {
     print(_stepStore.currentStep);
     final future = _repository.getTasks();
     fetchTasksFuture = ObservableFuture(future);
@@ -44,10 +44,7 @@ abstract class _TaskListStore with Store {
     List<Task> relatedTasks = [];
     future.then((taskList) {
       taskList.tasks.forEach((task) {
-        if (task.step_id == _stepStore.currentStep) {
-          print("there are stuff in here");
-          print(_stepStore.currentStep);
-          print(task.step_id);
+        if (task.step_id == id) {
           relatedTasks.add(task);
         }
       });

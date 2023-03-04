@@ -162,9 +162,7 @@ class _StepSliderWidgetState extends State<StepSliderWidget> {
       child: TextButton(
         style: _buildButtonStyle(),
         onPressed: () {
-          print("step store current");
-          print(stepStore.currentStep);
-          _taskListStore.getTaskList();
+          _taskListStore.getTaskList(stepStore.currentStep);
           Navigator.push(context,
               MaterialPageRoute(builder: (context) => const TaskList()));
         },
