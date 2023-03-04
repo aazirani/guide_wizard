@@ -100,9 +100,11 @@ class _QuestionWidgetState extends State<QuestionWidget>
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
-          Text(
-            widget.question.getTitle,
-            style: TextStyle(fontSize: 22, fontWeight: FontWeight.w500),
+          Flexible(
+            child: Text(
+              widget.question.getTitle,
+              style: TextStyle(fontSize: 22, fontWeight: FontWeight.w500),
+            ),
           ),
           Provider.of<QuestionsWidgetState>(context).isWidgetExpanded(widget.index)
               ? _buildHelpButton()
