@@ -6,6 +6,8 @@ import 'package:boilerplate/utils/enums/enum.dart';
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:boilerplate/stores/task_list/task_list_store.dart';
+import 'package:boilerplate/ui/tasklist/tasklist.dart';
 
 class StepSliderWidget extends StatefulWidget {
   final StepList stepList;
@@ -17,12 +19,14 @@ class StepSliderWidget extends StatefulWidget {
 
 class _StepSliderWidgetState extends State<StepSliderWidget> {
   late StepStore stepStore;
+  late TaskListStore _taskListStore;
   
   @override
   void didChangeDependencies() {
     super.didChangeDependencies();
     // initializing stores
     stepStore = Provider.of<StepStore>(context);
+    _taskListStore = Provider.of<TaskListStore>(context);
   }
 
   @override
@@ -156,7 +160,11 @@ class _StepSliderWidgetState extends State<StepSliderWidget> {
     return Container(
       child: TextButton(
         style: _buildButtonStyle(),
-        onPressed: () {},
+        onPressed: () {
+          _taskListStore.getTaskList(stepStore.currentStep);
+          Navigator.push(context,
+              MaterialPageRoute(builder: (context) => const TaskList()));
+        },
         child: Row(mainAxisAlignment: MainAxisAlignment.center, children: [
           Text("Continue",
               style: TextStyle(fontSize: 12, color: AppColors.main_color)),
