@@ -57,7 +57,7 @@ class _TaskListState extends State<TaskList> {
         leading: Padding(
           padding: Dimens.back_button,
           child: IconButton(
-              icon: Icon(Icons.arrow_back_ios),
+              icon: Icon(Icons.arrow_back),
               onPressed: () {
                 Navigator.push(
                     context,

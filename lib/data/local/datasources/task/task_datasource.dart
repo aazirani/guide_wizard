@@ -60,7 +60,6 @@ class TaskDataSource {
 
     // Making a List<Post> out of List<RecordSnapshot>
     if (recordSnapshots.length > 0) {
-      // print(recordSnapshots);
       tasksList = TaskList(
           tasks: recordSnapshots.map((snapshot) {
         final task = Task.fromMap(snapshot.value);

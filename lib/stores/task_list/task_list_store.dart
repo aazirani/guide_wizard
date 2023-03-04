@@ -37,7 +37,6 @@ abstract class _TaskListStore with Store {
 
   @action
   Future getTaskList(int id) async {
-    print(_stepStore.currentStep);
     final future = _repository.getTasks();
     fetchTasksFuture = ObservableFuture(future);
     TaskList temp = TaskList(tasks: []);
