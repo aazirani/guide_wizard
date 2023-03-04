@@ -13,7 +13,6 @@ class Question {
   TechnicalName info_url;
   TechnicalName info_description;
   int answer_required;
-  bool answers_selected_by_default;
   int creator_id;
   String created_at;
   String updated_at;
@@ -30,7 +29,6 @@ class Question {
     required this.info_url,
     required this.info_description,
     required this.answer_required,
-    required this.answers_selected_by_default,
     required this.creator_id,
     required this.created_at,
     required this.updated_at,
@@ -69,7 +67,6 @@ class Question {
       info_url: TechnicalName.fromMap(json["info_url"]),
       info_description: TechnicalName.fromMap(json["info_description"]),
       answer_required: json["answer_required"],
-      answers_selected_by_default: json["answers_selected_by_default"] == 1 ? true : false,
       creator_id: json["creator_id"],
       created_at: json["created_at"],
       updated_at: json["updated_at"],
@@ -90,7 +87,6 @@ class Question {
       "info_url": info_url.toMap(),
       "info_description": info_description.toMap(),
       "answer_required": answer_required,
-      "answers_selected_by_default": answers_selected_by_default ? 1 : 0,
       "creator_id": creator_id,
       "created_at": created_at,
       "updated_at": updated_at,

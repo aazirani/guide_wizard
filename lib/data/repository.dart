@@ -1,5 +1,4 @@
 import 'dart:async';
-
 import 'package:boilerplate/data/local/datasources/post/post_datasource.dart';
 import 'package:boilerplate/data/local/datasources/step/step_datasource.dart';
 import 'package:boilerplate/data/local/datasources/task/task_datasource.dart';
@@ -16,7 +15,6 @@ import 'package:boilerplate/models/translation/translation_list.dart';
 import 'package:boilerplate/models/translation/translations_with_step_name.dart';
 import 'package:boilerplate/models/translation/translations_with_step_name_list.dart';
 import 'package:sembast/sembast.dart';
-
 import 'package:boilerplate/models/answer/answer.dart';
 import 'package:boilerplate/models/question/question_list.dart';
 import 'package:boilerplate/models/sub_task/sub_task_list.dart';
@@ -67,13 +65,14 @@ class Repository {
 
   // Step: ---------------------------------------------------------------------
   Future<StepList> getStep() async {
+    // return getStepFromApi();
     return await _stepDataSource.count() > 0
         ? _stepDataSource.getStepsFromDb()
         : getStepFromApi();
   }
 
   Future<StepList> getStepFromApi() async {
-    return await _stepApi.getSteps().then((stepList) {
+    var f =  await _stepApi.getSteps().then((stepList) {
       stepList.steps.forEach((step) {
         _stepDataSource.insert(step);
         step.tasks.forEach((task) {
@@ -82,14 +81,18 @@ class Repository {
             _subTaskDataSource.insert(subTask);
           });
           task.questions.forEach((question) {
-            
             _questionDataSource.insert(question);
           });
         });
       });
       return stepList;
-    }); 
+    });
+    return f;
   }
+
+  Future truncateStep() =>
+      _stepDataSource.deleteAll().catchError((error) => throw error);
+
 
   Future<int> insertStep(Step step) => _stepDataSource
       .insert(step)
@@ -108,6 +111,7 @@ class Repository {
 
   // Task: ---------------------------------------------------------------------
   Future<TaskList> getTasks() async {
+    // return getTasksFromApi();
     //if already exists, get tasks from the database, otherwise, do the Api call.
     return await _taskDataSource.count() > 0
         ? _taskDataSource.getTasksFromDb()
@@ -115,15 +119,14 @@ class Repository {
   }
 
   Future<TaskList> getTasksFromApi() async {
+    List<Task> tasks = [];
     return await getStepFromApi().then((stepList) {
-      List<Task> tasks = [];
-      TaskList taskList = TaskList(tasks: []);
       stepList.steps.forEach((step) {
         step.tasks.forEach((task) {
           tasks.add(task);
         });
       });
-      taskList.setTasks = tasks;
+      TaskList taskList = TaskList(tasks: tasks);
       return taskList;
     });
   }
@@ -161,7 +164,6 @@ class Repository {
     List<Filter> filters = [];
 
     //check to see if dataLogsType is not null
-
     Filter dataLogTypeFilter = Filter.equals(DBConstants.FIELD_ID, id);
     filters.add(dataLogTypeFilter);
 

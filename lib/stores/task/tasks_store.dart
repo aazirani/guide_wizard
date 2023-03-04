@@ -1,4 +1,5 @@
 import 'package:boilerplate/data/repository.dart';
+import 'package:boilerplate/models/task/task.dart';
 import 'package:boilerplate/models/task/task_list.dart';
 import 'package:boilerplate/stores/error/error_store.dart';
 import 'package:boilerplate/utils/dio/dio_error_util.dart';
@@ -49,7 +50,6 @@ abstract class _TasksStore with Store {
   Future getTasks() async {
     final future = _repository.getTasks();
     fetchTasksFuture = ObservableFuture(future);
-
     future.then((taskList) {
       this.taskList = taskList;
     }).catchError((error) {
@@ -57,6 +57,11 @@ abstract class _TasksStore with Store {
     });
 
     return future;
+  }
+
+  @action
+  Task getTaskById(int taskId) {
+    return taskList!.tasks.firstWhere((task) => task.id == taskId);
   }
 
   Future truncateTable() async {
@@ -68,6 +73,16 @@ abstract class _TasksStore with Store {
     });
 
     return future;
+  }
+
+  @action
+  bool isTaskTypeOfImage(Task task) {
+    return task.isTypeOfImage;
+  }
+
+  @action
+  bool isTaskTypeOfImageById(int taskId) {
+    return isTaskTypeOfImage(getTaskById(taskId));
   }
 
   Future updateTasks() async {
@@ -83,4 +98,7 @@ abstract class _TasksStore with Store {
     return future;
   }
 
+  Future truncateTasks() async {
+   await _repository.truncateTask();
+  }
 }

@@ -19,7 +19,7 @@ abstract class _TaskListStore with Store {
   ObservableFuture<TaskList?> fetchTasksFuture = ObservableFuture<TaskList?>(emptyTaskList);
 
   @observable
-  TaskList taskList = TaskList(tasks: []);
+  TaskList? taskList;
 
   @observable
   bool success = false;
@@ -28,12 +28,14 @@ abstract class _TaskListStore with Store {
   bool get loading => fetchTasksFuture.status == FutureStatus.pending;
 
   @action
-  Future getProducts() async {
+  Future getTasks() async {
     final future = _repository.getTasks();
     fetchTasksFuture = ObservableFuture(future);
 
     future.then((taskList) {
       this.taskList = taskList;
     });
+
+    print("first task name " + taskList!.tasks[0].text.technical_name);
   }
 }

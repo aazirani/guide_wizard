@@ -4,12 +4,11 @@ import 'package:boilerplate/models/technical_name/technical_name.dart';
 
 class Task {
   int id;
+  int step_id;
   TechnicalName text;
   TechnicalName description;
-  // String type;
-  String? image1;
-  String? image2;
-  String? fa_icon;
+  String? image_1;
+  String? image_2;
   List<SubTask> sub_tasks;
   int creator_id;
   String created_at;
@@ -19,12 +18,11 @@ class Task {
 
   Task({
     required this.id,
+    required this.step_id,
     required this.text,
     required this.description,
-    // required this.type,
-    required this.image1,
-    required this.image2,
-    required this.fa_icon,
+    required this.image_1,
+    required this.image_2,
     required this.sub_tasks,
     required this.creator_id,
     required this.created_at,
@@ -36,12 +34,11 @@ class Task {
   factory Task.fromMap(Map<String, dynamic> json) {
     return Task(
       id: json["id"],
+      step_id: json["step_id"],
       text: TechnicalName.fromMap(json["text"]),
       description: TechnicalName.fromMap(json["description"]),
-      // type: json["type"],
-      image1: json["image1"],
-      image2: json["image2"],
-      fa_icon: json["fa_icon"],
+      image_1: json["image_1"],
+      image_2: json["image_2"],
       creator_id: json["creator_id"],
       created_at: json["created_at"],
       updated_at: json["updated_at"],
@@ -53,18 +50,22 @@ class Task {
   }
 
   Map<String, dynamic> toMap() => {
-        "id": id,
-        "text": text.toMap(),
-        "description": description.toMap(),
-        // "type": type,
-        "image1": image1,
-        "image2": image2,
-        "sub_tasks": sub_tasks.map((sub_task) => sub_task.toMap()).toList(),
-        "creator_id": creator_id,
-        "created_at": created_at,
-        "updated_at": updated_at,
-        "quesions": questions.map((question) => question.toMap()).toList(),
-      };
+    "id": id,
+    "step_id": step_id,
+    "text": text.toMap(),
+    "description": description.toMap(),
+    "image_1": image_1,
+    "image_2": image_2,
+    "sub_tasks": sub_tasks.map((sub_task) => sub_task.toMap()).toList(),
+    "creator_id": creator_id,
+    "created_at": created_at,
+    "updated_at": updated_at,
+    "questions": questions.map((question) => question.toMap()).toList(),
+  };
+
+  bool get isTypeOfText => image_1=="" && image_2=="";
+  bool get isTypeOfImage => !isTypeOfText;
+  int get subTaskCount => sub_tasks.length;
 
   void setDone(bool value) {
     isDone = value;
@@ -72,14 +73,6 @@ class Task {
 
   void toggleDone() {
     isDone = !isDone;
-  }
-
-  // bool get isImageTask{
-  //   return type == 'IMAGE';
-  // }
-
-  int get subTaskCount {
-    return sub_tasks.length;
   }
 
   get deadLine {

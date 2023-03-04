@@ -48,8 +48,6 @@ abstract class _AnswerStore with Store {
     }).catchError((error) {
       errorStore.errorMessage = DioErrorUtil.handleError(error);
     });
-
     return future;
   }
-
 }
