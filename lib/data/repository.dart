@@ -90,8 +90,6 @@ class Repository {
 
   Future truncateStep() =>
       _stepDataSource.deleteAll().catchError((error) => throw error);
-
-
   Future<int> insertStep(Step step) => _stepDataSource
       .insert(step)
       .then((id) => id)
