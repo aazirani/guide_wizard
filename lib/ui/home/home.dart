@@ -6,6 +6,7 @@ import 'package:boilerplate/stores/step/step_store.dart';
 import 'package:boilerplate/ui/compressed_tasklist_timeline/compressed_task_list_timeline.dart';
 import 'package:boilerplate/ui/step_slider/step_slider_widget.dart';
 import 'package:boilerplate/ui/step_timeline/step_timeline.dart';
+import 'package:boilerplate/utils/locale/app_localization.dart';
 import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
@@ -73,11 +74,11 @@ class _HomeScreenState extends State<HomeScreen> {
   }
 
   void _showNoInternetConnectionDialog(BuildContext context){
-    _showAlertDialog(context, 'No Internet Connection', 'Please check your internet connection and try again.', 'Try Again', _loadDataAndShowLoadingDialog);
+    _showAlertDialog(context, AppLocalizations.of(context).translate("no_internet_title"), AppLocalizations.of(context).translate("no_internet_content"), AppLocalizations.of(context).translate("no_internet_button_text"), _loadDataAndShowLoadingDialog);
   }
 
   void _showCantConnectToServer(BuildContext context){
-    _showAlertDialog(context, 'Can not connect to Server', 'There was a problem connecting to the server. Please check your internet connection and try again.', 'Try Again', _loadDataAndShowLoadingDialog);
+    _showAlertDialog(context, AppLocalizations.of(context).translate("unable_to_reach_server_title"), AppLocalizations.of(context).translate("unable_to_reach_server_content"), AppLocalizations.of(context).translate("unable_to_reach_server_button_text"), _loadDataAndShowLoadingDialog);
   }
 
   void _showAlertDialog(BuildContext context, String title, String content, String buttonText, void Function(BuildContext context) onPressedFunction) {
@@ -104,7 +105,7 @@ class _HomeScreenState extends State<HomeScreen> {
   void _loadDataAndShowLoadingDialog(BuildContext context) async {
     _dialog ??= SimpleFontelicoProgressDialog(context: context);
     _dialog!.show(
-        message: 'Loading...',
+        message: AppLocalizations.of(context).translate("loading_dialog_text"),
         type: SimpleFontelicoProgressDialogType.normal,
         horizontal: true,
         width: 175.0,
