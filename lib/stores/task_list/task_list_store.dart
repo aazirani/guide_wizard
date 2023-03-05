@@ -35,7 +35,5 @@ abstract class _TaskListStore with Store {
     future.then((taskList) {
       this.taskList = taskList;
     });
-
-    print("first task name " + taskList!.tasks[0].text.technical_name);
   }
 }

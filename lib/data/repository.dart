@@ -65,14 +65,13 @@ class Repository {
 
   // Step: ---------------------------------------------------------------------
   Future<StepList> getStep() async {
-    // return getStepFromApi();
     return await _stepDataSource.count() > 0
         ? _stepDataSource.getStepsFromDb()
         : getStepFromApi();
   }
 
   Future<StepList> getStepFromApi() async {
-    var f =  await _stepApi.getSteps().then((stepList) {
+    return await _stepApi.getSteps().then((stepList) {
       stepList.steps.forEach((step) {
         _stepDataSource.insert(step);
         step.tasks.forEach((task) {
@@ -87,7 +86,6 @@ class Repository {
       });
       return stepList;
     });
-    return f;
   }
 
   Future truncateStep() =>
@@ -111,7 +109,6 @@ class Repository {
 
   // Task: ---------------------------------------------------------------------
   Future<TaskList> getTasks() async {
-    // return getTasksFromApi();
     //if already exists, get tasks from the database, otherwise, do the Api call.
     return await _taskDataSource.count() > 0
         ? _taskDataSource.getTasksFromDb()
