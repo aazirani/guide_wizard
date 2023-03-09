@@ -1,5 +1,7 @@
+import 'dart:io';
 import 'package:boilerplate/constants/colors.dart';
 import 'package:boilerplate/constants/dimens.dart';
+import 'package:boilerplate/data/network/constants/endpoints.dart';
 import 'package:boilerplate/stores/step/step_store.dart';
 import 'package:boilerplate/ui/compressed_tasklist_timeline/compressed_task_list_timeline.dart';
 import 'package:boilerplate/ui/step_slider/step_slider_widget.dart';
@@ -11,7 +13,6 @@ import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:provider/provider.dart';
 import 'package:boilerplate/stores/step/steps_store.dart';
 import 'package:simple_fontellico_progress_dialog/simple_fontico_loading.dart';
-import 'package:boilerplate/stores/step/steps_store.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({
