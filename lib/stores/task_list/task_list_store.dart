@@ -2,6 +2,7 @@ import 'package:mobx/mobx.dart';
 import 'package:boilerplate/data/repository.dart';
 import 'package:boilerplate/models/task/task_list.dart';
 import 'package:boilerplate/models/task/task.dart';
+
 // // Include generated file
 part 'task_list_store.g.dart';
 

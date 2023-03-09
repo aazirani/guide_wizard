@@ -23,12 +23,14 @@
 
   "tasks": "tasks",
   "deadline": "Deadline",
+  "continue": "Continue"
   "tasks_end": "-------------------------------------------------------------------------------------",
 
 
   "no_internet_title": "No Internet Connection",
   "no_internet_content": "Please check your internet connection and try again.",
   "no_internet_button_text": "Try Again",
+
 
   "unable_to_reach_server_title": "Can not connect to Server",
   "unable_to_reach_server_content": "There was a problem connecting to the server. Please check your internet connection and try again.",
