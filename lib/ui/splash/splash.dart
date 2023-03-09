@@ -7,8 +7,7 @@ import 'package:boilerplate/widgets/app_icon_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:boilerplate/stores/step/steps_store.dart';
-
-import '../../data/repository.dart';
+import 'package:boilerplate/data/repository.dart';
 
 class SplashScreen extends StatefulWidget {
   @override

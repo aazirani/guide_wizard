@@ -25,7 +25,6 @@ import 'package:get_it/get_it.dart';
 import 'package:sembast/sembast.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
-import '../../stores/step/step_store.dart';
 
 final getIt = GetIt.instance;
 
@@ -84,5 +83,4 @@ Future<void> setupLocator() async {
   getIt.registerSingleton(PostStore(getIt<Repository>()));
   getIt.registerSingleton(ThemeStore(getIt<Repository>()));
   getIt.registerSingleton(UserStore(getIt<Repository>()));
-  getIt.registerSingleton(StepStore());
 }

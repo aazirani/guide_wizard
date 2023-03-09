@@ -24,6 +24,7 @@
   "undone_button_text" : "Undone",
 
   "tasks": "tasks",
-  "deadline": "Deadline"
+  "deadline": "Deadline",
+  "continue": "Continue"
 
 }

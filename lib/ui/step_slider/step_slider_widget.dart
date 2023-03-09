@@ -4,6 +4,7 @@ import 'package:boilerplate/models/step/step_list.dart';
 import 'package:boilerplate/stores/step/step_store.dart';
 import 'package:boilerplate/stores/task_list/task_list_store.dart';
 import 'package:boilerplate/utils/enums/enum.dart';
+import 'package:boilerplate/utils/locale/app_localization.dart';
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -167,7 +168,7 @@ class _StepSliderWidgetState extends State<StepSliderWidget> {
               MaterialPageRoute(builder: (context) => const TaskList()));
         },
         child: Row(mainAxisAlignment: MainAxisAlignment.center, children: [
-          Text("Continue",
+          Text(AppLocalizations.of(context).translate("continue"),
               style: TextStyle(fontSize: 12, color: AppColors.main_color)),
           SizedBox(width: 1),
           Icon(

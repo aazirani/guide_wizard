@@ -1,10 +1,7 @@
 import 'package:mobx/mobx.dart';
 import 'package:boilerplate/data/repository.dart';
 import 'package:boilerplate/models/task/task_list.dart';
-
-import '../../di/components/service_locator.dart';
-import '../../models/task/task.dart';
-import '../step/step_store.dart';
+import 'package:boilerplate/models/task/task.dart';
 
 // // Include generated file
 part 'task_list_store.g.dart';
@@ -14,8 +11,6 @@ class TaskListStore = _TaskListStore with _$TaskListStore;
 
 abstract class _TaskListStore with Store {
   Repository _repository;
-  // StepStore _stepStore = StepStore();
-  StepStore _stepStore = getIt<StepStore>();
 
   _TaskListStore(Repository repository) : this._repository = repository;
 
