@@ -76,7 +76,7 @@ class _TaskPageWithImageState extends State<TaskPageWithImage> {
 
   Widget _buildImageSlide() {
     return ImageSlide(
-        images: [widget.task.image1, widget.task.image2], 
+        images: [widget.task.image_1, widget.task.image_2],
         description: widget.task.description.string
     );
   }

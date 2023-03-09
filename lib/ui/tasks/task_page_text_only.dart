@@ -1,16 +1,19 @@
 import 'package:boilerplate/constants/colors.dart';
 import 'package:boilerplate/constants/dimens.dart';
 import 'package:boilerplate/models/task/task.dart';
+import 'package:boilerplate/stores/task/tasks_store.dart';
 import 'package:boilerplate/widgets/sub_task_widget.dart';
 import 'package:boilerplate/widgets/blocks_appbar_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
+import 'package:flutter_mobx/flutter_mobx.dart';
+import 'package:provider/provider.dart';
 import 'package:render_metrics/render_metrics.dart';
 
 class TaskPageTextOnly extends StatefulWidget {
-  Task task;
+  int task_id;
 
-  TaskPageTextOnly({Key? key, required this.task}) : super(key: key);
+  TaskPageTextOnly({Key? key, required this.task_id}) : super(key: key);
 
   @override
   State<TaskPageTextOnly> createState() => _TaskPageTextOnlyState();
@@ -18,31 +21,46 @@ class TaskPageTextOnly extends StatefulWidget {
 
 class _TaskPageTextOnlyState extends State<TaskPageTextOnly> {
   RenderParametersManager renderManager = RenderParametersManager<dynamic>();
+  // stores:--------------------------------------------------------------------
+  late TasksStore _tasksStore;
+
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    // initializing stores
+    _tasksStore = Provider.of<TasksStore>(context);
+  }
 
   @override
   void initState() {
     super.initState();
   }
 
-
-
   _buildDescription(){
     return Padding(
       padding: Dimens.taskPageTextOnlyListViewPadding,
-      child: Text(widget.task.description.string, style: TextStyle(fontSize: 20),),
+      child: Observer(
+        builder: (context) {
+          return Text(_tasksStore.getTaskById(widget.task_id).description.string, style: TextStyle(fontSize: 20),);
+        },
+      ),
     );
   }
 
   _buildSubTasksList(){
-    return ListView.builder(
-      physics: ScrollPhysics(),
-      shrinkWrap: true,
-      itemCount: widget.task.sub_tasks.length,
-      itemBuilder: (context, i) {
-        return SubTaskWidget(
-          index: i,
-          subTasks: widget.task.sub_tasks,
-          renderManager: renderManager,
+    return Observer(
+      builder: (context) {
+        return ListView.builder(
+          physics: ScrollPhysics(),
+          shrinkWrap: true,
+          itemCount: _tasksStore.getTaskById(widget.task_id).sub_tasks.length,
+          itemBuilder: (context, i) {
+            return SubTaskWidget(
+              index: i,
+              subTasks: _tasksStore.getTaskById(widget.task_id).sub_tasks,
+              renderManager: renderManager,
+            );
+          },
         );
       },
     );
@@ -79,9 +97,9 @@ class _TaskPageTextOnlyState extends State<TaskPageTextOnly> {
     return Scaffold(
       backgroundColor: AppColors.main_color,
       appBar: BlocksAppBarWidget(
-        isDone: widget.task.isDone,
+        isDone: _tasksStore.getTaskById(widget.task_id).isDone,
         appBarSize: 70.0,
-        title: widget.task.text.string,
+        title: _tasksStore.getTaskById(widget.task_id).text.string,
       ),
       body: _buildScaffoldBody(),
     );

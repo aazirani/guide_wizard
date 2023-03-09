@@ -1,4 +1,5 @@
 import 'package:boilerplate/data/repository.dart';
+import 'package:boilerplate/models/question/question.dart';
 import 'package:boilerplate/models/question/question_list.dart';
 import 'package:boilerplate/stores/error/error_store.dart';
 import 'package:boilerplate/utils/dio/dio_error_util.dart';
@@ -59,6 +60,11 @@ abstract class _QuestionsStore with Store {
     return future;
   }
 
+  @action
+  Question getQuestionById(int questionId) {
+    return questionList!.questions.firstWhere((question) => question.id == questionId);
+  }
+
   Future truncateTable() async {
     final future = _repository.truncateQuestions();
     truncateQuestionsFuture = ObservableFuture(future);
@@ -83,4 +89,7 @@ abstract class _QuestionsStore with Store {
     return future;
   }
 
+  Future truncateQuestions() async {
+    await _repository.truncateQuestions();
+  }
 }

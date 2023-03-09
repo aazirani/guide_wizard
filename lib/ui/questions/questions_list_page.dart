@@ -1,5 +1,4 @@
 import 'dart:math';
-
 import 'package:boilerplate/constants/colors.dart';
 import 'package:boilerplate/constants/dimens.dart';
 import 'package:boilerplate/models/answer/answer.dart';
@@ -8,13 +7,15 @@ import 'package:boilerplate/models/question/question_list.dart';
 import 'package:boilerplate/models/step/step.dart' as StepModel;
 import 'package:boilerplate/models/technical_name/technical_name.dart';
 import 'package:boilerplate/models/translation/translation_list.dart';
+import 'package:boilerplate/stores/question/questions_store.dart';
 import 'package:boilerplate/widgets/question_widget.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import 'package:scrollable_positioned_list/scrollable_positioned_list.dart';
 
 class QuestionsListPage extends StatefulWidget {
-  QuestionList questionList;
-  QuestionsListPage({Key? key, required this.questionList}) : super(key: key);
+  int questionId;
+  QuestionsListPage({Key? key, required this.questionId}) : super(key: key);
 
   @override
   State<QuestionsListPage> createState() => _QuestionsListPageState();
@@ -22,6 +23,15 @@ class QuestionsListPage extends StatefulWidget {
 
 class _QuestionsListPageState extends State<QuestionsListPage> {
   late final itemScrollController;
+  // stores:--------------------------------------------------------------------
+  late QuestionsStore _questionsStore;
+
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    // initializing stores
+    _questionsStore = Provider.of<QuestionsStore>(context);
+  }
 
   @override
   void initState() {
@@ -51,8 +61,8 @@ class _QuestionsListPageState extends State<QuestionsListPage> {
     return QuestionWidget(
       index: index,
       itemScrollController: itemScrollController,
-      question: widget.questionList.elementAt(index),
-      isLastQuestion: index == widget.questionList.length - 1,
+      question: _questionsStore.questionList!.elementAt(index),
+      isLastQuestion: index == _questionsStore.questionList!.length - 1,
     );
   }
 
@@ -61,7 +71,7 @@ class _QuestionsListPageState extends State<QuestionsListPage> {
     return Scaffold(
       appBar: _buildAppBar(),
       body: ScrollablePositionedList.builder(
-        itemCount: widget.questionList.length,
+        itemCount: _questionsStore.questionList!.length,
         itemBuilder: (context, index) => _buildQuestionWidget(index),
         itemScrollController: itemScrollController,
       ),

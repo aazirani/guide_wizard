@@ -5,7 +5,9 @@ import 'package:boilerplate/di/components/service_locator.dart';
 import 'package:boilerplate/providers/question_widget_state/question_widget_state.dart';
 import 'package:boilerplate/stores/language/language_store.dart';
 import 'package:boilerplate/stores/post/post_store.dart';
+import 'package:boilerplate/stores/question/questions_store.dart';
 import 'package:boilerplate/stores/step/step_store.dart';
+import 'package:boilerplate/stores/task/tasks_store.dart';
 import 'package:boilerplate/stores/theme/theme_store.dart';
 import 'package:boilerplate/stores/user/user_store.dart';
 import 'package:boilerplate/ui/splash/splash.dart';
@@ -30,6 +32,8 @@ class MyApp extends StatelessWidget {
   final StepStore _stepStore = StepStore();
   final StepsStore _stepsStore = StepsStore(getIt<Repository>());
   final TaskListStore _taskListStore = TaskListStore(getIt<Repository>());
+  final TasksStore _tasksStore = TasksStore(getIt<Repository>());
+  final QuestionsStore _questionsStore = QuestionsStore(getIt<Repository>());
 
   @override
   Widget build(BuildContext context) {
@@ -41,8 +45,10 @@ class MyApp extends StatelessWidget {
         Provider<StepStore>(create: (_) => _stepStore),
         Provider<StepsStore>(create: (_) => _stepsStore),
         Provider<TaskListStore>(create: (_) => _taskListStore),
+        Provider<TasksStore>(create: (_) => _tasksStore),
         ListenableProvider<QuestionsWidgetState>(
             create: (_) => QuestionsWidgetState(activeIndex: 0)),
+        Provider<QuestionsStore>(create: (_) => _questionsStore),
       ],
       child: Observer(
         name: 'global-observer',
