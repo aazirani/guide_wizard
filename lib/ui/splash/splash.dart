@@ -1,11 +1,15 @@
 import 'dart:async';
 
 import 'package:boilerplate/constants/assets.dart';
+import 'package:boilerplate/data/sharedpref/constants/preferences.dart';
+import 'package:boilerplate/stores/step/steps_store.dart';
 import 'package:boilerplate/utils/routes/routes.dart';
 import 'package:boilerplate/widgets/app_icon_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:boilerplate/stores/step/steps_store.dart';
+import 'package:provider/provider.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class SplashScreen extends StatefulWidget {
   @override
@@ -13,6 +17,7 @@ class SplashScreen extends StatefulWidget {
 }
 
 class _SplashScreenState extends State<SplashScreen> {
+  //stores:---------------------------------------------------------------------
   late StepsStore _stepsStore;
 
   @override
@@ -41,8 +46,7 @@ class _SplashScreenState extends State<SplashScreen> {
   }
 
   navigate() async {
-
-    if (!_stepsStore.loading) {
+    if(!_stepsStore.loading) {
       await _stepsStore.getSteps();
     }
     Navigator.of(context).pushReplacementNamed(Routes.home);

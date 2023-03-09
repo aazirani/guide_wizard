@@ -12,13 +12,15 @@ abstract class _StepsStore with Store {
 
   Repository _repository;
   _StepsStore(Repository repo) : this._repository = repo; 
+  
+  //TODO: add step_list to store
 
-  static ObservableFuture<StepList?> emptyStepsResponse =
-      ObservableFuture.value(null);
+  static ObservableFuture<StepList> emptyStepsResponse =
+      ObservableFuture.value(StepList(steps: []));
 
   @observable
-  ObservableFuture<StepList?> fetchStepsFuture =
-      ObservableFuture<StepList?>(emptyStepsResponse);
+  ObservableFuture<StepList> fetchStepsFuture =
+      ObservableFuture<StepList>(emptyStepsResponse);
 
   @observable
   StepList stepList = StepList(steps: []);
@@ -31,7 +33,7 @@ abstract class _StepsStore with Store {
 
   @action
   Future getSteps() async {
-    final future = _repository.getStepFromApi();
+    final future = _repository.getStep();
     fetchStepsFuture = ObservableFuture(future);
 
     future.then((stepList) {
