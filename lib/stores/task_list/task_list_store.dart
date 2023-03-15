@@ -22,7 +22,7 @@ abstract class _TaskListStore with Store {
       ObservableFuture<TaskList?>(emptyTaskList);
 
   @observable
-  TaskList? taskList;
+  TaskList taskList = TaskList(tasks: []);
 
   @observable
   bool success = false;
