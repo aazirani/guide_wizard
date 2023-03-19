@@ -1,7 +1,9 @@
 import 'dart:async';
 import 'package:boilerplate/constants/assets.dart';
 import 'package:boilerplate/data/sharedpref/constants/preferences.dart';
+import 'package:boilerplate/stores/step/step_store.dart';
 import 'package:boilerplate/stores/step/steps_store.dart';
+import 'package:boilerplate/ui/home/home.dart';
 import 'package:boilerplate/utils/routes/routes.dart';
 import 'package:boilerplate/stores/question/questions_store.dart';
 import 'package:boilerplate/stores/task/tasks_store.dart';
@@ -51,7 +53,6 @@ class _SplashScreenState extends State<SplashScreen> {
   }
 
   navigate() async {
-
     if (!_stepsStore.loading) {
       await _stepsStore.truncateSteps();
       await _tasksStore.truncateTasks();
@@ -61,7 +62,7 @@ class _SplashScreenState extends State<SplashScreen> {
       await _questionsStore.getQuestions();
     }
     Navigator.of(context).push(MaterialPageRoute(
-        builder: (context) => QuestionsListPage(questionId: 3,)));
+        builder: (context) => HomeScreen()));
 
   }
 }

@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'dart:io';
 import 'package:boilerplate/constants/colors.dart';
 import 'package:boilerplate/constants/dimens.dart';
@@ -26,13 +27,20 @@ class HomeScreen extends StatefulWidget {
 class _HomeScreenState extends State<HomeScreen> {
   late StepStore _stepStore;
   late StepsStore _stepsStore;
+  Map _source = {ConnectivityResult.none: false};
+  final MyConnectivity _connectivity = MyConnectivity.instance;
 
   @override
   void initState() {
-    Future.delayed(Duration.zero,() {
-      _loadDataAndShowLoadingDialog(context);
-    });
     super.initState();
+    _connectivity.initialise();
+    _connectivity.myStream.listen((source) {
+      setState(() => _source = source);
+    });
+    Future.delayed(Duration(milliseconds: 10000),() {
+      // _loadDataAndShowLoadingDialog(context);
+      _loadDataWithoutErrorHandling(context);
+    });
   }
 
   @override
@@ -46,21 +54,25 @@ class _HomeScreenState extends State<HomeScreen> {
   SimpleFontelicoProgressDialog? _dialog;
 
   Future<bool> _canConnectToServer() async {
-    late bool canConnect;
-    try {
-      final result = await InternetAddress.lookup(Endpoints.baseUrl);
-      if (result.isNotEmpty && result[0].rawAddress.isNotEmpty) {
-        canConnect = true;
+    bool ActiveConnection = false;
+      try {
+        final result = await InternetAddress.lookup('google.com');
+        if (result.isNotEmpty && result[0].rawAddress.isNotEmpty) {
+          setState(() {
+            ActiveConnection = true;
+          });
+        }
+      } on SocketException catch (_) {
+        setState(() {
+          ActiveConnection = false;
+        });
       }
-    } on SocketException catch (_) {
-      canConnect = false;
-    }
-    return canConnect;
+    return ActiveConnection;
   }
 
   Future<bool> _isConnectedToInternet() async{
-    Map _source = {ConnectivityResult.none: false};
     bool hasConnection;
+    print("connection status: ${_source.keys.toList()[0]}");
     switch (_source.keys.toList()[0]) {
       case ConnectivityResult.mobile:
       case ConnectivityResult.wifi:
@@ -114,11 +126,7 @@ class _HomeScreenState extends State<HomeScreen> {
         indicatorColor: AppColors.main_color);
     if(await _isConnectedToInternet()){
       if(await _canConnectToServer()){
-        await Future.delayed(Duration(seconds: 1),() {
-          if(!_stepsStore.loading) {
-            _stepsStore.getSteps();
-          }
-        });
+        await _stepsStore.getSteps();
         _dialog!.hide();
       } else {
         _dialog!.hide();
@@ -129,6 +137,20 @@ class _HomeScreenState extends State<HomeScreen> {
       _dialog!.hide();
       _showNoInternetConnectionDialog(context);
     }
+  }
+
+  void _loadDataWithoutErrorHandling(BuildContext context) async {
+    _dialog ??= SimpleFontelicoProgressDialog(context: context);
+    _dialog!.show(
+        message: AppLocalizations.of(context).translate("loading_dialog_text"),
+        type: SimpleFontelicoProgressDialogType.normal,
+        horizontal: true,
+        width: 175.0,
+        height: 75.0,
+        hideText: false,
+        indicatorColor: AppColors.main_color);
+    await _stepsStore.getSteps();
+    _dialog!.hide();
   }
 
   @override
@@ -199,15 +221,15 @@ class _HomeScreenState extends State<HomeScreen> {
 
   Widget _buildCurrentStepIndicator() {
     return Padding(
-        padding: EdgeInsets.only(
-          top: 30,
-          left: 15,
-        ),
-        child: Row(children: [
-          _buildStepsText(),
-          SizedBox(width: 10),
-          _buildCurrentStepText(_stepStore),
-        ]));
+      padding: EdgeInsets.only(
+        top: 30,
+        left: 15,
+      ),
+      child: Row(children: [
+        _buildStepsText(),
+         SizedBox(width: 10),
+        _buildCurrentStepText(_stepStore),
+      ]));
   }
 
   Widget _buildStepsText() {
@@ -235,4 +257,41 @@ class _HomeScreenState extends State<HomeScreen> {
                     color: AppColors.main_color,
                     fontWeight: FontWeight.bold))));
   }
+
+  @override
+  void dispose() {
+    _connectivity.disposeStream();
+    super.dispose();
+  }
+}
+
+class MyConnectivity {
+  MyConnectivity._();
+
+  static final _instance = MyConnectivity._();
+  static MyConnectivity get instance => _instance;
+  final _connectivity = Connectivity();
+  final _controller = StreamController.broadcast();
+  Stream get myStream => _controller.stream;
+
+  void initialise() async {
+    ConnectivityResult result = await _connectivity.checkConnectivity();
+    _checkStatus(result);
+    _connectivity.onConnectivityChanged.listen((result) {
+      _checkStatus(result);
+    });
+  }
+
+  void _checkStatus(ConnectivityResult result) async {
+    bool isOnline = false;
+    try {
+      final result = await InternetAddress.lookup('google.com');
+      isOnline = result.isNotEmpty && result[0].rawAddress.isNotEmpty;
+    } on SocketException catch (_) {
+      isOnline = false;
+    }
+    _controller.sink.add({result: isOnline});
+  }
+
+  void disposeStream() => _controller.close();
 }

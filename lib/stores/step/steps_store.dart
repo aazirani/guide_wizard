@@ -34,9 +34,10 @@ abstract class _StepsStore with Store {
 
   @action
   Future getSteps() async {
-    final future = _repository.getStep();
+    // final future = _repository.getStep(); //TODO: datasource getStepFromDB have to get fixed
+    final future = _repository.getStepFromApi();
     fetchStepsFuture = ObservableFuture(future);
-    future.then((stepList) {
+    await future.then((stepList) {
       this.stepList = stepList;
     });
   }

@@ -52,7 +52,7 @@ class StepDataSource {
     print('Loading from database');
 
     // post list
-    var stepsList;
+    StepList stepsList;
 
     // fetching data
     final recordSnapshots = await _stepsStore.find(
@@ -68,6 +68,9 @@ class StepDataSource {
             step.id = snapshot.key;
             return step;
           }).toList());
+    }
+    else{
+      stepsList = StepList(steps: []);
     }
 
     return stepsList;

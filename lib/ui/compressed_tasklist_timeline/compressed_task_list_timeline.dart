@@ -60,7 +60,7 @@ class _CompressedBlocklistTimelineState
             ),
             builder: TimelineTileBuilder(
               itemCount:
-                  _stepsStore.stepList.steps[(_stepStore.currentStep) - 1].numTasks,
+                  _stepsStore.stepList.steps.length == 0 ? 0 : _stepsStore.stepList.steps[(_stepStore.currentStep) - 1].numTasks,
               itemExtent: 70,
               contentsBuilder: (context, index) =>
                   _buildContents(index, _stepStore),
