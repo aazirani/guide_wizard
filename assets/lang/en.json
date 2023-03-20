@@ -24,6 +24,7 @@
   "tasks": "tasks",
   "deadline": "Deadline",
   "continue": "Continue",
+  "task_list_title": "University",
   "tasks_end": "-------------------------------------------------------------------------------------",
 
 
@@ -36,5 +37,10 @@
   "unable_to_reach_server_content": "There was a problem connecting to the server. Please check your internet connection and try again.",
   "unable_to_reach_server_button_text": "Try Again",
   "loading_dialog_text": "Loading...",
-  "loading_dialog_end": "-------------------------------------------------------------------------------------"
+  "loading_dialog_end": "-------------------------------------------------------------------------------------",
+
+  "steps_title": "Welcome Guide",
+  "steps": "Steps",
+  "in_progress": "In Progress",
+  "steps_end": "------------------------------------------------------------------------------------"
 }

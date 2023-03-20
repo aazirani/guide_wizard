@@ -1,12 +1,5 @@
-import 'dart:math';
 import 'package:boilerplate/constants/colors.dart';
 import 'package:boilerplate/constants/dimens.dart';
-import 'package:boilerplate/models/answer/answer.dart';
-import 'package:boilerplate/models/question/question.dart';
-import 'package:boilerplate/models/question/question_list.dart';
-import 'package:boilerplate/models/step/step.dart' as StepModel;
-import 'package:boilerplate/models/technical_name/technical_name.dart';
-import 'package:boilerplate/models/translation/translation_list.dart';
 import 'package:boilerplate/stores/question/questions_store.dart';
 import 'package:boilerplate/widgets/question_widget.dart';
 import 'package:flutter/material.dart';

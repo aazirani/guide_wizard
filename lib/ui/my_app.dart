@@ -11,14 +11,12 @@ import 'package:boilerplate/stores/task/tasks_store.dart';
 import 'package:boilerplate/stores/theme/theme_store.dart';
 import 'package:boilerplate/stores/user/user_store.dart';
 import 'package:boilerplate/ui/home/home.dart';
-import 'package:boilerplate/ui/splash/splash.dart';
 import 'package:boilerplate/utils/locale/app_localization.dart';
 import 'package:boilerplate/utils/routes/routes.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:provider/provider.dart';
-import 'package:flutter/services.dart' show rootBundle;
 import 'package:boilerplate/stores/step/steps_store.dart';
 import 'package:boilerplate/stores/task_list/task_list_store.dart';
 

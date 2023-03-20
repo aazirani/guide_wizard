@@ -56,7 +56,7 @@ class _HomeScreenState extends State<HomeScreen> {
   Future<bool> _canConnectToServer() async {
     bool ActiveConnection = false;
       try {
-        final result = await InternetAddress.lookup('google.com');
+        final result = await InternetAddress.lookup(Endpoints.baseUrl);
         if (result.isNotEmpty && result[0].rawAddress.isNotEmpty) {
           setState(() {
             ActiveConnection = true;
@@ -72,7 +72,6 @@ class _HomeScreenState extends State<HomeScreen> {
 
   Future<bool> _isConnectedToInternet() async{
     bool hasConnection;
-    print("connection status: ${_source.keys.toList()[0]}");
     switch (_source.keys.toList()[0]) {
       case ConnectivityResult.mobile:
       case ConnectivityResult.wifi:
@@ -170,7 +169,7 @@ class _HomeScreenState extends State<HomeScreen> {
       backgroundColor: AppColors.main_color,
       title: Padding(
           padding: EdgeInsets.only(left: 10),
-          child: Text("Welcome Guide",
+          child: Text(AppLocalizations.of(context).translate("steps_title"),
               style: TextStyle(color: AppColors.title_color, fontSize: 20))),
     );
   }
@@ -233,7 +232,7 @@ class _HomeScreenState extends State<HomeScreen> {
   }
 
   Widget _buildStepsText() {
-    return Text("Steps",
+    return Text(AppLocalizations.of(context).translate("steps"),
         style: TextStyle(
             color: AppColors.main_color,
             fontSize: 18,
@@ -251,7 +250,7 @@ class _HomeScreenState extends State<HomeScreen> {
         padding: EdgeInsets.only(left: 20, top: 10),
         child: Align(
             alignment: Alignment.centerLeft,
-            child: Text("In Progress",
+            child: Text(AppLocalizations.of(context).translate("in_progress"),
                 style: TextStyle(
                     fontSize: 18,
                     color: AppColors.main_color,
@@ -285,7 +284,7 @@ class MyConnectivity {
   void _checkStatus(ConnectivityResult result) async {
     bool isOnline = false;
     try {
-      final result = await InternetAddress.lookup('google.com');
+      final result = await InternetAddress.lookup(Endpoints.baseUrl);
       isOnline = result.isNotEmpty && result[0].rawAddress.isNotEmpty;
     } on SocketException catch (_) {
       isOnline = false;

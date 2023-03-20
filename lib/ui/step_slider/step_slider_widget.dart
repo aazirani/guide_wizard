@@ -153,7 +153,7 @@ class _StepSliderWidgetState extends State<StepSliderWidget> {
   }
 
   Widget _buildStepNoOfTasks(currentStepNo) {
-    return Text("${widget.stepList.steps[currentStepNo].numTasks} tasks",
+    return Text("${widget.stepList.steps[currentStepNo].numTasks}" + " " + AppLocalizations.of(context).translate('tasks'),
         style: TextStyle(fontSize: 15, color: AppColors.main_color));
   }
 

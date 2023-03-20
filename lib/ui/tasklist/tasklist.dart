@@ -37,7 +37,7 @@ class _TaskListState extends State<TaskList> {
     return AppBar(
         backgroundColor: AppColors.main_color,
         titleSpacing: 0,
-        title: Text("University",
+        title: Text(AppLocalizations.of(context).translate('task_list_title'),
             style: TextStyle(
                 color: AppColors.white,
                 fontSize: 18,

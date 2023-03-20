@@ -1,6 +1,4 @@
 import 'package:boilerplate/constants/colors.dart';
-import 'package:boilerplate/constants/dimens.dart';
-import 'package:boilerplate/models/sub_task/sub_task.dart';
 import 'package:boilerplate/models/task/task.dart';
 import 'package:boilerplate/widgets/sub_task_widget.dart';
 import 'package:boilerplate/widgets/blocks_appbar_widget.dart';
