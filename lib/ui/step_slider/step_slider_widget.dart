@@ -1,7 +1,9 @@
 import 'package:boilerplate/constants/colors.dart';
 import 'package:boilerplate/constants/dimens.dart';
 import 'package:boilerplate/models/step/step_list.dart';
+import 'package:boilerplate/stores/question/questions_store.dart';
 import 'package:boilerplate/stores/step/step_store.dart';
+import 'package:boilerplate/ui/questions/questions_list_page.dart';
 import 'package:boilerplate/utils/enums/enum.dart';
 import 'package:boilerplate/utils/locale/app_localization.dart';
 import 'package:carousel_slider/carousel_slider.dart';
@@ -19,15 +21,17 @@ class StepSliderWidget extends StatefulWidget {
 }
 
 class _StepSliderWidgetState extends State<StepSliderWidget> {
-  late StepStore stepStore;
+  late StepStore _stepStore;
   late TaskListStore _taskListStore;
+  late QuestionsStore _questionsStore;
   
   @override
   void didChangeDependencies() {
     super.didChangeDependencies();
     // initializing stores
-    stepStore = Provider.of<StepStore>(context);
+    _stepStore = Provider.of<StepStore>(context);
     _taskListStore = Provider.of<TaskListStore>(context);
+    _questionsStore = Provider.of<QuestionsStore>(context);
   }
 
   @override
@@ -48,7 +52,7 @@ class _StepSliderWidgetState extends State<StepSliderWidget> {
     return CarouselSlider(
       options: CarouselOptions(
           onPageChanged: (index, reason) {
-            stepStore.increment(index);
+            _stepStore.increment(index);
           },
           height: _getScreenHeight() / 4,
           enlargeCenterPage: false,
@@ -58,7 +62,7 @@ class _StepSliderWidgetState extends State<StepSliderWidget> {
           builder: (BuildContext context) {
             return GestureDetector(
               onTap: () {},
-              child: _buildSliderContainer(index, stepStore),
+              child: _buildSliderContainer(index, _stepStore),
             );
           },
         );
@@ -137,7 +141,7 @@ class _StepSliderWidgetState extends State<StepSliderWidget> {
             SizedBox(height: 10),
             _buildStepNoOfTasks(currentStepNo),
             SizedBox(height: 20),
-            _buildContinueButton(),
+            _buildContinueButton(currentStepNo),
             SizedBox(height: 10),
             //TODO: get the progress percentage from json
             _buildProgressBar(0.2),
@@ -157,14 +161,23 @@ class _StepSliderWidgetState extends State<StepSliderWidget> {
         style: TextStyle(fontSize: 15, color: AppColors.main_color));
   }
 
-  Widget _buildContinueButton() {
+  Widget _buildContinueButton(currentStepNo) {
     return Container(
       child: TextButton(
         style: _buildButtonStyle(),
         onPressed: () {
-          _taskListStore.getTaskList(stepStore.currentStep);
-          Navigator.push(context,
-              MaterialPageRoute(builder: (context) => const TaskList()));
+          if(currentStepNo == 0){
+            _questionsStore.getQuestions();
+            Navigator.push(context,
+                MaterialPageRoute(builder: (context) => QuestionsListPage()));
+          }
+          else{
+            _taskListStore.getTaskList(_stepStore.currentStep);
+            Navigator.push(context,
+                MaterialPageRoute(builder: (context) => TaskList(
+                  currentStepNo: currentStepNo,
+                )));
+          }
         },
         child: Row(mainAxisAlignment: MainAxisAlignment.center, children: [
           Text(AppLocalizations.of(context).translate("continue"),

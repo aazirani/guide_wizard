@@ -76,7 +76,7 @@ class Task {
   }
 
   get deadLine {
-    for (var sb = 0; sb <= sub_tasks.length; sb++) {
+    for (var sb = 0; sb < sub_tasks.length; sb++) {
       if (sub_tasks[sb].deadline.technical_name != "") {
         return true;
       }

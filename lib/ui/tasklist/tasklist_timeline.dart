@@ -1,5 +1,8 @@
 import 'package:boilerplate/constants/colors.dart';
 import 'package:boilerplate/constants/dimens.dart';
+import 'package:boilerplate/models/task/task.dart';
+import 'package:boilerplate/ui/tasks/task_page_text_only.dart';
+import 'package:boilerplate/ui/tasks/task_page_with_image.dart';
 import 'package:boilerplate/widgets/diamond_indicator.dart';
 import 'package:flutter/material.dart';
 import 'package:timelines/timelines.dart';
@@ -7,7 +10,7 @@ import 'package:boilerplate/utils/locale/app_localization.dart';
 import 'package:boilerplate/models/task/task_list.dart';
 
 class TaskListTimeLine extends StatefulWidget {
-  final TaskList taskList;
+  final List<Task> taskList;
   final int index;
   TaskListTimeLine({Key? key, required this.taskList, required this.index})
       : super(key: key);
@@ -63,7 +66,7 @@ class _TaskListTimeLineState extends State<TaskListTimeLine> {
             border: Border(
                 left: BorderSide(
               width: 25,
-              color: (widget.taskList.tasks[index].isDone == true)
+              color: (widget.taskList[index].isDone == true)
                   ? AppColors.contentDoneBorderColor
                   : AppColors.contentUnDoneBorderColor,
             )),
@@ -75,22 +78,32 @@ class _TaskListTimeLineState extends State<TaskListTimeLine> {
   }
 
   Widget _buildInsideElements(index) {
-    return Container(
-      child: Row(
-        children: [
-          Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: (_deadLineAvailable(index))
-                ? [
-                    _buildContentTitle(index),
-                    _buildContentDeadline(index),
-                  ]
-                : [Center(child: _buildContentTitle(index))],
-          ),
-          Spacer(),
-          _buildContentMoreIcon(),
-        ],
+    return GestureDetector(
+      onTap: () {
+        if(widget.taskList[index].isTypeOfText){
+          Navigator.push(context,MaterialPageRoute(builder: (context) => TaskPageTextOnly(task_id: widget.taskList[index].id,)));
+        }
+        else{
+          Navigator.push(context,MaterialPageRoute(builder: (context) => TaskPageWithImage(task: widget.taskList[index],)));
+        }
+      },
+      child: Container(
+        child: Row(
+          children: [
+            Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: (_deadLineAvailable(index))
+                  ? [
+                      _buildContentTitle(index),
+                      _buildContentDeadline(index),
+                    ]
+                  : [Center(child: _buildContentTitle(index))],
+            ),
+            Spacer(),
+            _buildContentMoreIcon(),
+          ],
+        ),
       ),
     );
   }
@@ -98,7 +111,7 @@ class _TaskListTimeLineState extends State<TaskListTimeLine> {
   Widget _buildContentTitle(index) {
     return Align(
       alignment: Alignment.centerLeft,
-      child: Text("${widget.taskList.tasks[index].text.technical_name}",
+      child: Text("${widget.taskList[index].text.technical_name}",
           style: TextStyle(
             color: AppColors.main_color,
             fontSize: 16,
@@ -144,7 +157,7 @@ class _TaskListTimeLineState extends State<TaskListTimeLine> {
   //general methods ............................................................
   double _getScreenWidth() => MediaQuery.of(context).size.width;
   bool _deadLineAvailable(index) {
-    switch (widget.taskList.tasks[index].deadLine) {
+    switch (widget.taskList[index].deadLine) {
       case null:
         return false;
     }
@@ -152,7 +165,7 @@ class _TaskListTimeLineState extends State<TaskListTimeLine> {
   }
 
   bool _taskDone(index) {
-    switch (widget.taskList.tasks[index].isDone) {
+    switch (widget.taskList[index].isDone) {
       case true:
         return true;
     }

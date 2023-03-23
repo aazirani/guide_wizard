@@ -3,6 +3,10 @@ import 'dart:math' as math;
 import 'package:boilerplate/constants/colors.dart';
 import 'package:boilerplate/constants/dimens.dart';
 import 'package:boilerplate/models/question/question.dart';
+import 'package:boilerplate/stores/step/step_store.dart';
+import 'package:boilerplate/stores/step/steps_store.dart';
+import 'package:boilerplate/stores/task_list/task_list_store.dart';
+import 'package:boilerplate/ui/tasklist/tasklist.dart';
 import 'package:boilerplate/utils/locale/app_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -28,8 +32,20 @@ class QuestionWidget extends StatefulWidget {
   State<QuestionWidget> createState() => _QuestionWidgetState();
 }
 
-class _QuestionWidgetState extends State<QuestionWidget>
-    with AutomaticKeepAliveClientMixin {
+class _QuestionWidgetState extends State<QuestionWidget> with AutomaticKeepAliveClientMixin {
+  late StepStore _stepStore;
+  late StepsStore _stepsStore;
+  late TaskListStore _taskListStore;
+
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    // initializing stores
+    _stepStore = Provider.of<StepStore>(context);
+    _stepsStore = Provider.of<StepsStore>(context);
+    _taskListStore = Provider.of<TaskListStore>(context);
+  }
+
   @override
   bool get wantKeepAlive => true;
   double _getScreenWidth() => MediaQuery.of(context).size.width;
@@ -64,7 +80,13 @@ class _QuestionWidgetState extends State<QuestionWidget>
       padding: Dimens.questionButtonPadding,
       child: TextButton(
         style: _buildQuestionsButtonStyle(Colors.green.shade600),
-        onPressed: () {},
+        onPressed: () {
+          _taskListStore.getTaskList(_stepStore.currentStep);
+          Navigator.push(context,
+              MaterialPageRoute(builder: (context) => TaskList(
+                currentStepNo: 1,
+              )));
+        },
         child: Text(
           AppLocalizations.of(context).translate('next_stage_button_text'),
           style: TextStyle(color: Colors.white, fontSize: 15),

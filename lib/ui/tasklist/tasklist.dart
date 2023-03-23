@@ -1,5 +1,7 @@
 import 'package:boilerplate/constants/colors.dart';
 import 'package:boilerplate/constants/dimens.dart';
+import 'package:boilerplate/models/task/task.dart';
+import 'package:boilerplate/stores/step/steps_store.dart';
 import 'package:boilerplate/ui/tasklist/tasklist_timeline.dart';
 import 'package:flutter/material.dart';
 import 'package:boilerplate/widgets/measure_size.dart';
@@ -8,9 +10,11 @@ import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:boilerplate/stores/task_list/task_list_store.dart';
 import 'package:provider/provider.dart';
 import 'package:boilerplate/ui/home/home.dart';
+import 'package:boilerplate/models/step/step.dart' as s;
 
 class TaskList extends StatefulWidget {
-  const TaskList({Key? key}) : super(key: key);
+  int currentStepNo;
+  TaskList({Key? key, required this.currentStepNo}) : super(key: key);
 
   @override
   State<TaskList> createState() => _TaskListState();
@@ -18,12 +22,14 @@ class TaskList extends StatefulWidget {
 
 class _TaskListState extends State<TaskList> {
   late TaskListStore _taskListStore;
+  late StepsStore _stepsStore;
 
   @override
   void didChangeDependencies() {
     super.didChangeDependencies();
     // initializing stores
     _taskListStore = Provider.of<TaskListStore>(context);
+    _stepsStore = Provider.of<StepsStore>(context);
   }
   var progressBarSize = Size.zero;
 
@@ -37,7 +43,7 @@ class _TaskListState extends State<TaskList> {
     return AppBar(
         backgroundColor: AppColors.main_color,
         titleSpacing: 0,
-        title: Text(AppLocalizations.of(context).translate('task_list_title'),
+        title: Text(_stepsStore.stepList.steps[widget.currentStepNo].name.technical_name,
             style: TextStyle(
                 color: AppColors.white,
                 fontSize: 18,
@@ -85,7 +91,7 @@ class _TaskListState extends State<TaskList> {
             Padding(
                 padding: Dimens.numberOfTasksPadding,
                 child: Observer(
-                  builder: (_) => Text("${_taskListStore.taskList.numTasks} ${AppLocalizations.of(context).translate('tasks')}",
+                  builder: (_) => Text("${_stepsStore.stepList.steps[widget.currentStepNo].tasks.length} ${AppLocalizations.of(context).translate('tasks')}",
                       style: TextStyle(color: AppColors.white)),
                 )),
             SizedBox(height: 5),
@@ -117,9 +123,9 @@ class _TaskListState extends State<TaskList> {
                 builder: (_) => ListView.builder(
                   scrollDirection: Axis.vertical,
                   controller: scrollController,
-                  itemCount: _taskListStore.taskList.numTasks,
+                  itemCount: _stepsStore.stepList.steps[widget.currentStepNo].tasks.length,
                   itemBuilder: (context, i) {
-                    return TaskListTimeLine(taskList: _taskListStore.taskList, index: i);
+                    return TaskListTimeLine(taskList: _stepsStore.stepList.steps[widget.currentStepNo].tasks, index: i);
                   },
                 ),
               ),

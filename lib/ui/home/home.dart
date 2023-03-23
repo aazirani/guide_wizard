@@ -3,7 +3,9 @@ import 'dart:io';
 import 'package:boilerplate/constants/colors.dart';
 import 'package:boilerplate/constants/dimens.dart';
 import 'package:boilerplate/data/network/constants/endpoints.dart';
+import 'package:boilerplate/stores/question/questions_store.dart';
 import 'package:boilerplate/stores/step/step_store.dart';
+import 'package:boilerplate/stores/task/tasks_store.dart';
 import 'package:boilerplate/ui/compressed_tasklist_timeline/compressed_task_list_timeline.dart';
 import 'package:boilerplate/ui/step_slider/step_slider_widget.dart';
 import 'package:boilerplate/ui/step_timeline/step_timeline.dart';
@@ -25,6 +27,9 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _HomeScreenState extends State<HomeScreen> {
+  //stores:---------------------------------------------------------------------
+  late TasksStore _tasksStore;
+  late QuestionsStore _questionsStore;
   late StepStore _stepStore;
   late StepsStore _stepsStore;
   Map _source = {ConnectivityResult.none: false};
@@ -47,6 +52,8 @@ class _HomeScreenState extends State<HomeScreen> {
   void didChangeDependencies() {
     super.didChangeDependencies();
     // initializing stores
+    _tasksStore = Provider.of<TasksStore>(context);
+    _questionsStore = Provider.of<QuestionsStore>(context);
     _stepStore = Provider.of<StepStore>(context);
     _stepsStore = Provider.of<StepsStore>(context);
   }
@@ -148,7 +155,14 @@ class _HomeScreenState extends State<HomeScreen> {
         height: 75.0,
         hideText: false,
         indicatorColor: AppColors.main_color);
-    await _stepsStore.getSteps();
+    if (!_stepsStore.loading) {
+      await _stepsStore.truncateSteps();
+      await _tasksStore.truncateTasks();
+      await _questionsStore.truncateQuestions();
+      await _stepsStore.getSteps();
+      await _tasksStore.getTasks();
+      await _questionsStore.getQuestions();
+    }
     _dialog!.hide();
   }
 
@@ -164,6 +178,7 @@ class _HomeScreenState extends State<HomeScreen> {
 //appbar build methods .........................................................
   PreferredSizeWidget _buildAppBar() {
     return AppBar(
+      automaticallyImplyLeading: false,
       toolbarHeight: 60,
       titleSpacing: 5,
       backgroundColor: AppColors.main_color,

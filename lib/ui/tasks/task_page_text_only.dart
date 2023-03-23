@@ -2,7 +2,7 @@ import 'package:boilerplate/constants/colors.dart';
 import 'package:boilerplate/constants/dimens.dart';
 import 'package:boilerplate/stores/task/tasks_store.dart';
 import 'package:boilerplate/widgets/sub_task_widget.dart';
-import 'package:boilerplate/widgets/blocks_appbar_widget.dart';
+import 'package:boilerplate/widgets/task_page_appbar_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';

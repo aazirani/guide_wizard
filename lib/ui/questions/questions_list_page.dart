@@ -7,8 +7,7 @@ import 'package:provider/provider.dart';
 import 'package:scrollable_positioned_list/scrollable_positioned_list.dart';
 
 class QuestionsListPage extends StatefulWidget {
-  int questionId;
-  QuestionsListPage({Key? key, required this.questionId}) : super(key: key);
+  QuestionsListPage({Key? key}) : super(key: key);
 
   @override
   State<QuestionsListPage> createState() => _QuestionsListPageState();
@@ -34,9 +33,16 @@ class _QuestionsListPageState extends State<QuestionsListPage> {
 
   PreferredSizeWidget? _buildAppBar() {
     return AppBar(
+      automaticallyImplyLeading: false,
       backgroundColor: AppColors.main_color,
       toolbarHeight: Dimens.appBar["toolbarHeight"],
       titleSpacing: Dimens.appBar["titleSpacing"],
+      leading: IconButton(
+        onPressed: () {
+          Navigator.pop(context);
+        },
+        icon: Icon(Icons.arrow_back_ios_new_rounded, color: AppColors.bright_foreground_color,),
+      ),
       title: Row(
         mainAxisAlignment: MainAxisAlignment.start,
         children: [
