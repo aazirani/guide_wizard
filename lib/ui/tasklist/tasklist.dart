@@ -91,7 +91,7 @@ class _TaskListState extends State<TaskList> {
             Padding(
                 padding: Dimens.numberOfTasksPadding,
                 child: Observer(
-                  builder: (_) => Text("${_stepsStore.stepList.steps[widget.currentStepNo].tasks.length} ${AppLocalizations.of(context).translate('tasks')}",
+                  builder: (_) => Text("${_taskListStore.taskList.numTasks} ${AppLocalizations.of(context).translate('tasks')}",
                       style: TextStyle(color: AppColors.white)),
                 )),
             SizedBox(height: 5),
@@ -123,9 +123,9 @@ class _TaskListState extends State<TaskList> {
                 builder: (_) => ListView.builder(
                   scrollDirection: Axis.vertical,
                   controller: scrollController,
-                  itemCount: _stepsStore.stepList.steps[widget.currentStepNo].tasks.length,
+                  itemCount: _taskListStore.taskList.numTasks,
                   itemBuilder: (context, i) {
-                    return TaskListTimeLine(taskList: _stepsStore.stepList.steps[widget.currentStepNo].tasks, index: i);
+                    return TaskListTimeLine(taskList: _taskListStore.taskList.tasks, index: i);
                   },
                 ),
               ),
