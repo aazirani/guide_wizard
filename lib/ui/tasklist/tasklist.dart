@@ -125,7 +125,7 @@ class _TaskListState extends State<TaskList> {
                   controller: scrollController,
                   itemCount: _taskListStore.taskList.numTasks,
                   itemBuilder: (context, i) {
-                    return TaskListTimeLine(taskList: _taskListStore.taskList.tasks, index: i);
+                    return TaskListTimeLine(taskList: _taskListStore.taskList, index: i);
                   },
                 ),
               ),
