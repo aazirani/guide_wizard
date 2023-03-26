@@ -3,6 +3,7 @@ import 'dart:io';
 import 'package:boilerplate/constants/colors.dart';
 import 'package:boilerplate/constants/dimens.dart';
 import 'package:boilerplate/data/network/constants/endpoints.dart';
+import 'package:boilerplate/data/sharedpref/constants/preferences.dart';
 import 'package:boilerplate/stores/question/questions_store.dart';
 import 'package:boilerplate/stores/step/step_store.dart';
 import 'package:boilerplate/stores/task/tasks_store.dart';
@@ -15,6 +16,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:provider/provider.dart';
 import 'package:boilerplate/stores/step/steps_store.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:simple_fontellico_progress_dialog/simple_fontico_loading.dart';
 
 class HomeScreen extends StatefulWidget {
@@ -42,9 +44,18 @@ class _HomeScreenState extends State<HomeScreen> {
     _connectivity.myStream.listen((source) {
       setState(() => _source = source);
     });
-    Future.delayed(Duration(milliseconds: 10000),() {
+    Future.delayed(Duration(milliseconds: 000),() async {
       // _loadDataAndShowLoadingDialog(context);
-      _loadDataWithoutErrorHandling(context);
+      late bool isDataLoaded;
+      await SharedPreferences.getInstance().then((prefs) {
+        isDataLoaded = prefs.getBool(Preferences.is_data_loaded) ?? false;
+      });
+      if(!isDataLoaded) {
+        await _loadDataWithoutErrorHandling(context);
+        SharedPreferences.getInstance().then((prefs) {
+          prefs.setBool(Preferences.is_data_loaded, true);
+        });
+      }
     });
   }
 
@@ -145,7 +156,7 @@ class _HomeScreenState extends State<HomeScreen> {
     }
   }
 
-  void _loadDataWithoutErrorHandling(BuildContext context) async {
+  Future _loadDataWithoutErrorHandling(BuildContext context) async {
     _dialog ??= SimpleFontelicoProgressDialog(context: context);
     _dialog!.show(
         message: AppLocalizations.of(context).translate("loading_dialog_text"),

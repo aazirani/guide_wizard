@@ -499,4 +499,7 @@ class Repository {
       _sharedPrefsHelper.changeLanguage(value);
 
   String? get currentLanguage => _sharedPrefsHelper.currentLanguage;
+
+  // Loading dialog:---------------------------------------------------------------------
+  Future<bool> get isDataLoaded => _sharedPrefsHelper.isDataLoaded;
 }
