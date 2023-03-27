@@ -50,4 +50,9 @@ class SharedPreferenceHelper {
   Future<void> changeLanguage(String language) {
     return _sharedPreference.setString(Preferences.current_language, language);
   }
+
+  // Loading dialog:---------------------------------------------------------------------
+  Future<bool> get isDataLoaded async {
+    return _sharedPreference.getBool(Preferences.is_data_loaded) ?? false;
+  }
 }

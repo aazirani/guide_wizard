@@ -55,7 +55,6 @@ abstract class _TasksStore with Store {
     }).catchError((error) {
       errorStore.errorMessage = DioErrorUtil.handleError(error);
     });
-
     return future;
   }
 

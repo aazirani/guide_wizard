@@ -98,7 +98,9 @@ class _BlocksAppBarWidgetState extends State<BlocksAppBarWidget> {
       toolbarHeight: Dimens.appBar["toolbarHeight"],
       titleSpacing: 0,
       leading: IconButton(
-        onPressed: () {},
+        onPressed: () {
+          Navigator.pop(context);
+        },
         icon: Icon(Icons.arrow_back_ios_new_rounded, color: AppColors.bright_foreground_color,),
       ),
       title: Row(

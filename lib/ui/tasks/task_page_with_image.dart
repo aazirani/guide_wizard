@@ -1,7 +1,7 @@
 import 'package:boilerplate/constants/colors.dart';
 import 'package:boilerplate/models/task/task.dart';
 import 'package:boilerplate/widgets/sub_task_widget.dart';
-import 'package:boilerplate/widgets/blocks_appbar_widget.dart';
+import 'package:boilerplate/widgets/task_page_appbar_widget.dart';
 import 'package:boilerplate/widgets/image_slide.dart';
 import 'package:boilerplate/widgets/measure_size.dart';
 import 'package:flutter/material.dart';

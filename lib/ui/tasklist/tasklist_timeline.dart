@@ -1,5 +1,7 @@
 import 'package:boilerplate/constants/colors.dart';
 import 'package:boilerplate/constants/dimens.dart';
+import 'package:boilerplate/ui/tasks/task_page_text_only.dart';
+import 'package:boilerplate/ui/tasks/task_page_with_image.dart';
 import 'package:boilerplate/widgets/diamond_indicator.dart';
 import 'package:flutter/material.dart';
 import 'package:timelines/timelines.dart';
@@ -75,22 +77,32 @@ class _TaskListTimeLineState extends State<TaskListTimeLine> {
   }
 
   Widget _buildInsideElements(index) {
-    return Container(
-      child: Row(
-        children: [
-          Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: (_deadLineAvailable(index))
-                ? [
-                    _buildContentTitle(index),
-                    _buildContentDeadline(index),
-                  ]
-                : [Center(child: _buildContentTitle(index))],
-          ),
-          Spacer(),
-          _buildContentMoreIcon(),
-        ],
+    return GestureDetector(
+      onTap: () {
+        if(widget.taskList.tasks[index].isTypeOfText){
+          Navigator.push(context,MaterialPageRoute(builder: (context) => TaskPageTextOnly(task_id: widget.taskList.tasks[index].id,)));
+        }
+        else{
+          Navigator.push(context,MaterialPageRoute(builder: (context) => TaskPageWithImage(task: widget.taskList.tasks[index],)));
+        }
+      },
+      child: Container(
+        child: Row(
+          children: [
+            Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: (_deadLineAvailable(index))
+                  ? [
+                      _buildContentTitle(index),
+                      _buildContentDeadline(index),
+                    ]
+                  : [Center(child: _buildContentTitle(index))],
+            ),
+            Spacer(),
+            _buildContentMoreIcon(),
+          ],
+        ),
       ),
     );
   }

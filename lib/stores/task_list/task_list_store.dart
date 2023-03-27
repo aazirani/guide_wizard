@@ -34,7 +34,6 @@ abstract class _TaskListStore with Store {
   Future getTaskList(int id) async {
     final future = _repository.getTasks();
     fetchTasksFuture = ObservableFuture(future);
-    TaskList temp = TaskList(tasks: []);
     List<Task> relatedTasks = [];
     future.then((taskList) {
       taskList.tasks.forEach((task) {
@@ -42,7 +41,7 @@ abstract class _TaskListStore with Store {
           relatedTasks.add(task);
         }
       });
-      temp.setTasks = relatedTasks;
+      TaskList temp = TaskList(tasks: relatedTasks);
       this.taskList = temp;
     });
   }
