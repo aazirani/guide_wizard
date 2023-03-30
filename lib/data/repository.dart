@@ -4,16 +4,15 @@ import 'package:boilerplate/data/local/datasources/step/step_datasource.dart';
 import 'package:boilerplate/data/local/datasources/task/task_datasource.dart';
 import 'package:boilerplate/data/local/datasources/sub_task/sub_task_datasource.dart';
 import 'package:boilerplate/data/local/datasources/question/question_datasource.dart';
-import 'package:boilerplate/data/local/datasources/translation/translation_datasource.dart';
-import 'package:boilerplate/data/local/datasources/translation/translations_with_step_name_datasource.dart';
+import 'package:boilerplate/data/local/datasources/technical_name/technical_name_datasource.dart';
+import 'package:boilerplate/data/local/datasources/technical_name/technical_name_with_translations_datasource.dart';
 import 'package:boilerplate/data/network/apis/tranlsation/translation_api.dart';
 import 'package:boilerplate/data/sharedpref/shared_preference_helper.dart';
 import 'package:boilerplate/models/post/post.dart';
 import 'package:boilerplate/models/post/post_list.dart';
 import 'package:boilerplate/models/translation/translation.dart';
-import 'package:boilerplate/models/translation/translation_list.dart';
-import 'package:boilerplate/models/translation/translations_with_step_name.dart';
-import 'package:boilerplate/models/translation/translations_with_step_name_list.dart';
+import 'package:boilerplate/models/technical_name/technical_name_with_translations_list.dart';
+import 'package:boilerplate/models/technical_name/technical_name_with_translations.dart';
 import 'package:sembast/sembast.dart';
 import 'package:boilerplate/models/answer/answer.dart';
 import 'package:boilerplate/models/question/question_list.dart';
@@ -27,23 +26,25 @@ import 'package:boilerplate/models/step/step_list.dart';
 import 'package:boilerplate/models/task/task.dart';
 import 'package:boilerplate/models/sub_task/sub_task.dart';
 import 'package:boilerplate/models/question/question.dart';
+import 'package:devicelocale/devicelocale.dart';
+import 'package:flutter/services.dart';
 
 class Repository {
   // data source object
   final PostDataSource _postDataSource;
-  final TranslationDataSource _translationDataSource;
+  final TechnicalNameDataSource _technicalNameDataSource;
   final StepDataSource _stepDataSource;
   final TaskDataSource _taskDataSource;
   final SubTaskDataSource _subTaskDataSource;
   final QuestionDataSource _questionDataSource;
+  final TechnicalNameWithTranslationsDataSource _technicalNameWithTranslationsDataSource;
 
   // api objects
   final PostApi _postApi;
   final StepApi _stepApi;
-  final TranslationsWithStepNameDataSource _translationsWithStepNameDataSource;
 
   // api objects
-  final TranslationApi _translationApi;
+  final TechnicalNameApi _technicalNameApi;
 
   // shared pref object
   final SharedPreferenceHelper _sharedPrefsHelper;
@@ -58,9 +59,9 @@ class Repository {
     this._taskDataSource,
     this._subTaskDataSource,
     this._questionDataSource,
-    this._translationApi,
-    this._translationDataSource,
-    this._translationsWithStepNameDataSource,
+    this._technicalNameApi,
+    this._technicalNameDataSource,
+    this._technicalNameWithTranslationsDataSource,
   );
 
   // Step: ---------------------------------------------------------------------
@@ -428,20 +429,21 @@ class Repository {
 // }
 
   // TranslationsWithTechnicalName: ---------------------------------------------------------------------
-  Future<TranslationsWithStepNameList>
-      getTranslationsWithTechnicalName() async {
+  Future<TechnicalNameWithTranslationsList> getTechnicalNameWithTranslations() async {
     // check to see if posts are present in database, then fetch from database
     // else make a network call to get all posts, store them into database for
     // later use
-    return await _translationApi.getTranslationsWithStepName().then((t) {
-      t.translationsWithStepName.forEach((translation) {
-        _translationsWithStepNameDataSource.insert(translation);
+    return await _technicalNameApi.getTechnicalNamesWithTranslations().then((t) {
+      t.technicalNameWithTranslations.forEach((technicalNameWithTranslations) {
+        _technicalNameWithTranslationsDataSource.insert(technicalNameWithTranslations);
+        // translationWithStepName.translations.forEach((translation) {
+        //   _languageDataSource.insert(translation.language);
+        // });
       });
 
       return t;
     }).catchError((error) => throw error);
   }
-
   Future<List<Translation>> findTranslationWithStepNameById(int id) {
     //creating filter
     List<Filter> filters = [];
@@ -451,32 +453,36 @@ class Repository {
     filters.add(dataLogTypeFilter);
 
     //making db call
-    return _translationsWithStepNameDataSource
+    return _technicalNameWithTranslationsDataSource
         .getAllSortedByFilter(filters: filters)
-        .then((translations) => translations)
+        .then((technicalNameWithTranslations) => technicalNameWithTranslations)
         .catchError((error) => throw error);
   }
 
   Future<int?> insertTranslationWithStepName(
-          TranslationsWithStepName translation) =>
-      _translationsWithStepNameDataSource
+          TechnicalNameWithTranslations translation) =>
+      _technicalNameWithTranslationsDataSource
           .insert(translation)
           .then((id) => id)
           .catchError((error) => throw error);
 
   Future<int> updateTranslationWithStepName(
-          TranslationsWithStepName translation) =>
-      _translationsWithStepNameDataSource
+          TechnicalNameWithTranslations translation) =>
+      _technicalNameWithTranslationsDataSource
           .update(translation)
           .then((id) => id)
           .catchError((error) => throw error);
 
   Future<int> deleteTranslationWithStepName(
-          TranslationsWithStepName translation) =>
-      _translationsWithStepNameDataSource
+          TechnicalNameWithTranslations translation) =>
+      _technicalNameWithTranslationsDataSource
           .update(translation)
           .then((id) => id)
           .catchError((error) => throw error);
+
+  Future truncateTechnicalNameWithTranslations() =>
+      _technicalNameWithTranslationsDataSource.deleteAll().catchError((error) => throw error);
+
 
   // Login:---------------------------------------------------------------------
   Future<bool> login(String email, String password) async {
@@ -495,11 +501,51 @@ class Repository {
   bool get isDarkMode => _sharedPrefsHelper.isDarkMode;
 
   // Language: -----------------------------------------------------------------
-  Future<void> changeLanguage(String value) =>
+   Future<void> changeLanguage(String value) =>
       _sharedPrefsHelper.changeLanguage(value);
 
   String? get currentLanguage => _sharedPrefsHelper.currentLanguage;
 
-  // Loading dialog:---------------------------------------------------------------------
-  Future<bool> get isDataLoaded => _sharedPrefsHelper.isDataLoaded;
+  // Future<void> _initPlatformState() async {
+  //   _getCurrentLocale();
+  //   _getDefaultLocale();
+  //   _getPreferredLanguages();
+  // }
+
+  Future<String?> _getDefaultLocale() async {
+    try {
+      final defaultLocale = await Devicelocale.defaultLocale;
+      print((defaultLocale != null)
+          ? defaultLocale
+          : "Unable to get defaultLocale");
+      return defaultLocale;
+    } on PlatformException {
+      print("Error obtaining default locale");
+    }
+  }
+
+  Future<String?> getCurrentLocale() async {
+    // try {
+    //   final currentLocale = await Devicelocale.currentLocale;
+    //   // print((currentLocale != null)
+    //   //     ? currentLocale
+    //   //     : "Unable to get currentLocale");
+    //   return currentLocale;
+    // } on PlatformException {
+    //   print("Error obtaining current locale");
+    // }
+    return await Devicelocale.currentLocale;
+  }
+
+  Future<dynamic> _getPreferredLanguages() async {
+    try {
+      final languages = await Devicelocale.preferredLanguages;
+      print((languages != null)
+          ? languages
+          : "unable to get preferred languages");
+      return languages;
+    } on PlatformException {
+      print("Error obtaining preferred languages");
+    }
+  }
 }

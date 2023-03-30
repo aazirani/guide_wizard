@@ -1,0 +1,17 @@
+import 'package:boilerplate/models/technical_name/technical_name_with_translations.dart';
+
+class TechnicalNameWithTranslationsList {
+  List<TechnicalNameWithTranslations> technicalNameWithTranslations;
+
+  TechnicalNameWithTranslationsList({
+    required this.technicalNameWithTranslations,
+  });
+
+  factory TechnicalNameWithTranslationsList.fromJson(List<dynamic> json) {
+        print("im in technical name with trnaslations lissssttttt");
+
+    return TechnicalNameWithTranslationsList(
+      technicalNameWithTranslations: json.map((translationsWithStepName) => TechnicalNameWithTranslations.fromMap(translationsWithStepName)).toList(),
+    );
+  }
+}

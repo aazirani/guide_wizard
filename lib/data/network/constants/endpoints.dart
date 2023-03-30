@@ -16,6 +16,6 @@ class Endpoints {
   static const String getPosts = baseUrl + "/posts";
 
   static const String getAppData = baseUrl + "/2nd_sample_hierarchy.json";
-  static const String getTranslations =
+  static const String getTechnicalNames =
       baseUrl + "/sample_technical_names.json";
 }

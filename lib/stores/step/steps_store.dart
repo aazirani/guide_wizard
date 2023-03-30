@@ -44,6 +44,6 @@ abstract class _StepsStore with Store {
 
   @action
   Future truncateSteps() async {
-    await _repository.truncateTask();
+    await _repository.truncateStep();
   }
 }

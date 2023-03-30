@@ -3,11 +3,9 @@ import 'dart:async';
 import 'package:boilerplate/data/network/constants/endpoints.dart';
 import 'package:boilerplate/data/network/dio_client.dart';
 import 'package:boilerplate/data/network/rest_client.dart';
-import 'package:boilerplate/models/post/post_list.dart';
-import 'package:boilerplate/models/translation/translation_list.dart';
-import 'package:boilerplate/models/translation/translations_with_step_name_list.dart';
+import 'package:boilerplate/models/technical_name/technical_name_with_translations_list.dart';
 
-class TranslationApi {
+class TechnicalNameApi {
   // dio instance
   final DioClient _dioClient;
 
@@ -15,26 +13,16 @@ class TranslationApi {
   final RestClient _restClient;
 
   // injecting dio instance
-  TranslationApi(this._dioClient, this._restClient);
+  TechnicalNameApi(this._dioClient, this._restClient);
 
-  // Future<TranslationList> getTranslations() async {
-  //   try {
-  //     final res = await _dioClient.get(Endpoints.getTranslations);
-  //     return TranslationList.fromJson(res["rows"]);
-  //   } catch (e) {
-  //     print(e.toString());
-  //     throw e;
-  //   }
-  // }
-
-  Future<TranslationsWithStepNameList> getTranslationsWithStepName() async {
+  Future<TechnicalNameWithTranslationsList>
+      getTechnicalNamesWithTranslations() async {
     try {
-      final res = await _dioClient.get(Endpoints.getTranslations);
-      return TranslationsWithStepNameList.fromJson(res["rows"]);
+      final res = await _dioClient.get(Endpoints.getTechnicalNames);
+      return TechnicalNameWithTranslationsList.fromJson(res["rows"]);
     } catch (e) {
       print(e.toString());
       throw e;
     }
   }
-
 }
