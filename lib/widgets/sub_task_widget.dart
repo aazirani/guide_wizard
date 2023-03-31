@@ -3,6 +3,7 @@ import 'package:boilerplate/constants/dimens.dart';
 import 'package:boilerplate/models/sub_task/sub_task.dart';
 import 'package:boilerplate/widgets/expansion_content.dart';
 import 'package:boilerplate/widgets/app_expansiontile.dart';
+import 'package:boilerplate/widgets/scrolling_overflow_text.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:render_metrics/render_metrics.dart';
@@ -45,7 +46,7 @@ class SubTaskWidgetState extends State<SubTaskWidget> with AutomaticKeepAliveCli
         maintainState: true,
         textColor: AppColors.main_color,
         iconColor: AppColors.main_color,
-        title: Text(widget.subTasks[widget.index].title.string,),
+        title: ScrollingOverflowText(text: widget.subTasks[widget.index].title.string, textStyle: TextStyle(fontSize: 19),),
         key: widget.subTasks[widget.index].globalKey,
         children: <Widget>[
           _buildExpansionContent(widget.subTasks[widget.index].markdown.string),

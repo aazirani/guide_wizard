@@ -48,16 +48,15 @@ class _SplashScreenState extends State<SplashScreen> {
   }
 
   navigate() async {
-    if (!_stepsStore.loading) {
-      await _stepsStore.truncateSteps();
-      await _tasksStore.truncateTasks();
-      await _questionsStore.truncateQuestions();
-      await _stepsStore.getSteps();
-      await _tasksStore.getTasks();
-      await _questionsStore.getQuestions();
-    }
-    Navigator.of(context).push(MaterialPageRoute(
-        builder: (context) => HomeScreen()));
-
+    // if (!_stepsStore.loading) {
+    //   await _stepsStore.truncateSteps();
+    //   await _tasksStore.truncateTasks();
+    //   await _questionsStore.truncateQuestions();
+    //   await _stepsStore.getSteps();
+    //   await _tasksStore.getTasks();
+    //   await _questionsStore.getQuestions();
+    // }
+    // Navigator.of(context).push(MaterialPageRoute(
+    //     builder: (context) => HomeScreen()));
   }
 }

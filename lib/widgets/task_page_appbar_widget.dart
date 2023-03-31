@@ -1,6 +1,7 @@
 import 'package:boilerplate/constants/colors.dart';
 import 'package:boilerplate/constants/dimens.dart';
 import 'package:boilerplate/utils/locale/app_localization.dart';
+import 'package:boilerplate/widgets/scrolling_overflow_text.dart';
 import 'package:flutter/material.dart';
 
 class BlocksAppBarWidget extends StatefulWidget implements PreferredSizeWidget {
@@ -106,17 +107,15 @@ class _BlocksAppBarWidgetState extends State<BlocksAppBarWidget> {
       title: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
-          Flexible(
-            child: Text(
-              widget.title,
-              style: TextStyle(
-                color: AppColors.bright_foreground_color,
-                fontSize: 22,
-              ),
+          ScrollingOverflowText(
+            text: widget.title,
+            textStyle: TextStyle(
+              color: AppColors.bright_foreground_color,
+              fontSize: 22,
             ),
           ),
           Padding(
-            padding: const EdgeInsets.only(right: 15),
+            padding: const EdgeInsets.only(right: 15, left: 10),
             child: _buildAppBarButton(),
           ),
         ],
