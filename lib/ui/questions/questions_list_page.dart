@@ -41,7 +41,10 @@ class _QuestionsListPageState extends State<QuestionsListPage> {
         onPressed: () {
           Navigator.pop(context);
         },
-        icon: Icon(Icons.arrow_back_ios_new_rounded, color: AppColors.bright_foreground_color,),
+        icon: Icon(
+          Icons.arrow_back_ios_new_rounded,
+          color: AppColors.bright_foreground_color,
+        ),
       ),
       title: Row(
         mainAxisAlignment: MainAxisAlignment.start,

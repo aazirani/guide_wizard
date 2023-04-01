@@ -49,7 +49,7 @@ class _HomeScreenState extends State<HomeScreen> {
     _connectivity.myStream.listen((source) {
       setState(() => _source = source);
     });
-    Future.delayed(Duration(milliseconds: 000), () async {
+    Future.delayed(Duration(milliseconds: 5000), () async {
       // _loadDataAndShowLoadingDialog(context);
       // late bool isDataLoaded;
       // await SharedPreferences.getInstance().then((prefs) {
@@ -192,16 +192,19 @@ class _HomeScreenState extends State<HomeScreen> {
     if (!_stepsStore.loading) {
       //truncate all data available in datasources
       await _stepsStore.truncateSteps();
+      await _technicalNameWithTranslationsStore
+          .truncateTechnicalNameWithTranslations();
       await _tasksStore.truncateTasks();
       await _questionsStore.truncateQuestions();
       await _technicalNameWithTranslationsStore
           .truncateTechnicalNameWithTranslations();
       //fill stores with updated data
-      await _stepsStore.getSteps();
-      await _tasksStore.getTasks();
-      await _questionsStore.getQuestions();
       await _technicalNameWithTranslationsStore
           .getTechnicalNameWithTranslations();
+      await _stepsStore.getSteps();
+
+      await _tasksStore.getTasks();
+      await _questionsStore.getQuestions();
     }
     _dialog!.hide();
   }
@@ -257,18 +260,21 @@ class _HomeScreenState extends State<HomeScreen> {
         //step slider
         Observer(
             builder: (_) => StepSliderWidget(stepList: _stepsStore.stepList)),
+        // StepSliderWidget(),
         //step timeline
         //TODO: save current and pending steps in shared preferences
-        Observer(
-            builder: (_) => StepTimeLine(
-                pending: 1, stepNo: 3, stepList: _stepsStore.stepList)),
+        StepTimeLine(
+          pending: 1,
+          stepNo: 3,
+        ),
         SizedBox(height: 25),
         _buildInProgressText(),
         SizedBox(height: 10),
         //task compressed timeline
-        Observer(
+      Observer(
             builder: (_) =>
-                CompressedBlocklistTimeline(stepList: _stepsStore.stepList)),
+                CompressedTasklistTimeline(stepList: _stepsStore.stepList))
+        // CompressedTasklistTimeline(),
       ],
     );
   }

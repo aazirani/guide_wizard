@@ -55,28 +55,16 @@ abstract class _TechnicalNameWithTranslationsStore with Store {
   // methods: ..................................................................
 
   String? getTechnicalNames(int text_id) {
-    // return await _repository.findTechnicalNameWithTranslations(name_id).indexOf(0).technicalName;
-    // print(technicalNameWithTranslationsList
-    //     .technicalNameWithTranslations[text_id].technicalName);
-
-    for (var i = 0;
-        i <
-            technicalNameWithTranslationsList
-                .technicalNameWithTranslations.length;
-        i++) {
+    for (var i = 0; i < technicalNameWithTranslationsList.technicalNameWithTranslations.length; i++) {
       if (technicalNameWithTranslationsList
               .technicalNameWithTranslations[i].id ==
           text_id) {
-        print("what do we have hereeeeeeee");
-        print(technicalNameWithTranslationsList
-            .technicalNameWithTranslations[i].technicalName);
+        // print("what do we have hereeeeeeee");
+        // print(technicalNameWithTranslationsList
+        //     .technicalNameWithTranslations[i].technicalName);
         return technicalNameWithTranslationsList
             .technicalNameWithTranslations[i].translations[0].translated_text;
       }
     }
   }
-
-  // TechnicalNameWithTranslations getTechnicalWithTranslations(int id) {
-  //   return technicalNameWithTranslationsList.
-  // }
 }

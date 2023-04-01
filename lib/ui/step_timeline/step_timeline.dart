@@ -8,14 +8,12 @@ import 'package:boilerplate/stores/step/step_store.dart';
 import 'package:boilerplate/constants/dimens.dart';
 
 class StepTimeLine extends StatefulWidget {
-  final StepList stepList;
   final int pending;
   final int stepNo;
   StepTimeLine(
       {Key? key,
       required this.pending,
-      required this.stepNo,
-      required this.stepList})
+      required this.stepNo})
       : super(key: key);
 
   @override

@@ -1,6 +1,5 @@
 import 'package:boilerplate/constants/colors.dart';
 import 'package:boilerplate/constants/dimens.dart';
-import 'package:boilerplate/models/step/step_list.dart';
 import 'package:boilerplate/stores/question/questions_store.dart';
 import 'package:boilerplate/stores/step/step_store.dart';
 import 'package:boilerplate/ui/questions/questions_list_page.dart';
@@ -11,6 +10,9 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:boilerplate/stores/task_list/task_list_store.dart';
 import 'package:boilerplate/ui/tasklist/tasklist.dart';
+import 'package:boilerplate/stores/step/steps_store.dart';
+import 'package:boilerplate/stores/technical_name/technical_name_with_translations_store.dart';
+import 'package:boilerplate/models/step/step_list.dart';
 
 class StepSliderWidget extends StatefulWidget {
   final StepList stepList;
@@ -22,16 +24,21 @@ class StepSliderWidget extends StatefulWidget {
 
 class _StepSliderWidgetState extends State<StepSliderWidget> {
   late StepStore _stepStore;
+  late StepsStore _stepsStore;
   late TaskListStore _taskListStore;
   late QuestionsStore _questionsStore;
-  
+  late TechnicalNameWithTranslationsStore _technicalNameWithTranslationsStore;
+
   @override
   void didChangeDependencies() {
     super.didChangeDependencies();
     // initializing stores
     _stepStore = Provider.of<StepStore>(context);
+    _stepsStore = Provider.of<StepsStore>(context);
     _taskListStore = Provider.of<TaskListStore>(context);
     _questionsStore = Provider.of<QuestionsStore>(context);
+    _technicalNameWithTranslationsStore =
+        Provider.of<TechnicalNameWithTranslationsStore>(context);
   }
 
   @override
@@ -57,7 +64,8 @@ class _StepSliderWidgetState extends State<StepSliderWidget> {
           height: _getScreenHeight() / 4,
           enlargeCenterPage: false,
           enableInfiniteScroll: false),
-      items: List<int>.generate(widget.stepList.steps.length, (index) => index).map((index) {
+      items: List<int>.generate(
+          _stepsStore.stepList.steps.length, (index) => index).map((index) {
         return Builder(
           builder: (BuildContext context) {
             return GestureDetector(
@@ -150,14 +158,19 @@ class _StepSliderWidgetState extends State<StepSliderWidget> {
   }
 
   Widget _buildStepTitle(currentStepNo) {
+    var step_title_id = _stepsStore.stepList.steps[currentStepNo].name.id;
     return Text(
-      "${widget.stepList.steps[currentStepNo].name.technical_name.toString()}",
+      // "${_stepsStore.stepList.steps[currentStepNo].name.technical_name.toString()}",
+      "${_technicalNameWithTranslationsStore.getTechnicalNames(step_title_id)}",
       style: TextStyle(fontSize: 17, color: AppColors.main_color),
     );
   }
 
   Widget _buildStepNoOfTasks(currentStepNo) {
-    return Text("${widget.stepList.steps[currentStepNo].numTasks}" + " " + AppLocalizations.of(context).translate('tasks'),
+    return Text(
+        "${_stepsStore.stepList.steps[currentStepNo].numTasks}" +
+            " " +
+            AppLocalizations.of(context).translate('tasks'),
         style: TextStyle(fontSize: 15, color: AppColors.main_color));
   }
 
@@ -166,17 +179,18 @@ class _StepSliderWidgetState extends State<StepSliderWidget> {
       child: TextButton(
         style: _buildButtonStyle(),
         onPressed: () {
-          if(currentStepNo == 0){
+          if (currentStepNo == 0) {
             _questionsStore.getQuestions();
             Navigator.push(context,
                 MaterialPageRoute(builder: (context) => QuestionsListPage()));
-          }
-          else{
+          } else {
             _taskListStore.getTaskList(_stepStore.currentStep);
-            Navigator.push(context,
-                MaterialPageRoute(builder: (context) => TaskList(
-                  currentStepNo: currentStepNo,
-                )));
+            Navigator.push(
+                context,
+                MaterialPageRoute(
+                    builder: (context) => TaskList(
+                          currentStepNo: currentStepNo,
+                        )));
           }
         },
         child: Row(mainAxisAlignment: MainAxisAlignment.center, children: [
@@ -243,6 +257,6 @@ class _StepSliderWidgetState extends State<StepSliderWidget> {
     } else if (index < stepStore.pending) {
       return StepStatus.isDone;
     }
-    return StepStatus.notStarted; 
+    return StepStatus.notStarted;
   }
 }
