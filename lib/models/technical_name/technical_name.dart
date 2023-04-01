@@ -39,4 +39,8 @@ class TechnicalName {
         "created_at": created_at,
         "updated_at": updated_at,
       };
+  
+  get technicalName {
+    return technical_name;
+  }
 }

@@ -16,15 +16,6 @@ class Language {
   });
 
   factory Language.fromMap(Map<String, dynamic> json) {
-    print("im in language");
-    print(Language(
-      id: json["id"],
-      language_code: json["language_code"],
-      is_active: json["is_active"],
-      creator_id: json["creator_id"],
-      created_at: json["created_at"],
-      updated_at: json["updated_at"],
-    ));
     return Language(
       id: json["id"],
       language_code: json["language_code"],

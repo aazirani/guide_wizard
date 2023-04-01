@@ -34,7 +34,7 @@ class TechnicalNameWithTranslationsDataSource {
     return await _technicalNameWithTranslationsStore.count(_db);
   }
 
-  Future<List<Translation>> getAllSortedByFilter(
+  Future<List<TechnicalNameWithTranslations>> getAllSortedByFilter(
       {List<Filter>? filters}) async {
     //creating finder
     final finder = Finder(
@@ -48,10 +48,10 @@ class TechnicalNameWithTranslationsDataSource {
 
     // Making a List<Post> out of List<RecordSnapshot>
     return recordSnapshots.map((snapshot) {
-      final translationsWithStepName = Translation.fromMap(snapshot.value);
+      final technicalNameWithTranslations = TechnicalNameWithTranslations.fromMap(snapshot.value);
       // An ID is a key of a record from the database.
-      translationsWithStepName.id = snapshot.key;
-      return translationsWithStepName;
+      technicalNameWithTranslations.id = snapshot.key;
+      return technicalNameWithTranslations;
     }).toList();
   }
 

@@ -444,7 +444,7 @@ class Repository {
       return t;
     }).catchError((error) => throw error);
   }
-  Future<List<Translation>> findTranslationWithStepNameById(int id) {
+  Future<List<TechnicalNameWithTranslations>> findTechnicalNameWithTranslations(int id) {
     //creating filter
     List<Filter> filters = [];
 

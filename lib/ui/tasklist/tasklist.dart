@@ -40,6 +40,9 @@ class _TaskListState extends State<TaskList> {
 
   //appBar methods .............................................................
   PreferredSizeWidget _buildAppBar() {
+
+    //text id of the step we want to find the title of
+    var title_id = _stepsStore.stepList.steps[widget.currentStepNo].name.id;
     return AppBar(
         backgroundColor: AppColors.main_color,
         titleSpacing: 0,
@@ -125,7 +128,7 @@ class _TaskListState extends State<TaskList> {
                   controller: scrollController,
                   itemCount: _taskListStore.taskList.numTasks,
                   itemBuilder: (context, i) {
-                    return TaskListTimeLine(taskList: _taskListStore.taskList, index: i);
+                    return TaskListTimeLine(task_number: i);
                   },
                 ),
               ),

@@ -4,44 +4,57 @@ import 'package:boilerplate/ui/tasks/task_page_text_only.dart';
 import 'package:boilerplate/ui/tasks/task_page_with_image.dart';
 import 'package:boilerplate/widgets/diamond_indicator.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import 'package:timelines/timelines.dart';
 import 'package:boilerplate/utils/locale/app_localization.dart';
 import 'package:boilerplate/models/task/task_list.dart';
+import 'package:boilerplate/stores/task_list/task_list_store.dart';
+import 'package:boilerplate/stores/technical_name/technical_name_with_translations_store.dart';
 
 class TaskListTimeLine extends StatefulWidget {
-  final TaskList taskList;
-  final int index;
-  TaskListTimeLine({Key? key, required this.taskList, required this.index})
-      : super(key: key);
+  // final TaskList taskList;
+  final int task_number;
+  TaskListTimeLine({Key? key, required this.task_number}) : super(key: key);
 
   @override
   State<TaskListTimeLine> createState() => _TaskListTimeLineState();
 }
 
 class _TaskListTimeLineState extends State<TaskListTimeLine> {
+  late TaskListStore _taskListStore;
+  late TechnicalNameWithTranslationsStore _technicalNameWithTranslationsStore;
   @override
-  Widget build(BuildContext context) {
-    return _buildTimeline(widget.index);
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    // initializing stores
+    _taskListStore = Provider.of<TaskListStore>(context);
+    _technicalNameWithTranslationsStore =
+        Provider.of<TechnicalNameWithTranslationsStore>(context);
   }
 
-  Widget _buildTimeline(index) {
+  @override
+  Widget build(BuildContext context) {
+    return _buildTimeline(widget.task_number);
+  }
+
+  Widget _buildTimeline(task_number) {
     return TimelineTile(
       nodePosition: 0.05,
-      contents: _buildContents(index),
+      contents: _buildContents(task_number),
       node: TimelineNode(
-        indicator: _buildIndicator(index),
+        indicator: _buildIndicator(task_number),
         startConnector: _buildConnector(),
         endConnector: _buildConnector(),
       ),
     );
   }
 
-  Widget _buildIndicator(index) {
+  Widget _buildIndicator(task_number) {
     return Container(
         color: AppColors.transparent,
         width: 8,
         height: 8,
-        child: (_taskDone(index))
+        child: (_taskDone(task_number))
             ? DiamondIndicator(fill: true)
             : DiamondIndicator());
   }
@@ -51,7 +64,7 @@ class _TaskListTimeLineState extends State<TaskListTimeLine> {
         direction: Axis.vertical, color: AppColors.tasklistConnectorColor);
   }
 
-  Widget _buildContents(index) {
+  Widget _buildContents(task_number) {
     return Padding(
       padding: Dimens.contentContainerPadding,
       child: ClipRRect(
@@ -65,25 +78,34 @@ class _TaskListTimeLineState extends State<TaskListTimeLine> {
             border: Border(
                 left: BorderSide(
               width: 25,
-              color: (widget.taskList.tasks[index].isDone == true)
+              color: (_taskListStore.taskList.tasks[task_number].isDone == true)
                   ? AppColors.contentDoneBorderColor
                   : AppColors.contentUnDoneBorderColor,
             )),
           ),
-          child: _buildInsideElements(index),
+          child: _buildInsideElements(task_number),
         ),
       ),
     );
   }
 
-  Widget _buildInsideElements(index) {
+  Widget _buildInsideElements(task_number) {
     return GestureDetector(
       onTap: () {
-        if(widget.taskList.tasks[index].isTypeOfText){
-          Navigator.push(context,MaterialPageRoute(builder: (context) => TaskPageTextOnly(task_id: widget.taskList.tasks[index].id,)));
-        }
-        else{
-          Navigator.push(context,MaterialPageRoute(builder: (context) => TaskPageWithImage(task: widget.taskList.tasks[index],)));
+        if (_taskListStore.taskList.tasks[task_number].isTypeOfText) {
+          Navigator.push(
+              context,
+              MaterialPageRoute(
+                  builder: (context) => TaskPageTextOnly(
+                        task_id: _taskListStore.taskList.tasks[task_number].id,
+                      )));
+        } else {
+          Navigator.push(
+              context,
+              MaterialPageRoute(
+                  builder: (context) => TaskPageWithImage(
+                        task: _taskListStore.taskList.tasks[task_number],
+                      )));
         }
       },
       child: Container(
@@ -92,12 +114,12 @@ class _TaskListTimeLineState extends State<TaskListTimeLine> {
             Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               mainAxisAlignment: MainAxisAlignment.center,
-              children: (_deadLineAvailable(index))
+              children: (_deadLineAvailable(task_number))
                   ? [
-                      _buildContentTitle(index),
-                      _buildContentDeadline(index),
+                      _buildContentTitle(task_number),
+                      _buildContentDeadline(task_number),
                     ]
-                  : [Center(child: _buildContentTitle(index))],
+                  : [Center(child: _buildContentTitle(task_number))],
             ),
             Spacer(),
             _buildContentMoreIcon(),
@@ -107,10 +129,17 @@ class _TaskListTimeLineState extends State<TaskListTimeLine> {
     );
   }
 
-  Widget _buildContentTitle(index) {
+  Widget _buildContentTitle(task_number) {
+    //text id of the task we want to find the title of
+    var title_id = _taskListStore.taskList.tasks[task_number].text.id;
+    // print(task_number);
+    // print(text_id);
+    // print(_technicalNameWithTranslationsStore.getTechnicalNames(text_id));
     return Align(
       alignment: Alignment.centerLeft,
-      child: Text("${widget.taskList.tasks[index].text.technical_name}",
+      // child: Text("${_taskListStore.taskList.tasks[task_number].text.technical_name}",
+      child: Text(
+          "${_technicalNameWithTranslationsStore.getTechnicalNames(title_id)}",
           style: TextStyle(
             color: AppColors.main_color,
             fontSize: 16,
@@ -118,31 +147,31 @@ class _TaskListTimeLineState extends State<TaskListTimeLine> {
     );
   }
 
-  Widget _buildContentDeadline(index) {
+  Widget _buildContentDeadline(task_number) {
     return Container(
         padding: Dimens.contentDeadlineTopPadding,
         width: 80,
         height: 40,
-        child: (_deadLineAvailable(index))
-            ? _buildDeadlineContainer(index)
+        child: (_deadLineAvailable(task_number))
+            ? _buildDeadlineContainer(task_number)
             : null);
   }
 
-  Widget _buildDeadlineContainer(index) {
+  Widget _buildDeadlineContainer(task_number) {
     return Container(
         height: 10,
         decoration: BoxDecoration(
             borderRadius: Dimens.contentDeadlineBorderRadius,
             border: Border.all(
                 width: 1,
-                color: (_taskDone(index))
+                color: (_taskDone(task_number))
                     ? AppColors.deadlineDoneBorderColor
                     : AppColors.deadlineUnDoneBorderColor)),
         child: Center(
             child: Text("${AppLocalizations.of(context).translate('deadline')}",
                 style: TextStyle(
                     fontSize: 13,
-                    color: (_taskDone(index)
+                    color: (_taskDone(task_number)
                         ? AppColors.deadlineTextDoneColor
                         : AppColors.deadlineTextUnDoneColor)))));
   }
@@ -155,16 +184,16 @@ class _TaskListTimeLineState extends State<TaskListTimeLine> {
 
   //general methods ............................................................
   double _getScreenWidth() => MediaQuery.of(context).size.width;
-  bool _deadLineAvailable(index) {
-    switch (widget.taskList.tasks[index].deadLine) {
+  bool _deadLineAvailable(task_number) {
+    switch (_taskListStore.taskList.tasks[task_number].deadLine) {
       case null:
         return false;
     }
     return true;
   }
 
-  bool _taskDone(index) {
-    switch (widget.taskList.tasks[index].isDone) {
+  bool _taskDone(task_number) {
+    switch (_taskListStore.taskList.tasks[task_number].isDone) {
       case true:
         return true;
     }

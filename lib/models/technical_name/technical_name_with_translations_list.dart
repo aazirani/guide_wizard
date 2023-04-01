@@ -8,8 +8,6 @@ class TechnicalNameWithTranslationsList {
   });
 
   factory TechnicalNameWithTranslationsList.fromJson(List<dynamic> json) {
-        print("im in technical name with trnaslations lissssttttt");
-
     return TechnicalNameWithTranslationsList(
       technicalNameWithTranslations: json.map((translationsWithStepName) => TechnicalNameWithTranslations.fromMap(translationsWithStepName)).toList(),
     );

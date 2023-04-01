@@ -1,4 +1,5 @@
 import 'package:boilerplate/models/technical_name/technical_name_with_translations.dart';
+import 'package:boilerplate/models/technical_name/technical_name.dart';
 import 'package:boilerplate/models/technical_name/technical_name_with_translations_list.dart';
 import 'package:mobx/mobx.dart';
 import 'package:boilerplate/data/repository.dart';
@@ -42,7 +43,7 @@ abstract class _TechnicalNameWithTranslationsStore with Store {
     fetchTechnicalNameWithTranslationsFuture = ObservableFuture(future);
     await future.then((technicalNameWithTranslationsList) {
       this.technicalNameWithTranslationsList =
-          technicalNameWithTranslationsList; 
+          technicalNameWithTranslationsList;
     });
   }
 
@@ -50,4 +51,32 @@ abstract class _TechnicalNameWithTranslationsStore with Store {
   Future truncateTechnicalNameWithTranslations() async {
     await _repository.truncateTechnicalNameWithTranslations();
   }
+
+  // methods: ..................................................................
+
+  String? getTechnicalNames(int text_id) {
+    // return await _repository.findTechnicalNameWithTranslations(name_id).indexOf(0).technicalName;
+    // print(technicalNameWithTranslationsList
+    //     .technicalNameWithTranslations[text_id].technicalName);
+
+    for (var i = 0;
+        i <
+            technicalNameWithTranslationsList
+                .technicalNameWithTranslations.length;
+        i++) {
+      if (technicalNameWithTranslationsList
+              .technicalNameWithTranslations[i].id ==
+          text_id) {
+        print("what do we have hereeeeeeee");
+        print(technicalNameWithTranslationsList
+            .technicalNameWithTranslations[i].technicalName);
+        return technicalNameWithTranslationsList
+            .technicalNameWithTranslations[i].translations[0].translated_text;
+      }
+    }
+  }
+
+  // TechnicalNameWithTranslations getTechnicalWithTranslations(int id) {
+  //   return technicalNameWithTranslationsList.
+  // }
 }

@@ -26,31 +26,31 @@ class Answer {
     required this.updated_at,
   });
 
-  bool get hasTitle{
+  bool get hasTitle {
     return title.string != "";
   }
 
-  bool get isSelected{
+  bool get isSelected {
     return selected;
   }
 
-  void setSelected(bool value){
+  void setSelected(bool value) {
     selected = value;
   }
 
-  void toggleSelected(){
+  void toggleSelected() {
     selected = !selected;
   }
 
-  Image getImageWidget(){
+  Image getImageWidget() {
     return Image.network(image!);
   }
 
-  String get getImage{
+  String get getImage {
     return image!;
   }
 
-  String get getTitle{
+  String get getTitle {
     return title.string;
   }
 
@@ -72,15 +72,18 @@ class Answer {
   }
 
   Map<String, dynamic> toMap() => {
-    "id": id,
-    "question_id": question_id,
-    "title": title.toMap(),
-    "order": order,
-    "image": image,
-    "is_enabled": is_enabled ? 1 : 0,
-    "creator_id": creator_id,
-    "created_at": created_at,
-    "updated_at": updated_at,
-  };
+        "id": id,
+        "question_id": question_id,
+        "title": title.toMap(),
+        "order": order,
+        "image": image,
+        "is_enabled": is_enabled ? 1 : 0,
+        "creator_id": creator_id,
+        "created_at": created_at,
+        "updated_at": updated_at,
+      };
 
+  int getAnswerTitleID() {
+    return title.id;
+  }
 }

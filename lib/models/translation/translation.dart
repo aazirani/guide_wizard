@@ -22,7 +22,6 @@ class Translation {
   });
 
   factory Translation.fromMap(Map<String, dynamic> json) {
-    print("im in translations from map");
     return Translation(
       id: json["id"],
       text_id: json["text_id"],

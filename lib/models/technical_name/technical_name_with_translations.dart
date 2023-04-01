@@ -12,7 +12,6 @@ class TechnicalNameWithTranslations {
   });
 
   factory TechnicalNameWithTranslations.fromMap(Map<String, dynamic> json) {
-    print("im in technical name with trnaslations");
     return TechnicalNameWithTranslations(
       id: json["id"],
       technical_name: json["technical_name"],
@@ -30,5 +29,9 @@ class TechnicalNameWithTranslations {
       "translations":
           translations.map((translation) => translation.toMap()).toList(),
     };
+  }
+
+  get technicalName {
+    return technical_name;
   }
 }
