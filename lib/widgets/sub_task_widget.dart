@@ -48,8 +48,6 @@ class SubTaskWidgetState extends State<SubTaskWidget>
 
   Widget _buildExpansionContent() {
     var markdown_id = widget.subTasks[widget.index].markdown.id;
-    print("the markdown idddd");
-    print(markdown_id);
     return ExpansionContent(
         renderManager: widget.renderManager,
         // markdown: markdown,

@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:boilerplate/data/repository.dart';
 import 'package:boilerplate/models/language/supported_language.dart';
 import 'package:boilerplate/stores/error/error_store.dart';
@@ -23,14 +25,16 @@ abstract class _LanguageStore with Store {
   ];
 
   // constructor:---------------------------------------------------------------
-  _LanguageStore(Repository repository)
-      : this._repository = repository {
+  _LanguageStore(Repository repository) : this._repository = repository {
     init();
   }
 
   // store variables:-----------------------------------------------------------
   @observable
   String _locale = "en";
+
+  @observable
+  int? language_id;
 
   @computed
   String get locale => _locale;
@@ -65,25 +69,21 @@ abstract class _LanguageStore with Store {
   }
 
   // general:-------------------------------------------------------------------
-  void init() async {
-    // getting current language from shared preference
-    // if(_repository.currentLanguage != null) {
-    //   _locale = _repository.currentLanguage!;
-    // }
+  @action
+  Future init() async {
     final future = _repository.getCurrentLocale();
     future.then((currentLocale) {
       if (currentLocale != null) {
         for (var i = 0; i < supportedLanguages.length; i++) {
-          if (supportedLanguages[i].locale == currentLocale) {
+          if ("${supportedLanguages[i].locale! + "-" + supportedLanguages[i].code!}" ==
+              currentLocale) {
             this._locale = currentLocale;
-            print("whoooooooooooooooooo");
-            print(currentLocale);
+            this.language_id = i;
           }
         }
       }
     });
   }
-
 
   // dispose:-------------------------------------------------------------------
   @override

@@ -51,6 +51,7 @@ class MyApp extends StatelessWidget {
             create: (_) => QuestionsWidgetState(activeIndex: 0)),
         Provider<QuestionsStore>(create: (_) => _questionsStore),
         Provider<TechnicalNameWithTranslationsStore>(create: (_) => _technicalNameWithTranslationsStore),
+        Provider<LanguageStore>(create: (_) => _languageStore),
       ],
       child: Observer(
         name: 'global-observer',

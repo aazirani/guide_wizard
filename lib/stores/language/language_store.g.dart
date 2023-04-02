@@ -31,6 +31,28 @@ mixin _$LanguageStore on _LanguageStore, Store {
     });
   }
 
+  final _$language_idAtom = Atom(name: '_LanguageStore.language_id');
+
+  @override
+  int? get language_id {
+    _$language_idAtom.reportRead();
+    return super.language_id;
+  }
+
+  @override
+  set language_id(int? value) {
+    _$language_idAtom.reportWrite(value, super.language_id, () {
+      super.language_id = value;
+    });
+  }
+
+  final _$initAsyncAction = AsyncAction('_LanguageStore.init');
+
+  @override
+  Future<dynamic> init() {
+    return _$initAsyncAction.run(() => super.init());
+  }
+
   final _$_LanguageStoreActionController =
       ActionController(name: '_LanguageStore');
 
@@ -70,6 +92,7 @@ mixin _$LanguageStore on _LanguageStore, Store {
   @override
   String toString() {
     return '''
+language_id: ${language_id},
 locale: ${locale}
     ''';
   }

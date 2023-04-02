@@ -128,9 +128,6 @@ class _CompressedTasklistTimelineState
   Widget _buildContentTitle(index, stepStore) {
     var step_title_id = _stepsStore
         .stepList.steps[stepStore.currentStep - 1].tasks[index].text.id;
-    // print("heyyyyyyyyyyyyyyyy");
-    // print(step_title_id);
-    // print(_technicalNameWithTranslationsStore.getTechnicalNames(step_title_id));
     return Align(
       alignment: Alignment.centerLeft,
       child: Text(

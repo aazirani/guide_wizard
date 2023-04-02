@@ -132,12 +132,8 @@ class _TaskListTimeLineState extends State<TaskListTimeLine> {
   Widget _buildContentTitle(task_number) {
     //text id of the task we want to find the title of
     var title_id = _taskListStore.taskList.tasks[task_number].text.id;
-    // print(task_number);
-    // print(text_id);
-    // print(_technicalNameWithTranslationsStore.getTechnicalNames(text_id));
     return Align(
       alignment: Alignment.centerLeft,
-      // child: Text("${_taskListStore.taskList.tasks[task_number].text.technical_name}",
       child: Text(
           "${_technicalNameWithTranslationsStore.getTechnicalNames(title_id)}",
           style: TextStyle(

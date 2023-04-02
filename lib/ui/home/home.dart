@@ -22,6 +22,7 @@ import 'package:provider/provider.dart';
 import 'package:boilerplate/stores/step/steps_store.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:simple_fontellico_progress_dialog/simple_fontico_loading.dart';
+import 'package:boilerplate/stores/language/language_store.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({
@@ -39,8 +40,22 @@ class _HomeScreenState extends State<HomeScreen> {
   late StepStore _stepStore;
   late StepsStore _stepsStore;
   late TechnicalNameWithTranslationsStore _technicalNameWithTranslationsStore;
+  late LanguageStore _languageStore;
   Map _source = {ConnectivityResult.none: false};
   final MyConnectivity _connectivity = MyConnectivity.instance;
+
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    // initializing stores
+    _tasksStore = Provider.of<TasksStore>(context);
+    _questionsStore = Provider.of<QuestionsStore>(context);
+    _stepStore = Provider.of<StepStore>(context);
+    _stepsStore = Provider.of<StepsStore>(context);
+    _technicalNameWithTranslationsStore =
+        Provider.of<TechnicalNameWithTranslationsStore>(context);
+    _languageStore = Provider.of<LanguageStore>(context);
+  }
 
   @override
   void initState() {
@@ -50,6 +65,9 @@ class _HomeScreenState extends State<HomeScreen> {
       setState(() => _source = source);
     });
     Future.delayed(Duration(milliseconds: 5000), () async {
+      _languageStore.init();
+      _technicalNameWithTranslationsStore.getCurrentLan(_languageStore.language_id!);
+      print(_languageStore.locale);
       // _loadDataAndShowLoadingDialog(context);
       // late bool isDataLoaded;
       // await SharedPreferences.getInstance().then((prefs) {
@@ -62,18 +80,6 @@ class _HomeScreenState extends State<HomeScreen> {
       //   });
       // }
     });
-  }
-
-  @override
-  void didChangeDependencies() {
-    super.didChangeDependencies();
-    // initializing stores
-    _tasksStore = Provider.of<TasksStore>(context);
-    _questionsStore = Provider.of<QuestionsStore>(context);
-    _stepStore = Provider.of<StepStore>(context);
-    _stepsStore = Provider.of<StepsStore>(context);
-    _technicalNameWithTranslationsStore =
-        Provider.of<TechnicalNameWithTranslationsStore>(context);
   }
 
   SimpleFontelicoProgressDialog? _dialog;
@@ -271,7 +277,7 @@ class _HomeScreenState extends State<HomeScreen> {
         _buildInProgressText(),
         SizedBox(height: 10),
         //task compressed timeline
-      Observer(
+        Observer(
             builder: (_) =>
                 CompressedTasklistTimeline(stepList: _stepsStore.stepList))
         // CompressedTasklistTimeline(),
