@@ -56,6 +56,7 @@ class SubTaskWidgetState extends State<SubTaskWidget>
   }
 
   Widget _buildAppExpansionTileWidget() {
+    var sub_task_title_id = widget.subTasks[widget.index].title.id; 
     return AppExpansionTile(
       onExpansionChanged: ((isNewState) {
         if (isNewState) {
@@ -66,7 +67,7 @@ class SubTaskWidgetState extends State<SubTaskWidget>
       textColor: AppColors.main_color,
       iconColor: AppColors.main_color,
       title: Text(
-        widget.subTasks[widget.index].title.string,
+      _technicalNameWithTranslationsStore.getTechnicalNames(sub_task_title_id)!,
       ),
       key: widget.subTasks[widget.index].globalKey,
       children: <Widget>[
