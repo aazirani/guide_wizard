@@ -46,16 +46,19 @@ class _HomeScreenState extends State<HomeScreen> {
     });
     Future.delayed(Duration(milliseconds: 000),() async {
       // _loadDataAndShowLoadingDialog(context);
-      late bool isDataLoaded;
-      await SharedPreferences.getInstance().then((prefs) {
-        isDataLoaded = prefs.getBool(Preferences.is_data_loaded) ?? false;
-      });
-      if(!isDataLoaded) {
+      /*
+      Warning: Do NOT remove these comments
+       */
+      // late bool isDataLoaded;
+      // await SharedPreferences.getInstance().then((prefs) {
+      //   isDataLoaded = prefs.getBool(Preferences.is_data_loaded) ?? false;
+      // });
+      // if(!isDataLoaded) {
         await _loadDataWithoutErrorHandling(context);
-        SharedPreferences.getInstance().then((prefs) {
-          prefs.setBool(Preferences.is_data_loaded, true);
-        });
-      }
+      //   SharedPreferences.getInstance().then((prefs) {
+      //     prefs.setBool(Preferences.is_data_loaded, true);
+      //   });
+      // }
     });
   }
 
