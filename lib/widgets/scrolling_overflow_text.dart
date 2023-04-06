@@ -6,7 +6,7 @@ class ScrollingOverflowText extends StatefulWidget {
   TextStyle? textStyle;
   double height, velocity;
   double? width;
-  ScrollingOverflowText({Key? key, required this.text, this.textStyle, this.height=30, this.width, this.velocity=30}) : super(key: key);
+  ScrollingOverflowText({Key? key, required this.text, this.textStyle, this.height = 30, this.width, this.velocity = 30}) : super(key: key);
 
   @override
   State<ScrollingOverflowText> createState() => _ScrollingOverflowTextState();
