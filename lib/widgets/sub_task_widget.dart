@@ -46,7 +46,7 @@ class SubTaskWidgetState extends State<SubTaskWidget>
       widget.subTasks[widget.index].toggleExpanded();
     });
   }
-    }
+    
 
     Widget _buildExpansionContent() {
     
