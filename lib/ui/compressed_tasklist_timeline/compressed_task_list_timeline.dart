@@ -2,6 +2,7 @@ import 'package:boilerplate/constants/colors.dart';
 import 'package:boilerplate/constants/dimens.dart';
 import 'package:boilerplate/models/step/step_list.dart';
 import 'package:boilerplate/stores/step/step_store.dart';
+import 'package:boilerplate/stores/technical_name/technical_name_with_translations_store.dart';
 import 'package:boilerplate/widgets/diamond_indicator.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
@@ -9,20 +10,20 @@ import 'package:provider/provider.dart';
 import 'package:timelines/timelines.dart';
 import 'package:boilerplate/stores/step/steps_store.dart';
 
-class CompressedBlocklistTimeline extends StatefulWidget {
-  final StepList stepList;
-  CompressedBlocklistTimeline({Key? key, required this.stepList})
-      : super(key: key);
+class CompressedTasklistTimeline extends StatefulWidget {
+  StepList stepList;
+  CompressedTasklistTimeline({Key? key, required this.stepList}) : super(key: key);
 
   @override
-  State<CompressedBlocklistTimeline> createState() =>
-      _CompressedBlocklistTimelineState();
+  State<CompressedTasklistTimeline> createState() =>
+      _CompressedTasklistTimelineState();
 }
 
-class _CompressedBlocklistTimelineState
-    extends State<CompressedBlocklistTimeline> {
+class _CompressedTasklistTimelineState
+    extends State<CompressedTasklistTimeline> {
   late StepStore _stepStore;
   late StepsStore _stepsStore;
+  late TechnicalNameWithTranslationsStore _technicalNameWithTranslationsStore;
 
   @override
   void didChangeDependencies() {
@@ -30,6 +31,8 @@ class _CompressedBlocklistTimelineState
     // initializing stores
     _stepStore = Provider.of<StepStore>(context);
     _stepsStore = Provider.of<StepsStore>(context);
+    _technicalNameWithTranslationsStore =
+        Provider.of<TechnicalNameWithTranslationsStore>(context);
   }
 
   @override
@@ -59,8 +62,10 @@ class _CompressedBlocklistTimelineState
               nodePosition: 0.009,
             ),
             builder: TimelineTileBuilder(
-              itemCount:
-                  _stepsStore.stepList.steps.length == 0 ? 0 : _stepsStore.stepList.steps[(_stepStore.currentStep) - 1].numTasks,
+              itemCount: _stepsStore.stepList.steps.length == 0
+                  ? 0
+                  : _stepsStore
+                      .stepList.steps[(_stepStore.currentStep) - 1].numTasks,
               itemExtent: 70,
               contentsBuilder: (context, index) =>
                   _buildContents(index, _stepStore),
@@ -121,10 +126,13 @@ class _CompressedBlocklistTimelineState
   }
 
   Widget _buildContentTitle(index, stepStore) {
+    var step_title_id = _stepsStore
+        .stepList.steps[stepStore.currentStep - 1].tasks[index].text.id;
     return Align(
       alignment: Alignment.centerLeft,
       child: Text(
-          "${widget.stepList.steps[stepStore.currentStep - 1].tasks[index].text.technical_name}",
+          // "${_stepsStore.stepList.steps[stepStore.currentStep - 1].tasks[index].text.technical_name}",
+          "${_technicalNameWithTranslationsStore.getTechnicalNames(step_title_id)}",
           style: TextStyle(
             color: AppColors.main_color,
             fontSize: 16,

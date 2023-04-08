@@ -32,7 +32,7 @@ abstract class _TaskListStore with Store {
 
   @action
   Future getTaskList(int id) async {
-    final future = _repository.getTasks();
+    final future = _repository.getTasksFromApi();
     fetchTasksFuture = ObservableFuture(future);
     List<Task> relatedTasks = [];
     future.then((taskList) {

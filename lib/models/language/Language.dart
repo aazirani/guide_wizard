@@ -1,15 +1,37 @@
 class Language {
-  /// the country code (IT,AF..)
-  String? code;
+  int id;
+  String language_code;
+  int is_active;
+  int creator_id;
+  String created_at;
+  String updated_at;
 
-  /// the locale (en, es, da)
-  String? locale;
+  Language({
+    required this.id,
+    required this.language_code,
+    required this.is_active,
+    required this.creator_id,
+    required this.created_at,
+    required this.updated_at,
+  });
 
-  /// the full name of language (English, Danish..)
-  String? language;
+  factory Language.fromMap(Map<String, dynamic> json) {
+    return Language(
+      id: json["id"],
+      language_code: json["language_code"],
+      is_active: json["is_active"],
+      creator_id: json["creator_id"],
+      created_at: json["created_at"],
+      updated_at: json["updated_at"],
+    );
+  }
 
-  /// map of keys used based on industry type (service worker, route etc)
-  Map<String, String>? dictionary;
-
-  Language({this.code, this.locale, this.language, this.dictionary});
+  Map<String, dynamic> toMap() => {
+        "id": id,
+        "language_code": language_code,
+        "is_active": is_active,
+        "creator_id": creator_id,
+        "created_at": created_at,
+        "updated_at": updated_at,
+      };
 }

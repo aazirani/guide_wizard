@@ -1,10 +1,10 @@
 import 'package:boilerplate/data/local/datasources/post/post_datasource.dart';
 import 'package:boilerplate/data/local/datasources/step/step_datasource.dart';
-import 'package:boilerplate/data/local/datasources/translation/translation_datasource.dart';
-import 'package:boilerplate/data/local/datasources/translation/translations_with_step_name_datasource.dart';
 import 'package:boilerplate/data/local/datasources/question/question_datasource.dart';
 import 'package:boilerplate/data/local/datasources/task/task_datasource.dart';
 import 'package:boilerplate/data/local/datasources/sub_task/sub_task_datasource.dart';
+import 'package:boilerplate/data/local/datasources/technical_name/technical_name_datasource.dart';
+import 'package:boilerplate/data/local/datasources/technical_name/technical_name_with_translations_datasource.dart';
 import 'package:boilerplate/data/network/apis/posts/post_api.dart';
 import 'package:boilerplate/data/network/apis/app_data/app_data_api.dart';
 import 'package:boilerplate/data/network/apis/tranlsation/translation_api.dart';
@@ -49,7 +49,7 @@ Future<void> setupLocator() async {
   // api's:---------------------------------------------------------------------
   getIt.registerSingleton(PostApi(getIt<DioClient>(), getIt<RestClient>()));
   getIt.registerSingleton(StepApi(getIt<DioClient>(), getIt<RestClient>()));
-  getIt.registerSingleton(TranslationApi(getIt<DioClient>(), getIt<RestClient>()));
+  getIt.registerSingleton(TechnicalNameApi(getIt<DioClient>(), getIt<RestClient>()));
 
   // data sources
   getIt.registerSingleton(PostDataSource(await getIt.getAsync<Database>()));
@@ -57,8 +57,8 @@ Future<void> setupLocator() async {
   getIt.registerSingleton(TaskDataSource(await getIt.getAsync<Database>()));
   getIt.registerSingleton(SubTaskDataSource(await getIt.getAsync<Database>()));
   getIt.registerSingleton(QuestionDataSource(await getIt.getAsync<Database>()));
-  getIt.registerSingleton(TranslationDataSource(await getIt.getAsync<Database>()));
-  getIt.registerSingleton(TranslationsWithStepNameDataSource(await getIt.getAsync<Database>()));
+  getIt.registerSingleton(TechnicalNameDataSource(await getIt.getAsync<Database>()));
+  getIt.registerSingleton(TechnicalNameWithTranslationsDataSource(await getIt.getAsync<Database>()));
 
   // repository:----------------------------------------------------------------
   getIt.registerSingleton(Repository(
@@ -70,9 +70,9 @@ Future<void> setupLocator() async {
     getIt<TaskDataSource>(),
     getIt<SubTaskDataSource>(),
     getIt<QuestionDataSource>(),
-    getIt<TranslationApi>(),
-    getIt<TranslationDataSource>(),
-    getIt<TranslationsWithStepNameDataSource>(),
+    getIt<TechnicalNameApi>(),
+    getIt<TechnicalNameDataSource>(),
+    getIt<TechnicalNameWithTranslationsDataSource>(),
   ));
 
   // stores:--------------------------------------------------------------------

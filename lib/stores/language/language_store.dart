@@ -1,5 +1,7 @@
+import 'dart:convert';
+
 import 'package:boilerplate/data/repository.dart';
-import 'package:boilerplate/models/language/Language.dart';
+import 'package:boilerplate/models/language/supported_language.dart';
 import 'package:boilerplate/stores/error/error_store.dart';
 import 'package:mobx/mobx.dart';
 
@@ -17,21 +19,22 @@ abstract class _LanguageStore with Store {
   final ErrorStore errorStore = ErrorStore();
 
   // supported languages
-  List<Language> supportedLanguages = [
-    Language(code: 'US', locale: 'en', language: 'English'),
-    Language(code: 'DK', locale: 'da', language: 'Danish'),
-    Language(code: 'ES', locale: 'es', language: 'España'),
+  List<SupportedLanguage> supportedLanguages = [
+    SupportedLanguage(code: 'US', locale: 'en', language: 'English'),
+    SupportedLanguage(code: 'DE', locale: 'de', language: 'German'),
   ];
 
   // constructor:---------------------------------------------------------------
-  _LanguageStore(Repository repository)
-      : this._repository = repository {
+  _LanguageStore(Repository repository) : this._repository = repository {
     init();
   }
 
   // store variables:-----------------------------------------------------------
   @observable
   String _locale = "en";
+
+  @observable
+  int? language_id;
 
   @computed
   String get locale => _locale;
@@ -51,10 +54,8 @@ abstract class _LanguageStore with Store {
 
     if (_locale == 'en') {
       code = "US";
-    } else if (_locale == 'da') {
-      code = "DK";
-    } else if (_locale == 'es') {
-      code = "ES";
+    } else if (_locale == 'de') {
+      code = "DE";
     }
 
     return code;
@@ -68,11 +69,20 @@ abstract class _LanguageStore with Store {
   }
 
   // general:-------------------------------------------------------------------
-  void init() async {
-    // getting current language from shared preference
-    if(_repository.currentLanguage != null) {
-      _locale = _repository.currentLanguage!;
-    }
+  @action
+  Future init() async {
+    final future = _repository.getCurrentLocale();
+    future.then((currentLocale) {
+      if (currentLocale != null) {
+        for (var i = 0; i < supportedLanguages.length; i++) {
+          if ("${supportedLanguages[i].locale! + "-" + supportedLanguages[i].code!}" ==
+              currentLocale) {
+            this._locale = currentLocale;
+            this.language_id = i;
+          }
+        }
+      }
+    });
   }
 
   // dispose:-------------------------------------------------------------------

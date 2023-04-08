@@ -8,6 +8,7 @@ import 'package:flutter/rendering.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:provider/provider.dart';
 import 'package:render_metrics/render_metrics.dart';
+import 'package:boilerplate/stores/technical_name/technical_name_with_translations_store.dart';
 
 class TaskPageTextOnly extends StatefulWidget {
   int task_id;
@@ -22,12 +23,15 @@ class _TaskPageTextOnlyState extends State<TaskPageTextOnly> {
   RenderParametersManager renderManager = RenderParametersManager<dynamic>();
   // stores:--------------------------------------------------------------------
   late TasksStore _tasksStore;
+  late TechnicalNameWithTranslationsStore _technicalNameWithTranslationsStore;
 
   @override
   void didChangeDependencies() {
     super.didChangeDependencies();
     // initializing stores
     _tasksStore = Provider.of<TasksStore>(context);
+    _technicalNameWithTranslationsStore =
+        Provider.of<TechnicalNameWithTranslationsStore>(context);
   }
 
   @override
@@ -35,18 +39,24 @@ class _TaskPageTextOnlyState extends State<TaskPageTextOnly> {
     super.initState();
   }
 
-  _buildDescription(){
+  _buildDescription() {
+    var description_id = _tasksStore.getTaskById(widget.task_id).description.id;
     return Padding(
       padding: Dimens.taskPageTextOnlyListViewPadding,
       child: Observer(
         builder: (context) {
-          return Text(_tasksStore.getTaskById(widget.task_id).description.string, style: TextStyle(fontSize: 20),);
+          return Text(
+            // _tasksStore.getTaskById(widget.task_id).description.string,
+            _technicalNameWithTranslationsStore
+                .getTechnicalNames(description_id)!,
+            style: TextStyle(fontSize: 20),
+          );
         },
       ),
     );
   }
 
-  _buildSubTasksList(){
+  _buildSubTasksList() {
     return Observer(
       builder: (context) {
         return ListView.builder(
@@ -65,7 +75,7 @@ class _TaskPageTextOnlyState extends State<TaskPageTextOnly> {
     );
   }
 
-  _buildPageContent(){
+  _buildPageContent() {
     return ListView(
       children: [
         _buildDescription(),
@@ -93,12 +103,14 @@ class _TaskPageTextOnlyState extends State<TaskPageTextOnly> {
 
   @override
   Widget build(BuildContext context) {
+    var title_id = _tasksStore.getTaskById(widget.task_id).text.id;
     return Scaffold(
       backgroundColor: AppColors.main_color,
       appBar: BlocksAppBarWidget(
         isDone: _tasksStore.getTaskById(widget.task_id).isDone,
         appBarSize: 70.0,
-        title: _tasksStore.getTaskById(widget.task_id).text.string,
+        // title: _tasksStore.getTaskById(widget.task_id).text.string,
+        title: _technicalNameWithTranslationsStore.getTechnicalNames(title_id)!,
       ),
       body: _buildScaffoldBody(),
     );

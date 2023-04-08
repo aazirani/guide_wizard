@@ -1,23 +1,28 @@
 import 'dart:async';
+import 'dart:convert';
 import 'dart:io';
 import 'package:boilerplate/constants/colors.dart';
 import 'package:boilerplate/constants/dimens.dart';
 import 'package:boilerplate/data/network/constants/endpoints.dart';
 import 'package:boilerplate/data/sharedpref/constants/preferences.dart';
+import 'package:boilerplate/models/technical_name/technical_name_with_translations_list.dart';
 import 'package:boilerplate/stores/question/questions_store.dart';
 import 'package:boilerplate/stores/step/step_store.dart';
 import 'package:boilerplate/stores/task/tasks_store.dart';
+import 'package:boilerplate/stores/technical_name/technical_name_with_translations_store.dart';
 import 'package:boilerplate/ui/compressed_tasklist_timeline/compressed_task_list_timeline.dart';
 import 'package:boilerplate/ui/step_slider/step_slider_widget.dart';
 import 'package:boilerplate/ui/step_timeline/step_timeline.dart';
 import 'package:boilerplate/utils/locale/app_localization.dart';
 import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:provider/provider.dart';
 import 'package:boilerplate/stores/step/steps_store.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:simple_fontellico_progress_dialog/simple_fontico_loading.dart';
+import 'package:boilerplate/stores/language/language_store.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({
@@ -34,8 +39,23 @@ class _HomeScreenState extends State<HomeScreen> {
   late QuestionsStore _questionsStore;
   late StepStore _stepStore;
   late StepsStore _stepsStore;
+  late TechnicalNameWithTranslationsStore _technicalNameWithTranslationsStore;
+  late LanguageStore _languageStore;
   Map _source = {ConnectivityResult.none: false};
   final MyConnectivity _connectivity = MyConnectivity.instance;
+
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    // initializing stores
+    _tasksStore = Provider.of<TasksStore>(context);
+    _questionsStore = Provider.of<QuestionsStore>(context);
+    _stepStore = Provider.of<StepStore>(context);
+    _stepsStore = Provider.of<StepsStore>(context);
+    _technicalNameWithTranslationsStore =
+        Provider.of<TechnicalNameWithTranslationsStore>(context);
+    _languageStore = Provider.of<LanguageStore>(context);
+  }
 
   @override
   void initState() {
@@ -44,7 +64,10 @@ class _HomeScreenState extends State<HomeScreen> {
     _connectivity.myStream.listen((source) {
       setState(() => _source = source);
     });
-    Future.delayed(Duration(milliseconds: 000),() async {
+    Future.delayed(Duration(milliseconds: 5000), () async {
+      _languageStore.init();
+      _technicalNameWithTranslationsStore.getCurrentLan(_languageStore.language_id!);
+      print(_languageStore.locale);
       // _loadDataAndShowLoadingDialog(context);
       /*
       Warning: Do NOT remove these comments
@@ -62,36 +85,26 @@ class _HomeScreenState extends State<HomeScreen> {
     });
   }
 
-  @override
-  void didChangeDependencies() {
-    super.didChangeDependencies();
-    // initializing stores
-    _tasksStore = Provider.of<TasksStore>(context);
-    _questionsStore = Provider.of<QuestionsStore>(context);
-    _stepStore = Provider.of<StepStore>(context);
-    _stepsStore = Provider.of<StepsStore>(context);
-  }
-
   SimpleFontelicoProgressDialog? _dialog;
 
   Future<bool> _canConnectToServer() async {
     bool ActiveConnection = false;
-      try {
-        final result = await InternetAddress.lookup(Endpoints.baseUrl);
-        if (result.isNotEmpty && result[0].rawAddress.isNotEmpty) {
-          setState(() {
-            ActiveConnection = true;
-          });
-        }
-      } on SocketException catch (_) {
+    try {
+      final result = await InternetAddress.lookup(Endpoints.baseUrl);
+      if (result.isNotEmpty && result[0].rawAddress.isNotEmpty) {
         setState(() {
-          ActiveConnection = false;
+          ActiveConnection = true;
         });
       }
+    } on SocketException catch (_) {
+      setState(() {
+        ActiveConnection = false;
+      });
+    }
     return ActiveConnection;
   }
 
-  Future<bool> _isConnectedToInternet() async{
+  Future<bool> _isConnectedToInternet() async {
     bool hasConnection;
     switch (_source.keys.toList()[0]) {
       case ConnectivityResult.mobile:
@@ -105,15 +118,32 @@ class _HomeScreenState extends State<HomeScreen> {
     return hasConnection;
   }
 
-  void _showNoInternetConnectionDialog(BuildContext context){
-    _showAlertDialog(context, AppLocalizations.of(context).translate("no_internet_title"), AppLocalizations.of(context).translate("no_internet_content"), AppLocalizations.of(context).translate("no_internet_button_text"), _loadDataAndShowLoadingDialog);
+  void _showNoInternetConnectionDialog(BuildContext context) {
+    _showAlertDialog(
+        context,
+        AppLocalizations.of(context).translate("no_internet_title"),
+        AppLocalizations.of(context).translate("no_internet_content"),
+        AppLocalizations.of(context).translate("no_internet_button_text"),
+        _loadDataAndShowLoadingDialog);
   }
 
-  void _showCantConnectToServer(BuildContext context){
-    _showAlertDialog(context, AppLocalizations.of(context).translate("unable_to_reach_server_title"), AppLocalizations.of(context).translate("unable_to_reach_server_content"), AppLocalizations.of(context).translate("unable_to_reach_server_button_text"), _loadDataAndShowLoadingDialog);
+  void _showCantConnectToServer(BuildContext context) {
+    _showAlertDialog(
+        context,
+        AppLocalizations.of(context).translate("unable_to_reach_server_title"),
+        AppLocalizations.of(context)
+            .translate("unable_to_reach_server_content"),
+        AppLocalizations.of(context)
+            .translate("unable_to_reach_server_button_text"),
+        _loadDataAndShowLoadingDialog);
   }
 
-  void _showAlertDialog(BuildContext context, String title, String content, String buttonText, void Function(BuildContext context) onPressedFunction) {
+  void _showAlertDialog(
+      BuildContext context,
+      String title,
+      String content,
+      String buttonText,
+      void Function(BuildContext context) onPressedFunction) {
     showDialog(
       context: context,
       builder: (BuildContext context) {
@@ -144,16 +174,15 @@ class _HomeScreenState extends State<HomeScreen> {
         height: 75.0,
         hideText: false,
         indicatorColor: AppColors.main_color);
-    if(await _isConnectedToInternet()){
-      if(await _canConnectToServer()){
+    if (await _isConnectedToInternet()) {
+      if (await _canConnectToServer()) {
         await _stepsStore.getSteps();
         _dialog!.hide();
       } else {
         _dialog!.hide();
         _showCantConnectToServer(context);
       }
-    }
-    else{
+    } else {
       _dialog!.hide();
       _showNoInternetConnectionDialog(context);
     }
@@ -170,10 +199,19 @@ class _HomeScreenState extends State<HomeScreen> {
         hideText: false,
         indicatorColor: AppColors.main_color);
     if (!_stepsStore.loading) {
+      //truncate all data available in datasources
       await _stepsStore.truncateSteps();
+      await _technicalNameWithTranslationsStore
+          .truncateTechnicalNameWithTranslations();
       await _tasksStore.truncateTasks();
       await _questionsStore.truncateQuestions();
+      await _technicalNameWithTranslationsStore
+          .truncateTechnicalNameWithTranslations();
+      //fill stores with updated data
+      await _technicalNameWithTranslationsStore
+          .getTechnicalNameWithTranslations();
       await _stepsStore.getSteps();
+
       await _tasksStore.getTasks();
       await _questionsStore.getQuestions();
     }
@@ -231,33 +269,36 @@ class _HomeScreenState extends State<HomeScreen> {
         //step slider
         Observer(
             builder: (_) => StepSliderWidget(stepList: _stepsStore.stepList)),
+        // StepSliderWidget(),
         //step timeline
         //TODO: save current and pending steps in shared preferences
-        Observer(
-            builder: (_) => StepTimeLine(
-                pending: 1, stepNo: 3, stepList: _stepsStore.stepList)),
+        StepTimeLine(
+          pending: 1,
+          stepNo: 3,
+        ),
         SizedBox(height: 25),
         _buildInProgressText(),
         SizedBox(height: 10),
         //task compressed timeline
         Observer(
             builder: (_) =>
-                CompressedBlocklistTimeline(stepList: _stepsStore.stepList)),
+                CompressedTasklistTimeline(stepList: _stepsStore.stepList))
+        // CompressedTasklistTimeline(),
       ],
     );
   }
 
   Widget _buildCurrentStepIndicator() {
     return Padding(
-      padding: EdgeInsets.only(
-        top: 30,
-        left: 15,
-      ),
-      child: Row(children: [
-        _buildStepsText(),
-         SizedBox(width: 10),
-        _buildCurrentStepText(_stepStore),
-      ]));
+        padding: EdgeInsets.only(
+          top: 30,
+          left: 15,
+        ),
+        child: Row(children: [
+          _buildStepsText(),
+          SizedBox(width: 10),
+          _buildCurrentStepText(_stepStore),
+        ]));
   }
 
   Widget _buildStepsText() {
