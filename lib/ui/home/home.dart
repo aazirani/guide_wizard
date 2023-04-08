@@ -69,12 +69,15 @@ class _HomeScreenState extends State<HomeScreen> {
       _technicalNameWithTranslationsStore.getCurrentLan(_languageStore.language_id!);
       print(_languageStore.locale);
       // _loadDataAndShowLoadingDialog(context);
+      /*
+      Warning: Do NOT remove these comments
+       */
       // late bool isDataLoaded;
       // await SharedPreferences.getInstance().then((prefs) {
       //   isDataLoaded = prefs.getBool(Preferences.is_data_loaded) ?? false;
       // });
-      // if (!isDataLoaded) {
-      await _loadDataWithoutErrorHandling(context);
+      // if(!isDataLoaded) {
+        await _loadDataWithoutErrorHandling(context);
       //   SharedPreferences.getInstance().then((prefs) {
       //     prefs.setBool(Preferences.is_data_loaded, true);
       //   });

@@ -4,6 +4,7 @@ import 'package:boilerplate/models/sub_task/sub_task.dart';
 import 'package:boilerplate/stores/technical_name/technical_name_with_translations_store.dart';
 import 'package:boilerplate/widgets/expansion_content.dart';
 import 'package:boilerplate/widgets/app_expansiontile.dart';
+import 'package:boilerplate/widgets/scrolling_overflow_text.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:provider/provider.dart';
@@ -45,37 +46,33 @@ class SubTaskWidgetState extends State<SubTaskWidget>
       widget.subTasks[widget.index].toggleExpanded();
     });
   }
+    }
 
-  Widget _buildExpansionContent() {
+    Widget _buildExpansionContent() {
+    
     var markdown_id = widget.subTasks[widget.index].markdown.id;
-    return ExpansionContent(
-        renderManager: widget.renderManager,
-        // markdown: markdown,
-        markdown: _technicalNameWithTranslationsStore
-            .getTechnicalNames(markdown_id)!);
-  }
+      return ExpansionContent(renderManager: widget.renderManager, markdown: _technicalNameWithTranslationsStore
+            .getTechnicalNames(markdown_id)!,);
+    }
 
-  Widget _buildAppExpansionTileWidget() {
-    var sub_task_title_id = widget.subTasks[widget.index].title.id; 
-    return AppExpansionTile(
-      onExpansionChanged: ((isNewState) {
-        if (isNewState) {
-          _runAtExpanding();
-        }
-      }),
-      maintainState: true,
-      textColor: AppColors.main_color,
-      iconColor: AppColors.main_color,
-      title: Text(
-      _technicalNameWithTranslationsStore.getTechnicalNames(sub_task_title_id)!,
-      ),
-      key: widget.subTasks[widget.index].globalKey,
-      children: <Widget>[
-        // _buildExpansionContent(widget.subTasks[widget.index].markdown.string),
-        _buildExpansionContent(),
-      ],
-    );
-  }
+    Widget _buildAppExpansionTileWidget() {
+    var sub_task_title_id = widget.subTasks[widget.index].title.id;
+      return AppExpansionTile(
+        onExpansionChanged: ((isNewState) {
+          if (isNewState) {
+            _runAtExpanding();
+          }
+        }),
+        maintainState: true,
+        textColor: AppColors.main_color,
+        iconColor: AppColors.main_color,
+        title: ScrollingOverflowText(text: _technicalNameWithTranslationsStore.getTechnicalNames(sub_task_title_id)!, textStyle: TextStyle(fontSize: 19),),
+        key: widget.subTasks[widget.index].globalKey,
+        children: <Widget>[
+          _buildExpansionContent(),
+        ],
+      );
+    }
 
   Widget _buildAppExpansionTileWidgetWithCustomTheme() {
     return ListTileTheme(

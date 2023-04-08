@@ -8,7 +8,9 @@ import 'package:boilerplate/stores/task_list/task_list_store.dart';
 import 'package:boilerplate/stores/technical_name/technical_name_with_translations_store.dart';
 import 'package:boilerplate/ui/tasklist/tasklist.dart';
 import 'package:boilerplate/utils/locale/app_localization.dart';
+import 'package:boilerplate/widgets/scrolling_overflow_text.dart';
 import 'package:flutter/material.dart';
+import 'package:marquee/marquee.dart';
 import 'package:provider/provider.dart';
 import 'package:scrollable_positioned_list/scrollable_positioned_list.dart';
 import 'package:boilerplate/providers/question_widget_state/question_widget_state.dart';
@@ -126,12 +128,14 @@ class _QuestionWidgetState extends State<QuestionWidget>
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
-          Flexible(
-            child: Text(
-              // widget.question.getTitle,
-              _technicalNameWithTranslationsStore.getTechnicalNames(title_id)!,
-              style: TextStyle(fontSize: 22, fontWeight: FontWeight.w500),
-            ),
+          ScrollingOverflowText(
+            text: _technicalNameWithTranslationsStore.getTechnicalNames(title_id)!,
+            textStyle: TextStyle(fontSize: 22, fontWeight: FontWeight.w500),
+            height: 30,
+            width: _getScreenWidth() - 100,
+          ),
+          SizedBox(
+            width: 10,
           ),
           Provider.of<QuestionsWidgetState>(context)
                   .isWidgetExpanded(widget.index)
