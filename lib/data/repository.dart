@@ -524,15 +524,6 @@ class Repository {
   }
 
   Future<String?> getCurrentLocale() async {
-    // try {
-    //   final currentLocale = await Devicelocale.currentLocale;
-    //   // print((currentLocale != null)
-    //   //     ? currentLocale
-    //   //     : "Unable to get currentLocale");
-    //   return currentLocale;
-    // } on PlatformException {
-    //   print("Error obtaining current locale");
-    // }
     return await Devicelocale.currentLocale;
   }
 
