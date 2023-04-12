@@ -48,7 +48,6 @@ class StepDataSource {
   }
 
   Future<StepList> getStepsFromDb() async {
-
     print('Loading from database');
 
     // post list
@@ -58,18 +57,16 @@ class StepDataSource {
     final recordSnapshots = await _stepsStore.find(
       _db,
     );
-
     // Making a List<Post> out of List<RecordSnapshot>
-    if(recordSnapshots.length > 0) {
+    if (recordSnapshots.length > 0) {
       stepsList = StepList(
           steps: recordSnapshots.map((snapshot) {
-            final step = Step.fromMap(snapshot.value);
-            // An ID is a key of a record from the database.
-            step.id = snapshot.key;
-            return step;
-          }).toList());
-    }
-    else{
+        final step = Step.fromMap(snapshot.value);
+        // An ID is a key of a record from the database.
+        step.id = snapshot.key;
+        return step;
+      }).toList());
+    } else {
       stepsList = StepList(steps: []);
     }
 
@@ -92,5 +89,4 @@ class StepDataSource {
       _db,
     );
   }
-
 }

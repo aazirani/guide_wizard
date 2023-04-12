@@ -15,6 +15,8 @@ import 'package:provider/provider.dart';
 import 'package:scrollable_positioned_list/scrollable_positioned_list.dart';
 import 'package:boilerplate/providers/question_widget_state/question_widget_state.dart';
 
+import '../stores/task/tasks_store.dart';
+
 class QuestionWidget extends StatefulWidget {
   Question question;
   bool isLastQuestion;
@@ -36,7 +38,8 @@ class QuestionWidget extends StatefulWidget {
 class _QuestionWidgetState extends State<QuestionWidget>
     with AutomaticKeepAliveClientMixin {
   late StepStore _stepStore;
-  late TaskListStore _taskListStore;
+  // late TaskListStore _taskListStore;
+  late TasksStore _tasksStore;
   late TechnicalNameWithTranslationsStore _technicalNameWithTranslationsStore;
 
   @override
@@ -44,7 +47,8 @@ class _QuestionWidgetState extends State<QuestionWidget>
     super.didChangeDependencies();
     // initializing stores
     _stepStore = Provider.of<StepStore>(context);
-    _taskListStore = Provider.of<TaskListStore>(context);
+    // _taskListStore = Provider.of<TaskListStore>(context);
+    _tasksStore = Provider.of<TasksStore>(context);
     _technicalNameWithTranslationsStore =
         Provider.of<TechnicalNameWithTranslationsStore>(context);
   }
@@ -84,7 +88,7 @@ class _QuestionWidgetState extends State<QuestionWidget>
       child: TextButton(
         style: _buildQuestionsButtonStyle(Colors.green.shade600),
         onPressed: () {
-          _taskListStore.getTaskList(_stepStore.currentStep);
+          _tasksStore.getTasks(_stepStore.currentStep);
           Navigator.push(
               context,
               MaterialPageRoute(
@@ -129,7 +133,8 @@ class _QuestionWidgetState extends State<QuestionWidget>
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
           ScrollingOverflowText(
-            text: _technicalNameWithTranslationsStore.getTechnicalNames(title_id)!,
+            text: _technicalNameWithTranslationsStore
+                .getTechnicalNames(title_id)!,
             textStyle: TextStyle(fontSize: 22, fontWeight: FontWeight.w500),
             height: 30,
             width: _getScreenWidth() - 100,
@@ -176,7 +181,8 @@ class _QuestionWidgetState extends State<QuestionWidget>
                   },
                   title: Text(
                     // option.getTitle
-                    _technicalNameWithTranslationsStore.getTechnicalNames(option.getAnswerTitleID())!,
+                    _technicalNameWithTranslationsStore
+                        .getTechnicalNames(option.getAnswerTitleID())!,
                   ),
                   controlAffinity: ListTileControlAffinity.leading,
                   tileColor: AppColors.grey,
@@ -378,7 +384,8 @@ class _QuestionWidgetState extends State<QuestionWidget>
       margin: Dimens.questionDescriptionPadding,
       child: Text(
         // widget.question.getSubTitle,
-        _technicalNameWithTranslationsStore.getTechnicalNames(question_subtitle_id)!,
+        _technicalNameWithTranslationsStore
+            .getTechnicalNames(question_subtitle_id)!,
       ),
     );
   }

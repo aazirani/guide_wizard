@@ -13,6 +13,8 @@ import 'package:provider/provider.dart';
 import 'package:boilerplate/ui/home/home.dart';
 import 'package:boilerplate/models/step/step.dart' as s;
 
+import '../../stores/task/tasks_store.dart';
+
 class TaskList extends StatefulWidget {
   int currentStepNo;
   TaskList({Key? key, required this.currentStepNo}) : super(key: key);
@@ -22,7 +24,8 @@ class TaskList extends StatefulWidget {
 }
 
 class _TaskListState extends State<TaskList> {
-  late TaskListStore _taskListStore;
+  // late TaskListStore _taskListStore;
+  late TasksStore _tasksStore;
   late StepsStore _stepsStore;
   late TechnicalNameWithTranslationsStore _technicalNameWithTranslationsStore;
 
@@ -30,9 +33,11 @@ class _TaskListState extends State<TaskList> {
   void didChangeDependencies() {
     super.didChangeDependencies();
     // initializing stores
-    _taskListStore = Provider.of<TaskListStore>(context);
+    // _taskListStore = Provider.of<TaskListStore>(context);
+    _tasksStore = Provider.of<TasksStore>(context);
     _stepsStore = Provider.of<StepsStore>(context);
-    _technicalNameWithTranslationsStore = Provider.of<TechnicalNameWithTranslationsStore>(context);
+    _technicalNameWithTranslationsStore =
+        Provider.of<TechnicalNameWithTranslationsStore>(context);
   }
 
   var progressBarSize = Size.zero;
@@ -48,12 +53,14 @@ class _TaskListState extends State<TaskList> {
   //appBar methods .............................................................
   PreferredSizeWidget _buildAppBar() {
     //text id of the step we want to find the title of
-    var step_title_id = _stepsStore.stepList.steps[widget.currentStepNo].name.id;
+    var step_title_id =
+        _stepsStore.stepList.steps[widget.currentStepNo].name.id;
     return AppBar(
         backgroundColor: AppColors.main_color,
         titleSpacing: 0,
         title: Text(
-            _technicalNameWithTranslationsStore.getTechnicalNames(step_title_id)!,
+            _technicalNameWithTranslationsStore
+                .getTechnicalNames(step_title_id)!,
             style: TextStyle(
                 color: AppColors.white,
                 fontSize: 18,
@@ -102,7 +109,7 @@ class _TaskListState extends State<TaskList> {
                 padding: Dimens.numberOfTasksPadding,
                 child: Observer(
                   builder: (_) => Text(
-                      "${_taskListStore.taskList.numTasks} ${AppLocalizations.of(context).translate('tasks')}",
+                      "${_tasksStore.taskList.numTasks} ${AppLocalizations.of(context).translate('tasks')}",
                       style: TextStyle(color: AppColors.white)),
                 )),
             SizedBox(height: 5),
@@ -134,7 +141,7 @@ class _TaskListState extends State<TaskList> {
                 builder: (_) => ListView.builder(
                   scrollDirection: Axis.vertical,
                   controller: scrollController,
-                  itemCount: _taskListStore.taskList.numTasks,
+                  itemCount: _tasksStore.taskList.numTasks,
                   itemBuilder: (context, i) {
                     return TaskListTimeLine(task_number: i);
                   },

@@ -48,7 +48,7 @@ abstract class _QuestionsStore with Store {
   // actions:-------------------------------------------------------------------
   @action
   Future getQuestions() async {
-    final future = _repository.getQuestionsFromApi();
+    final future = _repository.getQuestions();
     fetchQuestionsFuture = ObservableFuture(future);
 
     future.then((questionList) {

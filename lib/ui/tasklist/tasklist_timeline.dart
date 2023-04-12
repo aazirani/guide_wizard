@@ -7,9 +7,9 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:timelines/timelines.dart';
 import 'package:boilerplate/utils/locale/app_localization.dart';
-import 'package:boilerplate/models/task/task_list.dart';
-import 'package:boilerplate/stores/task_list/task_list_store.dart';
 import 'package:boilerplate/stores/technical_name/technical_name_with_translations_store.dart';
+
+import '../../stores/task/tasks_store.dart';
 
 class TaskListTimeLine extends StatefulWidget {
   // final TaskList taskList;
@@ -21,13 +21,15 @@ class TaskListTimeLine extends StatefulWidget {
 }
 
 class _TaskListTimeLineState extends State<TaskListTimeLine> {
-  late TaskListStore _taskListStore;
+  // late TaskListStore _taskListStore;
+  late TasksStore _tasksStore;
   late TechnicalNameWithTranslationsStore _technicalNameWithTranslationsStore;
   @override
   void didChangeDependencies() {
     super.didChangeDependencies();
     // initializing stores
-    _taskListStore = Provider.of<TaskListStore>(context);
+    // _taskListStore = Provider.of<TaskListStore>(context);
+    _tasksStore = Provider.of<TasksStore>(context);
     _technicalNameWithTranslationsStore =
         Provider.of<TechnicalNameWithTranslationsStore>(context);
   }
@@ -78,7 +80,7 @@ class _TaskListTimeLineState extends State<TaskListTimeLine> {
             border: Border(
                 left: BorderSide(
               width: 25,
-              color: (_taskListStore.taskList.tasks[task_number].isDone == true)
+              color: (_tasksStore.taskList.tasks[task_number].isDone == true)
                   ? AppColors.contentDoneBorderColor
                   : AppColors.contentUnDoneBorderColor,
             )),
@@ -92,19 +94,19 @@ class _TaskListTimeLineState extends State<TaskListTimeLine> {
   Widget _buildInsideElements(task_number) {
     return GestureDetector(
       onTap: () {
-        if (_taskListStore.taskList.tasks[task_number].isTypeOfText) {
+        if (_tasksStore.taskList.tasks[task_number].isTypeOfText) {
           Navigator.push(
               context,
               MaterialPageRoute(
                   builder: (context) => TaskPageTextOnly(
-                        task_id: _taskListStore.taskList.tasks[task_number].id,
+                        task_id: _tasksStore.taskList.tasks[task_number].id,
                       )));
         } else {
           Navigator.push(
               context,
               MaterialPageRoute(
                   builder: (context) => TaskPageWithImage(
-                        task: _taskListStore.taskList.tasks[task_number],
+                        task: _tasksStore.taskList.tasks[task_number],
                       )));
         }
       },
@@ -131,7 +133,7 @@ class _TaskListTimeLineState extends State<TaskListTimeLine> {
 
   Widget _buildContentTitle(task_number) {
     //text id of the task we want to find the title of
-    var title_id = _taskListStore.taskList.tasks[task_number].text.id;
+    var title_id = _tasksStore.taskList.tasks[task_number].text.id;
     return Align(
       alignment: Alignment.centerLeft,
       child: Text(
@@ -181,7 +183,7 @@ class _TaskListTimeLineState extends State<TaskListTimeLine> {
   //general methods ............................................................
   double _getScreenWidth() => MediaQuery.of(context).size.width;
   bool _deadLineAvailable(task_number) {
-    switch (_taskListStore.taskList.tasks[task_number].deadLine) {
+    switch (_tasksStore.taskList.tasks[task_number].deadLine) {
       case null:
         return false;
     }
@@ -189,7 +191,7 @@ class _TaskListTimeLineState extends State<TaskListTimeLine> {
   }
 
   bool _taskDone(task_number) {
-    switch (_taskListStore.taskList.tasks[task_number].isDone) {
+    switch (_tasksStore.taskList.tasks[task_number].isDone) {
       case true:
         return true;
     }
