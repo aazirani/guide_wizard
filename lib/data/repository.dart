@@ -37,7 +37,8 @@ class Repository {
   final TaskDataSource _taskDataSource;
   final SubTaskDataSource _subTaskDataSource;
   final QuestionDataSource _questionDataSource;
-  final TechnicalNameWithTranslationsDataSource _technicalNameWithTranslationsDataSource;
+  final TechnicalNameWithTranslationsDataSource
+      _technicalNameWithTranslationsDataSource;
 
   // api objects
   final PostApi _postApi;
@@ -109,9 +110,10 @@ class Repository {
   // Task: ---------------------------------------------------------------------
   Future<TaskList> getTasks() async {
     //if already exists, get tasks from the database, otherwise, do the Api call.
-    return await _taskDataSource.count() > 0
-        ? _taskDataSource.getTasksFromDb()
-        : getTasksFromApi();
+    // return await _taskDataSource.count() > 0
+    //     ? _taskDataSource.getTasksFromDb()
+    //     : getTasksFromApi();
+    return await _taskDataSource.getTasksFromDb();
   }
 
   Future<TaskList> getTasksFromApi() async {
@@ -225,9 +227,10 @@ class Repository {
 
   // Question: -----------------------------------------------------------------
   Future<QuestionList> getQuestions() async {
-    return await _questionDataSource.count() > 0
-        ? _questionDataSource.getQuestionsFromDb()
-        : getQuestionsFromApi();
+    // return await _questionDataSource.count() > 0
+    //     ? _questionDataSource.getQuestionsFromDb()
+    //     : getQuestionsFromApi();
+    return await _questionDataSource.getQuestionsFromDb();
   }
 
   Future<QuestionList> getQuestionsFromApi() async {
@@ -428,13 +431,17 @@ class Repository {
 // }
 
   // TranslationsWithTechnicalName: ---------------------------------------------------------------------
-  Future<TechnicalNameWithTranslationsList> getTechnicalNameWithTranslations() async {
+  Future<TechnicalNameWithTranslationsList>
+      getTechnicalNameWithTranslations() async {
     // check to see if posts are present in database, then fetch from database
     // else make a network call to get all posts, store them into database for
     // later use
-    return await _technicalNameApi.getTechnicalNamesWithTranslations().then((t) {
+    return await _technicalNameApi
+        .getTechnicalNamesWithTranslations()
+        .then((t) {
       t.technicalNameWithTranslations.forEach((technicalNameWithTranslations) {
-        _technicalNameWithTranslationsDataSource.insert(technicalNameWithTranslations);
+        _technicalNameWithTranslationsDataSource
+            .insert(technicalNameWithTranslations);
         // translationWithStepName.translations.forEach((translation) {
         //   _languageDataSource.insert(translation.language);
         // });
@@ -443,7 +450,9 @@ class Repository {
       return t;
     }).catchError((error) => throw error);
   }
-  Future<List<TechnicalNameWithTranslations>> findTechnicalNameWithTranslations(int id) {
+
+  Future<List<TechnicalNameWithTranslations>> findTechnicalNameWithTranslations(
+      int id) {
     //creating filter
     List<Filter> filters = [];
 
@@ -480,8 +489,9 @@ class Repository {
           .catchError((error) => throw error);
 
   Future truncateTechnicalNameWithTranslations() =>
-      _technicalNameWithTranslationsDataSource.deleteAll().catchError((error) => throw error);
-
+      _technicalNameWithTranslationsDataSource
+          .deleteAll()
+          .catchError((error) => throw error);
 
   // Login:---------------------------------------------------------------------
   Future<bool> login(String email, String password) async {
@@ -500,7 +510,7 @@ class Repository {
   bool get isDarkMode => _sharedPrefsHelper.isDarkMode;
 
   // Language: -----------------------------------------------------------------
-   Future<void> changeLanguage(String value) =>
+  Future<void> changeLanguage(String value) =>
       _sharedPrefsHelper.changeLanguage(value);
 
   String? get currentLanguage => _sharedPrefsHelper.currentLanguage;

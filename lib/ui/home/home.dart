@@ -64,7 +64,7 @@ class _HomeScreenState extends State<HomeScreen> {
     _connectivity.myStream.listen((source) {
       setState(() => _source = source);
     });
-    Future.delayed(Duration(milliseconds: 5000), () async {
+    Future.delayed(Duration(milliseconds: 000), () async {
       _languageStore.init();
       _technicalNameWithTranslationsStore.getCurrentLan(_languageStore.language_id!);
       print(_languageStore.locale);
@@ -200,20 +200,18 @@ class _HomeScreenState extends State<HomeScreen> {
         indicatorColor: AppColors.main_color);
     if (!_stepsStore.loading) {
       //truncate all data available in datasources
-      await _stepsStore.truncateSteps();
-      await _technicalNameWithTranslationsStore
-          .truncateTechnicalNameWithTranslations();
-      await _tasksStore.truncateTasks();
-      await _questionsStore.truncateQuestions();
-      await _technicalNameWithTranslationsStore
-          .truncateTechnicalNameWithTranslations();
+      // await _stepsStore.truncateSteps();
+      // await _technicalNameWithTranslationsStore
+      //     .truncateTechnicalNameWithTranslations();
+      // await _tasksStore.truncateTasks();
+      // await _questionsStore.truncateQuestions();
+      // await _technicalNameWithTranslationsStore
+      //     .truncateTechnicalNameWithTranslations();
       //fill stores with updated data
       await _technicalNameWithTranslationsStore
           .getTechnicalNameWithTranslations();
       await _stepsStore.getSteps();
 
-      await _tasksStore.getTasks();
-      await _questionsStore.getQuestions();
     }
     _dialog!.hide();
   }

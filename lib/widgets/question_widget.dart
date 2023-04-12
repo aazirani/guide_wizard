@@ -16,13 +16,13 @@ import 'package:marquee/marquee.dart';
 import 'package:provider/provider.dart';
 import 'package:scrollable_positioned_list/scrollable_positioned_list.dart';
 import 'package:boilerplate/providers/question_widget_state/question_widget_state.dart';
+import 'package:boilerplate/stores/task/tasks_store.dart';
 
 class QuestionWidget extends StatefulWidget {
   Question question;
   bool isLastQuestion;
   int index;
   ItemScrollController itemScrollController;
-
 
   QuestionWidget({
     Key? key,
@@ -39,7 +39,8 @@ class QuestionWidget extends StatefulWidget {
 class _QuestionWidgetState extends State<QuestionWidget>
     with AutomaticKeepAliveClientMixin {
   late StepStore _stepStore;
-  late TaskListStore _taskListStore;
+  // late TaskListStore _taskListStore;
+  late TasksStore _tasksStore;
   late TechnicalNameWithTranslationsStore _technicalNameWithTranslationsStore;
   late CurrentStepStore _currentStepStore;
 
@@ -48,7 +49,8 @@ class _QuestionWidgetState extends State<QuestionWidget>
     super.didChangeDependencies();
     // initializing stores
     _stepStore = Provider.of<StepStore>(context);
-    _taskListStore = Provider.of<TaskListStore>(context);
+    // _taskListStore = Provider.of<TaskListStore>(context);
+    _tasksStore = Provider.of<TasksStore>(context);
     _technicalNameWithTranslationsStore =
         Provider.of<TechnicalNameWithTranslationsStore>(context);
     _currentStepStore = Provider.of<CurrentStepStore>(context);
@@ -89,7 +91,7 @@ class _QuestionWidgetState extends State<QuestionWidget>
       child: TextButton(
         style: _buildQuestionsButtonStyle(AppColors.nextStepColor),
         onPressed: () {
-          _taskListStore.getTaskList(_stepStore.currentStep);
+          _tasksStore.getTasks(_stepStore.currentStep);
           _currentStepStore.setStepNumber(1);
           Navigator.of(context).pushAndRemoveUntil(MaterialPageRoute(builder: (context) =>
               HomeScreen()), (Route<dynamic> route) => false).then((value) => setState(() {}));
@@ -131,7 +133,8 @@ class _QuestionWidgetState extends State<QuestionWidget>
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
           ScrollingOverflowText(
-            text: _technicalNameWithTranslationsStore.getTechnicalNames(title_id)!,
+            text: _technicalNameWithTranslationsStore
+                .getTechnicalNames(title_id)!,
             textStyle: TextStyle(fontSize: 22, fontWeight: FontWeight.w500),
             height: 30,
             width: _getScreenWidth() - 100,

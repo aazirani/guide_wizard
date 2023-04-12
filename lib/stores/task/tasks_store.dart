@@ -34,7 +34,7 @@ abstract class _TasksStore with Store {
   ObservableFuture<dynamic>(emptyTruncateTaskResponse);
 
   @observable
-  TaskList? taskList;
+  TaskList taskList = TaskList(tasks: []);
 
   @observable
   bool success = false;
@@ -47,7 +47,7 @@ abstract class _TasksStore with Store {
 
   // actions:-------------------------------------------------------------------
   @action
-  Future getTasks() async {
+  Future getAllTasks() async {
     final future = _repository.getTasks();
     fetchTasksFuture = ObservableFuture(future);
     future.then((taskList) {
@@ -59,8 +59,24 @@ abstract class _TasksStore with Store {
   }
 
   @action
+  Future getTasks(int id) async {
+    final future = _repository.getTasks();
+    fetchTasksFuture = ObservableFuture(future);
+    List<Task> relatedTasks = [];
+    future.then((taskList) {
+      taskList.tasks.forEach((task) {
+        if (task.step_id == id) {
+          relatedTasks.add(task);
+        }
+      });
+      TaskList temp = TaskList(tasks: relatedTasks);
+      this.taskList = temp;
+    });
+  }
+
+  @action
   Task getTaskById(int taskId) {
-    return taskList!.tasks.firstWhere((task) => task.id == taskId);
+    return taskList.tasks.firstWhere((task) => task.id == taskId);
   }
 
   Future truncateTable() async {
