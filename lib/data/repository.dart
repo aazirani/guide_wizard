@@ -6,12 +6,15 @@ import 'package:boilerplate/data/local/datasources/sub_task/sub_task_datasource.
 import 'package:boilerplate/data/local/datasources/question/question_datasource.dart';
 import 'package:boilerplate/data/local/datasources/technical_name/technical_name_datasource.dart';
 import 'package:boilerplate/data/local/datasources/technical_name/technical_name_with_translations_datasource.dart';
+import 'package:boilerplate/data/local/datasources/updated_at_times/updated_at_times_datasource.dart';
 import 'package:boilerplate/data/network/apis/tranlsation/translation_api.dart';
+import 'package:boilerplate/data/network/apis/updated_at_times/updated_at_times_api.dart';
 import 'package:boilerplate/data/sharedpref/shared_preference_helper.dart';
 import 'package:boilerplate/models/post/post.dart';
 import 'package:boilerplate/models/post/post_list.dart';
 import 'package:boilerplate/models/technical_name/technical_name_with_translations_list.dart';
 import 'package:boilerplate/models/technical_name/technical_name_with_translations.dart';
+import 'package:boilerplate/models/updated_at_times/updated_at_times.dart';
 import 'package:sembast/sembast.dart';
 import 'package:boilerplate/models/answer/answer.dart';
 import 'package:boilerplate/models/question/question_list.dart';
@@ -36,12 +39,13 @@ class Repository {
   final TaskDataSource _taskDataSource;
   final SubTaskDataSource _subTaskDataSource;
   final QuestionDataSource _questionDataSource;
-  final TechnicalNameWithTranslationsDataSource
-      _technicalNameWithTranslationsDataSource;
+  final TechnicalNameWithTranslationsDataSource _technicalNameWithTranslationsDataSource;
+  final UpdatedAtTimesDataSource _updatedAtTimesDataSource;
 
   // api objects
   final PostApi _postApi;
   final StepApi _stepApi;
+  final UpdatedAtTimesApi _updatedAtTimesApi;
 
   // api objects
   final TechnicalNameApi _technicalNameApi;
@@ -53,6 +57,7 @@ class Repository {
   Repository(
     this._postApi,
     this._stepApi,
+    this._updatedAtTimesApi,
     this._sharedPrefsHelper,
     this._postDataSource,
     this._stepDataSource,
@@ -62,15 +67,16 @@ class Repository {
     this._technicalNameApi,
     this._technicalNameDataSource,
     this._technicalNameWithTranslationsDataSource,
+    this._updatedAtTimesDataSource,
   );
 
   // Step: ---------------------------------------------------------------------
   Future<StepList> getStep() async {
-    // return await _stepDataSource.count() > 0
-    //     ? _stepDataSource.getStepsFromDb()
-    //     : getStepFromApi();
+    return await _stepDataSource.count() > 0
+        ? _stepDataSource.getStepsFromDb()
+        : getStepFromApi();
     // return await getStepFromApi();
-    return await _stepDataSource.getStepsFromDb();
+    // return await _stepDataSource.getStepsFromDb();
   }
 
   Future<StepList> getStepFromApi() async {
@@ -549,4 +555,47 @@ class Repository {
       print("Error obtaining preferred languages");
     }
   }
+
+  // UpdatedAtTimes: -----------------------------------------------------------------
+  Future<UpdatedAtTimes> getUpdatedAtTimes() async {
+    return await getUpdatedAtTimesFromApi();
+  }
+
+  Future<UpdatedAtTimes> getUpdatedAtTimesFromApi() async {
+    return await _updatedAtTimesApi.getUpdatedAtTimes().then((updatedAtTimes) {
+      return updatedAtTimes;
+    });
+  }
+
+  Future<List<UpdatedAtTimes>> findUpdatedAtTimesByID(int id) {
+    //creating filter
+    List<Filter> filters = [];
+
+    Filter dataLogTypeFilter = Filter.equals(DBConstants.FIELD_ID, id);
+    filters.add(dataLogTypeFilter);
+
+    //making db call
+    return _updatedAtTimesDataSource
+        .getAllSortedByFilter(filters: filters)
+        .then((updatedAtTimes) => updatedAtTimes)
+        .catchError((error) => throw error);
+  }
+
+  Future<int> insertUpdatedAtTimes(UpdatedAtTimes updatedAtTimes) => _updatedAtTimesDataSource
+      .insert(updatedAtTimes)
+      .then((id) => id)
+      .catchError((error) => throw error);
+
+  Future<int> updateUpdatedAtTimes(UpdatedAtTimes updatedAtTimes) => _updatedAtTimesDataSource
+      .update(updatedAtTimes)
+      .then((id) => id)
+      .catchError((error) => throw error);
+
+  Future<int> deleteUpdatedAtTimes(UpdatedAtTimes updatedAtTimes) => _updatedAtTimesDataSource
+      .delete(updatedAtTimes)
+      .then((id) => id)
+      .catchError((error) => throw error);
+
+  Future truncateUpdatedAtTimes() =>
+      _updatedAtTimesDataSource.deleteAll().catchError((error) => throw error);
 }

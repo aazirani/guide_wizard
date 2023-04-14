@@ -211,7 +211,6 @@ class _HomeScreenState extends State<HomeScreen> {
       await _technicalNameWithTranslationsStore
           .getTechnicalNameWithTranslations();
       await _stepsStore.getSteps();
-
     }
     _dialog!.hide();
   }
