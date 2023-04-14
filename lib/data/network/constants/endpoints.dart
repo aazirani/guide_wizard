@@ -5,7 +5,7 @@ class Endpoints {
   // static const String baseUrl = "http://jsonplaceholder.typicode.com";
   // static const String baseUrl = "https://collegiality.de";
   static const String baseUrl = "https://glamapp.ir/collegiality";
-
+ 
   // receiveTimeout
   static const int receiveTimeout = 15000;
 
@@ -18,4 +18,5 @@ class Endpoints {
   static const String getAppData = baseUrl + "/2nd_sample_hierarchy.json";
   static const String getTechnicalNames =
       baseUrl + "/sample_technical_names.json";
+  static const String getUpdatedAtTimes = baseUrl + "/updated_at_times.json";
 }
