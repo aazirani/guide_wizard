@@ -556,8 +556,12 @@ class Repository {
   }
 
   // UpdatedAtTimes: -----------------------------------------------------------------
-  Future<UpdatedAtTimes> getUpdatedAtTimes() async {
+  Future<UpdatedAtTimes> updateUpdatedAtTimes() async {
     return await getUpdatedAtTimesFromApi();
+  }
+
+  Future<UpdatedAtTimes> getUpdatedAtTimesFromDB() async {
+    return await _updatedAtTimesDataSource.getUpdatedAtTimesFromDb();
   }
 
   Future<UpdatedAtTimes> getUpdatedAtTimesFromApi() async {

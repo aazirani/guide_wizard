@@ -1,6 +1,4 @@
 import 'package:boilerplate/data/repository.dart';
-import 'package:boilerplate/models/question/question.dart';
-import 'package:boilerplate/models/question/question_list.dart';
 import 'package:boilerplate/models/updated_at_times/updated_at_times.dart';
 import 'package:boilerplate/stores/error/error_store.dart';
 import 'package:boilerplate/utils/dio/dio_error_util.dart';
@@ -27,7 +25,7 @@ abstract class _UpdatedAtTimesStore with Store {
   ObservableFuture.value(null);
 
   @observable
-  ObservableFuture<UpdatedAtTimes?> fetchQuestionsFuture =
+  ObservableFuture<UpdatedAtTimes?> fetchUpdatedAtTimesFuture =
   ObservableFuture<UpdatedAtTimes?>(emptyUpdatedAtTimesResponse);
 
   @observable
@@ -41,7 +39,7 @@ abstract class _UpdatedAtTimesStore with Store {
   bool success = false;
 
   @computed
-  bool get loading => fetchQuestionsFuture.status == FutureStatus.pending;
+  bool get loading => fetchUpdatedAtTimesFuture.status == FutureStatus.pending;
 
   @computed
   bool get loadingTruncate => truncateQuestionsFuture.status == FutureStatus.pending;
@@ -50,7 +48,7 @@ abstract class _UpdatedAtTimesStore with Store {
   @action
   Future getUpdatedAtTimes() async {
     final future = _repository.getUpdatedAtTimes();
-    fetchQuestionsFuture = ObservableFuture(future);
+    fetchUpdatedAtTimesFuture = ObservableFuture(future);
 
     future.then((updatedAtTimes) {
       this.updatedAtTimes = updatedAtTimes;
@@ -74,7 +72,7 @@ abstract class _UpdatedAtTimesStore with Store {
 
   Future updateUpdatedAtTimes() async {
     final future = _repository.getUpdatedAtTimes();
-    fetchQuestionsFuture = ObservableFuture(future);
+    fetchUpdatedAtTimesFuture = ObservableFuture(future);
 
     future.then((updatedAtTimes) {
       this.updatedAtTimes = updatedAtTimes;
