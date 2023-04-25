@@ -21,4 +21,12 @@ class UpdatedAtTimes {
       "last_updated_at_technical_names": last_updated_at_technical_names,
     };
   }
+
+  factory UpdatedAtTimes.fromJson(List<dynamic> json) {
+    List<UpdatedAtTimes> updatedAtTimes;
+    updatedAtTimes = json.map((updatedAt) => UpdatedAtTimes.fromMap(updatedAt)).toList();
+
+    return updatedAtTimes.first;
+  }
+
 }

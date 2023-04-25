@@ -19,7 +19,7 @@ class UpdatedAtTimesApi{
   Future<UpdatedAtTimes> getUpdatedAtTimes() async {
     try {
       final res = await _dioClient.get(Endpoints.getUpdatedAtTimes);
-      return UpdatedAtTimes.fromMap(res["rows"]);
+      return UpdatedAtTimes.fromJson(res["rows"]);
     } catch (e) {
       print(e.toString());
       throw e;

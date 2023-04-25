@@ -80,6 +80,7 @@ class Repository {
   }
 
   Future<StepList> getStepFromApi() async {
+    await truncateContent();
     return await _stepApi.getSteps().then((stepList) {
       stepList.steps.forEach((step) {
         _stepDataSource.insert(step);
@@ -110,7 +111,7 @@ class Repository {
       .catchError((error) => throw error);
 
   Future<int> deleteStep(Step step) => _stepDataSource
-      .update(step)
+      .delete(step)
       .then((id) => id)
       .catchError((error) => throw error);
 
@@ -193,7 +194,7 @@ class Repository {
       .catchError((error) => throw error);
 
   Future<int> deleteTask(Task task) => _taskDataSource
-      .update(task)
+      .delete(task)
       .then((id) => id)
       .catchError((error) => throw error);
 
@@ -228,9 +229,12 @@ class Repository {
       .catchError((error) => throw error);
 
   Future<int> deleteSubTask(SubTask subTask) => _subTaskDataSource
-      .update(subTask)
+      .delete(subTask)
       .then((id) => id)
       .catchError((error) => throw error);
+
+  Future truncateSubTask() =>
+      _subTaskDataSource.deleteAll().catchError((error) => throw error);
 
   // Question: -----------------------------------------------------------------
   Future<QuestionList> getQuestions() async {
@@ -320,7 +324,7 @@ class Repository {
       .catchError((error) => throw error);
 
   Future<int> deleteQuestion(Question question) => _questionDataSource
-      .update(question)
+      .delete(question)
       .then((id) => id)
       .catchError((error) => throw error);
 
@@ -491,7 +495,7 @@ class Repository {
   Future<int> deleteTranslationWithStepName(
           TechnicalNameWithTranslations translation) =>
       _technicalNameWithTranslationsDataSource
-          .update(translation)
+          .delete(translation)
           .then((id) => id)
           .catchError((error) => throw error);
 
@@ -557,8 +561,32 @@ class Repository {
   }
 
   // UpdatedAtTimes: -----------------------------------------------------------------
-  Future<UpdatedAtTimes> updateUpdatedAtTimes() async {
-    return await getUpdatedAtTimesFromApi();
+  Future<bool> isContentUpdated(UpdatedAtTimes originUpdatedAt) async{
+    UpdatedAtTimes localUpdatedAt = await getTheLastUpdatedAtTimes();
+    // UpdatedAtTimes originUpdatedAt = await getUpdatedAtTimesFromApi();
+    // StepList stepList = await getStep();
+    // String contentUpdatedAt = stepList.steps.first.name.updated_at;
+    print("origin: " + originUpdatedAt.last_updated_at_content);
+    print("local: " + localUpdatedAt.last_updated_at_content);
+    if(originUpdatedAt.last_updated_at_content.compareTo(localUpdatedAt.last_updated_at_content) == 1){
+      return true;
+    }
+    return false;
+  }
+
+  Future updateContentIfNeeded() async{
+    UpdatedAtTimes originUpdatedAt = await getUpdatedAtTimesFromApi();
+    if(await isContentUpdated(originUpdatedAt)){
+      await getStepFromApi();
+      await truncateUpdatedAtTimes();
+      await _updatedAtTimesDataSource.insert(originUpdatedAt);
+    }
+  }
+
+  Future<UpdatedAtTimes> getTheLastUpdatedAtTimes() async {
+    return await _updatedAtTimesDataSource.count() > 0
+        ? _updatedAtTimesDataSource.getUpdatedAtTimesFromDb()
+        : getUpdatedAtTimesFromApi();
   }
 
   Future<UpdatedAtTimes> getUpdatedAtTimesFromDB() async {
@@ -602,4 +630,11 @@ class Repository {
 
   Future truncateUpdatedAtTimes() =>
       _updatedAtTimesDataSource.deleteAll().catchError((error) => throw error);
+
+  Future truncateContent() async{
+    await truncateStep();
+    await truncateTask();
+    await truncateSubTask();
+    await truncateQuestions();
+  }
 }
