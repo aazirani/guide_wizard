@@ -84,6 +84,14 @@ class StepDataSource {
     );
   }
 
+  Future<int> delete(Step step) async {
+    final finder = Finder(filter: Filter.byKey(step.id));
+    return await _stepsStore.delete(
+      _db,
+      finder: finder,
+    );
+  }
+
   Future deleteAll() async {
     await _stepsStore.drop(
       _db,

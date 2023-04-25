@@ -46,8 +46,18 @@ abstract class _UpdatedAtTimesStore with Store {
 
   // actions:-------------------------------------------------------------------
   @action
+  Future updateContentIfNeeded() async {
+    await _repository.updateContentIfNeeded();
+  }
+
+  @action
+  Future truncateContent() async {
+    await _repository.truncateContent();
+  }
+
+  @action
   Future getUpdatedAtTimes() async {
-    final future = _repository.getUpdatedAtTimes();
+    final future = _repository.getTheLastUpdatedAtTimes();
     fetchUpdatedAtTimesFuture = ObservableFuture(future);
 
     future.then((updatedAtTimes) {
@@ -71,7 +81,7 @@ abstract class _UpdatedAtTimesStore with Store {
   }
 
   Future updateUpdatedAtTimes() async {
-    final future = _repository.getUpdatedAtTimes();
+    final future = _repository.getTheLastUpdatedAtTimes();
     fetchUpdatedAtTimesFuture = ObservableFuture(future);
 
     future.then((updatedAtTimes) {
