@@ -1,6 +1,7 @@
 import 'package:boilerplate/constants/colors.dart';
 import 'package:boilerplate/constants/dimens.dart';
 import 'package:boilerplate/stores/question/questions_store.dart';
+import 'package:boilerplate/utils/locale/app_localization.dart';
 import 'package:boilerplate/widgets/question_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -42,19 +43,23 @@ class _QuestionsListPageState extends State<QuestionsListPage> {
           Navigator.pop(context);
         },
         icon: Icon(
-          Icons.arrow_back_ios_new_rounded,
+          Icons.arrow_back_rounded,
           color: AppColors.bright_foreground_color,
         ),
       ),
-      title: Row(
-        mainAxisAlignment: MainAxisAlignment.start,
-        children: [
-          Image.asset(
-            'assets/icons/appbar_logo.png',
-            fit: BoxFit.cover,
-            height: Dimens.appBar["logoHeight"],
-          ),
-        ],
+      // title: Row(
+      //   mainAxisAlignment: MainAxisAlignment.start,
+      //   children: [
+      //     Image.asset(
+      //       'assets/icons/appbar_logo.png',
+      //       fit: BoxFit.cover,
+      //       height: Dimens.appBar["logoHeight"],
+      //     ),
+      //   ],
+      // ),
+      title: Text(
+        AppLocalizations.of(context).translate("info"),
+        style: TextStyle(color: AppColors.white, fontSize: 20),
       ),
     );
   }
@@ -72,10 +77,26 @@ class _QuestionsListPageState extends State<QuestionsListPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: _buildAppBar(),
-      body: ScrollablePositionedList.builder(
-        itemCount: _questionsStore.questionList!.length,
-        itemBuilder: (context, index) => _buildQuestionWidget(index),
-        itemScrollController: itemScrollController,
+      backgroundColor: AppColors.main_color,
+      body: ClipRRect(
+        borderRadius: BorderRadius.only(
+            topLeft: Radius.circular(30), topRight: Radius.circular(30)),
+        child: Container(
+          height: MediaQuery.of(context).size.height,
+          width: MediaQuery.of(context).size.width,
+          decoration: BoxDecoration(
+            color: AppColors.white,
+            borderRadius: BorderRadius.only(
+              topLeft: Radius.circular(30),
+              topRight: Radius.circular(30),
+            ),
+          ),
+          child: ScrollablePositionedList.builder(
+            itemCount: _questionsStore.questionList!.length,
+            itemBuilder: (context, index) => _buildQuestionWidget(index),
+            itemScrollController: itemScrollController,
+          ),
+        ),
       ),
     );
   }

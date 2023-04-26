@@ -40,7 +40,7 @@ class Dimens {
   static const listTilePadding =
       EdgeInsets.symmetric(horizontal: 10, vertical: 5);
   static const Map<String, double> appBar = {
-    "toolbarHeight": 70,
+    "toolbarHeight": 60,
     "titleSpacing": 5,
     "logoHeight": 60,
   };
@@ -53,7 +53,7 @@ class Dimens {
 
   static const expansionPadding = EdgeInsets.symmetric(horizontal: 20);
   static BorderRadiusGeometry expansionTileBorderRadius = BorderRadius.circular(16);
-  static BorderRadiusGeometry blockPageAppBarButtonBorderRadius = BorderRadius.circular(10.0);
+  static BorderRadiusGeometry blockPageAppBarButtonBorderRadius = BorderRadius.circular(100.0);
 
   static const taskPageTextOnlyListViewPadding = EdgeInsets.only(top: 25, left: 30, right: 30, bottom: 20);
 }

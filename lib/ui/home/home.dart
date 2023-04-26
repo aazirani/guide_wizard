@@ -231,8 +231,8 @@ class _HomeScreenState extends State<HomeScreen> {
   PreferredSizeWidget _buildAppBar() {
     return AppBar(
       automaticallyImplyLeading: false,
-      toolbarHeight: 60,
-      titleSpacing: 5,
+      toolbarHeight: Dimens.appBar["toolbarHeight"],
+      titleSpacing: Dimens.appBar["titleSpacing"],
       backgroundColor: AppColors.main_color,
       title: Padding(
           padding: EdgeInsets.only(left: 10),
