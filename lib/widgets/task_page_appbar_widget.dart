@@ -24,7 +24,7 @@ class _BlocksAppBarWidgetState extends State<BlocksAppBarWidget> {
   _buildDoneButtonStyle(){
     return ElevatedButton.styleFrom(
         // overlayColor: MaterialStateProperty.all<Color>(AppColors.bright_foreground_color.withOpacity(0.1)),
-        backgroundColor: AppColors.green[50],
+        backgroundColor: AppColors.main_color,
         foregroundColor: AppColors.bright_foreground_color.withOpacity(0.1),
         // disabledBackgroundColor: Colors.red,
         // shape: MaterialStateProperty.all<RoundedRectangleBorder>(
