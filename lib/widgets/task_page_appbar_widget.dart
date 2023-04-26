@@ -22,73 +22,77 @@ class BlocksAppBarWidget extends StatefulWidget implements PreferredSizeWidget {
 class _BlocksAppBarWidgetState extends State<BlocksAppBarWidget> {
 
   _buildDoneButtonStyle(){
-    return ButtonStyle(
-        overlayColor: MaterialStateProperty.all<Color>(AppColors.bright_foreground_color.withOpacity(0.1)),
-        backgroundColor: MaterialStateProperty.all<Color>(
-            AppColors.button_background_color),
-        shape: MaterialStateProperty.all<RoundedRectangleBorder>(
-            RoundedRectangleBorder(
-              borderRadius: Dimens.blockPageAppBarButtonBorderRadius,
-            )
-        )
+    return ElevatedButton.styleFrom(
+        // overlayColor: MaterialStateProperty.all<Color>(AppColors.bright_foreground_color.withOpacity(0.1)),
+        backgroundColor: AppColors.green[50],
+        foregroundColor: AppColors.bright_foreground_color.withOpacity(0.1),
+        // disabledBackgroundColor: Colors.red,
+        // shape: MaterialStateProperty.all<RoundedRectangleBorder>(
+        //     RoundedRectangleBorder(
+        //       borderRadius: Dimens.blockPageAppBarButtonBorderRadius,
+        //     )
+        // )
+        shape: CircleBorder(),
+        side: BorderSide(color: AppColors.white, width: 2)
     );
   }
 
   _buildUndoneButtonStyle(){
-    return ButtonStyle(
-        overlayColor: MaterialStateProperty.all<Color>(AppColors.bright_foreground_color.withOpacity(0.1)),
-        shape: MaterialStateProperty.all<RoundedRectangleBorder>(
-            RoundedRectangleBorder(
-                borderRadius: Dimens.blockPageAppBarButtonBorderRadius,
-                side: BorderSide(color: AppColors.bright_foreground_color)
-            )
-        )
+    // return ButtonStyle(
+    //     overlayColor: MaterialStateProperty.all<Color>(AppColors.bright_foreground_color.withOpacity(0.1)),
+    //     shape: MaterialStateProperty.all<RoundedRectangleBorder>(
+    //         RoundedRectangleBorder(
+    //             borderRadius: Dimens.blockPageAppBarButtonBorderRadius,
+    //             side: BorderSide(color: AppColors.bright_foreground_color)
+    //         )
+    //     )
+    // );
+    return ElevatedButton.styleFrom(
+        // overlayColor: MaterialStateProperty.all<Color>(AppColors.bright_foreground_color.withOpacity(0.1)),
+        padding: EdgeInsets.all(0),
+        // backgroundColor: AppColors.button_background_color,
+        backgroundColor: AppColors.white,
+        foregroundColor: AppColors.bright_foreground_color.withOpacity(0.1),
+        // shape: MaterialStateProperty.all<RoundedRectangleBorder>(
+        //     RoundedRectangleBorder(
+        //       borderRadius: Dimens.blockPageAppBarButtonBorderRadius,
+        //     )
+        // )
+        shape: CircleBorder(),
+        side: BorderSide(color: AppColors.white, width: 1.2)
     );
   }
 
-  Widget _buildButton({required ButtonStyle? buttonStyle, required String text, required IconData? icon}) {
-    return TextButton(
+  Widget _buildButton({required ButtonStyle? buttonStyle, IconData? icon}) {
+    return ElevatedButton(
       onPressed: () {
         setState(() {
           widget.isDone = !widget.isDone;
         });
       },
       style: buttonStyle,
-      child: Padding(
-        padding: const EdgeInsets.all(1),
-        child: Row(
-          children: [
-            Text(
-              text,
-              style: TextStyle(
-                color: AppColors.bright_foreground_color,
-              ),
-            ),
-            SizedBox(width: 3,),
-            Icon(icon, color: AppColors.bright_foreground_color),
-          ],
-        ),
-      ),
+      child: Icon(icon, color: AppColors.main_color,)
     );
   }
 
   Widget _buildDoneButton() {
     return _buildButton(
       buttonStyle: _buildDoneButtonStyle(),
-      text: AppLocalizations.of(context).translate('done_button_text'),
-      icon: Icons.done_rounded
+      // text: AppLocalizations.of(context).translate('done_button_text'),
+      // icon: Icons.done_rounded
     );
   }
 
   Widget _buildUndoneButton() {
     return _buildButton(
         buttonStyle: _buildUndoneButtonStyle(),
-        text: AppLocalizations.of(context).translate('undone_button_text'),
-        icon: Icons.close_rounded,
+        // text: AppLocalizations.of(context).translate('undone_button_text'),
+        // icon: Icons.close_rounded,
+        icon: Icons.done_rounded,
     );
   }
 
-  Widget _buildAppBarButton(){
+  Widget _buildDoneUnDoneButton(){
     return widget.isDone ? _buildUndoneButton():_buildDoneButton();
   }
 
@@ -102,21 +106,25 @@ class _BlocksAppBarWidgetState extends State<BlocksAppBarWidget> {
         onPressed: () {
           Navigator.pop(context);
         },
-        icon: Icon(Icons.arrow_back_ios_new_rounded, color: AppColors.bright_foreground_color,),
+        icon: Icon(Icons.arrow_back_rounded, color: AppColors.bright_foreground_color,),
       ),
       title: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        children: [
+        children: [ 
           ScrollingOverflowText(
             text: widget.title,
             textStyle: TextStyle(
               color: AppColors.bright_foreground_color,
-              fontSize: 22,
+              fontSize: 20,
             ),
           ),
+          SizedBox(width: 10,),
           Padding(
-            padding: const EdgeInsets.only(right: 15, left: 10),
-            child: _buildAppBarButton(),
+            padding: const EdgeInsets.only(right: 20, left: 10, top: 10),
+            child: Container(
+              height: 25, 
+              width: 25,
+              child: _buildDoneUnDoneButton()),
           ),
         ],
       ),

@@ -51,12 +51,13 @@ class _TaskListState extends State<TaskList> {
     var step_title_id = _stepsStore.stepList.steps[widget.currentStepNo].name.id;
     return AppBar(
         backgroundColor: AppColors.main_color,
-        titleSpacing: 0,
+        toolbarHeight: Dimens.appBar["toolbarHeight"],
+        titleSpacing: Dimens.appBar["titleSpacing"],
         title: Text(
             _technicalNameWithTranslationsStore.getTechnicalNames(step_title_id)!,
             style: TextStyle(
                 color: AppColors.white,
-                fontSize: 18,
+                fontSize: 20,
                 fontWeight: FontWeight.bold)),
         leading: Padding(
           padding: Dimens.back_button,
