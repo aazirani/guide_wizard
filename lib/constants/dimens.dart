@@ -35,6 +35,7 @@ class Dimens {
   static const avatarBoyPadding = EdgeInsets.only(left: 140, bottom: 70);
   static const avatarGirlPadding =
       EdgeInsets.only(left: 200, bottom: 40, top: 20);
+  static const stepAvatar = EdgeInsets.only(left: 160, bottom: 40, top: 20);
   //compressed task list
   static const contentLeftMargin = EdgeInsets.only(left: 20);
   //task page appbar widget
@@ -56,18 +57,11 @@ class Dimens {
     "height": 55,
   };
   static const expansionContentPadding = EdgeInsets.only(top: 5);
-  static const expansionDottedLinePadding = EdgeInsets.only(
-    left: 20,
-    top: 5,
-    right: 15,
-  );
+  static const expansionDottedLinePadding = EdgeInsets.only(left: 20, top: 5, right: 15,);
 
   static const expansionPadding = EdgeInsets.symmetric(horizontal: 20);
-  static BorderRadiusGeometry expansionTileBorderRadius =
-      BorderRadius.circular(16);
-  static BorderRadiusGeometry blockPageAppBarButtonBorderRadius =
-      BorderRadius.circular(100.0);
+  static BorderRadiusGeometry expansionTileBorderRadius = BorderRadius.circular(16);
+  static BorderRadiusGeometry blockPageAppBarButtonBorderRadius = BorderRadius.circular(10.0);
 
-  static const taskPageTextOnlyListViewPadding =
-      EdgeInsets.only(top: 25, left: 30, right: 30, bottom: 20);
+  static const taskPageTextOnlyListViewPadding = EdgeInsets.only(top: 25, left: 30, right: 30, bottom: 20);
 }

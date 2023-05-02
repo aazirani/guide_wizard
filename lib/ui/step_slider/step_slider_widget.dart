@@ -91,7 +91,7 @@ class _StepSliderWidgetState extends State<StepSliderWidget> {
         ),
         child: Stack(
           children: [
-            _buildAvatar(),
+            _buildAvatar(index),
             _buildContent(index),
           ],
         ));
@@ -118,25 +118,39 @@ class _StepSliderWidgetState extends State<StepSliderWidget> {
     }
   }
 
-  Widget _buildAvatar() {
-    return Stack(children: [
-      _buildBoyAvatar(),
-      _buildGirlAvatar(),
-    ]);
-  }
-
-  Widget _buildBoyAvatar() {
-    return Padding(
-      padding: Dimens.avatarBoyPadding,
-      child: Image.asset("assets/images/avatar_boy.png", fit: BoxFit.contain),
+  Widget _buildAvatar(int index) {
+    return
+        // _buildBoyAvatar(),
+        // _buildGirlAvatar(),
+        Padding(
+      padding: Dimens.stepAvatar,
+      child: Container(
+          width: double.maxFinite,
+          alignment: Alignment.centerRight,
+          decoration: BoxDecoration(
+            image: DecorationImage(
+                image: NetworkImage(_stepsStore.getStepImage(index))),
+          )),
     );
   }
 
-  Widget _buildGirlAvatar() {
-    return Padding(
-        padding: Dimens.avatarGirlPadding,
-        child: Image.asset("assets/images/avatar_girl.png", fit: BoxFit.cover));
-  }
+// Don't remove these comments;
+
+  // Widget _buildBoyAvatar() {
+  //   return Padding(
+  //     padding: Dimens.avatarBoyPadding,
+  //     child: Image.asset("assets/images/avatar_boy.png", fit: BoxFit.contain),
+  //     // child: Image.network(_stepsStore.getStepImage(_stepStore.currentStep))
+  //   );
+  // }
+
+  // Widget _buildGirlAvatar() {
+  //   return Padding(
+  //       padding: Dimens.avatarGirlPadding,
+  //       child: Image.network(""),
+  //       // child: Image.asset("assets/images/avatar_girl.png", fit: BoxFit.cover)
+  //       );
+  // }
 
   Widget _buildContent(currentStepNo) {
     return Padding(
