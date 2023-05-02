@@ -82,7 +82,7 @@ class _QuestionWidgetState extends State<QuestionWidget>
     return Padding(
       padding: Dimens.questionButtonPadding,
       child: TextButton(
-        style: _buildQuestionsButtonStyle(Colors.green.shade600),
+        style: _buildQuestionsButtonStyle(AppColors.nextStepColor),
         onPressed: () {
           _taskListStore.getTaskList(_stepStore.currentStep);
           Navigator.push(
@@ -129,7 +129,8 @@ class _QuestionWidgetState extends State<QuestionWidget>
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
           ScrollingOverflowText(
-            text: _technicalNameWithTranslationsStore.getTechnicalNames(title_id)!,
+            // text: _technicalNameWithTranslationsStore.getTechnicalNames(title_id)!,
+            text: "what the actual fuck",
             textStyle: TextStyle(fontSize: 22, fontWeight: FontWeight.w500),
             height: 30,
             width: _getScreenWidth() - 100,
@@ -158,7 +159,7 @@ class _QuestionWidgetState extends State<QuestionWidget>
                   shape: RoundedRectangleBorder(
                     side: BorderSide(
                         color: option.isSelected
-                            ? Colors.black
+                            ? AppColors.main_color
                             : Colors.transparent,
                         width: 2),
                     borderRadius: BorderRadius.circular(5),
@@ -179,8 +180,8 @@ class _QuestionWidgetState extends State<QuestionWidget>
                     _technicalNameWithTranslationsStore.getTechnicalNames(option.getAnswerTitleID())!,
                   ),
                   controlAffinity: ListTileControlAffinity.leading,
-                  tileColor: AppColors.grey,
-                  activeColor: Colors.black,
+                  tileColor: Color.fromARGB(255, 239, 239, 239),
+                  activeColor: AppColors.main_color,
                 ),
               ))
           .toList(),
@@ -206,7 +207,7 @@ class _QuestionWidgetState extends State<QuestionWidget>
                     });
                   },
                   checkColor: Colors.white,
-                  activeColor: Colors.black87,
+                  activeColor: AppColors.main_color,
                   shape: CircleBorder(),
                 ),
                 height: 30,
@@ -243,8 +244,8 @@ class _QuestionWidgetState extends State<QuestionWidget>
           widget.question.getAnswerByIndex(index).setSelected(value!);
         });
       },
-      checkColor: Colors.white,
-      activeColor: Colors.black87,
+      checkColor: AppColors.white,
+      activeColor: AppColors.main_color,
       shape: CircleBorder(),
       side: BorderSide(color: Colors.transparent),
     );
@@ -295,7 +296,7 @@ class _QuestionWidgetState extends State<QuestionWidget>
               shape: RoundedRectangleBorder(
                 side: BorderSide(
                     color: widget.question.getAnswerByIndex(index).isSelected
-                        ? Colors.black
+                        ? AppColors.main_color
                         : Colors.transparent,
                     width: 2),
                 borderRadius: BorderRadius.circular(5),
@@ -308,7 +309,7 @@ class _QuestionWidgetState extends State<QuestionWidget>
                   _buildImageOptionSubtitle(index),
                 ],
               ),
-              tileColor: AppColors.grey,
+              tileColor: Color.fromARGB(255, 243, 243, 243),
             ),
           ),
           _buildImageCheckBox(index),
@@ -387,34 +388,37 @@ class _QuestionWidgetState extends State<QuestionWidget>
   Widget build(BuildContext context) {
     super.build(context);
     return Consumer<QuestionsWidgetState>(builder: (context, builder, child) {
-      return Padding(
-        padding: const EdgeInsets.fromLTRB(5, 5, 5, 0),
-        child: ExpansionPanelList(
-          expandedHeaderPadding: EdgeInsets.zero,
-          elevation: 0,
-          expansionCallback: (int index, bool isExpanded) {
-            setState(() {
-              builder.setActiveIndex(widget.index);
-            });
-          },
-          children: [
-            ExpansionPanel(
-              canTapOnHeader: true,
-              headerBuilder: (BuildContext context, bool isExpanded) {
-                return _buildTitle();
-              },
-              body: Column(
-                children: [
-                  _buildDescription(),
-                  _buildOptions(),
-                  widget.isLastQuestion
-                      ? _buildNextStageButton()
-                      : _buildNextQuestionButton(),
-                ],
+      return Container(
+        color: Colors.blue,
+        child: Padding(
+          padding: const EdgeInsets.fromLTRB(5, 5, 5, 0),
+          child: ExpansionPanelList(
+            expandedHeaderPadding: EdgeInsets.zero,
+            elevation: 0,
+            expansionCallback: (int index, bool isExpanded) {
+              setState(() {
+                builder.setActiveIndex(widget.index);
+              });
+            },
+            children: [
+              ExpansionPanel(
+                canTapOnHeader: true,
+                headerBuilder: (BuildContext context, bool isExpanded) {
+                  return _buildTitle();
+                },
+                body: Column(
+                  children: [
+                    _buildDescription(),
+                    _buildOptions(),
+                    widget.isLastQuestion
+                        ? _buildNextStageButton()
+                        : _buildNextQuestionButton(),
+                  ],
+                ),
+                isExpanded: builder.isWidgetExpanded(widget.index),
               ),
-              isExpanded: builder.isWidgetExpanded(widget.index),
-            ),
-          ],
+            ],
+          ),
         ),
       );
     });

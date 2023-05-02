@@ -49,7 +49,7 @@ class _TaskPageTextOnlyState extends State<TaskPageTextOnly> {
             // _tasksStore.getTaskById(widget.task_id).description.string,
             _technicalNameWithTranslationsStore
                 .getTechnicalNames(description_id)!,
-            style: TextStyle(fontSize: 20),
+            style: TextStyle(fontSize: 18, color: AppColors.main_color),
           );
         },
       ),

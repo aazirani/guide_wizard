@@ -88,6 +88,7 @@ class _QuestionsListPageState extends State<QuestionsListPage> {
           ),
         ),
       ),
+      backgroundColor: Color.fromARGB(255, 137, 15, 15),
     );
   }
 }

@@ -76,12 +76,13 @@ class SubTaskWidgetState extends State<SubTaskWidget>
 
   Widget _buildAppExpansionTileWidgetWithCustomTheme() {
     return ListTileTheme(
+      selectedColor: AppColors.main_color,
       shape: RoundedRectangleBorder(
         borderRadius: Dimens.expansionTileBorderRadius,
-        side: BorderSide(color: AppColors.main_color, width: 2),
+        side: BorderSide(color: AppColors.main_color, width: 1),
       ),
-      tileColor: AppColors.button_background_color,
-      textColor: AppColors.main_color,
+      // tileColor: AppColors.button_background_color,
+      // textColor: AppColors.main_color,
       contentPadding: Dimens.listTilePadding,
       dense: false,
       horizontalTitleGap: 0.0,
@@ -94,7 +95,8 @@ class SubTaskWidgetState extends State<SubTaskWidget>
     return ClipRRect(
       borderRadius: Dimens.expansionTileBorderRadius,
       child: Card(
-          elevation: 0,
+          elevation: 1,
+          shadowColor: Colors.black,
           shape: RoundedRectangleBorder(
             borderRadius: Dimens.expansionTileBorderRadius,
           ),
