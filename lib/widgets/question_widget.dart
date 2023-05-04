@@ -3,6 +3,7 @@ import 'dart:math' as math;
 import 'package:boilerplate/constants/colors.dart';
 import 'package:boilerplate/constants/dimens.dart';
 import 'package:boilerplate/models/question/question.dart';
+import 'package:boilerplate/stores/current_step/current_step_store.dart';
 import 'package:boilerplate/stores/step/step_store.dart';
 import 'package:boilerplate/stores/task_list/task_list_store.dart';
 import 'package:boilerplate/stores/technical_name/technical_name_with_translations_store.dart';
@@ -21,6 +22,7 @@ class QuestionWidget extends StatefulWidget {
   int index;
   ItemScrollController itemScrollController;
 
+
   QuestionWidget({
     Key? key,
     required this.index,
@@ -38,6 +40,7 @@ class _QuestionWidgetState extends State<QuestionWidget>
   late StepStore _stepStore;
   late TaskListStore _taskListStore;
   late TechnicalNameWithTranslationsStore _technicalNameWithTranslationsStore;
+  late CurrentStepStore _currentStepStore;
 
   @override
   void didChangeDependencies() {
@@ -47,6 +50,7 @@ class _QuestionWidgetState extends State<QuestionWidget>
     _taskListStore = Provider.of<TaskListStore>(context);
     _technicalNameWithTranslationsStore =
         Provider.of<TechnicalNameWithTranslationsStore>(context);
+    _currentStepStore = Provider.of<CurrentStepStore>(context);
   }
 
   @override
@@ -85,12 +89,8 @@ class _QuestionWidgetState extends State<QuestionWidget>
         style: _buildQuestionsButtonStyle(Colors.green.shade600),
         onPressed: () {
           _taskListStore.getTaskList(_stepStore.currentStep);
-          Navigator.push(
-              context,
-              MaterialPageRoute(
-                  builder: (context) => TaskList(
-                        currentStepNo: 1,
-                      )));
+          _currentStepStore.setStepNumber(1);
+          Navigator.pop(context);
         },
         child: Text(
           AppLocalizations.of(context).translate('next_stage_button_text'),

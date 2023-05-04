@@ -538,4 +538,11 @@ class Repository {
       print("Error obtaining preferred languages");
     }
   }
+
+  // Current Step Number: -----------------------------------------------------------------
+  Future<void> setCurrentStep(int value) =>
+      _sharedPrefsHelper.setCurrentStep(value);
+
+  int? get currentStepNumber => _sharedPrefsHelper.currentStepNumber;
+
 }

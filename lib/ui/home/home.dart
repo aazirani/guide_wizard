@@ -273,7 +273,6 @@ class _HomeScreenState extends State<HomeScreen> {
         //step timeline
         //TODO: save current and pending steps in shared preferences
         StepTimeLine(
-          pending: 1,
           stepNo: 3,
         ),
         SizedBox(height: 25),

@@ -55,4 +55,13 @@ class SharedPreferenceHelper {
   Future<bool> get isDataLoaded async {
     return _sharedPreference.getBool(Preferences.is_data_loaded) ?? false;
   }
+
+  // current step:---------------------------------------------------
+  int? get currentStepNumber {
+    return _sharedPreference.getInt(Preferences.current_step_number);
+  }
+
+  Future<void> setCurrentStep(int new_current_step) {
+    return _sharedPreference.setInt(Preferences.current_step_number, new_current_step);
+  }
 }
