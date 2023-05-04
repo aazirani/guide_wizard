@@ -1,5 +1,6 @@
 import 'package:boilerplate/constants/colors.dart';
 import 'package:boilerplate/constants/dimens.dart';
+import 'package:boilerplate/stores/current_step/current_step_store.dart';
 import 'package:boilerplate/stores/question/questions_store.dart';
 import 'package:boilerplate/stores/step/step_store.dart';
 import 'package:boilerplate/ui/questions/questions_list_page.dart';
@@ -28,6 +29,8 @@ class _StepSliderWidgetState extends State<StepSliderWidget> {
   late TaskListStore _taskListStore;
   late QuestionsStore _questionsStore;
   late TechnicalNameWithTranslationsStore _technicalNameWithTranslationsStore;
+  late CurrentStepStore _currentStepStore;
+
 
   @override
   void didChangeDependencies() {
@@ -39,6 +42,7 @@ class _StepSliderWidgetState extends State<StepSliderWidget> {
     _questionsStore = Provider.of<QuestionsStore>(context);
     _technicalNameWithTranslationsStore =
         Provider.of<TechnicalNameWithTranslationsStore>(context);
+    _currentStepStore = Provider.of<CurrentStepStore>(context);
   }
 
   @override
@@ -98,24 +102,20 @@ class _StepSliderWidgetState extends State<StepSliderWidget> {
   }
 
   BoxBorder _buildSliderBorder(index, stepStore) {
-    switch (_getStepStatus(index, stepStore)) {
-      case StepStatus.isDone:
-        return _buildDoneBorder();
-      case StepStatus.isPending:
-        return _buildPendingBorder();
-      case StepStatus.notStarted:
-        return _buildNotStartedBorder();
-    }
+    if(index < _currentStepStore.current_step_number)
+      return _buildDoneBorder();
+    else if(index == _currentStepStore.current_step_number)
+      return _buildPendingBorder();
+    return _buildNotStartedBorder();
   }
 
+
+
   Color _buildSliderColor(index, stepStore) {
-    switch (_getStepStatus(index, stepStore)) {
-      case StepStatus.isPending:
-      case StepStatus.isDone:
-        return AppColors.stepSliderAvailableColor;
-      default:
-        return AppColors.stepSliderUnavailableColor;
+    if(index <= _currentStepStore.current_step_number){
+      return AppColors.stepSliderAvailableColor;
     }
+    return AppColors.stepSliderUnavailableColor;
   }
 
   Widget _buildAvatar() {

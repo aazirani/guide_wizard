@@ -7,6 +7,7 @@ import 'package:boilerplate/stores/current_step/current_step_store.dart';
 import 'package:boilerplate/stores/step/step_store.dart';
 import 'package:boilerplate/stores/task_list/task_list_store.dart';
 import 'package:boilerplate/stores/technical_name/technical_name_with_translations_store.dart';
+import 'package:boilerplate/ui/home/home.dart';
 import 'package:boilerplate/ui/tasklist/tasklist.dart';
 import 'package:boilerplate/utils/locale/app_localization.dart';
 import 'package:boilerplate/widgets/scrolling_overflow_text.dart';
@@ -90,7 +91,8 @@ class _QuestionWidgetState extends State<QuestionWidget>
         onPressed: () {
           _taskListStore.getTaskList(_stepStore.currentStep);
           _currentStepStore.setStepNumber(1);
-          Navigator.pop(context);
+          Navigator.of(context).pushAndRemoveUntil(MaterialPageRoute(builder: (context) =>
+              HomeScreen()), (Route<dynamic> route) => false).then((value) => setState(() {}));
         },
         child: Text(
           AppLocalizations.of(context).translate('next_stage_button_text'),
