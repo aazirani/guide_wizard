@@ -40,6 +40,9 @@ abstract class _StepsStore with Store {
   }
 
   @action
+  Future dataSourceCount() => _repository.stepDatasourceCount();
+
+  @action
   Future truncateSteps() async {
     await _repository.truncateStep();
   }

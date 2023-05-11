@@ -57,6 +57,8 @@ class StepDataSource {
     final recordSnapshots = await _stepsStore.find(
       _db,
     );
+
+    print("snapss: $recordSnapshots");
     // Making a List<Post> out of List<RecordSnapshot>
     if (recordSnapshots.length > 0) {
       stepsList = StepList(
@@ -70,6 +72,8 @@ class StepDataSource {
       stepsList = StepList(steps: []);
     }
 
+
+    print("step len: " + (stepsList.steps.length).toString());
     return stepsList;
   }
 

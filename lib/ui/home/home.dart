@@ -71,7 +71,6 @@ class _HomeScreenState extends State<HomeScreen> {
       _languageStore.init();
       _technicalNameWithTranslationsStore.getCurrentLan(_languageStore.language_id!);
       print(_languageStore.locale);
-      // _loadDataAndShowLoadingDialog(context);
       /*
         *********************** Warning: Do NOT remove these comments ***************************
        */
@@ -81,10 +80,10 @@ class _HomeScreenState extends State<HomeScreen> {
       // });
       // if(!isDataLoaded) {
       await _loadDataWithoutErrorHandling(context);
-      await _checkForUpdate(context);
-      //   SharedPreferences.getInstance().then((prefs) {
-      //     prefs.setBool(Preferences.is_data_loaded, true);
-      //   });
+      // await _checkForUpdate(context);
+      // SharedPreferences.getInstance().then((prefs) {
+        //   prefs.setBool(Preferences.is_data_loaded, true);
+        // });
       // }
     });
 
@@ -227,9 +226,11 @@ class _HomeScreenState extends State<HomeScreen> {
       // await _technicalNameWithTranslationsStore
       //     .truncateTechnicalNameWithTranslations();
       //fill stores with updated data
+      await _stepsStore.getSteps();
+      await _tasksStore.getAllTasks();
+      await _questionsStore.getQuestions();
       await _technicalNameWithTranslationsStore
           .getTechnicalNameWithTranslations();
-      await _stepsStore.getSteps();
     }
     _dialog!.hide();
   }
@@ -283,11 +284,9 @@ class _HomeScreenState extends State<HomeScreen> {
         //steps (/)
         _buildCurrentStepIndicator(),
         //step slider
-        Observer(
-            builder: (_) => StepSliderWidget(stepList: _stepsStore.stepList)),
+        StepSliderWidget(),
         // StepSliderWidget(),
         //step timeline
-        //TODO: save current and pending steps in shared preferences
         StepTimeLine(
           stepNo: 3,
         ),
@@ -295,9 +294,7 @@ class _HomeScreenState extends State<HomeScreen> {
         _buildInProgressText(),
         SizedBox(height: 10),
         //task compressed timeline
-        Observer(
-            builder: (_) =>
-                CompressedTasklistTimeline(stepList: _stepsStore.stepList))
+        CompressedTasklistTimeline()
         // CompressedTasklistTimeline(),
       ],
     );

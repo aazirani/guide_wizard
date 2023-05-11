@@ -97,8 +97,12 @@ class Repository {
     });
   }
 
+  Future stepDatasourceCount() =>
+      _stepDataSource.count().catchError((error) => throw error);
+
   Future truncateStep() =>
       _stepDataSource.deleteAll().catchError((error) => throw error);
+
   Future<int> insertStep(Step step) => _stepDataSource
       .insert(step)
       .then((id) => id)
@@ -237,9 +241,6 @@ class Repository {
 
   // Question: -----------------------------------------------------------------
   Future<QuestionList> getQuestions() async {
-    // return await _questionDataSource.count() > 0
-    //     ? _questionDataSource.getQuestionsFromDb()
-    //     : getQuestionsFromApi();
     return await _questionDataSource.getQuestionsFromDb();
   }
 
@@ -446,17 +447,18 @@ class Repository {
     // check to see if posts are present in database, then fetch from database
     // else make a network call to get all posts, store them into database for
     // later use
-    return await _technicalNameApi
-        .getTechnicalNamesWithTranslations()
-        .then((t) {
-      t.technicalNameWithTranslations.forEach((technicalNameWithTranslations) {
-        _technicalNameWithTranslationsDataSource
-            .insert(technicalNameWithTranslations);
-        // translationWithStepName.translations.forEach((translation) {
-        //   _languageDataSource.insert(translation.language);
-        // });
-      });
-
+    return await _technicalNameWithTranslationsDataSource.count() > 0
+        ? _technicalNameWithTranslationsDataSource.getTranslationsFromDb()
+        : _technicalNameApi
+            .getTechnicalNamesWithTranslations()
+            .then((t) {
+          t.technicalNameWithTranslations.forEach((technicalNameWithTranslations) {
+            _technicalNameWithTranslationsDataSource
+                .insert(technicalNameWithTranslations);
+            // translationWithStepName.translations.forEach((translation) {
+            //   _languageDataSource.insert(translation.language);
+            // });
+          });
       return t;
     }).catchError((error) => throw error);
   }

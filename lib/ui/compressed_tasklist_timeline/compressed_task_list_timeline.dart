@@ -11,8 +11,7 @@ import 'package:timelines/timelines.dart';
 import 'package:boilerplate/stores/step/steps_store.dart';
 
 class CompressedTasklistTimeline extends StatefulWidget {
-  StepList stepList;
-  CompressedTasklistTimeline({Key? key, required this.stepList}) : super(key: key);
+  CompressedTasklistTimeline({Key? key}) : super(key: key);
 
   @override
   State<CompressedTasklistTimeline> createState() =>
