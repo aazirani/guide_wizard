@@ -17,8 +17,7 @@ import 'package:boilerplate/models/step/step_list.dart';
 import '../../stores/task/tasks_store.dart';
 
 class StepSliderWidget extends StatefulWidget {
-  final StepList stepList;
-  const StepSliderWidget({Key? key, required this.stepList}) : super(key: key);
+  const StepSliderWidget({Key? key}) : super(key: key);
 
   @override
   State<StepSliderWidget> createState() => _StepSliderWidgetState();
@@ -74,7 +73,7 @@ class _StepSliderWidgetState extends State<StepSliderWidget> {
           builder: (BuildContext context) {
             return GestureDetector(
               onTap: () {},
-              child: _buildSliderContainer(index, _stepStore),
+              child: _buildSliderContainer(index),
             );
           },
         );
@@ -82,15 +81,15 @@ class _StepSliderWidgetState extends State<StepSliderWidget> {
     );
   }
 
-  Widget _buildSliderContainer(index, stepStore) {
+  Widget _buildSliderContainer(index) {
     return Container(
         alignment: Alignment.topLeft,
         width: _getScreenWidth(),
         margin: Dimens.sliderContainerMargin,
         padding: Dimens.sliderContainerPadding,
         decoration: BoxDecoration(
-          color: _buildSliderColor(index, stepStore),
-          border: _buildSliderBorder(index, stepStore),
+          color: _buildSliderColor(index),
+          border: _buildSliderBorder(index),
           borderRadius: BorderRadius.all(Radius.circular(20)),
         ),
         child: Stack(
@@ -101,8 +100,8 @@ class _StepSliderWidgetState extends State<StepSliderWidget> {
         ));
   }
 
-  BoxBorder _buildSliderBorder(index, stepStore) {
-    switch (_getStepStatus(index, stepStore)) {
+  BoxBorder _buildSliderBorder(index) {
+    switch (_getStepStatus(index)) {
       case StepStatus.isDone:
         return _buildDoneBorder();
       case StepStatus.isPending:
@@ -112,8 +111,8 @@ class _StepSliderWidgetState extends State<StepSliderWidget> {
     }
   }
 
-  Color _buildSliderColor(index, stepStore) {
-    switch (_getStepStatus(index, stepStore)) {
+  Color _buildSliderColor(index) {
+    switch (_getStepStatus(index)) {
       case StepStatus.isPending:
       case StepStatus.isDone:
         return AppColors.stepSliderAvailableColor;
@@ -184,7 +183,6 @@ class _StepSliderWidgetState extends State<StepSliderWidget> {
         style: _buildButtonStyle(),
         onPressed: () {
           if (_stepStore.currentStep == 1) {
-            _questionsStore.getQuestions();
             Navigator.push(context,
                 MaterialPageRoute(builder: (context) => QuestionsListPage()));
           } else {
@@ -256,10 +254,10 @@ class _StepSliderWidgetState extends State<StepSliderWidget> {
   //general methods ............................................................
   double _getScreenHeight() => MediaQuery.of(context).size.height;
   double _getScreenWidth() => MediaQuery.of(context).size.width;
-  StepStatus _getStepStatus(index, stepStore) {
-    if (stepStore.pending == index) {
+  StepStatus _getStepStatus(index) {
+    if (_stepStore.pending == index) {
       return StepStatus.isPending;
-    } else if (index < stepStore.pending) {
+    } else if (index < _stepStore.pending) {
       return StepStatus.isDone;
     }
     return StepStatus.notStarted;

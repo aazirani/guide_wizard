@@ -57,7 +57,7 @@ class TechnicalNameWithTranslationsDataSource {
     }).toList();
   }
 
-  Future<TranslationList> getTranslationsFromDb() async {
+  Future<TechnicalNameWithTranslationsList> getTranslationsFromDb() async {
     print('Loading from database');
 
     // post list

@@ -33,7 +33,6 @@ class _TaskListState extends State<TaskList> {
   void didChangeDependencies() {
     super.didChangeDependencies();
     // initializing stores
-    // _taskListStore = Provider.of<TaskListStore>(context);
     _tasksStore = Provider.of<TasksStore>(context);
     _stepsStore = Provider.of<StepsStore>(context);
     _technicalNameWithTranslationsStore =
@@ -53,8 +52,7 @@ class _TaskListState extends State<TaskList> {
   //appBar methods .............................................................
   PreferredSizeWidget _buildAppBar() {
     //text id of the step we want to find the title of
-    var step_title_id =
-        _stepsStore.stepList.steps[widget.currentStepNo].name.id;
+    int step_title_id = _stepsStore.stepList.steps[widget.currentStepNo].name.id;
     return AppBar(
         backgroundColor: AppColors.main_color,
         titleSpacing: 0,
