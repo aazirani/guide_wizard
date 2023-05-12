@@ -209,11 +209,11 @@ class _HomeScreenState extends State<HomeScreen> {
         indicatorColor: AppColors.main_color);
     if (!_stepsStore.loading) {
       //fill stores with updated data
-      await _stepsStore.getSteps();
+      // await _stepsStore.getSteps();
       await _technicalNameWithTranslationsStore
           .getTechnicalNameWithTranslations();
-      await _tasksStore.getAllTasks();
-      await _questionsStore.getQuestions();
+      // await _tasksStore.getAllTasks();
+      // await _questionsStore.getQuestions();
     }
     _dialog!.hide();
   }
