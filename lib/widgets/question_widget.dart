@@ -3,6 +3,7 @@ import 'dart:math' as math;
 import 'package:boilerplate/constants/colors.dart';
 import 'package:boilerplate/constants/dimens.dart';
 import 'package:boilerplate/models/question/question.dart';
+import 'package:boilerplate/stores/question/questions_store.dart';
 import 'package:boilerplate/stores/current_step/current_step_store.dart';
 import 'package:boilerplate/stores/step/step_store.dart';
 import 'package:boilerplate/stores/task_list/task_list_store.dart';
@@ -39,7 +40,7 @@ class QuestionWidget extends StatefulWidget {
 class _QuestionWidgetState extends State<QuestionWidget>
     with AutomaticKeepAliveClientMixin {
   late StepStore _stepStore;
-  // late TaskListStore _taskListStore;
+  late QuestionsStore _questionsStore;
   late TasksStore _tasksStore;
   late TechnicalNameWithTranslationsStore _technicalNameWithTranslationsStore;
   late CurrentStepStore _currentStepStore;
@@ -49,7 +50,7 @@ class _QuestionWidgetState extends State<QuestionWidget>
     super.didChangeDependencies();
     // initializing stores
     _stepStore = Provider.of<StepStore>(context);
-    // _taskListStore = Provider.of<TaskListStore>(context);
+    _questionsStore = Provider.of<QuestionsStore>(context);
     _tasksStore = Provider.of<TasksStore>(context);
     _technicalNameWithTranslationsStore =
         Provider.of<TechnicalNameWithTranslationsStore>(context);
@@ -172,11 +173,7 @@ class _QuestionWidgetState extends State<QuestionWidget>
                   value: option.isSelected,
                   onChanged: (value) {
                     setState(() {
-                      widget.question
-                          .getAnswers()
-                          .elementAt(
-                              widget.question.getAnswers().indexOf(option))
-                          .setSelected(value!);
+                      _questionsStore.updateQuestion(widget.question, option, value ?? false);
                     });
                   },
                   title: Text(
@@ -206,9 +203,7 @@ class _QuestionWidgetState extends State<QuestionWidget>
                   value: widget.question.getAnswerByIndex(index).isSelected,
                   onChanged: (value) {
                     setState(() {
-                      widget.question
-                          .getAnswerByIndex(index)
-                          .setSelected(value!);
+                      _questionsStore.updateQuestion(widget.question, widget.question.getAnswerByIndex(index), value ?? false);
                     });
                   },
                   checkColor: Colors.white,
@@ -246,7 +241,7 @@ class _QuestionWidgetState extends State<QuestionWidget>
       value: widget.question.getAnswerByIndex(index).isSelected,
       onChanged: (value) {
         setState(() {
-          widget.question.getAnswerByIndex(index).setSelected(value!);
+          _questionsStore.updateQuestion(widget.question, widget.question.getAnswerByIndex(index), value ?? false);
         });
       },
       checkColor: AppColors.white,
@@ -295,7 +290,7 @@ class _QuestionWidgetState extends State<QuestionWidget>
               contentPadding: EdgeInsets.zero,
               onTap: () {
                 setState(() {
-                  widget.question.getAnswerByIndex(index).toggleSelected();
+                  _questionsStore.updateQuestion(widget.question, widget.question.getAnswerByIndex(index), !widget.question.getAnswerByIndex(index).selected);
                 });
               },
               shape: RoundedRectangleBorder(

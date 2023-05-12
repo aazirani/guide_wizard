@@ -54,7 +54,6 @@ class QuestionDataSource {
     final recordSnapshots = await _questionsStore.find(
       _db,
     );
-    print("hello");
     // Making a List<Post> out of List<RecordSnapshot>
     if (recordSnapshots.length > 0) {
       questionsList = QuestionList(
@@ -73,6 +72,7 @@ class QuestionDataSource {
     // For filtering by key (ID), RegEx, greater than, and many other criteria,
     // we use a Finder.
     final finder = Finder(filter: Filter.byKey(question.id));
+    print("here is the map: " + question.toMap().toString());
     return await _questionsStore.update(
       _db,
       question.toMap(),

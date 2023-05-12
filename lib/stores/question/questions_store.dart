@@ -1,4 +1,5 @@
 import 'package:boilerplate/data/repository.dart';
+import 'package:boilerplate/models/answer/answer.dart';
 import 'package:boilerplate/models/question/question.dart';
 import 'package:boilerplate/models/question/question_list.dart';
 import 'package:boilerplate/stores/error/error_store.dart';
@@ -34,7 +35,7 @@ abstract class _QuestionsStore with Store {
   ObservableFuture<dynamic>(emptyTruncateQuestionResponse);
 
   @observable
-  QuestionList? questionList;
+  QuestionList questionList = QuestionList(questions: []);
 
   @observable
   bool success = false;
@@ -56,13 +57,19 @@ abstract class _QuestionsStore with Store {
     }).catchError((error) {
       errorStore.errorMessage = DioErrorUtil.handleError(error);
     });
-
     return future;
   }
 
   @action
+  Future updateQuestion(Question question, Answer answer, bool value) async {
+    // await questionList.setAnswerValue(question, answer, value);
+    questionList.questions.firstWhere((element) => element == question).answers.firstWhere((element) => element == answer).selected = value;
+    await _repository.updateQuestion(question);
+  }
+
+  @action
   Question getQuestionById(int questionId) {
-    return questionList!.questions.firstWhere((question) => question.id == questionId);
+    return questionList.questions.firstWhere((question) => question.id == questionId);
   }
 
   Future truncateTable() async {

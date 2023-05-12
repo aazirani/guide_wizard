@@ -71,20 +71,8 @@ class _HomeScreenState extends State<HomeScreen> {
       _languageStore.init();
       _technicalNameWithTranslationsStore.getCurrentLan(_languageStore.language_id!);
       print(_languageStore.locale);
-      /*
-        *********************** Warning: Do NOT remove these comments ***************************
-       */
-      // late bool isDataLoaded;
-      // await SharedPreferences.getInstance().then((prefs) {
-      //   isDataLoaded = prefs.getBool(Preferences.is_data_loaded) ?? false;
-      // });
-      // if(!isDataLoaded) {
       await _loadDataWithoutErrorHandling(context);
       // await _checkForUpdate(context);
-      // SharedPreferences.getInstance().then((prefs) {
-        //   prefs.setBool(Preferences.is_data_loaded, true);
-        // });
-      // }
     });
 
   }
@@ -227,10 +215,10 @@ class _HomeScreenState extends State<HomeScreen> {
       //     .truncateTechnicalNameWithTranslations();
       //fill stores with updated data
       await _stepsStore.getSteps();
-      await _tasksStore.getAllTasks();
-      await _questionsStore.getQuestions();
       await _technicalNameWithTranslationsStore
           .getTechnicalNameWithTranslations();
+      await _tasksStore.getAllTasks();
+      await _questionsStore.getQuestions();
     }
     _dialog!.hide();
   }

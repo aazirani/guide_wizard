@@ -1,3 +1,4 @@
+import 'package:boilerplate/models/answer/answer.dart';
 import 'package:boilerplate/models/question/question.dart';
 
 class QuestionList {
@@ -26,5 +27,9 @@ class QuestionList {
 
   set setQuestions(List<Question> questions) {
     questions = questions;
+  }
+
+  Future setAnswerValue(Question question, Answer answer, bool value) async{
+    questions.firstWhere((element) => element == question).setAnswerValue(answer, value);
   }
 }

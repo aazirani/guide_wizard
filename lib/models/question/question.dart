@@ -1,6 +1,7 @@
 import 'package:boilerplate/models/answer/answer.dart';
 import 'package:boilerplate/models/step/step.dart';
 import 'package:boilerplate/models/technical_name/technical_name.dart';
+import 'package:get/get.dart';
 
 class Question {
   //Server Values
@@ -52,6 +53,10 @@ class Question {
 
   List<Answer> getAnswers() {
     return answers;
+  }
+
+  void setAnswerValue(Answer answer, bool value){
+    answers.firstWhere((element) => element==answer).selected = value;
   }
 
   factory Question.fromMap(Map<String, dynamic> json) {
