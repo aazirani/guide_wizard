@@ -47,16 +47,6 @@ class _QuestionsListPageState extends State<QuestionsListPage> {
           color: AppColors.bright_foreground_color,
         ),
       ),
-      // title: Row(
-      //   mainAxisAlignment: MainAxisAlignment.start,
-      //   children: [
-      //     Image.asset(
-      //       'assets/icons/appbar_logo.png',
-      //       fit: BoxFit.cover,
-      //       height: Dimens.appBar["logoHeight"],
-      //     ),
-      //   ],
-      // ),
       title: Text(
         AppLocalizations.of(context).translate("info"),
         style: TextStyle(color: AppColors.white, fontSize: 20),
