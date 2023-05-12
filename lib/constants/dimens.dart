@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 class Dimens {
   Dimens._();
 
-  //number of steps 
+  //number of steps
   static const int stepNo = 4;
   //for all screens
   static const double horizontal_padding = 12.0;
@@ -21,10 +21,14 @@ class Dimens {
   static const contentDeadlineBorderRadius =
       BorderRadius.all(Radius.circular(20));
   //for Home Screen - step timeline
-  static const stepTimelineContainerBorderRadius = BorderRadius.all(Radius.circular(30));
-  static const stepTimelineContainerPadding = const EdgeInsets.only(left: 25, right: 25);
-  static const stepTimelineCurrentStepOuterCirclePadding = const EdgeInsets.all(2);
-  static const stepTimelineCurrentStepInnerCirclePadding = const EdgeInsets.all(8);
+  static const stepTimelineContainerBorderRadius =
+      BorderRadius.all(Radius.circular(30));
+  static const stepTimelineContainerPadding =
+      const EdgeInsets.only(left: 25, right: 25);
+  static const stepTimelineCurrentStepOuterCirclePadding =
+      const EdgeInsets.all(2);
+  static const stepTimelineCurrentStepInnerCirclePadding =
+      const EdgeInsets.all(8);
   //for Home screen - Carousel Slider
   static const sliderContainerMargin = EdgeInsets.symmetric(horizontal: 10.0);
   static const sliderContainerPadding = EdgeInsets.only(top: 10);
@@ -33,7 +37,10 @@ class Dimens {
       EdgeInsets.only(left: 200, bottom: 40, top: 20);
   //compressed task list
   static const contentLeftMargin = EdgeInsets.only(left: 20);
-  
+  //task page appbar widget
+  static const doneButtonPadding =
+      const EdgeInsets.only(right: 20, left: 10, top: 10);
+
   static const questionButtonPadding = EdgeInsets.only(bottom: 20, top: 15);
   static const questionDescriptionPadding =
       EdgeInsets.only(left: 10, right: 10, bottom: 10);
@@ -49,11 +56,18 @@ class Dimens {
     "height": 55,
   };
   static const expansionContentPadding = EdgeInsets.only(top: 5);
-  static const expansionDottedLinePadding = EdgeInsets.only(left: 20, top: 5, right: 15,);
+  static const expansionDottedLinePadding = EdgeInsets.only(
+    left: 20,
+    top: 5,
+    right: 15,
+  );
 
   static const expansionPadding = EdgeInsets.symmetric(horizontal: 20);
-  static BorderRadiusGeometry expansionTileBorderRadius = BorderRadius.circular(16);
-  static BorderRadiusGeometry blockPageAppBarButtonBorderRadius = BorderRadius.circular(100.0);
+  static BorderRadiusGeometry expansionTileBorderRadius =
+      BorderRadius.circular(16);
+  static BorderRadiusGeometry blockPageAppBarButtonBorderRadius =
+      BorderRadius.circular(100.0);
 
-  static const taskPageTextOnlyListViewPadding = EdgeInsets.only(top: 25, left: 30, right: 30, bottom: 20);
+  static const taskPageTextOnlyListViewPadding =
+      EdgeInsets.only(top: 25, left: 30, right: 30, bottom: 20);
 }
