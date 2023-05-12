@@ -8,7 +8,12 @@ class BlocksAppBarWidget extends StatefulWidget implements PreferredSizeWidget {
   bool isDone;
   double appBarSize;
   String title;
-  BlocksAppBarWidget({Key? key, required this.isDone, required this.appBarSize, required this.title}) : super(key: key);
+  BlocksAppBarWidget(
+      {Key? key,
+      required this.isDone,
+      required this.appBarSize,
+      required this.title})
+      : super(key: key);
 
   @override
   State<BlocksAppBarWidget> createState() => _BlocksAppBarWidgetState();
@@ -20,8 +25,7 @@ class BlocksAppBarWidget extends StatefulWidget implements PreferredSizeWidget {
 }
 
 class _BlocksAppBarWidgetState extends State<BlocksAppBarWidget> {
-
-  _buildDoneButtonStyle(){
+  _buildDoneButtonStyle() {
     return ElevatedButton.styleFrom(
         // overlayColor: MaterialStateProperty.all<Color>(AppColors.bright_foreground_color.withOpacity(0.1)),
         backgroundColor: AppColors.main_color,
@@ -32,12 +36,13 @@ class _BlocksAppBarWidgetState extends State<BlocksAppBarWidget> {
         //       borderRadius: Dimens.blockPageAppBarButtonBorderRadius,
         //     )
         // )
-        shape: CircleBorder(),
-        side: BorderSide(color: AppColors.white, width: 2)
-    );
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(7.0),
+        ),
+        side: BorderSide(color: AppColors.white, width: 2));
   }
 
-  _buildUndoneButtonStyle(){
+  _buildUndoneButtonStyle() {
     // return ButtonStyle(
     //     overlayColor: MaterialStateProperty.all<Color>(AppColors.bright_foreground_color.withOpacity(0.1)),
     //     shape: MaterialStateProperty.all<RoundedRectangleBorder>(
@@ -58,21 +63,25 @@ class _BlocksAppBarWidgetState extends State<BlocksAppBarWidget> {
         //       borderRadius: Dimens.blockPageAppBarButtonBorderRadius,
         //     )
         // )
-        shape: CircleBorder(),
-        side: BorderSide(color: AppColors.white, width: 1.2)
-    );
+        // shape: CircleBorder(),
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(7.0),
+        ),
+        side: BorderSide(color: AppColors.white, width: 1.2));
   }
 
   Widget _buildButton({required ButtonStyle? buttonStyle, IconData? icon}) {
     return ElevatedButton(
-      onPressed: () {
-        setState(() {
-          widget.isDone = !widget.isDone;
-        });
-      },
-      style: buttonStyle,
-      child: Icon(icon, color: AppColors.main_color,)
-    );
+        onPressed: () {
+          setState(() {
+            widget.isDone = !widget.isDone;
+          });
+        },
+        style: buttonStyle,
+        child: Icon(
+          icon,
+          color: AppColors.main_color,
+        ));
   }
 
   Widget _buildDoneButton() {
@@ -85,15 +94,13 @@ class _BlocksAppBarWidgetState extends State<BlocksAppBarWidget> {
 
   Widget _buildUndoneButton() {
     return _buildButton(
-        buttonStyle: _buildUndoneButtonStyle(),
-        // text: AppLocalizations.of(context).translate('undone_button_text'),
-        // icon: Icons.close_rounded,
-        icon: Icons.done_rounded,
+      buttonStyle: _buildUndoneButtonStyle(),
+      icon: Icons.done_rounded,
     );
   }
 
-  Widget _buildDoneUnDoneButton(){
-    return widget.isDone ? _buildUndoneButton():_buildDoneButton();
+  Widget _buildDoneUnDoneButton() {
+    return widget.isDone ? _buildUndoneButton() : _buildDoneButton();
   }
 
   @override
@@ -106,11 +113,14 @@ class _BlocksAppBarWidgetState extends State<BlocksAppBarWidget> {
         onPressed: () {
           Navigator.pop(context);
         },
-        icon: Icon(Icons.arrow_back_rounded, color: AppColors.bright_foreground_color,),
+        icon: Icon(
+          Icons.arrow_back_rounded,
+          color: AppColors.bright_foreground_color,
+        ),
       ),
       title: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        children: [ 
+        children: [
           ScrollingOverflowText(
             text: widget.title,
             textStyle: TextStyle(
@@ -118,13 +128,13 @@ class _BlocksAppBarWidgetState extends State<BlocksAppBarWidget> {
               fontSize: 20,
             ),
           ),
-          SizedBox(width: 10,),
+          SizedBox(
+            width: 10,
+          ),
           Padding(
             padding: const EdgeInsets.only(right: 20, left: 10, top: 10),
             child: Container(
-              height: 25, 
-              width: 25,
-              child: _buildDoneUnDoneButton()),
+                height: 25, width: 25, child: _buildDoneUnDoneButton()),
           ),
         ],
       ),
