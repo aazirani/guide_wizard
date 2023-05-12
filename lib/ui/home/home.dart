@@ -74,7 +74,6 @@ class _HomeScreenState extends State<HomeScreen> {
       await _loadDataWithoutErrorHandling(context);
       // await _checkForUpdate(context);
     });
-
   }
 
   SimpleFontelicoProgressDialog? _dialog;
@@ -191,6 +190,10 @@ class _HomeScreenState extends State<HomeScreen> {
         hideText: false,
         indicatorColor: Colors.red);
     await _updatedAtTimesStore.updateContentIfNeeded();
+    await _technicalNameWithTranslationsStore
+        .getTechnicalNameWithTranslations();
+    await _tasksStore.getAllTasks();
+    await _questionsStore.getQuestions();
     _dialog!.hide();
   }
 
@@ -205,14 +208,6 @@ class _HomeScreenState extends State<HomeScreen> {
         hideText: false,
         indicatorColor: AppColors.main_color);
     if (!_stepsStore.loading) {
-      //truncate all data available in datasources
-      // await _stepsStore.truncateSteps();
-      // await _technicalNameWithTranslationsStore
-      //     .truncateTechnicalNameWithTranslations();
-      // await _tasksStore.truncateTasks();
-      // await _questionsStore.truncateQuestions();
-      // await _technicalNameWithTranslationsStore
-      //     .truncateTechnicalNameWithTranslations();
       //fill stores with updated data
       await _stepsStore.getSteps();
       await _technicalNameWithTranslationsStore
