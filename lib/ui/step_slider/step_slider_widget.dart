@@ -120,8 +120,6 @@ class _StepSliderWidgetState extends State<StepSliderWidget> {
 
   Widget _buildAvatar(int index) {
     return
-        // _buildBoyAvatar(),
-        // _buildGirlAvatar(),
         Padding(
       padding: Dimens.stepAvatar,
       child: Container(
@@ -133,24 +131,6 @@ class _StepSliderWidgetState extends State<StepSliderWidget> {
           )),
     );
   }
-
-// Don't remove these comments;
-
-  // Widget _buildBoyAvatar() {
-  //   return Padding(
-  //     padding: Dimens.avatarBoyPadding,
-  //     child: Image.asset("assets/images/avatar_boy.png", fit: BoxFit.contain),
-  //     // child: Image.network(_stepsStore.getStepImage(_stepStore.currentStep))
-  //   );
-  // }
-
-  // Widget _buildGirlAvatar() {
-  //   return Padding(
-  //       padding: Dimens.avatarGirlPadding,
-  //       child: Image.network(""),
-  //       // child: Image.asset("assets/images/avatar_girl.png", fit: BoxFit.cover)
-  //       );
-  // }
 
   Widget _buildContent(currentStepNo) {
     return Padding(
@@ -174,7 +154,6 @@ class _StepSliderWidgetState extends State<StepSliderWidget> {
   Widget _buildStepTitle(currentStepNo) {
     var step_title_id = _stepsStore.stepList.steps[currentStepNo].name.id;
     return Text(
-      // "${_stepsStore.stepList.steps[currentStepNo].name.technical_name.toString()}",
       "${_technicalNameWithTranslationsStore.getTechnicalNames(step_title_id)}",
       style: TextStyle(fontSize: 17, color: AppColors.main_color),
     );
@@ -237,7 +216,7 @@ class _StepSliderWidgetState extends State<StepSliderWidget> {
     return Container(
       height: 20,
       child: Padding(
-          padding: EdgeInsets.only(right: 10, top: 10),
+          padding: Dimens.stepSliderprogressBarPadding,
           child: ClipRRect(
             borderRadius: BorderRadius.all(Radius.circular(10)),
             child: LinearProgressIndicator(

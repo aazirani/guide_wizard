@@ -42,6 +42,9 @@ class Dimens {
   static const doneButtonPadding =
       const EdgeInsets.only(right: 20, left: 10, top: 10);
 
+  //step slider widget
+  static const stepSliderprogressBarPadding =
+      EdgeInsets.only(right: 10, top: 10);
   static const questionButtonPadding = EdgeInsets.only(bottom: 20, top: 15);
   static const questionDescriptionPadding =
       EdgeInsets.only(left: 10, right: 10, bottom: 10);
