@@ -80,10 +80,10 @@ class Repository {
   }
 
   Future<StepList> getStepFromApi() async {
-    await truncateContent();
+    // await truncateContent();
     return await _stepApi.getSteps().then((stepList) async {
       print("bug------");
-      stepList.steps.forEach((step) async {
+      stepList.steps.forEach((step) {
         _stepDataSource.insert(step);
         step.tasks.forEach((task) {
           _taskDataSource.insert(task);
@@ -95,7 +95,6 @@ class Repository {
           });
         });
       });
-      print("bugg:" + (await _taskDataSource.count()).toString());
       return stepList;
     });
   }
@@ -445,23 +444,24 @@ class Repository {
 // }
 
   // TranslationsWithTechnicalName: ---------------------------------------------------------------------
-  Future<TechnicalNameWithTranslationsList>
-      getTechnicalNameWithTranslations() async {
+  Future<TechnicalNameWithTranslationsList> getTechnicalNameWithTranslations() async {
     // check to see if posts are present in database, then fetch from database
     // else make a network call to get all posts, store them into database for
     // later use
+    await truncateTechnicalNameWithTranslations();
     return await _technicalNameWithTranslationsDataSource.count() > 0
         ? _technicalNameWithTranslationsDataSource.getTranslationsFromDb()
         : _technicalNameApi
             .getTechnicalNamesWithTranslations()
             .then((t) {
-          t.technicalNameWithTranslations.forEach((technicalNameWithTranslations) {
+          t.technicalNameWithTranslations.forEach((technicalNameWithTranslations) async {
             _technicalNameWithTranslationsDataSource
                 .insert(technicalNameWithTranslations);
             // translationWithStepName.translations.forEach((translation) {
             //   _languageDataSource.insert(translation.language);
             // });
           });
+
       return t;
     }).catchError((error) => throw error);
   }

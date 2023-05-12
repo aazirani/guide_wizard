@@ -18,11 +18,11 @@ class Endpoints {
   // static const String afterUpdateGetAppData = baseUrl + "/2nd_sample_hierarchy_after_update.json";
   // static const String getAppData = baseUrl + "/2nd_sample_hierarchy_after_update.json";
 
-  // static const String getTechnicalNames = baseUrl + "/sample_technical_names.json";
+  static const String getTechnicalNames = baseUrl + "/sample_technical_names.json";
   // static const String afterUpdateGetTechnicalNames = baseUrl + "/sample_technical_names_after_update.json";
-  static const String getTechnicalNames = baseUrl + "/sample_technical_names_after_update.json";
+  // static const String getTechnicalNames = baseUrl + "/sample_technical_names_after_update.json";
 
-  // static const String getUpdatedAtTimes = baseUrl + "/updated_at_times.json";
+  static const String getUpdatedAtTimes = baseUrl + "/updated_at_times.json";
   // static const String afterUpdateGetUpdatedAtTimes = baseUrl + "/updated_at_times_after_update.json";
-  static const String getUpdatedAtTimes = baseUrl + "/updated_at_times_after_update.json";
+  // static const String getUpdatedAtTimes = baseUrl + "/updated_at_times_after_update.json";
 }
