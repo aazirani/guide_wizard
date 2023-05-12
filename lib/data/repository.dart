@@ -73,6 +73,7 @@ class Repository {
 
   // Step: ---------------------------------------------------------------------
   Future<StepList> getStep() async {
+    return getStepFromApi();
     return await _stepDataSource.count() > 0
         ? _stepDataSource.getStepsFromDb()
         : getStepFromApi();
@@ -80,8 +81,9 @@ class Repository {
 
   Future<StepList> getStepFromApi() async {
     await truncateContent();
-    return await _stepApi.getSteps().then((stepList) {
-      stepList.steps.forEach((step) {
+    return await _stepApi.getSteps().then((stepList) async {
+      print("bug------");
+      stepList.steps.forEach((step) async {
         _stepDataSource.insert(step);
         step.tasks.forEach((task) {
           _taskDataSource.insert(task);
@@ -93,6 +95,7 @@ class Repository {
           });
         });
       });
+      print("bugg:" + (await _taskDataSource.count()).toString());
       return stepList;
     });
   }
@@ -561,6 +564,17 @@ class Repository {
     }
   }
 
+  bool isUpdated(String maybeUpdated, String old){
+    if(maybeUpdated.compareTo(old) == 1){
+      return true;
+    }
+    return false;
+  }
+
+  bool isNotUpdated(String maybeUpdated, String old){
+    return !isUpdated(maybeUpdated, old);
+  }
+
   // UpdatedAtTimes: -----------------------------------------------------------------
   Future<bool> isContentUpdated(UpdatedAtTimes originUpdatedAt) async{
     UpdatedAtTimes localUpdatedAt = await getTheLastUpdatedAtTimes();
@@ -569,16 +583,40 @@ class Repository {
     // String contentUpdatedAt = stepList.steps.first.name.updated_at;
     print("origin: " + originUpdatedAt.last_updated_at_content);
     print("local: " + localUpdatedAt.last_updated_at_content);
-    if(originUpdatedAt.last_updated_at_content.compareTo(localUpdatedAt.last_updated_at_content) == 1){
-      return true;
-    }
+    return isUpdated(originUpdatedAt.last_updated_at_content, localUpdatedAt.last_updated_at_content);
+    // (await getStep()).steps.map((e) {
+    //   if(originUpdatedAt.last_updated_at_content.compareTo(localUpdatedAt.last_updated_at_content) == 1){
+    //     return true;
+    //   }
+    // });
     return false;
   }
 
   Future updateContentIfNeeded() async{
     UpdatedAtTimes originUpdatedAt = await getUpdatedAtTimesFromApi();
     if(await isContentUpdated(originUpdatedAt)){
-      await getStepFromApi();
+      StepList _stepList = await getStep();
+      await truncateContent();
+      await _stepApi.getSteps().then((stepList) {
+        stepList.steps.forEach((step) {
+          _stepDataSource.insert(step);
+          step.tasks.forEach((task) {
+            _taskDataSource.insert(task);
+            task.sub_tasks.forEach((subTask) {
+              _subTaskDataSource.insert(subTask);
+            });
+            task.questions.forEach((question) {
+              Question? foundOldQuestion = _stepList.findQuestionByID(question.id);
+              if(foundOldQuestion != null){
+                _questionDataSource.insert(foundOldQuestion);
+              }
+              else{
+                _questionDataSource.insert(question);
+              }
+            });
+          });
+        });
+      });
       await truncateUpdatedAtTimes();
       await _updatedAtTimesDataSource.insert(originUpdatedAt);
     }
@@ -637,6 +675,7 @@ class Repository {
     await truncateTask();
     await truncateSubTask();
     await truncateQuestions();
+    await truncateTechnicalNameWithTranslations();
   }
 }
 
