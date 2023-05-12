@@ -72,8 +72,6 @@ class StepDataSource {
       stepsList = StepList(steps: []);
     }
 
-
-    print("step len: " + (stepsList.steps.length).toString());
     return stepsList;
   }
 
