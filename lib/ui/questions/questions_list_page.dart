@@ -67,13 +67,30 @@ class _QuestionsListPageState extends State<QuestionsListPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: _buildAppBar(),
-      body: ScrollablePositionedList.builder(
-        itemCount: _questionsStore.questionList!.length,
-        itemBuilder: (context, index) => Card(
+      backgroundColor: AppColors.main_color,
+      body: ClipRRect(
+        borderRadius: BorderRadius.only(
+            topLeft: Radius.circular(30), topRight: Radius.circular(30)),
+        child: Container(
+          height: MediaQuery.of(context).size.height,
+          width: MediaQuery.of(context).size.width,
+          decoration: BoxDecoration(
+            color: AppColors.white,
+            borderRadius: BorderRadius.only(
+              topLeft: Radius.circular(30),
+              topRight: Radius.circular(30),
+            ),
+          ),
+          child: ScrollablePositionedList.builder(
+            itemCount: _questionsStore.questionList!.length,
+            itemBuilder: (context, index) => Card(
             
             margin: EdgeInsets.all(5.0),
             child: _buildQuestionWidget(index)),
-        itemScrollController: itemScrollController,
+            itemScrollController: itemScrollController,
+          ),
+        ),
+
       ),
       backgroundColor: AppColors.white,
     );
