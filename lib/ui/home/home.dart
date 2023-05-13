@@ -71,8 +71,11 @@ class _HomeScreenState extends State<HomeScreen> {
       _languageStore.init();
       _technicalNameWithTranslationsStore.getCurrentLan(_languageStore.language_id!);
       print(_languageStore.locale);
+
+      // Loading data (from datasource if data is downloaded before):
       await _loadDataWithoutErrorHandling(context);
-      // await _checkForUpdate(context);
+      // Checking whether there is an update:
+      await _checkForUpdate(context);
     });
   }
 
