@@ -79,9 +79,8 @@ class Repository {
   }
 
   Future<StepList> getStepFromApi() async {
-    // await truncateContent();
+    await truncateContent();
     return await _stepApi.getSteps().then((stepList) async {
-      print("bug------");
       stepList.steps.forEach((step) {
         _stepDataSource.insert(step);
         step.tasks.forEach((task) {
