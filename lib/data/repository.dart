@@ -73,7 +73,6 @@ class Repository {
 
   // Step: ---------------------------------------------------------------------
   Future<StepList> getStep() async {
-    return getStepFromApi();
     return await _stepDataSource.count() > 0
         ? _stepDataSource.getStepsFromDb()
         : getStepFromApi();
