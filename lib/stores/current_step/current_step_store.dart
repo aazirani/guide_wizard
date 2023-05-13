@@ -1,8 +1,8 @@
+import 'package:boilerplate/data/repository.dart';
 import 'package:boilerplate/stores/error/error_store.dart';
+import 'package:boilerplate/stores/form/form_store.dart';
 import 'package:mobx/mobx.dart';
 
-import '../../data/repository.dart';
-import '../form/form_store.dart';
 
 part 'current_step_store.g.dart';
 
@@ -18,7 +18,7 @@ abstract class _CurrentStepStore with Store {
   // store for handling error messages
   final ErrorStore errorStore = ErrorStore();
 
-  // bool to check if current user is logged in
+  // current step number from 0 to 3
   late int current_step_number;
 
   // constructor:---------------------------------------------------------------
