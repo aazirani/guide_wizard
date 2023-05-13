@@ -129,8 +129,7 @@ class _QuestionWidgetState extends State<QuestionWidget>
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
           ScrollingOverflowText(
-            // text: _technicalNameWithTranslationsStore.getTechnicalNames(title_id)!,
-            text: "what the actual fuck",
+            text: _technicalNameWithTranslationsStore.getTechnicalNames(title_id)!,
             textStyle: TextStyle(fontSize: 22, fontWeight: FontWeight.w500),
             height: 30,
             width: _getScreenWidth() - 100,
