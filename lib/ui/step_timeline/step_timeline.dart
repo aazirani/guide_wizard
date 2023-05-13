@@ -1,5 +1,6 @@
 import 'package:boilerplate/constants/colors.dart';
 import 'package:boilerplate/models/step/step_list.dart';
+import 'package:boilerplate/stores/current_step/current_step_store.dart';
 import 'package:flutter/material.dart';
 import 'package:timelines/timelines.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
@@ -8,11 +9,9 @@ import 'package:boilerplate/stores/step/step_store.dart';
 import 'package:boilerplate/constants/dimens.dart';
 
 class StepTimeLine extends StatefulWidget {
-  final int pending;
   final int stepNo;
   StepTimeLine(
       {Key? key,
-      required this.pending,
       required this.stepNo})
       : super(key: key);
 
@@ -22,17 +21,18 @@ class StepTimeLine extends StatefulWidget {
 
 class _StepTimeLineState extends State<StepTimeLine> {
   late StepStore _stepStore;
+  late CurrentStepStore _currentStepStore;
 
   @override
   void didChangeDependencies() {
     super.didChangeDependencies();
     // initializing stores
     _stepStore = Provider.of<StepStore>(context);
+    _currentStepStore = Provider.of<CurrentStepStore>(context);
   }
 
   @override
   Widget build(BuildContext context) {
-    print(widget.pending);
     return _buildTimelineContainer();
   }
 
@@ -223,7 +223,7 @@ class _StepTimeLineState extends State<StepTimeLine> {
     if (_isPendingStep(index)) {
       return _buildNotStartedEndConnector();
     }
-    if (index == widget.pending - 1) {
+    if (index == _currentStepStore.current_step_number - 1) {
       return _buildPendingEndConnectorGradient();
     }
     if (_isNotStartedStep(index)) {
@@ -240,14 +240,14 @@ class _StepTimeLineState extends State<StepTimeLine> {
   }
 
   _isPendingStep(index) {
-    return index == widget.pending;
+    return index == _currentStepStore.current_step_number;
   }
 
   _isDoneStep(index) {
-    return index < widget.pending;
+    return index < _currentStepStore.current_step_number;
   }
 
   _isNotStartedStep(index) {
-    return index > widget.pending;
+    return index > _currentStepStore.current_step_number;
   }
 }
