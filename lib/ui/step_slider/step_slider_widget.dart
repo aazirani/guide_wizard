@@ -17,7 +17,8 @@ import 'package:boilerplate/models/step/step_list.dart';
 import '../../stores/task/tasks_store.dart';
 
 class StepSliderWidget extends StatefulWidget {
-  const StepSliderWidget({Key? key}) : super(key: key);
+  StepList stepList;
+  StepSliderWidget({Key? key, required this.stepList}) : super(key: key);
 
   @override
   State<StepSliderWidget> createState() => _StepSliderWidgetState();

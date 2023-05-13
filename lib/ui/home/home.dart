@@ -189,9 +189,9 @@ class _HomeScreenState extends State<HomeScreen> {
         height: 75.0,
         hideText: false,
         indicatorColor: Colors.red);
-    await _updatedAtTimesStore.updateContentIfNeeded();
     await _technicalNameWithTranslationsStore
         .getTechnicalNameWithTranslations();
+    await _updatedAtTimesStore.updateContentIfNeeded();
     await _tasksStore.getAllTasks();
     await _questionsStore.getQuestions();
     _dialog!.hide();
@@ -209,11 +209,11 @@ class _HomeScreenState extends State<HomeScreen> {
         indicatorColor: AppColors.main_color);
     if (!_stepsStore.loading) {
       //fill stores with updated data
-      // await _stepsStore.getSteps();
       await _technicalNameWithTranslationsStore
           .getTechnicalNameWithTranslations();
-      // await _tasksStore.getAllTasks();
-      // await _questionsStore.getQuestions();
+      await _stepsStore.getSteps();
+      await _tasksStore.getAllTasks();
+      await _questionsStore.getQuestions();
     }
     _dialog!.hide();
   }
@@ -267,9 +267,11 @@ class _HomeScreenState extends State<HomeScreen> {
         //steps (/)
         _buildCurrentStepIndicator(),
         //step slider
-        StepSliderWidget(),
+        Observer(
+            builder: (_) => StepSliderWidget(stepList: _stepsStore.stepList)),
         // StepSliderWidget(),
         //step timeline
+        //TODO: save current and pending steps in shared preferences
         StepTimeLine(
           stepNo: 3,
         ),
@@ -277,7 +279,9 @@ class _HomeScreenState extends State<HomeScreen> {
         _buildInProgressText(),
         SizedBox(height: 10),
         //task compressed timeline
-        CompressedTasklistTimeline()
+        Observer(
+            builder: (_) =>
+                CompressedTasklistTimeline(stepList: _stepsStore.stepList)),
         // CompressedTasklistTimeline(),
       ],
     );
