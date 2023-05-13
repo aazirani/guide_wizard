@@ -67,23 +67,28 @@ class _TaskListTimeLineState extends State<TaskListTimeLine> {
   Widget _buildContents(task_number) {
     return Padding(
       padding: Dimens.contentContainerPadding,
-      child: ClipRRect(
+      child: Material(
+        elevation: 5,
         borderRadius: Dimens.contentContainerBorderRadius,
-        child: Container(
-          width: _getScreenWidth() / 1.23,
-          height: 100,
-          padding: Dimens.contentPadding,
-          decoration: BoxDecoration(
-            color: AppColors.contentColor,
-            border: Border(
-                left: BorderSide(
-              width: 25,
-              color: (_taskListStore.taskList.tasks[task_number].isDone == true)
-                  ? AppColors.contentDoneBorderColor
-                  : AppColors.contentUnDoneBorderColor,
-            )),
+        child: ClipRRect(
+          borderRadius: Dimens.contentContainerBorderRadius,
+          child: Container(
+            width: _getScreenWidth() / 1.23,
+            height: 100,
+            padding: Dimens.contentPadding,
+            decoration: BoxDecoration(
+              color: AppColors.contentColor,
+              // color: Colors.red,
+              border: Border(
+                  left: BorderSide(
+                width: 25,
+                color: (_taskListStore.taskList.tasks[task_number].isDone == true)
+                    ? AppColors.contentDoneBorderColor
+                    : AppColors.contentUnDoneBorderColor,
+              )),
+            ),
+            child: _buildInsideElements(task_number),
           ),
-          child: _buildInsideElements(task_number),
         ),
       ),
     );

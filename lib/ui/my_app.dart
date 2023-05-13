@@ -3,6 +3,7 @@ import 'package:boilerplate/constants/strings.dart';
 import 'package:boilerplate/data/repository.dart';
 import 'package:boilerplate/di/components/service_locator.dart';
 import 'package:boilerplate/providers/question_widget_state/question_widget_state.dart';
+import 'package:boilerplate/stores/current_step/current_step_store.dart';
 import 'package:boilerplate/stores/language/language_store.dart';
 import 'package:boilerplate/stores/post/post_store.dart';
 import 'package:boilerplate/stores/question/questions_store.dart';
@@ -28,13 +29,13 @@ class MyApp extends StatelessWidget {
   final ThemeStore _themeStore = ThemeStore(getIt<Repository>());
   final PostStore _postStore = PostStore(getIt<Repository>());
   final LanguageStore _languageStore = LanguageStore(getIt<Repository>());
-  final UserStore _userStore = UserStore(getIt<Repository>());
   final StepStore _stepStore = StepStore();
   final StepsStore _stepsStore = StepsStore(getIt<Repository>());
   final TaskListStore _taskListStore = TaskListStore(getIt<Repository>());
   final TasksStore _tasksStore = TasksStore(getIt<Repository>());
   final QuestionsStore _questionsStore = QuestionsStore(getIt<Repository>());
   final TechnicalNameWithTranslationsStore _technicalNameWithTranslationsStore = TechnicalNameWithTranslationsStore(getIt<Repository>());
+  final CurrentStepStore _currentStepStore = CurrentStepStore(getIt<Repository>());
 
   @override
   Widget build(BuildContext context) {
@@ -52,6 +53,8 @@ class MyApp extends StatelessWidget {
         Provider<QuestionsStore>(create: (_) => _questionsStore),
         Provider<TechnicalNameWithTranslationsStore>(create: (_) => _technicalNameWithTranslationsStore),
         Provider<LanguageStore>(create: (_) => _languageStore),
+        Provider<CurrentStepStore>(create: (_) => _currentStepStore),
+
       ],
       child: Observer(
         name: 'global-observer',

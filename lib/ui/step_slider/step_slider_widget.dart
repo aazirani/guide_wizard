@@ -1,5 +1,6 @@
 import 'package:boilerplate/constants/colors.dart';
 import 'package:boilerplate/constants/dimens.dart';
+import 'package:boilerplate/stores/current_step/current_step_store.dart';
 import 'package:boilerplate/stores/question/questions_store.dart';
 import 'package:boilerplate/stores/step/step_store.dart';
 import 'package:boilerplate/ui/questions/questions_list_page.dart';
@@ -28,6 +29,8 @@ class _StepSliderWidgetState extends State<StepSliderWidget> {
   late TaskListStore _taskListStore;
   late QuestionsStore _questionsStore;
   late TechnicalNameWithTranslationsStore _technicalNameWithTranslationsStore;
+  late CurrentStepStore _currentStepStore;
+
 
   @override
   void didChangeDependencies() {
@@ -39,6 +42,7 @@ class _StepSliderWidgetState extends State<StepSliderWidget> {
     _questionsStore = Provider.of<QuestionsStore>(context);
     _technicalNameWithTranslationsStore =
         Provider.of<TechnicalNameWithTranslationsStore>(context);
+    _currentStepStore = Provider.of<CurrentStepStore>(context);
   }
 
   @override
@@ -91,51 +95,41 @@ class _StepSliderWidgetState extends State<StepSliderWidget> {
         ),
         child: Stack(
           children: [
-            _buildAvatar(),
+            _buildAvatar(index),
             _buildContent(index),
           ],
         ));
   }
 
   BoxBorder _buildSliderBorder(index, stepStore) {
-    switch (_getStepStatus(index, stepStore)) {
-      case StepStatus.isDone:
-        return _buildDoneBorder();
-      case StepStatus.isPending:
-        return _buildPendingBorder();
-      case StepStatus.notStarted:
-        return _buildNotStartedBorder();
-    }
+    if(index < _currentStepStore.current_step_number)
+      return _buildDoneBorder();
+    else if(index == _currentStepStore.current_step_number)
+      return _buildPendingBorder();
+    return _buildNotStartedBorder();
   }
+
+
 
   Color _buildSliderColor(index, stepStore) {
-    switch (_getStepStatus(index, stepStore)) {
-      case StepStatus.isPending:
-      case StepStatus.isDone:
-        return AppColors.stepSliderAvailableColor;
-      default:
-        return AppColors.stepSliderUnavailableColor;
+    if(index <= _currentStepStore.current_step_number){
+      return AppColors.stepSliderAvailableColor;
     }
+    return AppColors.stepSliderUnavailableColor;
   }
 
-  Widget _buildAvatar() {
-    return Stack(children: [
-      _buildBoyAvatar(),
-      _buildGirlAvatar(),
-    ]);
-  }
-
-  Widget _buildBoyAvatar() {
-    return Padding(
-      padding: Dimens.avatarBoyPadding,
-      child: Image.asset("assets/images/avatar_boy.png", fit: BoxFit.contain),
+  Widget _buildAvatar(int index) {
+    return
+        Padding(
+      padding: Dimens.stepAvatar,
+      child: Container(
+          width: double.maxFinite,
+          alignment: Alignment.centerRight,
+          decoration: BoxDecoration(
+            image: DecorationImage(
+                image: NetworkImage(_stepsStore.getStepImage(index))),
+          )),
     );
-  }
-
-  Widget _buildGirlAvatar() {
-    return Padding(
-        padding: Dimens.avatarGirlPadding,
-        child: Image.asset("assets/images/avatar_girl.png", fit: BoxFit.cover));
   }
 
   Widget _buildContent(currentStepNo) {
@@ -160,7 +154,6 @@ class _StepSliderWidgetState extends State<StepSliderWidget> {
   Widget _buildStepTitle(currentStepNo) {
     var step_title_id = _stepsStore.stepList.steps[currentStepNo].name.id;
     return Text(
-      // "${_stepsStore.stepList.steps[currentStepNo].name.technical_name.toString()}",
       "${_technicalNameWithTranslationsStore.getTechnicalNames(step_title_id)}",
       style: TextStyle(fontSize: 17, color: AppColors.main_color),
     );
@@ -223,7 +216,7 @@ class _StepSliderWidgetState extends State<StepSliderWidget> {
     return Container(
       height: 20,
       child: Padding(
-          padding: EdgeInsets.only(right: 10, top: 10),
+          padding: Dimens.stepSliderprogressBarPadding,
           child: ClipRRect(
             borderRadius: BorderRadius.all(Radius.circular(10)),
             child: LinearProgressIndicator(

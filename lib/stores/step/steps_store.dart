@@ -10,10 +10,9 @@ part 'steps_store.g.dart';
 class StepsStore = _StepsStore with _$StepsStore;
 
 abstract class _StepsStore with Store {
-
   Repository _repository;
-  _StepsStore(Repository repo) : this._repository = repo; 
-  
+  _StepsStore(Repository repo) : this._repository = repo;
+
   //TODO: add step_list to store
 
   static ObservableFuture<StepList> emptyStepsResponse =
@@ -45,5 +44,9 @@ abstract class _StepsStore with Store {
   @action
   Future truncateSteps() async {
     await _repository.truncateStep();
+  }
+
+  String getStepImage(int storeNum) {
+    return this.stepList.steps[storeNum].image!;
   }
 }

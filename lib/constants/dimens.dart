@@ -35,12 +35,17 @@ class Dimens {
   static const avatarBoyPadding = EdgeInsets.only(left: 140, bottom: 70);
   static const avatarGirlPadding =
       EdgeInsets.only(left: 200, bottom: 40, top: 20);
+  static const stepAvatar = EdgeInsets.only(left: 160, bottom: 40, top: 20);
   //compressed task list
   static const contentLeftMargin = EdgeInsets.only(left: 20);
   //task page appbar widget
   static const doneButtonPadding =
       const EdgeInsets.only(right: 20, left: 10, top: 10);
 
+  
+  //step slider widget
+  static const stepSliderprogressBarPadding =
+      EdgeInsets.only(right: 10, top: 10);
   static const questionButtonPadding = EdgeInsets.only(bottom: 20, top: 15);
   static const questionDescriptionPadding =
       EdgeInsets.only(left: 10, right: 10, bottom: 10);

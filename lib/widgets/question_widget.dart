@@ -3,9 +3,11 @@ import 'dart:math' as math;
 import 'package:boilerplate/constants/colors.dart';
 import 'package:boilerplate/constants/dimens.dart';
 import 'package:boilerplate/models/question/question.dart';
+import 'package:boilerplate/stores/current_step/current_step_store.dart';
 import 'package:boilerplate/stores/step/step_store.dart';
 import 'package:boilerplate/stores/task_list/task_list_store.dart';
 import 'package:boilerplate/stores/technical_name/technical_name_with_translations_store.dart';
+import 'package:boilerplate/ui/home/home.dart';
 import 'package:boilerplate/ui/tasklist/tasklist.dart';
 import 'package:boilerplate/utils/locale/app_localization.dart';
 import 'package:boilerplate/widgets/scrolling_overflow_text.dart';
@@ -20,6 +22,7 @@ class QuestionWidget extends StatefulWidget {
   bool isLastQuestion;
   int index;
   ItemScrollController itemScrollController;
+
 
   QuestionWidget({
     Key? key,
@@ -38,6 +41,7 @@ class _QuestionWidgetState extends State<QuestionWidget>
   late StepStore _stepStore;
   late TaskListStore _taskListStore;
   late TechnicalNameWithTranslationsStore _technicalNameWithTranslationsStore;
+  late CurrentStepStore _currentStepStore;
 
   @override
   void didChangeDependencies() {
@@ -47,6 +51,7 @@ class _QuestionWidgetState extends State<QuestionWidget>
     _taskListStore = Provider.of<TaskListStore>(context);
     _technicalNameWithTranslationsStore =
         Provider.of<TechnicalNameWithTranslationsStore>(context);
+    _currentStepStore = Provider.of<CurrentStepStore>(context);
   }
 
   @override
@@ -82,15 +87,12 @@ class _QuestionWidgetState extends State<QuestionWidget>
     return Padding(
       padding: Dimens.questionButtonPadding,
       child: TextButton(
-        style: _buildQuestionsButtonStyle(Colors.green.shade600),
+        style: _buildQuestionsButtonStyle(AppColors.nextStepColor),
         onPressed: () {
           _taskListStore.getTaskList(_stepStore.currentStep);
-          Navigator.push(
-              context,
-              MaterialPageRoute(
-                  builder: (context) => TaskList(
-                        currentStepNo: 1,
-                      )));
+          _currentStepStore.setStepNumber(1);
+          Navigator.of(context).pushAndRemoveUntil(MaterialPageRoute(builder: (context) =>
+              HomeScreen()), (Route<dynamic> route) => false).then((value) => setState(() {}));
         },
         child: Text(
           AppLocalizations.of(context).translate('next_stage_button_text'),
@@ -116,7 +118,7 @@ class _QuestionWidgetState extends State<QuestionWidget>
         color: Colors.transparent,
       ),
       decoration: BoxDecoration(
-          color: AppColors.main_color,
+          // color: AppColors.main_color,
           borderRadius: BorderRadius.all(Radius.circular(5))),
     );
   }
@@ -158,7 +160,7 @@ class _QuestionWidgetState extends State<QuestionWidget>
                   shape: RoundedRectangleBorder(
                     side: BorderSide(
                         color: option.isSelected
-                            ? Colors.black
+                            ? AppColors.main_color
                             : Colors.transparent,
                         width: 2),
                     borderRadius: BorderRadius.circular(5),
@@ -176,11 +178,12 @@ class _QuestionWidgetState extends State<QuestionWidget>
                   },
                   title: Text(
                     // option.getTitle
-                    _technicalNameWithTranslationsStore.getTechnicalNames(option.getAnswerTitleID())!,
+                    _technicalNameWithTranslationsStore
+                        .getTechnicalNames(option.getAnswerTitleID())!,
                   ),
                   controlAffinity: ListTileControlAffinity.leading,
-                  tileColor: AppColors.grey,
-                  activeColor: Colors.black,
+                  tileColor: AppColors.white,
+                  activeColor: AppColors.main_color,
                 ),
               ))
           .toList(),
@@ -206,7 +209,7 @@ class _QuestionWidgetState extends State<QuestionWidget>
                     });
                   },
                   checkColor: Colors.white,
-                  activeColor: Colors.black87,
+                  activeColor: AppColors.main_color,
                   shape: CircleBorder(),
                 ),
                 height: 30,
@@ -243,8 +246,8 @@ class _QuestionWidgetState extends State<QuestionWidget>
           widget.question.getAnswerByIndex(index).setSelected(value!);
         });
       },
-      checkColor: Colors.white,
-      activeColor: Colors.black87,
+      checkColor: AppColors.white,
+      activeColor: AppColors.main_color,
       shape: CircleBorder(),
       side: BorderSide(color: Colors.transparent),
     );
@@ -295,7 +298,7 @@ class _QuestionWidgetState extends State<QuestionWidget>
               shape: RoundedRectangleBorder(
                 side: BorderSide(
                     color: widget.question.getAnswerByIndex(index).isSelected
-                        ? Colors.black
+                        ? AppColors.main_color
                         : Colors.transparent,
                     width: 2),
                 borderRadius: BorderRadius.circular(5),
@@ -308,7 +311,7 @@ class _QuestionWidgetState extends State<QuestionWidget>
                   _buildImageOptionSubtitle(index),
                 ],
               ),
-              tileColor: AppColors.grey,
+              tileColor: Color.fromARGB(255, 243, 243, 243),
             ),
           ),
           _buildImageCheckBox(index),
@@ -378,7 +381,8 @@ class _QuestionWidgetState extends State<QuestionWidget>
       margin: Dimens.questionDescriptionPadding,
       child: Text(
         // widget.question.getSubTitle,
-        _technicalNameWithTranslationsStore.getTechnicalNames(question_subtitle_id)!,
+        _technicalNameWithTranslationsStore
+            .getTechnicalNames(question_subtitle_id)!,
       ),
     );
   }
@@ -387,35 +391,32 @@ class _QuestionWidgetState extends State<QuestionWidget>
   Widget build(BuildContext context) {
     super.build(context);
     return Consumer<QuestionsWidgetState>(builder: (context, builder, child) {
-      return Padding(
-        padding: const EdgeInsets.fromLTRB(5, 5, 5, 0),
-        child: ExpansionPanelList(
-          expandedHeaderPadding: EdgeInsets.zero,
-          elevation: 0,
-          expansionCallback: (int index, bool isExpanded) {
-            setState(() {
-              builder.setActiveIndex(widget.index);
-            });
-          },
-          children: [
-            ExpansionPanel(
-              canTapOnHeader: true,
-              headerBuilder: (BuildContext context, bool isExpanded) {
-                return _buildTitle();
-              },
-              body: Column(
-                children: [
-                  _buildDescription(),
-                  _buildOptions(),
-                  widget.isLastQuestion
-                      ? _buildNextStageButton()
-                      : _buildNextQuestionButton(),
-                ],
-              ),
-              isExpanded: builder.isWidgetExpanded(widget.index),
+      return ExpansionPanelList(
+        expandedHeaderPadding: EdgeInsets.zero,
+        elevation: 0,
+        expansionCallback: (int index, bool isExpanded) {
+          setState(() {
+            builder.setActiveIndex(widget.index);
+          });
+        },
+        children: [
+          ExpansionPanel(
+            canTapOnHeader: true,
+            headerBuilder: (BuildContext context, bool isExpanded) {
+              return _buildTitle();
+            },
+            body: Column(
+              children: [
+                _buildDescription(),
+                _buildOptions(),
+                widget.isLastQuestion
+                    ? _buildNextStageButton()
+                    : _buildNextQuestionButton(),
+              ],
             ),
-          ],
-        ),
+            isExpanded: builder.isWidgetExpanded(widget.index),
+          ),
+        ],
       );
     });
   }

@@ -83,11 +83,16 @@ class _QuestionsListPageState extends State<QuestionsListPage> {
           ),
           child: ScrollablePositionedList.builder(
             itemCount: _questionsStore.questionList!.length,
-            itemBuilder: (context, index) => _buildQuestionWidget(index),
+            itemBuilder: (context, index) => Card(
+            
+            margin: EdgeInsets.all(5.0),
+            child: _buildQuestionWidget(index)),
             itemScrollController: itemScrollController,
           ),
         ),
+
       ),
+      backgroundColor: AppColors.white,
     );
   }
 }

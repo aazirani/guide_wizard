@@ -89,6 +89,12 @@ class _ExpansionContentState extends State<ExpansionContent> {
         },
         shrinkWrap: true,
         physics: NeverScrollableScrollPhysics(),
-        data: widget.markdown);
+        data: fixedJsonMarkdown(widget.markdown));
+  }
+
+  String fixedJsonMarkdown(String json_markdown){
+    return json_markdown.replaceAllMapped(RegExp(r'(?<!\\)\\n'), (match) {
+      return '\n';
+    });
   }
 }

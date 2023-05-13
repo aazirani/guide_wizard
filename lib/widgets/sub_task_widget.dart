@@ -78,7 +78,7 @@ class SubTaskWidgetState extends State<SubTaskWidget>
     return ListTileTheme(
       shape: RoundedRectangleBorder(
         borderRadius: Dimens.expansionTileBorderRadius,
-        side: BorderSide(color: AppColors.main_color, width: 2),
+        // side: BorderSide(color: AppColors.main_color, width: 2),
       ),
       tileColor: AppColors.button_background_color,
       textColor: AppColors.main_color,
@@ -94,7 +94,7 @@ class SubTaskWidgetState extends State<SubTaskWidget>
     return ClipRRect(
       borderRadius: Dimens.expansionTileBorderRadius,
       child: Card(
-          elevation: 0,
+          elevation: 4,
           shape: RoundedRectangleBorder(
             borderRadius: Dimens.expansionTileBorderRadius,
           ),
