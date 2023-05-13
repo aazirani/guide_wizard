@@ -109,7 +109,6 @@ class _TaskPageTextOnlyState extends State<TaskPageTextOnly> {
       appBar: BlocksAppBarWidget(
         isDone: _tasksStore.getTaskById(widget.task_id).isDone,
         appBarSize: 70.0,
-        // title: _tasksStore.getTaskById(widget.task_id).text.string,
         title: _technicalNameWithTranslationsStore.getTechnicalNames(title_id)!,
       ),
       body: _buildScaffoldBody(),

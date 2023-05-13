@@ -25,8 +25,6 @@ class AppColors {
     50: Color.fromARGB(218, 206, 240, 229),
     100: Color.fromARGB(255, 115, 213, 172),
     200: Color.fromARGB(255, 124, 222, 194),
-    // 300: Color.fromARGB(255, 47, 205, 144),
-    // 300: Color.fromARGB(255,49, 236, 146),
     300: Color(0xFF31EC92),
   };
 
@@ -70,7 +68,8 @@ class AppColors {
   static Color diamondColor = green[300]!;
   // tasklist
   static Color tasklistConnectorColor = green[300]!;
-  static Color contentColor = greys[600]!;
+  // static Color contentColor = greys[600]!;
+  static Color contentColor = Colors.white;
   static Color contentDoneBorderColor = green[300]!.withOpacity(0.2);
   static Color contentUnDoneBorderColor = red[50]!.withOpacity(0.2);
   static Color deadlineDoneBorderColor = green[100]!;
@@ -79,7 +78,7 @@ class AppColors {
   static Color deadlineTextUnDoneColor = red[100]!;
   // questionpage
   static Color nextStepColor = green[300]!;
-  
+
   static const Color title_color = Colors.white;
   static const Color main_color = const Color.fromRGBO(0, 81, 158, 1);
   static const Color grey = const Color.fromRGBO(231, 231, 231, 1);
