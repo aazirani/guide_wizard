@@ -24,7 +24,8 @@ class TechnicalNameWithTranslationsDataSource {
   TechnicalNameWithTranslationsDataSource(this._db);
 
   // DB functions:--------------------------------------------------------------
-  Future<int?> insert(TechnicalNameWithTranslations technicalNameWithTranslations) async {
+  Future<int?> insert(
+      TechnicalNameWithTranslations technicalNameWithTranslations) async {
     return await _technicalNameWithTranslationsStore
         .record(technicalNameWithTranslations.id)
         .add(_db, technicalNameWithTranslations.toMap());
@@ -48,14 +49,15 @@ class TechnicalNameWithTranslationsDataSource {
 
     // Making a List<Post> out of List<RecordSnapshot>
     return recordSnapshots.map((snapshot) {
-      final technicalNameWithTranslations = TechnicalNameWithTranslations.fromMap(snapshot.value);
+      final technicalNameWithTranslations =
+          TechnicalNameWithTranslations.fromMap(snapshot.value);
       // An ID is a key of a record from the database.
       technicalNameWithTranslations.id = snapshot.key;
       return technicalNameWithTranslations;
     }).toList();
   }
 
-  Future<TranslationList> getTranslationsFromDb() async {
+  Future<TechnicalNameWithTranslationsList> getTranslationsFromDb() async {
     print('Loading from database');
 
     // post list
@@ -70,7 +72,8 @@ class TechnicalNameWithTranslationsDataSource {
     if (recordSnapshots.length > 0) {
       translationsWithStepNameList = TechnicalNameWithTranslationsList(
           technicalNameWithTranslations: recordSnapshots.map((snapshot) {
-        final translation = TechnicalNameWithTranslations.fromMap(snapshot.value);
+        final translation =
+            TechnicalNameWithTranslations.fromMap(snapshot.value);
         // An ID is a key of a record from the database.
         translation.id = snapshot.key;
         return translation;
@@ -80,7 +83,8 @@ class TechnicalNameWithTranslationsDataSource {
     return translationsWithStepNameList;
   }
 
-  Future<int> update(TechnicalNameWithTranslations translationWithStepName) async {
+  Future<int> update(
+      TechnicalNameWithTranslations translationWithStepName) async {
     // For filtering by key (ID), RegEx, greater than, and many other criteria,
     // we use a Finder.
     final finder = Finder(filter: Filter.byKey(translationWithStepName.id));
@@ -91,7 +95,8 @@ class TechnicalNameWithTranslationsDataSource {
     );
   }
 
-  Future<int> delete(TechnicalNameWithTranslations translationWithStepName) async {
+  Future<int> delete(
+      TechnicalNameWithTranslations translationWithStepName) async {
     final finder = Finder(filter: Filter.byKey(translationWithStepName.id));
     return await _technicalNameWithTranslationsStore.delete(
       _db,

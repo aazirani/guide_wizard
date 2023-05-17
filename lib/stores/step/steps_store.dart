@@ -1,4 +1,3 @@
-import 'package:boilerplate/models/step/step.dart';
 import 'package:mobx/mobx.dart';
 import 'package:boilerplate/models/step/step_list.dart';
 import 'package:boilerplate/data/repository.dart';
@@ -33,13 +32,15 @@ abstract class _StepsStore with Store {
 
   @action
   Future getSteps() async {
-    // final future = _repository.getStep(); //TODO: datasource getStepFromDB have to get fixed
-    final future = _repository.getStepFromApi();
+    final future = _repository.getStep();
     fetchStepsFuture = ObservableFuture(future);
     await future.then((stepList) {
       this.stepList = stepList;
     });
   }
+
+  @action
+  Future dataSourceCount() => _repository.stepDatasourceCount();
 
   @action
   Future truncateSteps() async {

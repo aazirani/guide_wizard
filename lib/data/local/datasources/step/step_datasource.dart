@@ -48,7 +48,6 @@ class StepDataSource {
   }
 
   Future<StepList> getStepsFromDb() async {
-
     print('Loading from database');
 
     // post list
@@ -59,17 +58,17 @@ class StepDataSource {
       _db,
     );
 
+    print("snapss: $recordSnapshots");
     // Making a List<Post> out of List<RecordSnapshot>
-    if(recordSnapshots.length > 0) {
+    if (recordSnapshots.length > 0) {
       stepsList = StepList(
           steps: recordSnapshots.map((snapshot) {
-            final step = Step.fromMap(snapshot.value);
-            // An ID is a key of a record from the database.
-            step.id = snapshot.key;
-            return step;
-          }).toList());
-    }
-    else{
+        final step = Step.fromMap(snapshot.value);
+        // An ID is a key of a record from the database.
+        step.id = snapshot.key;
+        return step;
+      }).toList());
+    } else {
       stepsList = StepList(steps: []);
     }
 
@@ -87,10 +86,17 @@ class StepDataSource {
     );
   }
 
+  Future<int> delete(Step step) async {
+    final finder = Finder(filter: Filter.byKey(step.id));
+    return await _stepsStore.delete(
+      _db,
+      finder: finder,
+    );
+  }
+
   Future deleteAll() async {
     await _stepsStore.drop(
       _db,
     );
   }
-
 }

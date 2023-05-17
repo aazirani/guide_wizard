@@ -9,8 +9,7 @@ class DBConstants {
   static const String STORE_NAME_QUESTION = "database_" + "question";
   static const String STORE_NAME_TECHNICAL_NAME = 'database_' + 'technical_name';
   static const String STORE_NAME_TECHNICAL_NAME_WITH_TRANSLATIONS = 'database_' + 'technical_name_with_translations'; 
-
-
+  static const String STORE_NAME_UPDATED_AT_TIMES = 'database_' + 'updated_at_times';
 
   // DB Name
   static const DB_NAME = 'demo.db';

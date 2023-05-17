@@ -19,11 +19,11 @@ class Answer {
     required this.title,
     required this.order,
     this.image,
-    this.selected = false,
     required this.is_enabled,
     required this.creator_id,
     required this.created_at,
     required this.updated_at,
+    this.selected = false,
   });
 
   bool get hasTitle {
@@ -58,6 +58,7 @@ class Answer {
     //   image: Endpoints.domain +
     //       '/api/app/answers/img/${json["image"].toString().replaceAll(
     //           Endpoints.domain + '/api/app/answers/img/', '')}',
+
     return Answer(
       id: json["id"],
       question_id: json["question_id"],
@@ -68,6 +69,7 @@ class Answer {
       creator_id: json["creator_id"],
       created_at: json["created_at"],
       updated_at: json["updated_at"],
+      selected: json["selected"] ?? false,
     );
   }
 
@@ -81,6 +83,7 @@ class Answer {
         "creator_id": creator_id,
         "created_at": created_at,
         "updated_at": updated_at,
+        "selected": selected,
       };
 
   int getAnswerTitleID() {

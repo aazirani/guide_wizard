@@ -48,7 +48,6 @@ class TaskDataSource {
   }
 
   Future<TaskList> getTasksFromDb() async {
-
     print('Loading from database');
 
     // post list
@@ -58,16 +57,15 @@ class TaskDataSource {
     final recordSnapshots = await _tasksStore.find(
       _db,
     );
-
     // Making a List<Post> out of List<RecordSnapshot>
     if (recordSnapshots.length > 0) {
       tasksList = TaskList(
           tasks: recordSnapshots.map((snapshot) {
-            final task = Task.fromMap(snapshot.value);
-            // An ID is a key of a record from the database.
-            task.id = snapshot.key;
-            return task;
-          }).toList());
+        final task = Task.fromMap(snapshot.value);
+        // An ID is a key of a record from the database.
+        task.id = snapshot.key;
+        return task;
+      }).toList());
     }
 
     return tasksList;
@@ -93,9 +91,8 @@ class TaskDataSource {
   }
 
   Future deleteAll() async {
-    await _tasksStore.drop(
+    await _tasksStore.delete(
       _db,
     );
   }
-
 }

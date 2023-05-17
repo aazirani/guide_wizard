@@ -6,13 +6,16 @@ import 'package:boilerplate/data/local/datasources/sub_task/sub_task_datasource.
 import 'package:boilerplate/data/local/datasources/question/question_datasource.dart';
 import 'package:boilerplate/data/local/datasources/technical_name/technical_name_datasource.dart';
 import 'package:boilerplate/data/local/datasources/technical_name/technical_name_with_translations_datasource.dart';
+import 'package:boilerplate/data/local/datasources/updated_at_times/updated_at_times_datasource.dart';
 import 'package:boilerplate/data/network/apis/tranlsation/translation_api.dart';
+import 'package:boilerplate/data/network/apis/updated_at_times/updated_at_times_api.dart';
 import 'package:boilerplate/data/sharedpref/shared_preference_helper.dart';
 import 'package:boilerplate/models/post/post.dart';
 import 'package:boilerplate/models/post/post_list.dart';
 import 'package:boilerplate/models/translation/translation.dart';
 import 'package:boilerplate/models/technical_name/technical_name_with_translations_list.dart';
 import 'package:boilerplate/models/technical_name/technical_name_with_translations.dart';
+import 'package:boilerplate/models/updated_at_times/updated_at_times.dart';
 import 'package:sembast/sembast.dart';
 import 'package:boilerplate/models/answer/answer.dart';
 import 'package:boilerplate/models/question/question_list.dart';
@@ -38,10 +41,12 @@ class Repository {
   final SubTaskDataSource _subTaskDataSource;
   final QuestionDataSource _questionDataSource;
   final TechnicalNameWithTranslationsDataSource _technicalNameWithTranslationsDataSource;
+  final UpdatedAtTimesDataSource _updatedAtTimesDataSource;
 
   // api objects
   final PostApi _postApi;
   final StepApi _stepApi;
+  final UpdatedAtTimesApi _updatedAtTimesApi;
 
   // api objects
   final TechnicalNameApi _technicalNameApi;
@@ -53,6 +58,7 @@ class Repository {
   Repository(
     this._postApi,
     this._stepApi,
+    this._updatedAtTimesApi,
     this._sharedPrefsHelper,
     this._postDataSource,
     this._stepDataSource,
@@ -62,6 +68,7 @@ class Repository {
     this._technicalNameApi,
     this._technicalNameDataSource,
     this._technicalNameWithTranslationsDataSource,
+    this._updatedAtTimesDataSource,
   );
 
   // Step: ---------------------------------------------------------------------
@@ -72,7 +79,8 @@ class Repository {
   }
 
   Future<StepList> getStepFromApi() async {
-    return await _stepApi.getSteps().then((stepList) {
+    await truncateContent();
+    return await _stepApi.getSteps().then((stepList) async {
       stepList.steps.forEach((step) {
         _stepDataSource.insert(step);
         step.tasks.forEach((task) {
@@ -89,8 +97,12 @@ class Repository {
     });
   }
 
+  Future stepDatasourceCount() =>
+      _stepDataSource.count().catchError((error) => throw error);
+
   Future truncateStep() =>
       _stepDataSource.deleteAll().catchError((error) => throw error);
+
   Future<int> insertStep(Step step) => _stepDataSource
       .insert(step)
       .then((id) => id)
@@ -102,16 +114,17 @@ class Repository {
       .catchError((error) => throw error);
 
   Future<int> deleteStep(Step step) => _stepDataSource
-      .update(step)
+      .delete(step)
       .then((id) => id)
       .catchError((error) => throw error);
 
   // Task: ---------------------------------------------------------------------
   Future<TaskList> getTasks() async {
     //if already exists, get tasks from the database, otherwise, do the Api call.
-    return await _taskDataSource.count() > 0
-        ? _taskDataSource.getTasksFromDb()
-        : getTasksFromApi();
+    // return await _taskDataSource.count() > 0
+    //     ? _taskDataSource.getTasksFromDb()
+    //     : getTasksFromApi();
+    return await _taskDataSource.getTasksFromDb();
   }
 
   Future<TaskList> getTasksFromApi() async {
@@ -184,7 +197,7 @@ class Repository {
       .catchError((error) => throw error);
 
   Future<int> deleteTask(Task task) => _taskDataSource
-      .update(task)
+      .delete(task)
       .then((id) => id)
       .catchError((error) => throw error);
 
@@ -219,15 +232,16 @@ class Repository {
       .catchError((error) => throw error);
 
   Future<int> deleteSubTask(SubTask subTask) => _subTaskDataSource
-      .update(subTask)
+      .delete(subTask)
       .then((id) => id)
       .catchError((error) => throw error);
 
+  Future truncateSubTask() =>
+      _subTaskDataSource.deleteAll().catchError((error) => throw error);
+
   // Question: -----------------------------------------------------------------
   Future<QuestionList> getQuestions() async {
-    return await _questionDataSource.count() > 0
-        ? _questionDataSource.getQuestionsFromDb()
-        : getQuestionsFromApi();
+    return await _questionDataSource.getQuestionsFromDb();
   }
 
   Future<QuestionList> getQuestionsFromApi() async {
@@ -310,7 +324,7 @@ class Repository {
       .catchError((error) => throw error);
 
   Future<int> deleteQuestion(Question question) => _questionDataSource
-      .update(question)
+      .delete(question)
       .then((id) => id)
       .catchError((error) => throw error);
 
@@ -432,18 +446,26 @@ class Repository {
     // check to see if posts are present in database, then fetch from database
     // else make a network call to get all posts, store them into database for
     // later use
-    return await _technicalNameApi.getTechnicalNamesWithTranslations().then((t) {
-      t.technicalNameWithTranslations.forEach((technicalNameWithTranslations) {
-        _technicalNameWithTranslationsDataSource.insert(technicalNameWithTranslations);
-        // translationWithStepName.translations.forEach((translation) {
-        //   _languageDataSource.insert(translation.language);
-        // });
-      });
+    await truncateTechnicalNameWithTranslations();
+    return await _technicalNameWithTranslationsDataSource.count() > 0
+        ? _technicalNameWithTranslationsDataSource.getTranslationsFromDb()
+        : _technicalNameApi
+            .getTechnicalNamesWithTranslations()
+            .then((t) {
+          t.technicalNameWithTranslations.forEach((technicalNameWithTranslations) async {
+            _technicalNameWithTranslationsDataSource
+                .insert(technicalNameWithTranslations);
+            // translationWithStepName.translations.forEach((translation) {
+            //   _languageDataSource.insert(translation.language);
+            // });
+          });
 
       return t;
     }).catchError((error) => throw error);
   }
-  Future<List<TechnicalNameWithTranslations>> findTechnicalNameWithTranslations(int id) {
+
+  Future<List<TechnicalNameWithTranslations>> findTechnicalNameWithTranslations(
+      int id) {
     //creating filter
     List<Filter> filters = [];
 
@@ -475,13 +497,14 @@ class Repository {
   Future<int> deleteTranslationWithStepName(
           TechnicalNameWithTranslations translation) =>
       _technicalNameWithTranslationsDataSource
-          .update(translation)
+          .delete(translation)
           .then((id) => id)
           .catchError((error) => throw error);
 
   Future truncateTechnicalNameWithTranslations() =>
-      _technicalNameWithTranslationsDataSource.deleteAll().catchError((error) => throw error);
-
+      _technicalNameWithTranslationsDataSource
+          .deleteAll()
+          .catchError((error) => throw error);
 
   // Login:---------------------------------------------------------------------
   Future<bool> login(String email, String password) async {
@@ -500,7 +523,7 @@ class Repository {
   bool get isDarkMode => _sharedPrefsHelper.isDarkMode;
 
   // Language: -----------------------------------------------------------------
-   Future<void> changeLanguage(String value) =>
+  Future<void> changeLanguage(String value) =>
       _sharedPrefsHelper.changeLanguage(value);
 
   String? get currentLanguage => _sharedPrefsHelper.currentLanguage;
@@ -539,10 +562,123 @@ class Repository {
     }
   }
 
+  bool isUpdated(String maybeUpdated, String old){
+    if(maybeUpdated.compareTo(old) == 1){
+      return true;
+    }
+    return false;
+  }
+
+  bool isNotUpdated(String maybeUpdated, String old){
+    return !isUpdated(maybeUpdated, old);
+  }
+
+  // UpdatedAtTimes: -----------------------------------------------------------------
+  Future<bool> isContentUpdated(UpdatedAtTimes originUpdatedAt) async{
+    UpdatedAtTimes localUpdatedAt = await getTheLastUpdatedAtTimes();
+    // UpdatedAtTimes originUpdatedAt = await getUpdatedAtTimesFromApi();
+    // StepList stepList = await getStep();
+    // String contentUpdatedAt = stepList.steps.first.name.updated_at;
+    print("origin: " + originUpdatedAt.last_updated_at_content);
+    print("local: " + localUpdatedAt.last_updated_at_content);
+    return isUpdated(originUpdatedAt.last_updated_at_content, localUpdatedAt.last_updated_at_content);
+    // (await getStep()).steps.map((e) {
+    //   if(originUpdatedAt.last_updated_at_content.compareTo(localUpdatedAt.last_updated_at_content) == 1){
+    //     return true;
+    //   }
+    // });
+    return false;
+  }
+
+  Future updateContentIfNeeded() async{
+    UpdatedAtTimes originUpdatedAt = await getUpdatedAtTimesFromApi();
+    if(await isContentUpdated(originUpdatedAt)){
+      StepList _stepList = await getStep();
+      await truncateContent();
+      await _stepApi.getSteps().then((stepList) {
+        stepList.steps.forEach((step) {
+          _stepDataSource.insert(step);
+          step.tasks.forEach((task) {
+            _taskDataSource.insert(task);
+            task.sub_tasks.forEach((subTask) {
+              _subTaskDataSource.insert(subTask);
+            });
+            task.questions.forEach((question) {
+              Question? foundOldQuestion = _stepList.findQuestionByID(question.id);
+              if(foundOldQuestion != null){
+                _questionDataSource.insert(foundOldQuestion);
+              }
+              else{
+                _questionDataSource.insert(question);
+              }
+            });
+          });
+        });
+      });
+      await truncateUpdatedAtTimes();
+      await _updatedAtTimesDataSource.insert(originUpdatedAt);
+    }
+  }
+
+  Future<UpdatedAtTimes> getTheLastUpdatedAtTimes() async {
+    return await _updatedAtTimesDataSource.count() > 0
+        ? _updatedAtTimesDataSource.getUpdatedAtTimesFromDb()
+        : getUpdatedAtTimesFromApi();
+  }
+
+  Future<UpdatedAtTimes> getUpdatedAtTimesFromDB() async {
+    return await _updatedAtTimesDataSource.getUpdatedAtTimesFromDb();
+  }
+
+  Future<UpdatedAtTimes> getUpdatedAtTimesFromApi() async {
+    return await _updatedAtTimesApi.getUpdatedAtTimes().then((updatedAtTimes) {
+      return updatedAtTimes;
+    });
+  }
+
+  Future<List<UpdatedAtTimes>> findUpdatedAtTimesByID(int id) {
+    //creating filter
+    List<Filter> filters = [];
+
+    Filter dataLogTypeFilter = Filter.equals(DBConstants.FIELD_ID, id);
+    filters.add(dataLogTypeFilter);
+
+    //making db call
+    return _updatedAtTimesDataSource
+        .getAllSortedByFilter(filters: filters)
+        .then((updatedAtTimes) => updatedAtTimes)
+        .catchError((error) => throw error);
+  }
+
+  Future<int> insertUpdatedAtTimes(UpdatedAtTimes updatedAtTimes) => _updatedAtTimesDataSource
+      .insert(updatedAtTimes)
+      .then((id) => id)
+      .catchError((error) => throw error);
+
+  Future<int> updateUpdatedAtTimes(UpdatedAtTimes updatedAtTimes) => _updatedAtTimesDataSource
+      .update(updatedAtTimes)
+      .then((id) => id)
+      .catchError((error) => throw error);
+
+  Future<int> deleteUpdatedAtTimes(UpdatedAtTimes updatedAtTimes) => _updatedAtTimesDataSource
+      .delete(updatedAtTimes)
+      .then((id) => id)
+      .catchError((error) => throw error);
+
+  Future truncateUpdatedAtTimes() =>
+      _updatedAtTimesDataSource.deleteAll().catchError((error) => throw error);
+
+  Future truncateContent() async{
+    await truncateStep();
+    await truncateTask();
+    await truncateSubTask();
+    await truncateQuestions();
+    await truncateTechnicalNameWithTranslations();
+  }
+
   // Current Step Number: -----------------------------------------------------------------
   Future<void> setCurrentStep(int value) =>
       _sharedPrefsHelper.setCurrentStep(value);
 
   int? get currentStepNumber => _sharedPrefsHelper.currentStepNumber;
-
 }

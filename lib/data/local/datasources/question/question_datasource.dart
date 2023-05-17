@@ -6,7 +6,8 @@ import 'package:sembast/sembast.dart';
 class QuestionDataSource {
   // A Store with int keys and Map<String, dynamic> values.
   // This Store acts like a persistent map, values of which are Flogs objects converted to Map
-  final _questionsStore = intMapStoreFactory.store(DBConstants.STORE_NAME_QUESTION);
+  final _questionsStore =
+      intMapStoreFactory.store(DBConstants.STORE_NAME_QUESTION);
 
   // database instance
   final Database _db;
@@ -44,7 +45,6 @@ class QuestionDataSource {
   }
 
   Future<QuestionList> getQuestionsFromDb() async {
-
     print('Loading from database');
 
     // post list
@@ -54,16 +54,15 @@ class QuestionDataSource {
     final recordSnapshots = await _questionsStore.find(
       _db,
     );
-
     // Making a List<Post> out of List<RecordSnapshot>
-    if(recordSnapshots.length > 0) {
+    if (recordSnapshots.length > 0) {
       questionsList = QuestionList(
           questions: recordSnapshots.map((snapshot) {
-            final question = Question.fromMap(snapshot.value);
-            // An ID is a key of a record from the database.
-            question.id = snapshot.key;
-            return question;
-          }).toList());
+        final question = Question.fromMap(snapshot.value);
+        // An ID is a key of a record from the database.
+        question.id = snapshot.key;
+        return question;
+      }).toList());
     }
 
     return questionsList;
@@ -73,6 +72,7 @@ class QuestionDataSource {
     // For filtering by key (ID), RegEx, greater than, and many other criteria,
     // we use a Finder.
     final finder = Finder(filter: Filter.byKey(question.id));
+    print("here is the map: " + question.toMap().toString());
     return await _questionsStore.update(
       _db,
       question.toMap(),
@@ -93,5 +93,4 @@ class QuestionDataSource {
       _db,
     );
   }
-
 }

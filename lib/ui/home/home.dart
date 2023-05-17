@@ -10,6 +10,7 @@ import 'package:boilerplate/stores/question/questions_store.dart';
 import 'package:boilerplate/stores/step/step_store.dart';
 import 'package:boilerplate/stores/task/tasks_store.dart';
 import 'package:boilerplate/stores/technical_name/technical_name_with_translations_store.dart';
+import 'package:boilerplate/stores/updated_at_times/updated_at_times_store.dart';
 import 'package:boilerplate/ui/compressed_tasklist_timeline/compressed_task_list_timeline.dart';
 import 'package:boilerplate/ui/step_slider/step_slider_widget.dart';
 import 'package:boilerplate/ui/step_timeline/step_timeline.dart';
@@ -41,6 +42,7 @@ class _HomeScreenState extends State<HomeScreen> {
   late StepsStore _stepsStore;
   late TechnicalNameWithTranslationsStore _technicalNameWithTranslationsStore;
   late LanguageStore _languageStore;
+  late UpdatedAtTimesStore _updatedAtTimesStore;
   Map _source = {ConnectivityResult.none: false};
   final MyConnectivity _connectivity = MyConnectivity.instance;
 
@@ -55,6 +57,7 @@ class _HomeScreenState extends State<HomeScreen> {
     _technicalNameWithTranslationsStore =
         Provider.of<TechnicalNameWithTranslationsStore>(context);
     _languageStore = Provider.of<LanguageStore>(context);
+    _updatedAtTimesStore = Provider.of<UpdatedAtTimesStore>(context);
   }
 
   @override
@@ -64,24 +67,15 @@ class _HomeScreenState extends State<HomeScreen> {
     _connectivity.myStream.listen((source) {
       setState(() => _source = source);
     });
-    Future.delayed(Duration(milliseconds: 5000), () async {
+    Future.delayed(Duration(milliseconds: 000), () async {
       _languageStore.init();
       _technicalNameWithTranslationsStore.getCurrentLan(_languageStore.language_id!);
       print(_languageStore.locale);
-      // _loadDataAndShowLoadingDialog(context);
-      /*
-      Warning: Do NOT remove these comments
-       */
-      // late bool isDataLoaded;
-      // await SharedPreferences.getInstance().then((prefs) {
-      //   isDataLoaded = prefs.getBool(Preferences.is_data_loaded) ?? false;
-      // });
-      // if(!isDataLoaded) {
-        await _loadDataWithoutErrorHandling(context);
-      //   SharedPreferences.getInstance().then((prefs) {
-      //     prefs.setBool(Preferences.is_data_loaded, true);
-      //   });
-      // }
+
+      // Loading data (from datasource if data is downloaded before):
+      await _loadDataWithoutErrorHandling(context);
+      // Checking whether there is an update:
+      await _checkForUpdate(context);
     });
   }
 
@@ -188,6 +182,24 @@ class _HomeScreenState extends State<HomeScreen> {
     }
   }
 
+  Future _checkForUpdate(BuildContext context) async {
+    _dialog ??= SimpleFontelicoProgressDialog(context: context);
+    _dialog!.show(
+        message: AppLocalizations.of(context).translate("loading_dialog_text"),
+        type: SimpleFontelicoProgressDialogType.normal,
+        horizontal: true,
+        width: 175.0,
+        height: 75.0,
+        hideText: false,
+        indicatorColor: Colors.red);
+    await _technicalNameWithTranslationsStore
+        .getTechnicalNameWithTranslations();
+    await _updatedAtTimesStore.updateContentIfNeeded();
+    await _tasksStore.getAllTasks();
+    await _questionsStore.getQuestions();
+    _dialog!.hide();
+  }
+
   Future _loadDataWithoutErrorHandling(BuildContext context) async {
     _dialog ??= SimpleFontelicoProgressDialog(context: context);
     _dialog!.show(
@@ -199,20 +211,11 @@ class _HomeScreenState extends State<HomeScreen> {
         hideText: false,
         indicatorColor: AppColors.main_color);
     if (!_stepsStore.loading) {
-      //truncate all data available in datasources
-      await _stepsStore.truncateSteps();
-      await _technicalNameWithTranslationsStore
-          .truncateTechnicalNameWithTranslations();
-      await _tasksStore.truncateTasks();
-      await _questionsStore.truncateQuestions();
-      await _technicalNameWithTranslationsStore
-          .truncateTechnicalNameWithTranslations();
       //fill stores with updated data
       await _technicalNameWithTranslationsStore
           .getTechnicalNameWithTranslations();
       await _stepsStore.getSteps();
-
-      await _tasksStore.getTasks();
+      await _tasksStore.getAllTasks();
       await _questionsStore.getQuestions();
     }
     _dialog!.hide();
@@ -281,7 +284,7 @@ class _HomeScreenState extends State<HomeScreen> {
         //task compressed timeline
         Observer(
             builder: (_) =>
-                CompressedTasklistTimeline(stepList: _stepsStore.stepList))
+                CompressedTasklistTimeline(stepList: _stepsStore.stepList)),
         // CompressedTasklistTimeline(),
       ],
     );

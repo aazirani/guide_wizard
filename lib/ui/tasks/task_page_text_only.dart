@@ -1,6 +1,7 @@
 import 'package:boilerplate/constants/colors.dart';
 import 'package:boilerplate/constants/dimens.dart';
 import 'package:boilerplate/stores/task/tasks_store.dart';
+import 'package:boilerplate/stores/task_list/task_list_store.dart';
 import 'package:boilerplate/widgets/sub_task_widget.dart';
 import 'package:boilerplate/widgets/task_page_appbar_widget.dart';
 import 'package:flutter/material.dart';
@@ -23,6 +24,7 @@ class _TaskPageTextOnlyState extends State<TaskPageTextOnly> {
   RenderParametersManager renderManager = RenderParametersManager<dynamic>();
   // stores:--------------------------------------------------------------------
   late TasksStore _tasksStore;
+  late TaskListStore _taskListStore;
   late TechnicalNameWithTranslationsStore _technicalNameWithTranslationsStore;
 
   @override
@@ -30,6 +32,7 @@ class _TaskPageTextOnlyState extends State<TaskPageTextOnly> {
     super.didChangeDependencies();
     // initializing stores
     _tasksStore = Provider.of<TasksStore>(context);
+    _taskListStore = Provider.of<TaskListStore>(context);
     _technicalNameWithTranslationsStore =
         Provider.of<TechnicalNameWithTranslationsStore>(context);
   }
@@ -57,19 +60,15 @@ class _TaskPageTextOnlyState extends State<TaskPageTextOnly> {
   }
 
   _buildSubTasksList() {
-    return Observer(
-      builder: (context) {
-        return ListView.builder(
-          physics: ScrollPhysics(),
-          shrinkWrap: true,
-          itemCount: _tasksStore.getTaskById(widget.task_id).sub_tasks.length,
-          itemBuilder: (context, i) {
-            return SubTaskWidget(
-              index: i,
-              subTasks: _tasksStore.getTaskById(widget.task_id).sub_tasks,
-              renderManager: renderManager,
-            );
-          },
+    return ListView.builder(
+      physics: ScrollPhysics(),
+      shrinkWrap: true,
+      itemCount: _tasksStore.getTaskById(widget.task_id).sub_tasks.length,
+      itemBuilder: (context, i) {
+        return SubTaskWidget(
+          index: i,
+          subTasks: _tasksStore.getTaskById(widget.task_id).sub_tasks,
+          renderManager: renderManager,
         );
       },
     );
