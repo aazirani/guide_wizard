@@ -675,10 +675,10 @@ class Repository {
     await truncateQuestions();
     await truncateTechnicalNameWithTranslations();
   }
-}
 
   // Current Step Number: -----------------------------------------------------------------
   Future<void> setCurrentStep(int value) =>
       _sharedPrefsHelper.setCurrentStep(value);
 
   int? get currentStepNumber => _sharedPrefsHelper.currentStepNumber;
+}
