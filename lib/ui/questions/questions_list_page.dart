@@ -92,7 +92,6 @@ class _QuestionsListPageState extends State<QuestionsListPage> {
         ),
 
       ),
-      backgroundColor: AppColors.white,
     );
   }
 }
