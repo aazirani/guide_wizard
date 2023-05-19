@@ -64,4 +64,12 @@ class SharedPreferenceHelper {
   Future<void> setCurrentStep(int new_current_step) {
     return _sharedPreference.setInt(Preferences.current_step_number, new_current_step);
   }
+
+  int? get stepsCount {
+    return _sharedPreference.getInt(Preferences.steps_count);
+  }
+
+  Future<void> setStepsCount(int new_steps_count) {
+    return _sharedPreference.setInt(Preferences.steps_count, new_steps_count);
+  }
 }

@@ -545,4 +545,10 @@ class Repository {
 
   int? get currentStepNumber => _sharedPrefsHelper.currentStepNumber;
 
+  Future<void> setStepsCount(int value) =>
+      _sharedPrefsHelper.setStepsCount(value);
+
+  int? get stepsCount => _sharedPrefsHelper.stepsCount;
+
+
 }
