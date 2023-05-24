@@ -81,18 +81,18 @@ class Repository {
   Future<StepList> getStepFromApi() async {
     await truncateContent();
     return await _stepApi.getSteps().then((stepList) async {
-      stepList.steps.forEach((step) {
-        _stepDataSource.insert(step);
-        step.tasks.forEach((task) {
-          _taskDataSource.insert(task);
-          task.sub_tasks.forEach((subTask) {
-            _subTaskDataSource.insert(subTask);
-          });
-          task.questions.forEach((question) {
-            _questionDataSource.insert(question);
-          });
-        });
-      });
+      for(Step step in stepList.steps){
+        await _stepDataSource.insert(step);
+        for(Task task in step.tasks){
+          await _taskDataSource.insert(task);
+          for(SubTask subTask in task.sub_tasks){
+            await _subTaskDataSource.insert(subTask);
+          }
+          for(Question question in task.questions){
+            await _questionDataSource.insert(question);
+          }
+        }
+      }
       return stepList;
     });
   }
@@ -670,7 +670,7 @@ class Repository {
 
   Future truncateContent() async{
     await truncateStep();
-    await truncateTask();
+    // await truncateTask();
     await truncateSubTask();
     await truncateQuestions();
     await truncateTechnicalNameWithTranslations();
