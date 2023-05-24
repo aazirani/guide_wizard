@@ -670,7 +670,7 @@ class Repository {
 
   Future truncateContent() async{
     await truncateStep();
-    // await truncateTask();
+    await truncateTask();
     await truncateSubTask();
     await truncateQuestions();
     await truncateTechnicalNameWithTranslations();
