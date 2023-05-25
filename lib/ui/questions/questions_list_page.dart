@@ -1,11 +1,11 @@
 import 'package:boilerplate/constants/colors.dart';
 import 'package:boilerplate/constants/dimens.dart';
-import 'package:boilerplate/stores/question/questions_store.dart';
 import 'package:boilerplate/utils/locale/app_localization.dart';
 import 'package:boilerplate/widgets/question_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:scrollable_positioned_list/scrollable_positioned_list.dart';
+import 'package:boilerplate/stores/data/data_store.dart';
 
 class QuestionsListPage extends StatefulWidget {
   QuestionsListPage({Key? key}) : super(key: key);
@@ -17,13 +17,13 @@ class QuestionsListPage extends StatefulWidget {
 class _QuestionsListPageState extends State<QuestionsListPage> {
   late final itemScrollController;
   // stores:--------------------------------------------------------------------
-  late QuestionsStore _questionsStore;
+  late DataStore _dataStore;
 
   @override
   void didChangeDependencies() {
     super.didChangeDependencies();
     // initializing stores
-    _questionsStore = Provider.of<QuestionsStore>(context);
+    _dataStore = Provider.of<DataStore>(context);
   }
 
   @override
@@ -58,8 +58,8 @@ class _QuestionsListPageState extends State<QuestionsListPage> {
     return QuestionWidget(
       index: index,
       itemScrollController: itemScrollController,
-      question: _questionsStore.questionList!.elementAt(index),
-      isLastQuestion: index == _questionsStore.questionList!.length - 1,
+      question: _dataStore.questionList!.elementAt(index),
+      isLastQuestion: index == _dataStore.questionList!.length - 1,
     );
   }
 
@@ -82,15 +82,13 @@ class _QuestionsListPageState extends State<QuestionsListPage> {
             ),
           ),
           child: ScrollablePositionedList.builder(
-            itemCount: _questionsStore.questionList!.length,
+            itemCount: _dataStore.questionList!.length,
             itemBuilder: (context, index) => Card(
-            
-            margin: EdgeInsets.all(5.0),
-            child: _buildQuestionWidget(index)),
+                margin: EdgeInsets.all(5.0),
+                child: _buildQuestionWidget(index)),
             itemScrollController: itemScrollController,
           ),
         ),
-
       ),
     );
   }

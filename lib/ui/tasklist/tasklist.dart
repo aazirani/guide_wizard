@@ -1,19 +1,14 @@
 import 'package:boilerplate/constants/colors.dart';
 import 'package:boilerplate/constants/dimens.dart';
-import 'package:boilerplate/models/task/task.dart';
-import 'package:boilerplate/stores/step/steps_store.dart';
 import 'package:boilerplate/stores/technical_name/technical_name_with_translations_store.dart';
 import 'package:boilerplate/ui/tasklist/tasklist_timeline.dart';
 import 'package:flutter/material.dart';
 import 'package:boilerplate/widgets/measure_size.dart';
 import 'package:boilerplate/utils/locale/app_localization.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
-import 'package:boilerplate/stores/task_list/task_list_store.dart';
 import 'package:provider/provider.dart';
 import 'package:boilerplate/ui/home/home.dart';
-import 'package:boilerplate/models/step/step.dart' as s;
-
-import '../../stores/task/tasks_store.dart';
+import 'package:boilerplate/stores/data/data_store.dart';
 
 class TaskList extends StatefulWidget {
   int currentStepNo;
@@ -24,17 +19,15 @@ class TaskList extends StatefulWidget {
 }
 
 class _TaskListState extends State<TaskList> {
-  // late TaskListStore _taskListStore;
-  late TasksStore _tasksStore;
-  late StepsStore _stepsStore;
+
+  late DataStore _dataStore;
   late TechnicalNameWithTranslationsStore _technicalNameWithTranslationsStore;
 
   @override
   void didChangeDependencies() {
     super.didChangeDependencies();
     // initializing stores
-    _tasksStore = Provider.of<TasksStore>(context);
-    _stepsStore = Provider.of<StepsStore>(context);
+    _dataStore = Provider.of<DataStore>(context);
     _technicalNameWithTranslationsStore =
         Provider.of<TechnicalNameWithTranslationsStore>(context);
   }
@@ -52,7 +45,7 @@ class _TaskListState extends State<TaskList> {
   //appBar methods .............................................................
   PreferredSizeWidget _buildAppBar() {
     //text id of the step we want to find the title of
-    int step_title_id = _stepsStore.stepList.steps[widget.currentStepNo].name.id;
+    int step_title_id = _dataStore.stepList.steps[widget.currentStepNo].name.id;
     return AppBar(
         backgroundColor: AppColors.main_color,
         toolbarHeight: Dimens.appBar["toolbarHeight"],
@@ -108,7 +101,7 @@ class _TaskListState extends State<TaskList> {
                 padding: Dimens.numberOfTasksPadding,
                 child: Observer(
                   builder: (_) => Text(
-                      "${_tasksStore.taskList.numTasks} ${AppLocalizations.of(context).translate('tasks')}",
+                      "${_dataStore.taskList.numTasks} ${AppLocalizations.of(context).translate('tasks')}",
                       style: TextStyle(color: AppColors.white)),
                 )),
             SizedBox(height: 5),
@@ -140,7 +133,7 @@ class _TaskListState extends State<TaskList> {
                 builder: (_) => ListView.builder(
                   scrollDirection: Axis.vertical,
                   controller: scrollController,
-                  itemCount: _tasksStore.taskList.numTasks,
+                  itemCount: _dataStore.taskList.numTasks,
                   itemBuilder: (context, i) {
                     return TaskListTimeLine(task_number: i);
                   },

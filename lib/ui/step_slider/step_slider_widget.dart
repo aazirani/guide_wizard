@@ -1,21 +1,16 @@
 import 'package:boilerplate/constants/colors.dart';
 import 'package:boilerplate/constants/dimens.dart';
 import 'package:boilerplate/stores/current_step/current_step_store.dart';
-import 'package:boilerplate/stores/question/questions_store.dart';
 import 'package:boilerplate/stores/step/step_store.dart';
 import 'package:boilerplate/ui/questions/questions_list_page.dart';
-import 'package:boilerplate/utils/enums/enum.dart';
 import 'package:boilerplate/utils/locale/app_localization.dart';
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:boilerplate/stores/task_list/task_list_store.dart';
 import 'package:boilerplate/ui/tasklist/tasklist.dart';
-import 'package:boilerplate/stores/step/steps_store.dart';
 import 'package:boilerplate/stores/technical_name/technical_name_with_translations_store.dart';
 import 'package:boilerplate/models/step/step_list.dart';
-
-import '../../stores/task/tasks_store.dart';
+import 'package:boilerplate/stores/data/data_store.dart';
 
 class StepSliderWidget extends StatefulWidget {
   StepList stepList;
@@ -26,24 +21,17 @@ class StepSliderWidget extends StatefulWidget {
 }
 
 class _StepSliderWidgetState extends State<StepSliderWidget> {
+  late DataStore _dataStore;
   late StepStore _stepStore;
-  late StepsStore _stepsStore;
-  late TaskListStore _taskListStore;
-  late TasksStore _tasksStore;
-  late QuestionsStore _questionsStore;
   late TechnicalNameWithTranslationsStore _technicalNameWithTranslationsStore;
   late CurrentStepStore _currentStepStore;
-
 
   @override
   void didChangeDependencies() {
     super.didChangeDependencies();
     // initializing stores
+    _dataStore = Provider.of<DataStore>(context);
     _stepStore = Provider.of<StepStore>(context);
-    _stepsStore = Provider.of<StepsStore>(context);
-    _taskListStore = Provider.of<TaskListStore>(context);
-    _tasksStore = Provider.of<TasksStore>(context);
-    _questionsStore = Provider.of<QuestionsStore>(context);
     _technicalNameWithTranslationsStore =
         Provider.of<TechnicalNameWithTranslationsStore>(context);
     _currentStepStore = Provider.of<CurrentStepStore>(context);
@@ -73,7 +61,7 @@ class _StepSliderWidgetState extends State<StepSliderWidget> {
           enlargeCenterPage: false,
           enableInfiniteScroll: false),
       items: List<int>.generate(
-          _stepsStore.stepList.steps.length, (index) => index).map((index) {
+            _dataStore.stepList.steps.length, (index) => index).map((index) {
         return Builder(
           builder: (BuildContext context) {
             return GestureDetector(
@@ -106,30 +94,29 @@ class _StepSliderWidgetState extends State<StepSliderWidget> {
   }
 
   BoxBorder _buildSliderBorder(index) {
-    if(index < _currentStepStore.current_step_number)
+    if (index < _currentStepStore.current_step_number)
       return _buildDoneBorder();
-    else if(index == _currentStepStore.current_step_number)
+    else if (index == _currentStepStore.current_step_number)
       return _buildPendingBorder();
     return _buildNotStartedBorder();
   }
 
   Color _buildSliderColor(index) {
-    if(index <= _currentStepStore.current_step_number){
+    if (index <= _currentStepStore.current_step_number) {
       return AppColors.stepSliderAvailableColor;
     }
     return AppColors.stepSliderUnavailableColor;
   }
 
   Widget _buildAvatar(int index) {
-    return
-        Padding(
+    return Padding(
       padding: Dimens.stepAvatar,
       child: Container(
           width: double.maxFinite,
           alignment: Alignment.centerRight,
           decoration: BoxDecoration(
             image: DecorationImage(
-                image: NetworkImage(_stepsStore.getStepImage(index))),
+                image: NetworkImage(_dataStore.getStepImage(index))),
           )),
     );
   }
@@ -154,7 +141,7 @@ class _StepSliderWidgetState extends State<StepSliderWidget> {
   }
 
   Widget _buildStepTitle(currentStepNo) {
-    var step_title_id = _stepsStore.stepList.steps[currentStepNo].name.id;
+    var step_title_id = _dataStore.stepList.steps[currentStepNo].name.id;
     return Text(
       "${_technicalNameWithTranslationsStore.getTechnicalNames(step_title_id)}",
       style: TextStyle(fontSize: 17, color: AppColors.main_color),
@@ -163,7 +150,7 @@ class _StepSliderWidgetState extends State<StepSliderWidget> {
 
   Widget _buildStepNoOfTasks(currentStepNo) {
     return Text(
-        "${_stepsStore.stepList.steps[currentStepNo].numTasks}" +
+        "${_dataStore.stepList.steps[currentStepNo].numTasks}" +
             " " +
             AppLocalizations.of(context).translate('tasks'),
         style: TextStyle(fontSize: 15, color: AppColors.main_color));
@@ -178,8 +165,7 @@ class _StepSliderWidgetState extends State<StepSliderWidget> {
             Navigator.push(context,
                 MaterialPageRoute(builder: (context) => QuestionsListPage()));
           } else {
-            // _taskListStore.getTaskList(_stepStore.currentStep);
-            _tasksStore.getTasks(_stepStore.currentStep);
+            _dataStore.getTasks(_stepStore.currentStep);
             Navigator.push(
                 context,
                 MaterialPageRoute(
@@ -246,12 +232,5 @@ class _StepSliderWidgetState extends State<StepSliderWidget> {
   //general methods ............................................................
   double _getScreenHeight() => MediaQuery.of(context).size.height;
   double _getScreenWidth() => MediaQuery.of(context).size.width;
-  // StepStatus _getStepStatus(index) {
-  //   if (_stepStore.pending == index) {
-  //     return StepStatus.isPending;
-  //   } else if (index < _stepStore.pending) {
-  //     return StepStatus.isDone;
-  //   }
-  //   return StepStatus.notStarted;
-  // }
+
 }

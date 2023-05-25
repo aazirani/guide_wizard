@@ -3,13 +3,10 @@ import 'dart:math' as math;
 import 'package:boilerplate/constants/colors.dart';
 import 'package:boilerplate/constants/dimens.dart';
 import 'package:boilerplate/models/question/question.dart';
-import 'package:boilerplate/stores/question/questions_store.dart';
 import 'package:boilerplate/stores/current_step/current_step_store.dart';
 import 'package:boilerplate/stores/step/step_store.dart';
-import 'package:boilerplate/stores/task_list/task_list_store.dart';
 import 'package:boilerplate/stores/technical_name/technical_name_with_translations_store.dart';
 import 'package:boilerplate/ui/home/home.dart';
-import 'package:boilerplate/ui/tasklist/tasklist.dart';
 import 'package:boilerplate/utils/locale/app_localization.dart';
 import 'package:boilerplate/widgets/scrolling_overflow_text.dart';
 import 'package:flutter/material.dart';
@@ -17,7 +14,7 @@ import 'package:marquee/marquee.dart';
 import 'package:provider/provider.dart';
 import 'package:scrollable_positioned_list/scrollable_positioned_list.dart';
 import 'package:boilerplate/providers/question_widget_state/question_widget_state.dart';
-import 'package:boilerplate/stores/task/tasks_store.dart';
+import 'package:boilerplate/stores/data/data_store.dart';
 
 class QuestionWidget extends StatefulWidget {
   Question question;
@@ -39,9 +36,8 @@ class QuestionWidget extends StatefulWidget {
 
 class _QuestionWidgetState extends State<QuestionWidget>
     with AutomaticKeepAliveClientMixin {
+  late DataStore _dataStore;
   late StepStore _stepStore;
-  late QuestionsStore _questionsStore;
-  late TasksStore _tasksStore;
   late TechnicalNameWithTranslationsStore _technicalNameWithTranslationsStore;
   late CurrentStepStore _currentStepStore;
 
@@ -49,12 +45,10 @@ class _QuestionWidgetState extends State<QuestionWidget>
   void didChangeDependencies() {
     super.didChangeDependencies();
     // initializing stores
+    _dataStore = Provider.of<DataStore>(context);
     _stepStore = Provider.of<StepStore>(context);
-    _questionsStore = Provider.of<QuestionsStore>(context);
-    _tasksStore = Provider.of<TasksStore>(context);
     _technicalNameWithTranslationsStore =
         Provider.of<TechnicalNameWithTranslationsStore>(context);
-    _currentStepStore = Provider.of<CurrentStepStore>(context);
   }
 
   @override
@@ -92,10 +86,13 @@ class _QuestionWidgetState extends State<QuestionWidget>
       child: TextButton(
         style: _buildQuestionsButtonStyle(AppColors.nextStepColor),
         onPressed: () {
-          _tasksStore.getTasks(_stepStore.currentStep);
+          _dataStore.getTasks(_stepStore.currentStep);
           _currentStepStore.setStepNumber(1);
-          Navigator.of(context).pushAndRemoveUntil(MaterialPageRoute(builder: (context) =>
-              HomeScreen()), (Route<dynamic> route) => false).then((value) => setState(() {}));
+          Navigator.of(context)
+              .pushAndRemoveUntil(
+                  MaterialPageRoute(builder: (context) => HomeScreen()),
+                  (Route<dynamic> route) => false)
+              .then((value) => setState(() {}));
         },
         child: Text(
           AppLocalizations.of(context).translate('next_stage_button_text'),
@@ -121,7 +118,6 @@ class _QuestionWidgetState extends State<QuestionWidget>
         color: Colors.transparent,
       ),
       decoration: BoxDecoration(
-          // color: AppColors.main_color,
           borderRadius: BorderRadius.all(Radius.circular(5))),
     );
   }
@@ -154,7 +150,6 @@ class _QuestionWidgetState extends State<QuestionWidget>
   }
 
   Widget _buildTextOptions() {
-    // var answer_title_id = widget.question
     return Column(
       children: widget.question
           .getAnswers()
@@ -173,11 +168,11 @@ class _QuestionWidgetState extends State<QuestionWidget>
                   value: option.isSelected,
                   onChanged: (value) {
                     setState(() {
-                      _questionsStore.updateQuestion(widget.question, option, value ?? false);
+                      _dataStore.updateQuestion(
+                          widget.question, option, value ?? false);
                     });
                   },
                   title: Text(
-                    // option.getTitle
                     _technicalNameWithTranslationsStore
                         .getTechnicalNames(option.getAnswerTitleID())!,
                   ),
@@ -203,7 +198,10 @@ class _QuestionWidgetState extends State<QuestionWidget>
                   value: widget.question.getAnswerByIndex(index).isSelected,
                   onChanged: (value) {
                     setState(() {
-                      _questionsStore.updateQuestion(widget.question, widget.question.getAnswerByIndex(index), value ?? false);
+                      _dataStore.updateQuestion(
+                          widget.question,
+                          widget.question.getAnswerByIndex(index),
+                          value ?? false);
                     });
                   },
                   checkColor: Colors.white,
@@ -217,7 +215,6 @@ class _QuestionWidgetState extends State<QuestionWidget>
             ),
             Flexible(
               child: Text(
-                // widget.question.getAnswerByIndex(index).getTitle,
                 _technicalNameWithTranslationsStore
                     .getTechnicalNames(answer_title_id)!,
                 style: TextStyle(
@@ -241,7 +238,8 @@ class _QuestionWidgetState extends State<QuestionWidget>
       value: widget.question.getAnswerByIndex(index).isSelected,
       onChanged: (value) {
         setState(() {
-          _questionsStore.updateQuestion(widget.question, widget.question.getAnswerByIndex(index), value ?? false);
+          _dataStore.updateQuestion(widget.question,
+              widget.question.getAnswerByIndex(index), value ?? false);
         });
       },
       checkColor: AppColors.white,
@@ -290,7 +288,10 @@ class _QuestionWidgetState extends State<QuestionWidget>
               contentPadding: EdgeInsets.zero,
               onTap: () {
                 setState(() {
-                  _questionsStore.updateQuestion(widget.question, widget.question.getAnswerByIndex(index), !widget.question.getAnswerByIndex(index).selected);
+                  _dataStore.updateQuestion(
+                      widget.question,
+                      widget.question.getAnswerByIndex(index),
+                      !widget.question.getAnswerByIndex(index).selected);
                 });
               },
               shape: RoundedRectangleBorder(
@@ -301,7 +302,6 @@ class _QuestionWidgetState extends State<QuestionWidget>
                     width: 2),
                 borderRadius: BorderRadius.circular(5),
               ),
-              // checkboxShape: CircleBorder(),
               title: Column(
                 children: [
                   _buildImageLoader(
@@ -309,7 +309,8 @@ class _QuestionWidgetState extends State<QuestionWidget>
                   _buildImageOptionSubtitle(index),
                 ],
               ),
-              tileColor: Color.fromARGB(255, 243, 243, 243),
+              // tileColor: Color.fromARGB(255, 243, 243, 243),
+              tileColor: AppColors.greys[500]
             ),
           ),
           _buildImageCheckBox(index),
@@ -378,7 +379,6 @@ class _QuestionWidgetState extends State<QuestionWidget>
     return Container(
       margin: Dimens.questionDescriptionPadding,
       child: Text(
-        // widget.question.getSubTitle,
         _technicalNameWithTranslationsStore
             .getTechnicalNames(question_subtitle_id)!,
       ),

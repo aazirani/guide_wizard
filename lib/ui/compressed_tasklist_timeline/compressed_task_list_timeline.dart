@@ -8,11 +8,12 @@ import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:provider/provider.dart';
 import 'package:timelines/timelines.dart';
-import 'package:boilerplate/stores/step/steps_store.dart';
+import 'package:boilerplate/stores/data/data_store.dart';
 
 class CompressedTasklistTimeline extends StatefulWidget {
   StepList stepList;
-  CompressedTasklistTimeline({Key? key, required this.stepList}) : super(key: key);
+  CompressedTasklistTimeline({Key? key, required this.stepList})
+      : super(key: key);
 
   @override
   State<CompressedTasklistTimeline> createState() =>
@@ -21,8 +22,8 @@ class CompressedTasklistTimeline extends StatefulWidget {
 
 class _CompressedTasklistTimelineState
     extends State<CompressedTasklistTimeline> {
+  late DataStore _dataStore;
   late StepStore _stepStore;
-  late StepsStore _stepsStore;
   late TechnicalNameWithTranslationsStore _technicalNameWithTranslationsStore;
 
   @override
@@ -30,7 +31,7 @@ class _CompressedTasklistTimelineState
     super.didChangeDependencies();
     // initializing stores
     _stepStore = Provider.of<StepStore>(context);
-    _stepsStore = Provider.of<StepsStore>(context);
+    _dataStore = Provider.of<DataStore>(context);
     _technicalNameWithTranslationsStore =
         Provider.of<TechnicalNameWithTranslationsStore>(context);
   }
@@ -62,9 +63,9 @@ class _CompressedTasklistTimelineState
               nodePosition: 0.009,
             ),
             builder: TimelineTileBuilder(
-              itemCount: _stepsStore.stepList.steps.length == 0
+              itemCount: _dataStore.stepList.steps.length == 0
                   ? 0
-                  : _stepsStore
+                  : _dataStore
                       .stepList.steps[(_stepStore.currentStep) - 1].numTasks,
               itemExtent: 70,
               contentsBuilder: (context, index) =>
@@ -126,12 +127,11 @@ class _CompressedTasklistTimelineState
   }
 
   Widget _buildContentTitle(index, stepStore) {
-    var step_title_id = _stepsStore
+    var step_title_id = _dataStore
         .stepList.steps[stepStore.currentStep - 1].tasks[index].text.id;
     return Align(
       alignment: Alignment.centerLeft,
       child: Text(
-          // "${_stepsStore.stepList.steps[stepStore.currentStep - 1].tasks[index].text.technical_name}",
           "${_technicalNameWithTranslationsStore.getTechnicalNames(step_title_id)}",
           style: TextStyle(
             color: AppColors.main_color,

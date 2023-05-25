@@ -1,5 +1,4 @@
 import 'dart:async';
-import 'dart:convert';
 import 'dart:io';
 import 'package:boilerplate/constants/colors.dart';
 import 'package:boilerplate/constants/dimens.dart';
@@ -7,9 +6,7 @@ import 'package:boilerplate/data/network/constants/endpoints.dart';
 import 'package:boilerplate/data/sharedpref/constants/preferences.dart';
 import 'package:boilerplate/models/technical_name/technical_name_with_translations_list.dart';
 import 'package:boilerplate/stores/current_step/current_step_store.dart';
-import 'package:boilerplate/stores/question/questions_store.dart';
 import 'package:boilerplate/stores/step/step_store.dart';
-import 'package:boilerplate/stores/task/tasks_store.dart';
 import 'package:boilerplate/stores/technical_name/technical_name_with_translations_store.dart';
 import 'package:boilerplate/stores/updated_at_times/updated_at_times_store.dart';
 import 'package:boilerplate/ui/compressed_tasklist_timeline/compressed_task_list_timeline.dart';
@@ -18,13 +15,11 @@ import 'package:boilerplate/ui/step_timeline/step_timeline.dart';
 import 'package:boilerplate/utils/locale/app_localization.dart';
 import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:provider/provider.dart';
-import 'package:boilerplate/stores/step/steps_store.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 import 'package:simple_fontellico_progress_dialog/simple_fontico_loading.dart';
 import 'package:boilerplate/stores/language/language_store.dart';
+import 'package:boilerplate/stores/data/data_store.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({
@@ -37,10 +32,9 @@ class HomeScreen extends StatefulWidget {
 
 class _HomeScreenState extends State<HomeScreen> {
   //stores:---------------------------------------------------------------------
-  late TasksStore _tasksStore;
-  late QuestionsStore _questionsStore;
+  // late TasksStore _tasksStore;
+  late DataStore _dataStore;
   late StepStore _stepStore;
-  late StepsStore _stepsStore;
   late TechnicalNameWithTranslationsStore _technicalNameWithTranslationsStore;
   late LanguageStore _languageStore;
   late UpdatedAtTimesStore _updatedAtTimesStore;
@@ -52,10 +46,8 @@ class _HomeScreenState extends State<HomeScreen> {
   void didChangeDependencies() {
     super.didChangeDependencies();
     // initializing stores
-    _tasksStore = Provider.of<TasksStore>(context);
-    _questionsStore = Provider.of<QuestionsStore>(context);
+    _dataStore = Provider.of<DataStore>(context);
     _stepStore = Provider.of<StepStore>(context);
-    _stepsStore = Provider.of<StepsStore>(context);
     _technicalNameWithTranslationsStore =
         Provider.of<TechnicalNameWithTranslationsStore>(context);
     _languageStore = Provider.of<LanguageStore>(context);
@@ -72,7 +64,8 @@ class _HomeScreenState extends State<HomeScreen> {
     });
     Future.delayed(Duration(milliseconds: 000), () async {
       _languageStore.init();
-      _technicalNameWithTranslationsStore.getCurrentLan(_languageStore.language_id!);
+      _technicalNameWithTranslationsStore
+          .getCurrentLan(_languageStore.language_id!);
       print(_languageStore.locale);
 
       // Loading data (from datasource if data is downloaded before):
@@ -173,7 +166,8 @@ class _HomeScreenState extends State<HomeScreen> {
         indicatorColor: AppColors.main_color);
     if (await _isConnectedToInternet()) {
       if (await _canConnectToServer()) {
-        await _stepsStore.getSteps();
+        // await _stepsStore.getSteps();
+        await _dataStore.getSteps();
         _dialog!.hide();
       } else {
         _dialog!.hide();
@@ -198,8 +192,8 @@ class _HomeScreenState extends State<HomeScreen> {
     await _technicalNameWithTranslationsStore
         .getTechnicalNameWithTranslations();
     await _updatedAtTimesStore.updateContentIfNeeded();
-    await _tasksStore.getAllTasks();
-    await _questionsStore.getQuestions();
+    await _dataStore.getAllTasks();
+    await _dataStore.getQuestions();
     _dialog!.hide();
   }
 
@@ -213,14 +207,14 @@ class _HomeScreenState extends State<HomeScreen> {
         height: 75.0,
         hideText: false,
         indicatorColor: AppColors.main_color);
-    if (!_stepsStore.loading) {
+    if (!_dataStore.stepLoading) {
       //fill stores with updated data
       await _technicalNameWithTranslationsStore
           .getTechnicalNameWithTranslations();
-      await _stepsStore.getSteps();
-      await _currentStepStore.setStepsCount(_stepsStore.stepList.steps.length);
-      await _tasksStore.getAllTasks();
-      await _questionsStore.getQuestions();
+      await _dataStore.getSteps();
+      await _currentStepStore.setStepsCount(_dataStore.stepList.steps.length);
+      await _dataStore.getAllTasks();
+      await _dataStore.getQuestions();
     }
     _dialog!.hide();
   }
@@ -275,7 +269,7 @@ class _HomeScreenState extends State<HomeScreen> {
         _buildCurrentStepIndicator(),
         //step slider
         Observer(
-            builder: (_) => StepSliderWidget(stepList: _stepsStore.stepList)),
+            builder: (_) => StepSliderWidget(stepList: _dataStore.stepList)),
         // StepSliderWidget(),
         //step timeline
         //TODO: save current and pending steps in shared preferences
@@ -288,7 +282,7 @@ class _HomeScreenState extends State<HomeScreen> {
         //task compressed timeline
         Observer(
             builder: (_) =>
-                CompressedTasklistTimeline(stepList: _stepsStore.stepList)),
+                CompressedTasklistTimeline(stepList: _dataStore.stepList)),
         // CompressedTasklistTimeline(),
       ],
     );
