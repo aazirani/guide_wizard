@@ -78,24 +78,27 @@ class Repository {
         : getStepFromApi();
   }
 
+
   Future<StepList> getStepFromApi() async {
     await truncateContent();
-    return await _stepApi.getSteps().then((stepList) async {
-      stepList.steps.forEach((step) {
-        _stepDataSource.insert(step);
-        step.tasks.forEach((task) {
-          _taskDataSource.insert(task);
-          task.sub_tasks.forEach((subTask) {
-            _subTaskDataSource.insert(subTask);
-          });
-          task.questions.forEach((question) {
-            _questionDataSource.insert(question);
-          });
-        });
-      });
-      return stepList;
-    });
+    StepList stepList = await _stepApi.getSteps();
+    for (Step step in stepList.steps) {
+      await _stepDataSource.insert(step);
+      for (Task task in step.tasks) {
+        await _taskDataSource.insert(task);
+        await _insertItems(task.sub_tasks, _subTaskDataSource.insert);
+        await _insertItems(task.questions, _questionDataSource.insert);
+      }
+    }
+    return stepList;
   }
+
+  Future<void> _insertItems<T>(List<T> items, Future<void> Function(T) insertFunction) async {
+    for (T item in items) {
+      await insertFunction(item);
+    }
+  }
+
 
   Future stepDatasourceCount() =>
       _stepDataSource.count().catchError((error) => throw error);
