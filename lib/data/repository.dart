@@ -120,10 +120,6 @@ class Repository {
 
   // Task: ---------------------------------------------------------------------
   Future<TaskList> getTasks() async {
-    //if already exists, get tasks from the database, otherwise, do the Api call.
-    // return await _taskDataSource.count() > 0
-    //     ? _taskDataSource.getTasksFromDb()
-    //     : getTasksFromApi();
     return await _taskDataSource.getTasksFromDb();
   }
 
@@ -374,73 +370,6 @@ class Repository {
       .then((id) => id)
       .catchError((error) => throw error);
 
-//   // Translation: ---------------------------------------------------------------------
-//   Future<TranslationList> getTranslations() async {
-//     // check to see if posts are present in database, then fetch from database
-//     // else make a network call to get all posts, store them into database for
-//     // later use
-//     return await _translationApi.getTranslations().then((translationsList) {
-//       translationsList.translations?.forEach((translation) {
-//         _translationDataSource.insert(translation);
-//       });
-//
-//       return translationsList;
-//     }).catchError((error) => throw error);
-//   }
-//
-//   Future<List<Translation>> findTranslationById(int id) {
-//     //creating filter
-//     List<Filter> filters = [];
-//
-//     //check to see if dataLogsType is not null
-//     Filter dataLogTypeFilter = Filter.equals(DBConstants.FIELD_ID, id);
-//     filters.add(dataLogTypeFilter);
-//
-//     //making db call
-//     return _translationDataSource
-//         .getAllSortedByFilter(filters: filters)
-//         .then((translations) => translations)
-//         .catchError((error) => throw error);
-//   }
-//
-//   Future<int?> insertTranslation(Translation translation) => _translationDataSource
-//       .insert(translation)
-//       .then((id) => id)
-//       .catchError((error) => throw error);
-//
-//   Future<int> updateTranslation(Translation translation) => _translationDataSource
-//       .update(translation)
-//       .then((id) => id)
-//       .catchError((error) => throw error);
-//
-//   Future<int> deleteTranslation(Translation translation) => _translationDataSource
-//       .update(translation)
-//       .then((id) => id)
-//       .catchError((error) => throw error);
-//
-//   // Login:---------------------------------------------------------------------
-//   Future<bool> login(String email, String password) async {
-//     return await Future.delayed(Duration(seconds: 2), ()=> true);
-//   }
-//
-//   Future<void> saveIsLoggedIn(bool value) =>
-//       _sharedPrefsHelper.saveIsLoggedIn(value);
-//
-//   Future<bool> get isLoggedIn => _sharedPrefsHelper.isLoggedIn;
-//
-//   // Theme: --------------------------------------------------------------------
-//   Future<void> changeBrightnessToDark(bool value) =>
-//       _sharedPrefsHelper.changeBrightnessToDark(value);
-//
-//   bool get isDarkMode => _sharedPrefsHelper.isDarkMode;
-//
-//   // Language: -----------------------------------------------------------------
-//   Future<void> changeLanguage(String value) =>
-//       _sharedPrefsHelper.changeLanguage(value);
-//
-//   String? get currentLanguage => _sharedPrefsHelper.currentLanguage;
-// }
-
   // TranslationsWithTechnicalName: ---------------------------------------------------------------------
   Future<TechnicalNameWithTranslationsList> getTechnicalNameWithTranslations() async {
     // check to see if posts are present in database, then fetch from database
@@ -681,4 +610,11 @@ class Repository {
       _sharedPrefsHelper.setCurrentStep(value);
 
   int? get currentStepNumber => _sharedPrefsHelper.currentStepNumber;
+
+  Future<void> setStepsCount(int value) =>
+      _sharedPrefsHelper.setStepsCount(value);
+
+  int? get stepsCount => _sharedPrefsHelper.stepsCount;
+
+
 }

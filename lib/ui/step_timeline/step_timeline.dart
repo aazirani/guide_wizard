@@ -217,7 +217,7 @@ class _StepTimeLineState extends State<StepTimeLine> {
   }
 
   Widget? _buildEndConnector(int index) {
-    if (index == widget.stepNo) {
+    if (index == widget.stepNo - 1) {
       return null;
     }
     if (_isPendingStep(index)) {

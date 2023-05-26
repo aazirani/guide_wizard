@@ -6,6 +6,7 @@ import 'package:boilerplate/constants/dimens.dart';
 import 'package:boilerplate/data/network/constants/endpoints.dart';
 import 'package:boilerplate/data/sharedpref/constants/preferences.dart';
 import 'package:boilerplate/models/technical_name/technical_name_with_translations_list.dart';
+import 'package:boilerplate/stores/current_step/current_step_store.dart';
 import 'package:boilerplate/stores/question/questions_store.dart';
 import 'package:boilerplate/stores/step/step_store.dart';
 import 'package:boilerplate/stores/task/tasks_store.dart';
@@ -43,6 +44,7 @@ class _HomeScreenState extends State<HomeScreen> {
   late TechnicalNameWithTranslationsStore _technicalNameWithTranslationsStore;
   late LanguageStore _languageStore;
   late UpdatedAtTimesStore _updatedAtTimesStore;
+  late CurrentStepStore _currentStepStore;
   Map _source = {ConnectivityResult.none: false};
   final MyConnectivity _connectivity = MyConnectivity.instance;
 
@@ -58,6 +60,7 @@ class _HomeScreenState extends State<HomeScreen> {
         Provider.of<TechnicalNameWithTranslationsStore>(context);
     _languageStore = Provider.of<LanguageStore>(context);
     _updatedAtTimesStore = Provider.of<UpdatedAtTimesStore>(context);
+    _currentStepStore = Provider.of<CurrentStepStore>(context);
   }
 
   @override
@@ -215,6 +218,7 @@ class _HomeScreenState extends State<HomeScreen> {
       await _technicalNameWithTranslationsStore
           .getTechnicalNameWithTranslations();
       await _stepsStore.getSteps();
+      await _currentStepStore.setStepsCount(_stepsStore.stepList.steps.length);
       await _tasksStore.getAllTasks();
       await _questionsStore.getQuestions();
     }
@@ -276,7 +280,7 @@ class _HomeScreenState extends State<HomeScreen> {
         //step timeline
         //TODO: save current and pending steps in shared preferences
         StepTimeLine(
-          stepNo: 3,
+          stepNo: _currentStepStore.steps_count,
         ),
         SizedBox(height: 25),
         _buildInProgressText(),
