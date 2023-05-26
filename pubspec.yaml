@@ -71,7 +71,7 @@ dependencies:
   google_fonts: ^2.3.2
   flutter_svg: ^1.1.5
   flutter_expanded_tile: ^0.3.6
-  scrollable_positioned_list: ^0.3.5
+  scrollable_positioned_list: 0.2.3
   carousel_slider: ^4.1.1
   smooth_page_indicator: ^1.0.0+2
   dotted_line: ^3.1.0
@@ -85,7 +85,7 @@ dependencies:
   future_loading_dialog: ^0.2.4
   simple_fontellico_progress_dialog: ^0.3.0
   get: ^4.6.5
-  connectivity_plus: ^3.0.3
+  connectivity_plus: 2.3.7
   internet_connection_checker: ^1.0.0+1
   devicelocale: ^0.6.0
   marquee: ^2.2.3
