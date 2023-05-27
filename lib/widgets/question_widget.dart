@@ -309,7 +309,6 @@ class _QuestionWidgetState extends State<QuestionWidget>
                   _buildImageOptionSubtitle(index),
                 ],
               ),
-              // tileColor: Color.fromARGB(255, 243, 243, 243),
               tileColor: AppColors.greys[500]
             ),
           ),

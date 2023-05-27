@@ -32,7 +32,6 @@ class HomeScreen extends StatefulWidget {
 
 class _HomeScreenState extends State<HomeScreen> {
   //stores:---------------------------------------------------------------------
-  // late TasksStore _tasksStore;
   late DataStore _dataStore;
   late StepStore _stepStore;
   late TechnicalNameWithTranslationsStore _technicalNameWithTranslationsStore;
@@ -166,7 +165,6 @@ class _HomeScreenState extends State<HomeScreen> {
         indicatorColor: AppColors.main_color);
     if (await _isConnectedToInternet()) {
       if (await _canConnectToServer()) {
-        // await _stepsStore.getSteps();
         await _dataStore.getSteps();
         _dialog!.hide();
       } else {
@@ -283,7 +281,6 @@ class _HomeScreenState extends State<HomeScreen> {
         Observer(
             builder: (_) =>
                 CompressedTasklistTimeline(stepList: _dataStore.stepList)),
-        // CompressedTasklistTimeline(),
       ],
     );
   }
