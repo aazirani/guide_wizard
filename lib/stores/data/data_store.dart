@@ -228,8 +228,6 @@ abstract class _DataStore with Store {
   }
 
   // answers actions: 
-  @action
-  get getAnswers => answers;
 
   @action
   Future updateAnswers() async {
@@ -258,5 +256,6 @@ abstract class _DataStore with Store {
     return this.stepList.steps[stepNum].image!;
   }
 
-  
+  get getAnswers => answers;
+
 }
