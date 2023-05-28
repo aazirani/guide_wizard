@@ -49,6 +49,7 @@ class _QuestionWidgetState extends State<QuestionWidget>
     _stepStore = Provider.of<StepStore>(context);
     _technicalNameWithTranslationsStore =
         Provider.of<TechnicalNameWithTranslationsStore>(context);
+    _currentStepStore = Provider.of<CurrentStepStore>(context);
   }
 
   @override
@@ -117,8 +118,8 @@ class _QuestionWidgetState extends State<QuestionWidget>
         ),
         color: Colors.transparent,
       ),
-      decoration: BoxDecoration(
-          borderRadius: BorderRadius.all(Radius.circular(5))),
+      decoration:
+          BoxDecoration(borderRadius: BorderRadius.all(Radius.circular(5))),
     );
   }
 
@@ -282,35 +283,34 @@ class _QuestionWidgetState extends State<QuestionWidget>
             // height: 200, //TODO: can admin set height manually?
             //   width: 200, //TODO: can admin set width manually?
             child: ListTile(
-              horizontalTitleGap: 0,
-              minVerticalPadding: 0,
-              minLeadingWidth: 0,
-              contentPadding: EdgeInsets.zero,
-              onTap: () {
-                setState(() {
-                  _dataStore.updateQuestion(
-                      widget.question,
-                      widget.question.getAnswerByIndex(index),
-                      !widget.question.getAnswerByIndex(index).selected);
-                });
-              },
-              shape: RoundedRectangleBorder(
-                side: BorderSide(
-                    color: widget.question.getAnswerByIndex(index).isSelected
-                        ? AppColors.main_color
-                        : Colors.transparent,
-                    width: 2),
-                borderRadius: BorderRadius.circular(5),
-              ),
-              title: Column(
-                children: [
-                  _buildImageLoader(
-                      widget.question.getAnswerByIndex(index).getImage),
-                  _buildImageOptionSubtitle(index),
-                ],
-              ),
-              tileColor: AppColors.greys[500]
-            ),
+                horizontalTitleGap: 0,
+                minVerticalPadding: 0,
+                minLeadingWidth: 0,
+                contentPadding: EdgeInsets.zero,
+                onTap: () {
+                  setState(() {
+                    _dataStore.updateQuestion(
+                        widget.question,
+                        widget.question.getAnswerByIndex(index),
+                        !widget.question.getAnswerByIndex(index).selected);
+                  });
+                },
+                shape: RoundedRectangleBorder(
+                  side: BorderSide(
+                      color: widget.question.getAnswerByIndex(index).isSelected
+                          ? AppColors.main_color
+                          : Colors.transparent,
+                      width: 2),
+                  borderRadius: BorderRadius.circular(5),
+                ),
+                title: Column(
+                  children: [
+                    _buildImageLoader(
+                        widget.question.getAnswerByIndex(index).getImage),
+                    _buildImageOptionSubtitle(index),
+                  ],
+                ),
+                tileColor: AppColors.greys[500]),
           ),
           _buildImageCheckBox(index),
         ],
