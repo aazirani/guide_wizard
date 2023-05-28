@@ -228,7 +228,6 @@ abstract class _DataStore with Store {
   }
 
   // answers actions: 
-  @action
   get getAnswers => answers;
 
   @action
