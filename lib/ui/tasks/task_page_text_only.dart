@@ -101,7 +101,7 @@ class _TaskPageTextOnlyState extends State<TaskPageTextOnly> {
     return Scaffold(
       backgroundColor: AppColors.main_color,
       appBar: BlocksAppBarWidget(
-        isDone: _dataStore.getTaskById(widget.task_id).isDone,
+        taskId: widget.task_id,
         appBarSize: 70.0,
         title: _technicalNameWithTranslationsStore.getTechnicalNames(title_id)!,
       ),

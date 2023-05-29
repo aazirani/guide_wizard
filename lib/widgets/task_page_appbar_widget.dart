@@ -1,16 +1,18 @@
 import 'package:boilerplate/constants/colors.dart';
 import 'package:boilerplate/constants/dimens.dart';
-import 'package:boilerplate/utils/locale/app_localization.dart';
 import 'package:boilerplate/widgets/scrolling_overflow_text.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+import 'package:boilerplate/models/task/task.dart';
+import 'package:boilerplate/stores/data/data_store.dart';
 
 class BlocksAppBarWidget extends StatefulWidget implements PreferredSizeWidget {
-  bool isDone;
+  int taskId;
   double appBarSize;
   String title;
   BlocksAppBarWidget(
       {Key? key,
-      required this.isDone,
+      required this.taskId,
       required this.appBarSize,
       required this.title})
       : super(key: key);
@@ -26,10 +28,18 @@ class BlocksAppBarWidget extends StatefulWidget implements PreferredSizeWidget {
 
 class _BlocksAppBarWidgetState extends State<BlocksAppBarWidget> {
 
+  late DataStore _dataStore;
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    _dataStore = Provider.of<DataStore>(context);
+  }
+
   _buildDoneUndoneButtonStyle() {
+    Task current_task = _dataStore.getTaskById(widget.taskId);
     return ElevatedButton.styleFrom(
         padding: EdgeInsets.all(0),
-        backgroundColor: widget.isDone ? AppColors.white : AppColors.main_color,
+        backgroundColor: current_task.isDone ? AppColors.white : AppColors.main_color,
         foregroundColor: AppColors.bright_foreground_color.withOpacity(0.1),
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(7.0),
@@ -38,10 +48,12 @@ class _BlocksAppBarWidgetState extends State<BlocksAppBarWidget> {
   }
 
   Widget _buildButton({required ButtonStyle? buttonStyle, IconData? icon}) {
+    Task current_task = _dataStore.getTaskById(widget.taskId);
     return ElevatedButton(
         onPressed: () {
           setState(() {
-            widget.isDone = !widget.isDone;
+            current_task.isDone = !current_task.isDone;
+          _dataStore.updateTask(current_task);
           });
         },
         style: buttonStyle,
@@ -52,9 +64,10 @@ class _BlocksAppBarWidgetState extends State<BlocksAppBarWidget> {
   }
 
   Widget _buildDoneUnDoneButton() {
+    Task current_task = _dataStore.getTaskById(widget.taskId);
     return _buildButton(
       buttonStyle: _buildDoneUndoneButtonStyle(),
-      icon: widget.isDone ? Icons.done_rounded : null, 
+      icon: current_task.isDone ? Icons.done_rounded : null,
     );
   }
 
