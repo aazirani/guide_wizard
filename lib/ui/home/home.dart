@@ -70,7 +70,7 @@ class _HomeScreenState extends State<HomeScreen> {
       // Loading data (from datasource if data is downloaded before):
       await _loadDataWithoutErrorHandling(context);
       // Checking whether there is an update:
-      await _checkForUpdate(context);
+      // await _checkForUpdate(context);
     });
   }
 
