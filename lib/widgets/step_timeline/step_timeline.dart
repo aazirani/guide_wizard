@@ -1,5 +1,4 @@
 import 'package:boilerplate/constants/colors.dart';
-import 'package:boilerplate/models/step/step_list.dart';
 import 'package:boilerplate/stores/current_step/current_step_store.dart';
 import 'package:flutter/material.dart';
 import 'package:timelines/timelines.dart';

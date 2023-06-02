@@ -60,8 +60,9 @@ class _StepSliderWidgetState extends State<StepSliderWidget> {
           height: _getScreenHeight() / 4,
           enlargeCenterPage: false,
           enableInfiniteScroll: false),
-      items: List<int>.generate(
-            _dataStore.stepList.steps.length, (index) => index).map((index) {
+      items:
+          List<int>.generate(_dataStore.stepList.steps.length, (index) => index)
+              .map((index) {
         return Builder(
           builder: (BuildContext context) {
             return GestureDetector(
@@ -94,6 +95,8 @@ class _StepSliderWidgetState extends State<StepSliderWidget> {
   }
 
   BoxBorder _buildSliderBorder(index) {
+    print("in step sliderrrrrrrrrrrrrrrrrrrrrrrr");
+    print(_currentStepStore.current_step_number);
     if (index < _currentStepStore.current_step_number)
       return _buildDoneBorder();
     else if (index == _currentStepStore.current_step_number)
@@ -232,5 +235,4 @@ class _StepSliderWidgetState extends State<StepSliderWidget> {
   //general methods ............................................................
   double _getScreenHeight() => MediaQuery.of(context).size.height;
   double _getScreenWidth() => MediaQuery.of(context).size.width;
-
 }
