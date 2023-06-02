@@ -6,6 +6,7 @@ import 'package:boilerplate/ui/questions/questions_list_page.dart';
 import 'package:boilerplate/utils/locale/app_localization.dart';
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:provider/provider.dart';
 import 'package:boilerplate/ui/tasklist/tasklist.dart';
 import 'package:boilerplate/stores/technical_name/technical_name_with_translations_store.dart';
@@ -52,25 +53,28 @@ class _StepSliderWidgetState extends State<StepSliderWidget> {
   }
 
   _buildCarouselSlider() {
-    return CarouselSlider(
-      options: CarouselOptions(
-          onPageChanged: (index, reason) {
-            _stepStore.increment(index);
-          },
-          height: _getScreenHeight() / 4,
-          enlargeCenterPage: false,
-          enableInfiniteScroll: false),
-      items: List<int>.generate(
-            _dataStore.stepList.steps.length, (index) => index).map((index) {
-        return Builder(
-          builder: (BuildContext context) {
-            return GestureDetector(
-              onTap: () {},
-              child: _buildSliderContainer(index),
-            );
-          },
-        );
-      }).toList(),
+    return Observer(
+      builder: (_) => CarouselSlider(
+        options: CarouselOptions(
+            initialPage: _stepStore.currentStep - 1,
+            onPageChanged: (index, reason) {
+              _stepStore.increment(index);
+            },
+            height: _getScreenHeight() / 4,
+            enlargeCenterPage: false,
+            enableInfiniteScroll: false),
+        items: List<int>.generate(
+              _dataStore.stepList.steps.length, (index) => index).map((index) {
+          return Builder(
+            builder: (BuildContext context) {
+              return GestureDetector(
+                onTap: () {},
+                child: _buildSliderContainer(index),
+              );
+            },
+          );
+        }).toList(),
+      ),
     );
   }
 
