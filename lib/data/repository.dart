@@ -462,31 +462,31 @@ class Repository {
     // });
   }
 
+
+
   Future updateContentIfNeeded() async {
     UpdatedAtTimes originUpdatedAt = await getUpdatedAtTimesFromApi();
     if (await isContentUpdated(originUpdatedAt)) {
       StepList _stepList = await getStep();
       await truncateContent();
-      await _stepApi.getSteps().then((stepList) {
-        stepList.steps.forEach((step) {
-          _stepDataSource.insert(step);
-          step.tasks.forEach((task) {
-            _taskDataSource.insert(task);
-            task.sub_tasks.forEach((subTask) {
-              _subTaskDataSource.insert(subTask);
-            });
-            task.questions.forEach((question) {
-              Question? foundOldQuestion =
-                  _stepList.findQuestionByID(question.id);
-              if (foundOldQuestion != null) {
-                _questionDataSource.insert(foundOldQuestion);
-              } else {
-                _questionDataSource.insert(question);
-              }
-            });
-          });
-        });
-      });
+      StepList stepList = await _stepApi.getSteps();
+      for (Step step in stepList.steps) {
+        _stepDataSource.insert(step);
+        for (Task task in step.tasks) {
+          _taskDataSource.insert(task);
+          for (SubTask subTask in task.sub_tasks) {
+            _subTaskDataSource.insert(subTask);
+          }
+          for (Question question in task.questions) {
+            Question? foundOldQuestion = _stepList.findQuestionByID(question.id);
+            if (foundOldQuestion != null) {
+              _questionDataSource.insert(foundOldQuestion);
+            } else {
+              _questionDataSource.insert(question);
+            }
+          }
+        }
+      }
       await truncateUpdatedAtTimes();
       await _updatedAtTimesDataSource.insert(originUpdatedAt);
     }
