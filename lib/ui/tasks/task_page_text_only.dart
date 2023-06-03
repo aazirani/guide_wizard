@@ -10,9 +10,9 @@ import 'package:boilerplate/stores/technical_name/technical_name_with_translatio
 import 'package:boilerplate/stores/data/data_store.dart';
 
 class TaskPageTextOnly extends StatefulWidget {
-  int task_id;
+  int taskId;
 
-  TaskPageTextOnly({Key? key, required this.task_id}) : super(key: key);
+  TaskPageTextOnly({Key? key, required this.taskId}) : super(key: key);
 
   @override
   State<TaskPageTextOnly> createState() => _TaskPageTextOnlyState();
@@ -38,43 +38,17 @@ class _TaskPageTextOnlyState extends State<TaskPageTextOnly> {
     super.initState();
   }
 
-  _buildDescription() {
-    var description_id = _dataStore.getTaskById(widget.task_id).description.id;
-    return Padding(
-      padding: Dimens.taskPageTextOnlyListViewPadding,
-      child: Observer(
-        builder: (context) {
-          return Text(
-            _technicalNameWithTranslationsStore
-                .getTechnicalNames(description_id)!,
-            style: TextStyle(fontSize: 18, color: AppColors.main_color),
-          );
-        },
+  @override
+  Widget build(BuildContext context) {
+    var titleId = _dataStore.getTaskById(widget.taskId).text.id;
+    return Scaffold(
+      backgroundColor: AppColors.main_color,
+      appBar: BlocksAppBarWidget(
+        isDone: _dataStore.getTaskById(widget.taskId).isDone,
+        appBarSize: 70.0,
+        title: _technicalNameWithTranslationsStore.getTechnicalNames(titleId)!,
       ),
-    );
-  }
-
-  _buildSubTasksList() {
-    return ListView.builder(
-      physics: ScrollPhysics(),
-      shrinkWrap: true,
-      itemCount: _dataStore.getTaskById(widget.task_id).sub_tasks.length,
-      itemBuilder: (context, i) {
-        return SubTaskWidget(
-          index: i,
-          subTasks: _dataStore.getTaskById(widget.task_id).sub_tasks,
-          renderManager: renderManager,
-        );
-      },
-    );
-  }
-
-  _buildPageContent() {
-    return ListView(
-      children: [
-        _buildDescription(),
-        _buildSubTasksList(),
-      ],
+      body: _buildScaffoldBody(),
     );
   }
 
@@ -95,17 +69,43 @@ class _TaskPageTextOnlyState extends State<TaskPageTextOnly> {
     );
   }
 
-  @override
-  Widget build(BuildContext context) {
-    var title_id = _dataStore.getTaskById(widget.task_id).text.id;
-    return Scaffold(
-      backgroundColor: AppColors.main_color,
-      appBar: BlocksAppBarWidget(
-        isDone: _dataStore.getTaskById(widget.task_id).isDone,
-        appBarSize: 70.0,
-        title: _technicalNameWithTranslationsStore.getTechnicalNames(title_id)!,
+  _buildPageContent() {
+    return ListView(
+      children: [
+        _buildDescription(),
+        _buildSubTasksList(),
+      ],
+    );
+  }
+
+  _buildDescription() {
+    var descriptionId = _dataStore.getTaskById(widget.taskId).description.id;
+    return Padding(
+      padding: Dimens.taskPageTextOnlyListViewPadding,
+      child: Observer(
+        builder: (context) {
+          return Text(
+            _technicalNameWithTranslationsStore
+                .getTechnicalNames(descriptionId)!,
+            style: TextStyle(fontSize: 18, color: AppColors.main_color),
+          );
+        },
       ),
-      body: _buildScaffoldBody(),
+    );
+  }
+
+  _buildSubTasksList() {
+    return ListView.builder(
+      physics: ScrollPhysics(),
+      shrinkWrap: true,
+      itemCount: _dataStore.getTaskById(widget.taskId).sub_tasks.length,
+      itemBuilder: (context, i) {
+        return SubTaskWidget(
+          index: i,
+          subTasks: _dataStore.getTaskById(widget.taskId).sub_tasks,
+          renderManager: renderManager,
+        );
+      },
     );
   }
 }

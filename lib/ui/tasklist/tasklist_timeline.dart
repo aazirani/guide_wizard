@@ -100,7 +100,7 @@ class _TaskListTimeLineState extends State<TaskListTimeLine> {
               context,
               MaterialPageRoute(
                   builder: (context) => TaskPageTextOnly(
-                        task_id: _dataStore.getTaskId(taskNumber),
+                        taskId: _dataStore.getTaskId(taskNumber),
                       )));
         } else {
           Navigator.push(

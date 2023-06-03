@@ -28,9 +28,44 @@ class _TaskPageWithImageState extends State<TaskPageWithImage> {
     super.initState();
   }
 
-    double _getHeightOfDraggableScrollableSheet(){ //TODO: This function should get fixed
+    double _getHeightOfDraggableScrollableSheet(){
     double screenHeight = MediaQuery.of(context).size.height;
     return (screenHeight - (appBarSize + imageSlideSize.height * 0.44)) / screenHeight;
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      backgroundColor: AppColors.main_color,
+      appBar: BlocksAppBarWidget(
+        title: widget.task.text.string,
+        appBarSize: appBarSize,
+        isDone: widget.task.isDone,
+      ),
+      body: _buildScaffoldBody(),
+    );
+  }
+
+  Widget _buildScaffoldBody() {
+    return Stack(
+      children: [
+        MeasureSize(
+            onChange: (Size size) {
+              setState(() {
+                imageSlideSize = size;
+              });
+            },
+            child: _buildImageSlide()),
+        _buildDraggableScrollableSheet(),
+      ],
+    );
+  }
+
+  Widget _buildImageSlide() {
+    return ImageSlide(
+        images: [widget.task.image_1, widget.task.image_2],
+        description: widget.task.description.string
+    );
   }
 
   Widget _buildDraggableScrollableSheet() {
@@ -69,41 +104,6 @@ class _TaskPageWithImageState extends State<TaskPageWithImage> {
           );
         },
       ),
-    );
-  }
-
-  Widget _buildImageSlide() {
-    return ImageSlide(
-        images: [widget.task.image_1, widget.task.image_2],
-        description: widget.task.description.string
-    );
-  }
-
-  Widget _buildScaffoldBody() {
-    return Stack(
-      children: [
-        MeasureSize(
-            onChange: (Size size) {
-              setState(() {
-                imageSlideSize = size;
-              });
-            },
-            child: _buildImageSlide()),
-        _buildDraggableScrollableSheet(),
-      ],
-    );
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      backgroundColor: AppColors.main_color,
-      appBar: BlocksAppBarWidget(
-        title: widget.task.text.string,
-        appBarSize: appBarSize,
-        isDone: widget.task.isDone,
-      ),
-      body: _buildScaffoldBody(),
     );
   }
 }
