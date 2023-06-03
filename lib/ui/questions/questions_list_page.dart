@@ -1,6 +1,4 @@
 import 'package:boilerplate/constants/colors.dart';
-import 'package:boilerplate/constants/dimens.dart';
-import 'package:boilerplate/utils/locale/app_localization.dart';
 import 'package:boilerplate/widgets/question_widget.dart';
 import 'package:boilerplate/widgets/questions_list_page_appBar.dart';
 import 'package:flutter/material.dart';
@@ -52,7 +50,7 @@ class _QuestionsListPageState extends State<QuestionsListPage> {
             ),
           ),
           child: ScrollablePositionedList.builder(
-            itemCount: _dataStore.questionList!.length,
+            itemCount: _dataStore.questionList.length,
             itemBuilder: (context, index) => Card(
                 margin: EdgeInsets.all(5.0),
                 child: _buildQuestionWidget(index)),
@@ -67,8 +65,8 @@ class _QuestionsListPageState extends State<QuestionsListPage> {
     return QuestionWidget(
       index: index,
       itemScrollController: itemScrollController,
-      question: _dataStore.questionList!.elementAt(index),
-      isLastQuestion: index == _dataStore.questionList!.length - 1,
+      question: _dataStore.questionList.elementAt(index),
+      isLastQuestion: index == _dataStore.questionList.length - 1,
     );
   }
 }
