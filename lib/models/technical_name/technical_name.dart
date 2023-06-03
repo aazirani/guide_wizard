@@ -1,9 +1,6 @@
-import 'package:boilerplate/models/translation/translation_list.dart';
-
 class TechnicalName {
   int id;
   String technical_name;
-  // TranslationList translations;
   int creator_id;
   String created_at;
   String updated_at;
@@ -11,7 +8,6 @@ class TechnicalName {
   TechnicalName({
     required this.id,
     required this.technical_name,
-    // required this.translations,
     required this.creator_id,
     required this.created_at,
     required this.updated_at,
@@ -25,7 +21,6 @@ class TechnicalName {
     return TechnicalName(
       id: json["id"],
       technical_name: json["technical_name"],
-      // translations: TranslationList.fromJson(json["translations"]),
       creator_id: json["creator_id"],
       created_at: json["created_at"],
       updated_at: json["updated_at"],

@@ -3,8 +3,6 @@ import 'dart:io';
 import 'package:boilerplate/constants/colors.dart';
 import 'package:boilerplate/constants/dimens.dart';
 import 'package:boilerplate/data/network/constants/endpoints.dart';
-import 'package:boilerplate/data/sharedpref/constants/preferences.dart';
-import 'package:boilerplate/models/technical_name/technical_name_with_translations_list.dart';
 import 'package:boilerplate/stores/current_step/current_step_store.dart';
 import 'package:boilerplate/stores/step/step_store.dart';
 import 'package:boilerplate/stores/technical_name/technical_name_with_translations_store.dart';
@@ -272,7 +270,7 @@ class _HomeScreenState extends State<HomeScreen> {
         //step timeline
         //TODO: save current and pending steps in shared preferences
         StepTimeLine(
-          stepNo: _currentStepStore.steps_count,
+          stepNo: _currentStepStore.stepsCount,
         ),
         SizedBox(height: 25),
         _buildInProgressText(),
@@ -308,7 +306,7 @@ class _HomeScreenState extends State<HomeScreen> {
 
   Widget _buildCurrentStepText(stepStore) {
     return Observer(
-        builder: (_) => Text("${stepStore.currentStep}/${Dimens.stepNo}",
+        builder: (_) => Text("${stepStore.currentStep}/${_currentStepStore.stepsCount}",
             style: TextStyle(color: AppColors.main_color)));
   }
 

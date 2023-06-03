@@ -19,10 +19,10 @@ class DataStore = _DataStore with _$DataStore;
 abstract class _DataStore with Store {
   Repository _repository;
   _DataStore(Repository repo) : this._repository = repo;
-  
+
   // store for handling errors
   final ErrorStore errorStore = ErrorStore();
-  
+
   //steplist observables
   static ObservableFuture<StepList> emptyStepsResponse =
       ObservableFuture.value(StepList(steps: []));
@@ -42,38 +42,38 @@ abstract class _DataStore with Store {
 
   //tasklist observables
   static ObservableFuture<TaskList?> emptyTaskResponse =
-  ObservableFuture.value(null);
+      ObservableFuture.value(null);
 
   static ObservableFuture<dynamic> emptyTruncateTaskResponse =
-  ObservableFuture.value(null);
+      ObservableFuture.value(null);
 
   @observable
   ObservableFuture<TaskList?> fetchTasksFuture =
-  ObservableFuture<TaskList?>(emptyTaskResponse);
+      ObservableFuture<TaskList?>(emptyTaskResponse);
 
   @observable
   ObservableFuture<dynamic> truncateTasksFuture =
-  ObservableFuture<dynamic>(emptyTruncateTaskResponse);
+      ObservableFuture<dynamic>(emptyTruncateTaskResponse);
 
   @observable
   TaskList taskList = TaskList(tasks: []);
-  
+
   @observable
   bool tasksSuccess = false;
 
-  //questions observables: 
+  //questions observables:
   static ObservableFuture<QuestionList?> emptyQuestionResponse =
-  ObservableFuture.value(null);
+      ObservableFuture.value(null);
   static ObservableFuture<dynamic> emptyTruncateQuestionResponse =
-  ObservableFuture.value(null);
+      ObservableFuture.value(null);
 
   @observable
   ObservableFuture<QuestionList?> fetchQuestionsFuture =
-  ObservableFuture<QuestionList?>(emptyQuestionResponse);
+      ObservableFuture<QuestionList?>(emptyQuestionResponse);
 
   @observable
   ObservableFuture<dynamic> truncateQuestionsFuture =
-  ObservableFuture<dynamic>(emptyTruncateQuestionResponse);
+      ObservableFuture<dynamic>(emptyTruncateQuestionResponse);
 
   @observable
   QuestionList questionList = QuestionList(questions: []);
@@ -85,20 +85,23 @@ abstract class _DataStore with Store {
   List<Answer> answers = [];
 
   @observable
-  bool success = false;
-  //tasks computed: 
+  bool answerSuccess = false;
+  //tasks computed:
   @computed
   bool get tasksLoading => fetchTasksFuture.status == FutureStatus.pending;
 
   @computed
-  bool get tasksLoadingTruncate => truncateTasksFuture.status == FutureStatus.pending;
+  bool get tasksLoadingTruncate =>
+      truncateTasksFuture.status == FutureStatus.pending;
 
   //questions computed:
   @computed
-  bool get questionLoading => fetchQuestionsFuture.status == FutureStatus.pending;
+  bool get questionLoading =>
+      fetchQuestionsFuture.status == FutureStatus.pending;
 
   @computed
-  bool get questionLoadingTruncate => truncateQuestionsFuture.status == FutureStatus.pending;
+  bool get questionLoadingTruncate =>
+      truncateQuestionsFuture.status == FutureStatus.pending;
 
 // actions......................................................................
   @action
@@ -168,7 +171,7 @@ abstract class _DataStore with Store {
 
   @action
   Future truncateTasks() async {
-   await _repository.truncateTask();
+    await _repository.truncateTask();
   }
 
   //questions actions: .........................................................
@@ -187,13 +190,18 @@ abstract class _DataStore with Store {
 
   @action
   Future updateQuestion(Question question, Answer answer, bool value) async {
-    questionList.questions.firstWhere((element) => element == question).answers.firstWhere((element) => element == answer).selected = value;
+    questionList.questions
+        .firstWhere((element) => element == question)
+        .answers
+        .firstWhere((element) => element == answer)
+        .selected = value;
     await _repository.updateQuestion(question);
   }
 
   @action
   Question getQuestionById(int questionId) {
-    return questionList.questions.firstWhere((question) => question.id == questionId);
+    return questionList.questions
+        .firstWhere((question) => question.id == questionId);
   }
 
   @action
@@ -227,18 +235,18 @@ abstract class _DataStore with Store {
     await _repository.truncateQuestions();
   }
 
-  // answers actions: 
+  // answers actions:
 
   @action
   Future updateAnswers() async {
     final future = _repository.getStep();
     answers = [];
     future.then((stepList) {
-      for(Step step in stepList.steps) {
-        for(Task task in step.tasks) {
-          for(Question question in task.questions) {
-            for(Answer answer in question.answers) {
-              if(answer.selected) {
+      for (Step step in stepList.steps) {
+        for (Task task in step.tasks) {
+          for (Question question in task.questions) {
+            for (Answer answer in question.answers) {
+              if (answer.selected) {
                 answers.add(answer);
               }
             }
@@ -251,11 +259,54 @@ abstract class _DataStore with Store {
     return future;
   }
 
- //.............................................................................
+  //.............................................................................
   String getStepImage(int stepNum) {
     return this.stepList.steps[stepNum].image!;
   }
 
-  get getAnswers => answers;
+  int getNumberOfSteps() {
+    return this.stepList.steps.length;
+  }
 
+  int getNumberOfTaskListTasks() {
+    return this.taskList.numTasks;
+  }
+
+  int getStepTitleId(stepIndex) {
+    return this.stepList.steps[stepIndex].name.id;
+  }
+
+  int getTaskTitleId(stepIndex, taskIndex) {
+    return this.stepList.steps[stepIndex].tasks[taskIndex].text.id;
+  }
+
+  int getTaskTitleIdByIndex(taskIndex) {
+    return this.taskList.tasks[taskIndex].text.id;
+  }
+
+  int getTaskId(taskIndex) {
+    return this.taskList.tasks[taskIndex].id;
+  }
+
+  Task getTaskByIndex(taskIndex) {
+    return this.taskList.tasks[taskIndex];
+  }
+
+  getNumberOfTasksFromAStep(index) {
+    return this.stepList.steps[index].numTasks;
+  }
+
+  bool getTaskIsDoneStatus(taskIndex) {
+    return this.taskList.tasks[taskIndex].isDone;
+  }
+
+  getTaskDeadlineStatus(taskIndex) {
+    return this.taskList.tasks[taskIndex].getDeadline();
+  }
+
+  bool getTaskType(taskIndex) {
+    return this.taskList.tasks[taskIndex].isTypeOfText;
+  }
+
+  get getAnswers => answers;
 }

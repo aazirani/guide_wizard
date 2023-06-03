@@ -1,5 +1,3 @@
-import 'dart:convert';
-
 import 'package:boilerplate/data/repository.dart';
 import 'package:boilerplate/models/language/supported_language.dart';
 import 'package:boilerplate/stores/error/error_store.dart';
@@ -84,8 +82,4 @@ abstract class _LanguageStore with Store {
       }
     });
   }
-
-  // dispose:-------------------------------------------------------------------
-  @override
-  dispose() {}
 }

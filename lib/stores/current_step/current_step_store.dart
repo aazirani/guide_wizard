@@ -19,16 +19,16 @@
     final ErrorStore errorStore = ErrorStore();
 
     // current step number from 0 to steps_count-1
-    late int current_step_number;
+    late int currentStepNumber;
     // steps count (usually 4)
-    late int steps_count = 4;
+    late int stepsCount = 4;
 
     // constructor:---------------------------------------------------------------
     _CurrentStepStore(Repository repository) : this._repository = repository {
       // setting up disposers
       _setupDisposers();
 
-      current_step_number = _repository.currentStepNumber ?? 0;
+      currentStepNumber = _repository.currentStepNumber ?? 0;
     }
 
     // disposers:-----------------------------------------------------------------
@@ -56,20 +56,20 @@
 
     // actions:-------------------------------------------------------------------
     @action
-    Future setStepNumber(int step_number) async {
-      _repository.setCurrentStep(step_number);
-      current_step_number = step_number;
+    Future setStepNumber(int stepNumber) async {
+      _repository.setCurrentStep(stepNumber);
+      currentStepNumber = stepNumber;
     }
 
     @action
-    Future setStepsCount(int new_steps_count) async {
-      _repository.setStepsCount(new_steps_count);
-      steps_count = new_steps_count;
+    Future setStepsCount(int newStepsCount) async {
+      _repository.setStepsCount(newStepsCount);
+      stepsCount = newStepsCount;
     }
 
     @action
     Future incrementStepNumber() async {
-      setStepNumber(current_step_number + 1);
+      setStepNumber(currentStepNumber + 1);
     }
 
 
