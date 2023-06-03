@@ -2,6 +2,7 @@ import 'package:boilerplate/constants/colors.dart';
 import 'package:boilerplate/constants/dimens.dart';
 import 'package:boilerplate/utils/locale/app_localization.dart';
 import 'package:boilerplate/widgets/question_widget.dart';
+import 'package:boilerplate/widgets/questions_list_page_appBar.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:scrollable_positioned_list/scrollable_positioned_list.dart';
@@ -32,41 +33,10 @@ class _QuestionsListPageState extends State<QuestionsListPage> {
     super.initState();
   }
 
-  PreferredSizeWidget? _buildAppBar() {
-    return AppBar(
-      automaticallyImplyLeading: false,
-      backgroundColor: AppColors.main_color,
-      toolbarHeight: Dimens.appBar["toolbarHeight"],
-      titleSpacing: Dimens.appBar["titleSpacing"],
-      leading: IconButton(
-        onPressed: () {
-          Navigator.pop(context);
-        },
-        icon: Icon(
-          Icons.arrow_back_rounded,
-          color: AppColors.bright_foreground_color,
-        ),
-      ),
-      title: Text(
-        AppLocalizations.of(context).translate("info"),
-        style: TextStyle(color: AppColors.white, fontSize: 20),
-      ),
-    );
-  }
-
-  Widget _buildQuestionWidget(int index) {
-    return QuestionWidget(
-      index: index,
-      itemScrollController: itemScrollController,
-      question: _dataStore.questionList!.elementAt(index),
-      isLastQuestion: index == _dataStore.questionList!.length - 1,
-    );
-  }
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: _buildAppBar(),
+      appBar: QuestionsListAppBar(),
       backgroundColor: AppColors.main_color,
       body: ClipRRect(
         borderRadius: BorderRadius.only(
@@ -90,6 +60,15 @@ class _QuestionsListPageState extends State<QuestionsListPage> {
           ),
         ),
       ),
+    );
+  }
+
+  Widget _buildQuestionWidget(int index) {
+    return QuestionWidget(
+      index: index,
+      itemScrollController: itemScrollController,
+      question: _dataStore.questionList!.elementAt(index),
+      isLastQuestion: index == _dataStore.questionList!.length - 1,
     );
   }
 }
