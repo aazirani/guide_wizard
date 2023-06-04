@@ -15,7 +15,6 @@ class QuestionsListPage extends StatefulWidget {
 }
 
 class _QuestionsListPageState extends State<QuestionsListPage> {
-  late final itemScrollController;
   // stores:--------------------------------------------------------------------
   late DataStore _dataStore;
 
@@ -28,7 +27,6 @@ class _QuestionsListPageState extends State<QuestionsListPage> {
 
   @override
   void initState() {
-    itemScrollController = ItemScrollController();
     super.initState();
   }
 
@@ -57,7 +55,6 @@ class _QuestionsListPageState extends State<QuestionsListPage> {
   Widget _buildQuestionWidget(int index) {
     return QuestionWidget(
       index: index,
-      itemScrollController: itemScrollController,
       question: _dataStore.questionList!.elementAt(index),
       isLastQuestion: index == _dataStore.questionList!.length - 1,
     );
@@ -86,7 +83,6 @@ class _QuestionsListPageState extends State<QuestionsListPage> {
             itemBuilder: (context, index) => Card(
                 margin: EdgeInsets.all(5.0),
                 child: _buildQuestionWidget(index)),
-            itemScrollController: itemScrollController,
           ),
         ),
       ),

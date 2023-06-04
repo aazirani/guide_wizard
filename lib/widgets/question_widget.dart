@@ -10,9 +10,7 @@ import 'package:boilerplate/ui/home/home.dart';
 import 'package:boilerplate/utils/locale/app_localization.dart';
 import 'package:boilerplate/widgets/scrolling_overflow_text.dart';
 import 'package:flutter/material.dart';
-import 'package:marquee/marquee.dart';
 import 'package:provider/provider.dart';
-import 'package:scrollable_positioned_list/scrollable_positioned_list.dart';
 import 'package:boilerplate/providers/question_widget_state/question_widget_state.dart';
 import 'package:boilerplate/stores/data/data_store.dart';
 
@@ -20,12 +18,10 @@ class QuestionWidget extends StatefulWidget {
   Question question;
   bool isLastQuestion;
   int index;
-  ItemScrollController itemScrollController;
 
   QuestionWidget({
     Key? key,
     required this.index,
-    required this.itemScrollController,
     required this.question,
     required this.isLastQuestion,
   }) : super(key: key);
@@ -55,13 +51,6 @@ class _QuestionWidgetState extends State<QuestionWidget>
   @override
   bool get wantKeepAlive => true;
   double _getScreenWidth() => MediaQuery.of(context).size.width;
-
-  Future scrollToItem(int index) async {
-    widget.itemScrollController.scrollTo(
-      index: index,
-      duration: Duration(milliseconds: 1000),
-    );
-  }
 
   ButtonStyle _buildQuestionsButtonStyle(Color color) {
     return ButtonStyle(
@@ -362,7 +351,6 @@ class _QuestionWidgetState extends State<QuestionWidget>
           style: _buildQuestionsButtonStyle(AppColors.main_color),
           onPressed: () async => {
             await builder.setActiveIndex(widget.index + 1),
-            scrollToItem(widget.index + 1),
           },
           child: Text(
             AppLocalizations.of(context).translate('next_question_button_text'),
