@@ -531,9 +531,11 @@ class Repository {
         stepList.steps.forEach((step) {
           _stepDataSource.insert(step);
           step.tasks.forEach((task) {
-            _taskDataSource.insert(task);
             task.sub_tasks.forEach((subTask) {
               _subTaskDataSource.insert(subTask);
+              if(_stepList.findSubTaskByID(subTask.id) == null){
+                task.isDone = false;
+              }
             });
             task.questions.forEach((question) {
               Question? foundOldQuestion = _stepList.findQuestionByID(question.id);
@@ -544,6 +546,7 @@ class Repository {
                 _questionDataSource.insert(question);
               }
             });
+            _taskDataSource.insert(task);
           });
         });
       });

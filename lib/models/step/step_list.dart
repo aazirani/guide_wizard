@@ -1,5 +1,6 @@
 import 'package:boilerplate/models/question/question.dart';
 import 'package:boilerplate/models/step/step.dart' as s;
+import 'package:boilerplate/models/sub_task/sub_task.dart';
 
 class StepList {
   final List<s.Step> steps;
@@ -32,5 +33,17 @@ class StepList {
       });
     });
     return found_question;
+  }
+
+  SubTask? findSubTaskByID(int id){
+    SubTask? found_subTask;
+    steps.forEach((step) {
+      step.tasks.forEach((task) {
+        task.sub_tasks.forEach((subTask) {
+          if(subTask.id == id) found_subTask = subTask;
+        });
+      });
+    });
+    return found_subTask;
   }
 }

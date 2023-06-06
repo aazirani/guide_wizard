@@ -46,7 +46,7 @@ class Task {
           json["questions"].map((x) => Question.fromMap(x))),
       sub_tasks:
           List<SubTask>.from(json["sub_tasks"].map((x) => SubTask.fromMap(x))),
-       isDone: json["isDone"] ?? false,
+      isDone: json["isDone"] ?? false,
     );
   }
 
@@ -62,7 +62,7 @@ class Task {
     "created_at": created_at,
     "updated_at": updated_at,
     "questions": questions.map((question) => question.toMap()).toList(),
-    "isDone" : isDone,
+    "isDone": isDone,
   };
 
   bool get isTypeOfText => image_1=="" && image_2=="";
