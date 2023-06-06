@@ -101,7 +101,7 @@ class _TaskPageWithImageState extends State<TaskPageWithImage> {
       appBar: BlocksAppBarWidget(
         title: widget.task.text.string,
         appBarSize: appBarSize,
-        isDone: widget.task.isDone,
+        taskId: widget.task.id,
       ),
       body: _buildScaffoldBody(),
     );

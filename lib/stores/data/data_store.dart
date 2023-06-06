@@ -153,6 +153,11 @@ abstract class _DataStore with Store {
   }
 
   @action
+  Future updateTask(Task task) async {
+    await _repository.updateTask(task);
+  }
+
+  @action
   Future updateTasks() async {
     final future = _repository.getUpdatedTask();
     fetchTasksFuture = ObservableFuture(future);
