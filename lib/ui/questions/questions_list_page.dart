@@ -2,6 +2,7 @@ import 'package:boilerplate/constants/colors.dart';
 import 'package:boilerplate/constants/dimens.dart';
 import 'package:boilerplate/utils/locale/app_localization.dart';
 import 'package:boilerplate/widgets/question_widget.dart';
+import 'package:boilerplate/widgets/questions_list_page_appBar.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:scrollable_positioned_list/scrollable_positioned_list.dart';
@@ -62,7 +63,6 @@ class _QuestionsListPageState extends State<QuestionsListPage> {
   Widget _buildQuestionWidget(int index) {
     return QuestionWidget(
       index: index,
-      itemScrollController: itemScrollController,
       question: _dataStore.questionList.elementAt(index),
       isLastQuestion: index == _dataStore.questionList.length - 1,
     );

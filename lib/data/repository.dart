@@ -445,8 +445,6 @@ class Repository {
         localUpdatedAt.last_updated_at_content);
   }
 
-
-
   Future updateContentIfNeeded() async {
     UpdatedAtTimes originUpdatedAt = await getUpdatedAtTimesFromApi();
     if (await isContentUpdated(originUpdatedAt)) {

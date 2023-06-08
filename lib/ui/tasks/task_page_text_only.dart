@@ -44,7 +44,7 @@ class _TaskPageTextOnlyState extends State<TaskPageTextOnly> {
     return Scaffold(
       backgroundColor: AppColors.main_color,
       appBar: BlocksAppBarWidget(
-          taskId: widget.task_id,
+          taskId: widget.taskId,
           title: _technicalNameWithTranslationsStore.getTechnicalNames(titleId)!,
       ),
       body: _buildScaffoldBody(),
