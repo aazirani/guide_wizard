@@ -1,3 +1,4 @@
+import 'package:dio/dio.dart';
 import 'package:mobx/mobx.dart';
 import 'package:boilerplate/models/step/step_list.dart';
 import 'package:boilerplate/data/repository.dart';
@@ -236,31 +237,66 @@ abstract class _DataStore with Store {
   get getAnswers => answers;
 
   @action
-  Future updateAnswers() async {
-    final future = _repository.getStep();
-    answers = [];
-    future.then((stepList) {
-      for(Step step in stepList.steps) {
-        for(Task task in step.tasks) {
-          for(Question question in task.questions) {
-            for(Answer answer in question.answers) {
-              if(answer.selected) {
-                answers.add(answer);
-              }
-            }
-          }
-        }
-      }
-    }).catchError((error) {
-      errorStore.errorMessage = DioErrorUtil.handleError(error);
-    });
-    return future;
-  }
+  Future<void> updateAnswers() async {
+  try {
+    final stepList = await _repository.getStep();
 
+    answers = stepList.steps.expand((step) =>
+        step.tasks.expand((task) =>
+            task.questions.expand((question) =>
+                question.answers.where((answer) => answer.selected))))
+        .toList();
+  } on DioError catch (error) {
+    errorStore.errorMessage = DioErrorUtil.handleError(error);
+  }
+}
  //.............................................................................
   String getStepImage(int stepNum) {
     return this.stepList.steps[stepNum].image!;
   }
 
-  
+  int getNumberOfSteps() {
+    return this.stepList.steps.length;
+  }
+
+  int getNumberOfTaskListTasks() {
+    return this.taskList.numTasks;
+  }
+
+  int getStepTitleId(stepIndex) {
+    return this.stepList.steps[stepIndex].name.id;
+  }
+
+  int getTaskTitleId(stepIndex, taskIndex) {
+    return this.stepList.steps[stepIndex].tasks[taskIndex].text.id;
+  }
+
+  int getTaskTitleIdByIndex(taskIndex) {
+    return this.taskList.tasks[taskIndex].text.id;
+  }
+
+  int getTaskId(taskIndex) {
+    return this.taskList.tasks[taskIndex].id;
+  }
+
+  Task getTaskByIndex(taskIndex) {
+    return this.taskList.tasks[taskIndex];
+  }
+
+  getNumberOfTasksFromAStep(index) {
+    return this.stepList.steps[index].numTasks;
+  }
+
+  bool getTaskIsDoneStatus(taskIndex) {
+    return this.taskList.tasks[taskIndex].isDone;
+  }
+
+  getTaskDeadlineStatus(taskIndex) {
+    return this.taskList.tasks[taskIndex].getDeadline();
+  }
+
+  bool getTaskType(taskIndex) {
+    return this.taskList.tasks[taskIndex].isTypeOfText;
+  }
+
 }

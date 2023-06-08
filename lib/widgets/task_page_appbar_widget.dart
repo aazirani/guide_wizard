@@ -13,7 +13,7 @@ class BlocksAppBarWidget extends StatefulWidget implements PreferredSizeWidget {
   BlocksAppBarWidget(
       {Key? key,
       required this.taskId,
-      required this.appBarSize,
+      required this.appBarSize = Dimens.blocksAppBarWidgetHeight,
       required this.title})
       : super(key: key);
 
@@ -53,7 +53,7 @@ class _BlocksAppBarWidgetState extends State<BlocksAppBarWidget> {
         onPressed: () {
           setState(() {
             current_task.isDone = !current_task.isDone;
-          _dataStore.updateTask(current_task);
+            _dataStore.updateTask(current_task);
           });
         },
         style: buttonStyle,

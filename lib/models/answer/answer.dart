@@ -55,9 +55,6 @@ class Answer {
   }
 
   factory Answer.fromMap(Map<String, dynamic> json) {
-    //   image: Endpoints.domain +
-    //       '/api/app/answers/img/${json["image"].toString().replaceAll(
-    //           Endpoints.domain + '/api/app/answers/img/', '')}',
 
     return Answer(
       id: json["id"],

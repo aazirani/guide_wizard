@@ -9,7 +9,6 @@ import 'package:boilerplate/stores/step/step_store.dart';
 import 'package:boilerplate/stores/technical_name/technical_name_with_translations_store.dart';
 import 'package:boilerplate/stores/theme/theme_store.dart';
 import 'package:boilerplate/stores/updated_at_times/updated_at_times_store.dart';
-import 'package:boilerplate/stores/user/user_store.dart';
 import 'package:boilerplate/ui/home/home.dart';
 import 'package:boilerplate/utils/locale/app_localization.dart';
 import 'package:boilerplate/utils/routes/routes.dart';
@@ -25,7 +24,6 @@ class MyApp extends StatelessWidget {
   // with Hot Reload than creating it directly in the `build` function.
   final ThemeStore _themeStore = ThemeStore(getIt<Repository>());
   final LanguageStore _languageStore = LanguageStore(getIt<Repository>());
-  final UserStore _userStore = UserStore(getIt<Repository>());
   final StepStore _stepStore = StepStore();
   final DataStore _dataStore = DataStore(getIt<Repository>());
   final TechnicalNameWithTranslationsStore _technicalNameWithTranslationsStore = TechnicalNameWithTranslationsStore(getIt<Repository>());

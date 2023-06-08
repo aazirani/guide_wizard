@@ -1,5 +1,4 @@
 import 'package:boilerplate/models/answer/answer.dart';
-import 'package:boilerplate/models/step/step.dart';
 import 'package:boilerplate/models/technical_name/technical_name.dart';
 
 class Question {

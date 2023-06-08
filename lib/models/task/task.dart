@@ -65,7 +65,7 @@ class Task {
     "isDone": isDone,
   };
 
-  bool get isTypeOfText => image_1=="" && image_2=="";
+  bool get isTypeOfText => image_1 == "" && image_2 == "";
   bool get isTypeOfImage => !isTypeOfText;
   int get subTaskCount => sub_tasks.length;
 
@@ -77,12 +77,7 @@ class Task {
     isDone = !isDone;
   }
 
-  get deadLine {
-    for (var sb = 0; sb < sub_tasks.length; sb++) {
-      if (sub_tasks[sb].deadline.technical_name != "") {
-        return true;
-      }
-    }
-    return null;
-  }
+  bool getDeadline() {
+  return sub_tasks.any((sub_task) => sub_task.deadline.technical_name.isNotEmpty);
+}
 }

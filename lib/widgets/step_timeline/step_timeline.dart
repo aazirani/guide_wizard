@@ -1,5 +1,4 @@
 import 'package:boilerplate/constants/colors.dart';
-import 'package:boilerplate/models/step/step_list.dart';
 import 'package:boilerplate/stores/current_step/current_step_store.dart';
 import 'package:flutter/material.dart';
 import 'package:timelines/timelines.dart';
@@ -51,7 +50,7 @@ class _StepTimeLineState extends State<StepTimeLine> {
                   blurRadius: 0.3,
                   offset: Offset(0, 2))
             ]),
-        child: _buildTimeline(),
+        child:_buildTimeline(),
       ),
     );
   }
@@ -60,7 +59,7 @@ class _StepTimeLineState extends State<StepTimeLine> {
     return FixedTimeline.tileBuilder(
       direction: Axis.horizontal,
       builder: TimelineTileBuilder(
-        itemCount: 4,
+        itemCount: _currentStepStore.stepsCount,
         itemExtent: (_getScreenWidth() - 50) / 4,
         indicatorBuilder: (context, index) =>
             Observer(builder: (_) => _buildIndicator(index)),
@@ -163,31 +162,31 @@ class _StepTimeLineState extends State<StepTimeLine> {
 
   Widget _buildPendingStartConnectorGradient() {
     return DecoratedLineConnector(
-      thickness: 3,
+      thickness: Dimens.pendingStartConnectorGradientThickness,
       decoration: _buildStartGradient(),
-      endIndent: 10,
+      endIndent: Dimens.pendingStartConnectorGradientEndIndent,
     );
   }
 
   Widget _buildPendingEndConnectorGradient() {
     return DecoratedLineConnector(
-        thickness: 3, decoration: _buildEndGradient(), indent: 10);
+        thickness: Dimens.pendingEndConnectorGradientThickness, decoration: _buildEndGradient(), indent: Dimens.pendingEndConnectorGradientIndent);
   }
 
   Widget _buildNotStartedStartConnector() {
     return DashedLineConnector(
-        thickness: 3,
+        thickness: Dimens.notStartedStartConnectorThickness,
         color: AppColors.stepTimelineNotStartedConnectorColor,
-        gap: 2,
-        endIndent: 10);
+        gap: Dimens.notStartedStartConnectorGap,
+        endIndent: Dimens.notStartedStartConnectorEndIndent);
   }
 
   Widget _buildNotStartedEndConnector() {
     return DashedLineConnector(
-        thickness: 3,
+        thickness: Dimens.notStartedEndConnectorThickness,
         color: AppColors.stepTimelineNotStartedConnectorColor,
-        gap: 2,
-        indent: 10);
+        gap: Dimens.notStartedEndConnectorGap,
+        indent: Dimens.notStartedEndConnectorIndent);
   }
 
   Widget _buildDoneStartConnector() {
@@ -197,9 +196,9 @@ class _StepTimeLineState extends State<StepTimeLine> {
 
   Widget _buildDoneEndConnector() {
     return SolidLineConnector(
-      thickness: 3,
+      thickness: Dimens.doneEndConnectorThickness,
       color: AppColors.main_color,
-      indent: 10,
+      indent: Dimens.doneEndConnectorIndent,
     );
   }
 
@@ -223,7 +222,7 @@ class _StepTimeLineState extends State<StepTimeLine> {
     if (_isPendingStep(index)) {
       return _buildNotStartedEndConnector();
     }
-    if (index == _currentStepStore.current_step_number - 1) {
+    if (index == _currentStepStore.currentStepNumber - 1) {
       return _buildPendingEndConnectorGradient();
     }
     if (_isNotStartedStep(index)) {
@@ -240,14 +239,14 @@ class _StepTimeLineState extends State<StepTimeLine> {
   }
 
   _isPendingStep(index) {
-    return index == _currentStepStore.current_step_number;
+    return index == _currentStepStore.currentStepNumber;
   }
 
   _isDoneStep(index) {
-    return index < _currentStepStore.current_step_number;
+    return index < _currentStepStore.currentStepNumber;
   }
 
   _isNotStartedStep(index) {
-    return index > _currentStepStore.current_step_number;
+    return index > _currentStepStore.currentStepNumber;
   }
 }

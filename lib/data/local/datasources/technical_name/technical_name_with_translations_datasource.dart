@@ -1,8 +1,4 @@
 import 'package:boilerplate/data/local/constants/db_constants.dart';
-import 'package:boilerplate/models/translation/translation.dart';
-import 'package:boilerplate/models/translation/translation_list.dart';
-// import 'package:boilerplate/models/translation/translations_with_step_name.dart';
-// import 'package:boilerplate/models/translation/translations_with_step_name_list.dart';
 import 'package:boilerplate/models/technical_name/technical_name_with_translations.dart';
 import 'package:boilerplate/models/technical_name/technical_name_with_translations_list.dart';
 import 'package:sembast/sembast.dart';

@@ -3,15 +3,13 @@ import 'dart:io';
 import 'package:boilerplate/constants/colors.dart';
 import 'package:boilerplate/constants/dimens.dart';
 import 'package:boilerplate/data/network/constants/endpoints.dart';
-import 'package:boilerplate/data/sharedpref/constants/preferences.dart';
-import 'package:boilerplate/models/technical_name/technical_name_with_translations_list.dart';
 import 'package:boilerplate/stores/current_step/current_step_store.dart';
 import 'package:boilerplate/stores/step/step_store.dart';
 import 'package:boilerplate/stores/technical_name/technical_name_with_translations_store.dart';
 import 'package:boilerplate/stores/updated_at_times/updated_at_times_store.dart';
-import 'package:boilerplate/ui/compressed_tasklist_timeline/compressed_task_list_timeline.dart';
-import 'package:boilerplate/ui/step_slider/step_slider_widget.dart';
-import 'package:boilerplate/ui/step_timeline/step_timeline.dart';
+import 'package:boilerplate/widgets/compressed_tasklist_timeline/compressed_task_list_timeline.dart';
+import 'package:boilerplate/widgets/step_slider/step_slider_widget.dart';
+import 'package:boilerplate/widgets/step_timeline/step_timeline.dart';
 import 'package:boilerplate/utils/locale/app_localization.dart';
 import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:flutter/material.dart';
@@ -272,7 +270,7 @@ class _HomeScreenState extends State<HomeScreen> {
         //step timeline
         //TODO: save current and pending steps in shared preferences
         StepTimeLine(
-          stepNo: _currentStepStore.steps_count,
+          stepNo: _currentStepStore.stepsCount,
         ),
         SizedBox(height: 25),
         _buildInProgressText(),
@@ -308,7 +306,7 @@ class _HomeScreenState extends State<HomeScreen> {
 
   Widget _buildCurrentStepText(stepStore) {
     return Observer(
-        builder: (_) => Text("${stepStore.currentStep}/${Dimens.stepNo}",
+        builder: (_) => Text("${stepStore.currentStep}/${_currentStepStore.stepsCount}",
             style: TextStyle(color: AppColors.main_color)));
   }
 

@@ -43,7 +43,7 @@ class _CompressedTasklistTimelineState
 
   Widget _buildTimelineContainer() {
     return Container(
-      padding: EdgeInsets.only(left: 20, right: 20, top: 25),
+      padding: Dimens.timelineContainerPadding,
       height: _getScreenHeight() / 2.8,
       width: double.infinity,
       child: Align(
@@ -60,13 +60,12 @@ class _CompressedTasklistTimelineState
         child: Timeline.tileBuilder(
             theme: TimelineThemeData(
               direction: Axis.vertical,
-              nodePosition: 0.009,
+              nodePosition: Dimens.timelineNodePosition,
             ),
             builder: TimelineTileBuilder(
-              itemCount: _dataStore.stepList.steps.length == 0
+              itemCount: _dataStore.getNumberOfSteps() == 0
                   ? 0
-                  : _dataStore
-                      .stepList.steps[(_stepStore.currentStep) - 1].numTasks,
+                  : _dataStore.getNumberOfTasksFromAStep((_stepStore.currentStep) - 1),
               itemExtent: 70,
               contentsBuilder: (context, index) =>
                   _buildContents(index, _stepStore),
@@ -100,7 +99,7 @@ class _CompressedTasklistTimelineState
       margin: Dimens.contentLeftMargin,
       decoration: BoxDecoration(
           color: AppColors.timelineCompressedContainerColor,
-          borderRadius: BorderRadius.all(Radius.circular(10)),
+          borderRadius: BorderRadius.all(Radius.circular(Dimens.contentRadius)),
           boxShadow: [
             BoxShadow(
               color: AppColors.timelineCompressedContainerShadowColor,
@@ -115,7 +114,7 @@ class _CompressedTasklistTimelineState
 
   Widget _buildContentElements(index, stepStore) {
     return Padding(
-      padding: const EdgeInsets.only(left: 10),
+      padding: Dimens.compressedTaskListContentPadding,
       child: Row(
         children: [
           _buildContentTitle(index, stepStore),
@@ -127,12 +126,11 @@ class _CompressedTasklistTimelineState
   }
 
   Widget _buildContentTitle(index, stepStore) {
-    var step_title_id = _dataStore
-        .stepList.steps[stepStore.currentStep - 1].tasks[index].text.id;
+    var stepTitleId = _dataStore.getTaskTitleId(stepStore.currentStep - 1, index);
     return Align(
       alignment: Alignment.centerLeft,
       child: Text(
-          "${_technicalNameWithTranslationsStore.getTechnicalNames(step_title_id)}",
+          "${_technicalNameWithTranslationsStore.getTechnicalNames(stepTitleId)}",
           style: TextStyle(
             color: AppColors.main_color,
             fontSize: 16,

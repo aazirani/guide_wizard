@@ -45,7 +45,7 @@ class _TaskListState extends State<TaskList> {
   //appBar methods .............................................................
   PreferredSizeWidget _buildAppBar() {
     //text id of the step we want to find the title of
-    int step_title_id = _dataStore.stepList.steps[widget.currentStepNo].name.id;
+    int step_title_id = _dataStore.getStepTitleId(widget.currentStepNo);
     return AppBar(
         backgroundColor: AppColors.main_color,
         toolbarHeight: Dimens.appBar["toolbarHeight"],
@@ -101,7 +101,7 @@ class _TaskListState extends State<TaskList> {
                 padding: Dimens.numberOfTasksPadding,
                 child: Observer(
                   builder: (_) => Text(
-                      "${_dataStore.taskList.numTasks} ${AppLocalizations.of(context).translate('tasks')}",
+                      "${_dataStore.getNumberOfTaskListTasks()} ${AppLocalizations.of(context).translate('tasks')}",
                       style: TextStyle(color: AppColors.white)),
                 )),
             SizedBox(height: 5),
@@ -125,17 +125,17 @@ class _TaskListState extends State<TaskList> {
             child: Container(
               decoration: BoxDecoration(
                   borderRadius: BorderRadius.only(
-                    topLeft: Radius.circular(25),
-                    topRight: Radius.circular(25),
+                    topLeft: Radius.circular(Dimens.draggableScrollableSheetRadius),
+                    topRight: Radius.circular(Dimens.draggableScrollableSheetRadius),
                   ),
                   color: AppColors.white),
               child: Observer(
                 builder: (_) => ListView.builder(
                   scrollDirection: Axis.vertical,
                   controller: scrollController,
-                  itemCount: _dataStore.taskList.numTasks,
+                  itemCount: _dataStore.getNumberOfTaskListTasks(),
                   itemBuilder: (context, i) {
-                    return TaskListTimeLine(task_number: i);
+                    return TaskListTimeLine(taskNumber: i);
                   },
                 ),
               ),
@@ -151,9 +151,9 @@ class _TaskListState extends State<TaskList> {
       height: 20,
       width: _getScreenWidth() / 1.19,
       child: Padding(
-          padding: EdgeInsets.only(right: 0, bottom: 15),
+          padding: Dimens.taskListProgressBarPadding,
           child: ClipRRect(
-            borderRadius: BorderRadius.all(Radius.circular(10)),
+            borderRadius: BorderRadius.all(Radius.circular(Dimens.taskListProgressBarRadius)),
             child: LinearProgressIndicator(
                 value: 0.2,
                 backgroundColor: AppColors.white,

@@ -53,28 +53,27 @@ class _StepSliderWidgetState extends State<StepSliderWidget> {
   }
 
   _buildCarouselSlider() {
-    return Observer(
-      builder: (_) => CarouselSlider(
-        options: CarouselOptions(
-            initialPage: _stepStore.currentStep - 1,
-            onPageChanged: (index, reason) {
-              _stepStore.increment(index);
-            },
-            height: _getScreenHeight() / 4,
-            enlargeCenterPage: false,
-            enableInfiniteScroll: false),
-        items: List<int>.generate(
-              _dataStore.stepList.steps.length, (index) => index).map((index) {
-          return Builder(
-            builder: (BuildContext context) {
-              return GestureDetector(
-                onTap: () {},
-                child: _buildSliderContainer(index),
-              );
-            },
-          );
-        }).toList(),
-      ),
+    return CarouselSlider(
+      options: CarouselOptions(
+          initialPage: _stepStore.currentStep - 1,
+          onPageChanged: (index, reason) {
+            _stepStore.increment(index);
+          },
+          height: _getScreenHeight() / 4,
+          enlargeCenterPage: false,
+          enableInfiniteScroll: false),
+      items:
+          List<int>.generate(_dataStore.stepList.steps.length, (index) => index)
+              .map((index) {
+        return Builder(
+          builder: (BuildContext context) {
+            return GestureDetector(
+              onTap: () {},
+              child: _buildSliderContainer(index),
+            );
+          },
+        );
+      }).toList(),
     );
   }
 
@@ -98,15 +97,15 @@ class _StepSliderWidgetState extends State<StepSliderWidget> {
   }
 
   BoxBorder _buildSliderBorder(index) {
-    if (index < _currentStepStore.current_step_number)
+    if (index < _currentStepStore.currentStepNumber)
       return _buildDoneBorder();
-    else if (index == _currentStepStore.current_step_number)
+    else if (index == _currentStepStore.currentStepNumber)
       return _buildPendingBorder();
     return _buildNotStartedBorder();
   }
 
   Color _buildSliderColor(index) {
-    if (index <= _currentStepStore.current_step_number) {
+    if (index <= _currentStepStore.currentStepNumber) {
       return AppColors.stepSliderAvailableColor;
     }
     return AppColors.stepSliderUnavailableColor;
@@ -127,7 +126,7 @@ class _StepSliderWidgetState extends State<StepSliderWidget> {
 
   Widget _buildContent(currentStepNo) {
     return Padding(
-      padding: EdgeInsets.only(top: 20, left: 10),
+      padding: Dimens.sliderContainerContentPadding,
       child: Column(
           mainAxisAlignment: MainAxisAlignment.start,
           crossAxisAlignment: CrossAxisAlignment.start,
@@ -148,16 +147,16 @@ class _StepSliderWidgetState extends State<StepSliderWidget> {
     var step_title_id = _dataStore.stepList.steps[currentStepNo].name.id;
     return Text(
       "${_technicalNameWithTranslationsStore.getTechnicalNames(step_title_id)}",
-      style: TextStyle(fontSize: 17, color: AppColors.main_color),
+      style: TextStyle(fontSize: Dimens.stepTitleFont, color: AppColors.main_color),
     );
   }
 
   Widget _buildStepNoOfTasks(currentStepNo) {
     return Text(
-        "${_dataStore.stepList.steps[currentStepNo].numTasks}" +
+        "${_dataStore.getNumberOfTasksFromAStep(currentStepNo)}" +
             " " +
             AppLocalizations.of(context).translate('tasks'),
-        style: TextStyle(fontSize: 15, color: AppColors.main_color));
+        style: TextStyle(fontSize: Dimens.numOfTasksFont, color: AppColors.main_color));
   }
 
   Widget _buildContinueButton(currentStepNo) {
@@ -180,7 +179,7 @@ class _StepSliderWidgetState extends State<StepSliderWidget> {
         },
         child: Row(mainAxisAlignment: MainAxisAlignment.center, children: [
           Text(AppLocalizations.of(context).translate("continue"),
-              style: TextStyle(fontSize: 12, color: AppColors.main_color)),
+              style: TextStyle(fontSize: Dimens.continueFont, color: AppColors.main_color)),
           SizedBox(width: 1),
           Icon(
             Icons.arrow_forward_ios_rounded,
@@ -200,7 +199,7 @@ class _StepSliderWidgetState extends State<StepSliderWidget> {
             AppColors.stepSliderContinueButton.withOpacity(0.5)),
         shape: MaterialStateProperty.all<RoundedRectangleBorder>(
             RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(18.0),
+                borderRadius: BorderRadius.circular(Dimens.buttonRadius),
                 side: BorderSide(color: AppColors.main_color))));
   }
 
@@ -210,7 +209,7 @@ class _StepSliderWidgetState extends State<StepSliderWidget> {
       child: Padding(
           padding: Dimens.stepSliderprogressBarPadding,
           child: ClipRRect(
-            borderRadius: BorderRadius.all(Radius.circular(10)),
+            borderRadius: BorderRadius.all(Radius.circular(Dimens.progressBarRadius)),
             child: LinearProgressIndicator(
                 // minHeight: 4,
                 value: percentage,
@@ -222,19 +221,18 @@ class _StepSliderWidgetState extends State<StepSliderWidget> {
   }
 
   Border _buildPendingBorder() {
-    return Border.all(width: 4, color: AppColors.main_color);
+    return Border.all(width: Dimens.pendingSliderBorder, color: AppColors.main_color);
   }
 
   Border _buildDoneBorder() {
-    return Border.all(width: 1, color: AppColors.main_color);
+    return Border.all(width: Dimens.doneSliderBorder, color: AppColors.main_color);
   }
 
   Border _buildNotStartedBorder() {
-    return Border.all(width: 2, color: AppColors.stepSliderUnavailableBorder);
+    return Border.all(width: Dimens.notStartedSliderBorder, color: AppColors.stepSliderUnavailableBorder);
   }
 
   //general methods ............................................................
   double _getScreenHeight() => MediaQuery.of(context).size.height;
   double _getScreenWidth() => MediaQuery.of(context).size.width;
-
 }

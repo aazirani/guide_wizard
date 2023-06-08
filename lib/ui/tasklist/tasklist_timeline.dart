@@ -12,8 +12,8 @@ import 'package:boilerplate/stores/data/data_store.dart';
 
 class TaskListTimeLine extends StatefulWidget {
   // final TaskList taskList;
-  final int task_number;
-  TaskListTimeLine({Key? key, required this.task_number}) : super(key: key);
+  final int taskNumber;
+  TaskListTimeLine({Key? key, required this.taskNumber}) : super(key: key);
 
   @override
   State<TaskListTimeLine> createState() => _TaskListTimeLineState();
@@ -33,27 +33,27 @@ class _TaskListTimeLineState extends State<TaskListTimeLine> {
 
   @override
   Widget build(BuildContext context) {
-    return _buildTimeline(widget.task_number);
+    return _buildTimeline(widget.taskNumber);
   }
 
-  Widget _buildTimeline(task_number) {
+  Widget _buildTimeline(taskNumber) {
     return TimelineTile(
       nodePosition: 0.05,
-      contents: _buildContents(task_number),
+      contents: _buildContents(taskNumber),
       node: TimelineNode(
-        indicator: _buildIndicator(task_number),
+        indicator: _buildIndicator(taskNumber),
         startConnector: _buildConnector(),
         endConnector: _buildConnector(),
       ),
     );
   }
 
-  Widget _buildIndicator(task_number) {
+  Widget _buildIndicator(taskNumber) {
     return Container(
         color: AppColors.transparent,
         width: 8,
         height: 8,
-        child: (_taskDone(task_number))
+        child: (_taskDone(taskNumber))
             ? DiamondIndicator(fill: true)
             : DiamondIndicator());
   }
@@ -63,7 +63,7 @@ class _TaskListTimeLineState extends State<TaskListTimeLine> {
         direction: Axis.vertical, color: AppColors.tasklistConnectorColor);
   }
 
-  Widget _buildContents(task_number) {
+  Widget _buildContents(taskNumber) {
     return Padding(
       padding: Dimens.contentContainerPadding,
       child: Material(
@@ -80,34 +80,34 @@ class _TaskListTimeLineState extends State<TaskListTimeLine> {
               border: Border(
                   left: BorderSide(
                 width: 25,
-                color: (_dataStore.taskList.tasks[task_number].isDone == true)
+                color: (_dataStore.getTaskIsDoneStatus(taskNumber) == true)
                     ? AppColors.contentDoneBorderColor
                     : AppColors.contentUnDoneBorderColor,
               )),
             ),
-            child: _buildInsideElements(task_number),
+            child: _buildInsideElements(taskNumber),
           ),
         ),
       ),
     );
   }
 
-  Widget _buildInsideElements(task_number) {
+  Widget _buildInsideElements(taskNumber) {
     return GestureDetector(
       onTap: () {
-        if (_dataStore.taskList.tasks[task_number].isTypeOfText) {
+        if (_dataStore.getTaskType(taskNumber)) {
           Navigator.push(
               context,
               MaterialPageRoute(
                   builder: (context) => TaskPageTextOnly(
-                        task_id: _dataStore.taskList.tasks[task_number].id,
+                        taskId: _dataStore.getTaskId(taskNumber),
                       )));
         } else {
           Navigator.push(
               context,
               MaterialPageRoute(
                   builder: (context) => TaskPageWithImage(
-                        task: _dataStore.taskList.tasks[task_number],
+                        task: _dataStore.getTaskByIndex(taskNumber),
                       )));
         }
       },
@@ -117,12 +117,12 @@ class _TaskListTimeLineState extends State<TaskListTimeLine> {
             Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               mainAxisAlignment: MainAxisAlignment.center,
-              children: (_deadLineAvailable(task_number))
+              children: (_deadLineAvailable(taskNumber))
                   ? [
-                      _buildContentTitle(task_number),
-                      _buildContentDeadline(task_number),
+                      _buildContentTitle(taskNumber),
+                      _buildContentDeadline(taskNumber),
                     ]
-                  : [Center(child: _buildContentTitle(task_number))],
+                  : [Center(child: _buildContentTitle(taskNumber))],
             ),
             Spacer(),
             _buildContentMoreIcon(),
@@ -132,9 +132,9 @@ class _TaskListTimeLineState extends State<TaskListTimeLine> {
     );
   }
 
-  Widget _buildContentTitle(task_number) {
+  Widget _buildContentTitle(taskNumber) {
     //text id of the task we want to find the title of
-    var title_id = _dataStore.taskList.tasks[task_number].text.id;
+    var title_id = _dataStore.getTaskTitleIdByIndex(taskNumber);
     return Align(
       alignment: Alignment.centerLeft,
       child: Text(
@@ -146,31 +146,31 @@ class _TaskListTimeLineState extends State<TaskListTimeLine> {
     );
   }
 
-  Widget _buildContentDeadline(task_number) {
+  Widget _buildContentDeadline(taskNumber) {
     return Container(
         padding: Dimens.contentDeadlineTopPadding,
         width: 80,
         height: 40,
-        child: (_deadLineAvailable(task_number))
-            ? _buildDeadlineContainer(task_number)
+        child: (_deadLineAvailable(taskNumber))
+            ? _buildDeadlineContainer(taskNumber)
             : null);
   }
 
-  Widget _buildDeadlineContainer(task_number) {
+  Widget _buildDeadlineContainer(taskNumber) {
     return Container(
         height: 10,
         decoration: BoxDecoration(
             borderRadius: Dimens.contentDeadlineBorderRadius,
             border: Border.all(
                 width: 1,
-                color: (_taskDone(task_number))
+                color: (_taskDone(taskNumber))
                     ? AppColors.deadlineDoneBorderColor
                     : AppColors.deadlineUnDoneBorderColor)),
         child: Center(
             child: Text("${AppLocalizations.of(context).translate('deadline')}",
                 style: TextStyle(
                     fontSize: 13,
-                    color: (_taskDone(task_number)
+                    color: (_taskDone(taskNumber)
                         ? AppColors.deadlineTextDoneColor
                         : AppColors.deadlineTextUnDoneColor)))));
   }
@@ -183,16 +183,16 @@ class _TaskListTimeLineState extends State<TaskListTimeLine> {
 
   //general methods ............................................................
   double _getScreenWidth() => MediaQuery.of(context).size.width;
-  bool _deadLineAvailable(task_number) {
-    switch (_dataStore.taskList.tasks[task_number].deadLine) {
-      case null:
+  bool _deadLineAvailable(taskNumber) {
+    switch (_dataStore.getTaskDeadlineStatus(taskNumber)) {
+      case false:
         return false;
     }
     return true;
   }
 
-  bool _taskDone(task_number) {
-    switch (_dataStore.taskList.tasks[task_number].isDone) {
+  bool _taskDone(taskNumber) {
+    switch (_dataStore.getTaskIsDoneStatus(taskNumber)) {
       case true:
         return true;
     }
