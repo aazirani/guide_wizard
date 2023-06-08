@@ -1,4 +1,5 @@
 import 'package:boilerplate/constants/colors.dart';
+import 'package:boilerplate/constants/dimens.dart';
 import 'package:boilerplate/models/task/task.dart';
 import 'package:boilerplate/widgets/sub_task_widget.dart';
 import 'package:boilerplate/widgets/task_page_appbar_widget.dart';
@@ -20,7 +21,7 @@ class TaskPageWithImage extends StatefulWidget {
 class _TaskPageWithImageState extends State<TaskPageWithImage> {
   RenderParametersManager renderManager = RenderParametersManager<dynamic>();
 
-  double appBarSize = 70.0;
+  double appBarSize = Dimens.blocksAppBarWidgetHeight;
   var imageSlideSize = Size.zero;
 
   @override
@@ -39,7 +40,6 @@ class _TaskPageWithImageState extends State<TaskPageWithImage> {
       backgroundColor: AppColors.main_color,
       appBar: BlocksAppBarWidget(
         title: widget.task.text.string,
-        appBarSize: appBarSize,
         isDone: widget.task.isDone,
       ),
       body: _buildScaffoldBody(),

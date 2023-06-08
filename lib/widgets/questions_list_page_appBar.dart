@@ -5,10 +5,13 @@ import 'package:flutter/material.dart';
 
 class QuestionsListAppBar extends StatefulWidget implements PreferredSizeWidget {
   double appBarSize;
+  double fontSize;
 
   QuestionsListAppBar(
       {Key? key,
-        this.appBarSize = 56,})
+        this.appBarSize = Dimens.questionListPageAppBarHeight,
+        this.fontSize = Dimens.questionListPageAppBarFontSize,
+      })
       : super(key: key);
 
   @override

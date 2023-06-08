@@ -10,8 +10,8 @@ class BlocksAppBarWidget extends StatefulWidget implements PreferredSizeWidget {
   BlocksAppBarWidget(
       {Key? key,
       required this.isDone,
-      required this.appBarSize,
-      required this.title})
+      required this.title,
+      this.appBarSize = Dimens.blocksAppBarWidgetHeight,})
       : super(key: key);
 
   @override

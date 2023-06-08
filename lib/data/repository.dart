@@ -80,8 +80,7 @@ class Repository {
     return stepList;
   }
 
-  Future<void> _insertItems<T>(
-      List<T> items, Future<void> Function(T) insertFunction) async {
+  Future<void> _insertItems<T>(List<T> items, Future<void> Function(T) insertFunction) async {
     for (T item in items) {
       await insertFunction(item);
     }

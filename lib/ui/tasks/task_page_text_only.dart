@@ -45,7 +45,6 @@ class _TaskPageTextOnlyState extends State<TaskPageTextOnly> {
       backgroundColor: AppColors.main_color,
       appBar: BlocksAppBarWidget(
         isDone: _dataStore.getTaskById(widget.taskId).isDone,
-        appBarSize: 70.0,
         title: _technicalNameWithTranslationsStore.getTechnicalNames(titleId)!,
       ),
       body: _buildScaffoldBody(),
@@ -58,10 +57,7 @@ class _TaskPageTextOnlyState extends State<TaskPageTextOnly> {
         color: AppColors.main_color,
         child: Container(
           decoration: BoxDecoration(
-              borderRadius: BorderRadius.only(
-                topLeft: Radius.circular(25),
-                topRight: Radius.circular(25),
-              ),
+              borderRadius: Dimens.taskPageTextOnlyScaffoldBorder,
               color: AppColors.bright_foreground_color),
           child: _buildPageContent(),
         ),
