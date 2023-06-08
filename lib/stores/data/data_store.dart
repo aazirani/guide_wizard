@@ -1,3 +1,4 @@
+import 'package:dio/dio.dart';
 import 'package:mobx/mobx.dart';
 import 'package:boilerplate/models/step/step_list.dart';
 import 'package:boilerplate/data/repository.dart';
@@ -19,10 +20,10 @@ class DataStore = _DataStore with _$DataStore;
 abstract class _DataStore with Store {
   Repository _repository;
   _DataStore(Repository repo) : this._repository = repo;
-
+  
   // store for handling errors
   final ErrorStore errorStore = ErrorStore();
-
+  
   //steplist observables
   static ObservableFuture<StepList> emptyStepsResponse =
       ObservableFuture.value(StepList(steps: []));
@@ -42,38 +43,38 @@ abstract class _DataStore with Store {
 
   //tasklist observables
   static ObservableFuture<TaskList?> emptyTaskResponse =
-      ObservableFuture.value(null);
+  ObservableFuture.value(null);
 
   static ObservableFuture<dynamic> emptyTruncateTaskResponse =
-      ObservableFuture.value(null);
+  ObservableFuture.value(null);
 
   @observable
   ObservableFuture<TaskList?> fetchTasksFuture =
-      ObservableFuture<TaskList?>(emptyTaskResponse);
+  ObservableFuture<TaskList?>(emptyTaskResponse);
 
   @observable
   ObservableFuture<dynamic> truncateTasksFuture =
-      ObservableFuture<dynamic>(emptyTruncateTaskResponse);
+  ObservableFuture<dynamic>(emptyTruncateTaskResponse);
 
   @observable
   TaskList taskList = TaskList(tasks: []);
-
+  
   @observable
   bool tasksSuccess = false;
 
-  //questions observables:
+  //questions observables: 
   static ObservableFuture<QuestionList?> emptyQuestionResponse =
-      ObservableFuture.value(null);
+  ObservableFuture.value(null);
   static ObservableFuture<dynamic> emptyTruncateQuestionResponse =
-      ObservableFuture.value(null);
+  ObservableFuture.value(null);
 
   @observable
   ObservableFuture<QuestionList?> fetchQuestionsFuture =
-      ObservableFuture<QuestionList?>(emptyQuestionResponse);
+  ObservableFuture<QuestionList?>(emptyQuestionResponse);
 
   @observable
   ObservableFuture<dynamic> truncateQuestionsFuture =
-      ObservableFuture<dynamic>(emptyTruncateQuestionResponse);
+  ObservableFuture<dynamic>(emptyTruncateQuestionResponse);
 
   @observable
   QuestionList questionList = QuestionList(questions: []);
@@ -85,23 +86,20 @@ abstract class _DataStore with Store {
   List<Answer> answers = [];
 
   @observable
-  bool answerSuccess = false;
-  //tasks computed:
+  bool success = false;
+  //tasks computed: 
   @computed
   bool get tasksLoading => fetchTasksFuture.status == FutureStatus.pending;
 
   @computed
-  bool get tasksLoadingTruncate =>
-      truncateTasksFuture.status == FutureStatus.pending;
+  bool get tasksLoadingTruncate => truncateTasksFuture.status == FutureStatus.pending;
 
   //questions computed:
   @computed
-  bool get questionLoading =>
-      fetchQuestionsFuture.status == FutureStatus.pending;
+  bool get questionLoading => fetchQuestionsFuture.status == FutureStatus.pending;
 
   @computed
-  bool get questionLoadingTruncate =>
-      truncateQuestionsFuture.status == FutureStatus.pending;
+  bool get questionLoadingTruncate => truncateQuestionsFuture.status == FutureStatus.pending;
 
 // actions......................................................................
   @action
@@ -156,6 +154,11 @@ abstract class _DataStore with Store {
   }
 
   @action
+  Future updateTask(Task task) async {
+    await _repository.updateTask(task);
+  }
+
+  @action
   Future updateTasks() async {
     final future = _repository.getUpdatedTask();
     fetchTasksFuture = ObservableFuture(future);
@@ -171,7 +174,7 @@ abstract class _DataStore with Store {
 
   @action
   Future truncateTasks() async {
-    await _repository.truncateTask();
+   await _repository.truncateTask();
   }
 
   //questions actions: .........................................................
@@ -190,18 +193,13 @@ abstract class _DataStore with Store {
 
   @action
   Future updateQuestion(Question question, Answer answer, bool value) async {
-    questionList.questions
-        .firstWhere((element) => element == question)
-        .answers
-        .firstWhere((element) => element == answer)
-        .selected = value;
+    questionList.questions.firstWhere((element) => element == question).answers.firstWhere((element) => element == answer).selected = value;
     await _repository.updateQuestion(question);
   }
 
   @action
   Question getQuestionById(int questionId) {
-    return questionList.questions
-        .firstWhere((question) => question.id == questionId);
+    return questionList.questions.firstWhere((question) => question.id == questionId);
   }
 
   @action
@@ -235,31 +233,24 @@ abstract class _DataStore with Store {
     await _repository.truncateQuestions();
   }
 
-  // answers actions:
+  // answers actions: 
+  get getAnswers => answers;
 
   @action
-  Future updateAnswers() async {
-    final future = _repository.getStep();
-    answers = [];
-    future.then((stepList) {
-      for (Step step in stepList.steps) {
-        for (Task task in step.tasks) {
-          for (Question question in task.questions) {
-            for (Answer answer in question.answers) {
-              if (answer.selected) {
-                answers.add(answer);
-              }
-            }
-          }
-        }
-      }
-    }).catchError((error) {
-      errorStore.errorMessage = DioErrorUtil.handleError(error);
-    });
-    return future;
-  }
+  Future<void> updateAnswers() async {
+  try {
+    final stepList = await _repository.getStep();
 
-  //.............................................................................
+    answers = stepList.steps.expand((step) =>
+        step.tasks.expand((task) =>
+            task.questions.expand((question) =>
+                question.answers.where((answer) => answer.selected))))
+        .toList();
+  } on DioError catch (error) {
+    errorStore.errorMessage = DioErrorUtil.handleError(error);
+  }
+}
+ //.............................................................................
   String getStepImage(int stepNum) {
     return this.stepList.steps[stepNum].image!;
   }
@@ -308,5 +299,4 @@ abstract class _DataStore with Store {
     return this.taskList.tasks[taskIndex].isTypeOfText;
   }
 
-  get getAnswers => answers;
 }

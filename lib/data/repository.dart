@@ -21,8 +21,8 @@ import 'package:boilerplate/models/sub_task/sub_task.dart';
 import 'package:boilerplate/models/sub_task/sub_task_list.dart';
 import 'package:boilerplate/models/question/question.dart';
 import 'package:sembast/sembast.dart';
-import 'local/constants/db_constants.dart';
-import 'network/apis/app_data/app_data_api.dart';
+import 'package:boilerplate/data/local/constants/db_constants.dart';
+import 'package:boilerplate/data/network/apis/app_data/app_data_api.dart';
 import 'package:devicelocale/devicelocale.dart';
 import 'package:flutter/services.dart';
 
@@ -32,8 +32,7 @@ class Repository {
   final TaskDataSource _taskDataSource;
   final SubTaskDataSource _subTaskDataSource;
   final QuestionDataSource _questionDataSource;
-  final TechnicalNameWithTranslationsDataSource
-      _technicalNameWithTranslationsDataSource;
+  final TechnicalNameWithTranslationsDataSource _technicalNameWithTranslationsDataSource;
   final UpdatedAtTimesDataSource _updatedAtTimesDataSource;
 
   // api objects
@@ -319,11 +318,7 @@ class Repository {
       _questionDataSource.deleteAll().catchError((error) => throw error);
   
   // TranslationsWithTechnicalName: ---------------------------------------------------------------------
-  Future<TechnicalNameWithTranslationsList>
-      getTechnicalNameWithTranslations() async {
-    // check to see if posts are present in database, then fetch from database
-    // else make a network call to get all posts, store them into database for
-    // later use
+  Future<TechnicalNameWithTranslationsList> getTechnicalNameWithTranslations() async {
     await truncateTechnicalNameWithTranslations();
     return await _technicalNameWithTranslationsDataSource.count() > 0
         ? _technicalNameWithTranslationsDataSource.getTranslationsFromDb()
@@ -332,9 +327,6 @@ class Repository {
                 .forEach((technicalNameWithTranslations) async {
               _technicalNameWithTranslationsDataSource
                   .insert(technicalNameWithTranslations);
-              // translationWithStepName.translations.forEach((translation) {
-              //   _languageDataSource.insert(translation.language);
-              // });
             });
 
             return t;
@@ -448,18 +440,10 @@ class Repository {
   // UpdatedAtTimes: -----------------------------------------------------------------
   Future<bool> isContentUpdated(UpdatedAtTimes originUpdatedAt) async {
     UpdatedAtTimes localUpdatedAt = await getTheLastUpdatedAtTimes();
-    // UpdatedAtTimes originUpdatedAt = await getUpdatedAtTimesFromApi();
-    // StepList stepList = await getStep();
-    // String contentUpdatedAt = stepList.steps.first.name.updated_at;
     print("origin: " + originUpdatedAt.last_updated_at_content);
     print("local: " + localUpdatedAt.last_updated_at_content);
     return isUpdated(originUpdatedAt.last_updated_at_content,
         localUpdatedAt.last_updated_at_content);
-    // (await getStep()).steps.map((e) {
-    //   if(originUpdatedAt.last_updated_at_content.compareTo(localUpdatedAt.last_updated_at_content) == 1){
-    //     return true;
-    //   }
-    // });
   }
 
 
