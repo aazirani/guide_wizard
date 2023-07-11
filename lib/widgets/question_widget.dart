@@ -88,7 +88,7 @@ class _QuestionWidgetState extends State<QuestionWidget>
   }
 
   Widget _buildTitle() {
-    var title_id = widget.question.title.id;
+    var title_id = widget.question.title;
     return Padding(
       padding: const EdgeInsets.only(top: 20, bottom: 20, left: 15),
       child: Row(
@@ -115,7 +115,7 @@ class _QuestionWidgetState extends State<QuestionWidget>
   }
 
   Widget _buildDescription() {
-    var questionSubtitleId = widget.question.sub_title.id;
+    var questionSubtitleId = widget.question.sub_title;
     return Container(
       margin: Dimens.questionDescriptionPadding,
       child: Text(
@@ -309,7 +309,7 @@ class _QuestionWidgetState extends State<QuestionWidget>
 
   Widget _buildImageOptionSubtitle(int index) {
     if (widget.question.answersHasTitle) {
-      var answer_title_id = widget.question.getAnswerByIndex(index).title.id;
+      var answer_title_id = widget.question.getAnswerByIndex(index).title;
       return Padding(
         padding: const EdgeInsets.only(top: 5, bottom: 5),
         child: Row(

@@ -1,6 +1,7 @@
 import 'package:boilerplate/constants/colors.dart';
 import 'package:boilerplate/constants/dimens.dart';
 import 'package:boilerplate/models/task/task.dart';
+import 'package:boilerplate/stores/technical_name/technical_name_with_translations_store.dart';
 import 'package:boilerplate/widgets/sub_task_widget.dart';
 import 'package:boilerplate/widgets/task_page_appbar_widget.dart';
 import 'package:boilerplate/widgets/image_slide.dart';
@@ -8,6 +9,7 @@ import 'package:boilerplate/widgets/measure_size.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:flutter/services.dart';
+import 'package:provider/provider.dart';
 import 'package:render_metrics/render_metrics.dart';
 
 class TaskPageWithImage extends StatefulWidget {
@@ -20,9 +22,16 @@ class TaskPageWithImage extends StatefulWidget {
 
 class _TaskPageWithImageState extends State<TaskPageWithImage> {
   RenderParametersManager renderManager = RenderParametersManager<dynamic>();
-
+  late TechnicalNameWithTranslationsStore _technicalNameWithTranslationsStore;
   double appBarSize = Dimens.blocksAppBarWidgetHeight;
   var imageSlideSize = Size.zero;
+
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    // initializing stores
+    _technicalNameWithTranslationsStore = Provider.of<TechnicalNameWithTranslationsStore>(context);
+  }
 
   @override
   void initState() {
@@ -39,7 +48,7 @@ class _TaskPageWithImageState extends State<TaskPageWithImage> {
     return Scaffold(
       backgroundColor: AppColors.main_color,
       appBar: BlocksAppBarWidget(
-        title: widget.task.text.string,
+        title: _technicalNameWithTranslationsStore.getTechnicalNames(widget.task.text)!,
         appBarSize: appBarSize,
         taskId: widget.task.id,
       ),
@@ -65,7 +74,7 @@ class _TaskPageWithImageState extends State<TaskPageWithImage> {
   Widget _buildImageSlide() {
     return ImageSlide(
         images: [widget.task.image_1, widget.task.image_2],
-        description: widget.task.description.string
+        description: _technicalNameWithTranslationsStore.getTechnicalNames(widget.task.description)!
     );
   }
 
