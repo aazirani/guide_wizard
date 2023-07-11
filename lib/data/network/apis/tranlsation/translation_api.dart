@@ -19,8 +19,6 @@ class TechnicalNameApi {
       getTechnicalNamesWithTranslations() async {
     try {
       final res = await _dioClient.get(Endpoints.getTechnicalNames);
-      print("hereeeeeeeeeeeeeeee");
-      print(res["rows"]);
       return TechnicalNameWithTranslationsList.fromJson(res["rows"]);
     } catch (e) {
       print(e.toString());

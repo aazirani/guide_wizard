@@ -5,9 +5,9 @@ import 'package:flutter/material.dart';
 class SubTask {
   int id;
   int task_id;
-  TechnicalName title;
-  TechnicalName markdown;
-  TechnicalName deadline;
+  int title;
+  int markdown;
+  int deadline;
   int order;
   int creator_id;
   String created_at;
@@ -33,9 +33,9 @@ class SubTask {
     return SubTask(
       id: json["id"],
       task_id: json["task_id"],
-      title: TechnicalName.fromMap(json["title"]),
-      markdown: TechnicalName.fromMap(json["markdown"]),
-      deadline: TechnicalName.fromMap(json["deadline"]),
+      title: json["title"],
+      markdown: json["markdown"],
+      deadline: json["deadline"],
       order: json["order"],
       creator_id: json["creator_id"],
       created_at: json["created_at"],
@@ -46,9 +46,9 @@ class SubTask {
   Map<String, dynamic> toMap() => {
         "id": id,
         "task_id": task_id,
-        "title": title.toMap(),
-        "markdown": markdown.toMap(),
-        "deadline": deadline.toMap(),
+        "title": title,
+        "markdown": markdown,
+        "deadline": deadline,
         "order": order,
         "creator_id": creator_id,
         "created_at": created_at,

@@ -7,17 +7,13 @@ import 'package:boilerplate/data/repository.dart';
 part 'technical_name_with_translations_store.g.dart';
 
 // This is the class used by rest of your codebase
-class TechnicalNameWithTranslationsStore = _TechnicalNameWithTranslationsStore
-    with _$TechnicalNameWithTranslationsStore;
+class TechnicalNameWithTranslationsStore = _TechnicalNameWithTranslationsStore with _$TechnicalNameWithTranslationsStore;
 
 abstract class _TechnicalNameWithTranslationsStore with Store {
   Repository _repository;
-  _TechnicalNameWithTranslationsStore(Repository repo)
-      : this._repository = repo;
+  _TechnicalNameWithTranslationsStore(Repository repo) : this._repository = repo;
 
-  static ObservableFuture<TechnicalNameWithTranslationsList>
-      emptyTechnicalNameWithTranslationsResponse = ObservableFuture.value(
-          TechnicalNameWithTranslationsList(technicalNameWithTranslations: []));
+  static ObservableFuture<TechnicalNameWithTranslationsList>emptyTechnicalNameWithTranslationsResponse = ObservableFuture.value(TechnicalNameWithTranslationsList(technicalNameWithTranslations: []));
 
   @observable
   ObservableFuture<TechnicalNameWithTranslationsList>
@@ -60,20 +56,10 @@ abstract class _TechnicalNameWithTranslationsStore with Store {
   }
 
   // methods: ..................................................................
-
   String? getTechnicalNames(int text_id) {
-    for (var i = 0;
-        i <
-            technicalNameWithTranslationsList
-                .technicalNameWithTranslations.length;
-        i++) {
-      if (technicalNameWithTranslationsList
-              .technicalNameWithTranslations[i].id ==
-          text_id) {
-        // print(technicalNameWithTranslationsList
-        //     .technicalNameWithTranslations[i].technicalName);
-        return technicalNameWithTranslationsList
-            .technicalNameWithTranslations[i].translations[this.language_id!].translated_text;
+    for (var i = 0; i < technicalNameWithTranslationsList.technicalNameWithTranslations.length; i++) {
+      if (technicalNameWithTranslationsList.technicalNameWithTranslations[i].id == text_id) {
+        return technicalNameWithTranslationsList.technicalNameWithTranslations[i].translations[this.language_id!].translated_text;
       }
     }
   }

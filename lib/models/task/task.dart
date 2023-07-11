@@ -78,6 +78,6 @@ class Task {
   }
 
   bool getDeadline() {
-  return sub_tasks.any((sub_task) => sub_task.deadline.technical_name.isNotEmpty);
-}
+    return sub_tasks.any((sub_task) => _technicalNameWithTranslationsStore.getTechnicalNames(sub_task.deadline).isNotEmpty);
+  }
 }

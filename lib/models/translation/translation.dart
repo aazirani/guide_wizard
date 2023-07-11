@@ -4,7 +4,7 @@ class Translation {
   int id;
   int text_id;
   String translated_text;
-  // String language_code;
+  int language_id;
   L.Language language;
   int creator_id;
   String created_at;
@@ -14,7 +14,7 @@ class Translation {
     required this.id,
     required this.text_id,
     required this.translated_text,
-    // required this.language_code,
+    required this.language_id,
     required this.language,
     required this.creator_id,
     required this.created_at,
@@ -26,7 +26,7 @@ class Translation {
       id: json["id"],
       text_id: json["text_id"],
       translated_text: json["translated_text"],
-      // language_code: json["language"]["language_code"],
+      language_id: json["language_id"],
       language: L.Language.fromMap(json["language"]),
       creator_id: json["creator_id"],
       created_at: json["created_at"],
@@ -39,7 +39,7 @@ class Translation {
       "id": id,
       "text_id": text_id,
       "translated_text": translated_text,
-      // "language_code": language_code,
+      "language_id": language_id,
       "language": language.toMap(),
       "creator_id": creator_id,
       "created_at": created_at,

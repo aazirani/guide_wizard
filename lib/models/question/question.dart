@@ -11,8 +11,6 @@ class Question {
   bool is_multiple_choice;
   int info_url;
   int info_description;
-  int answer_required;
-  bool answers_selected_by_default;
   int task_id;
   int creator_id;
   String created_at;
@@ -28,8 +26,6 @@ class Question {
     required this.is_multiple_choice,
     required this.info_url,
     required this.info_description,
-    required this.answer_required,
-    required this.answers_selected_by_default,
     required this.task_id,
     required this.creator_id,
     required this.created_at,
@@ -64,14 +60,14 @@ class Question {
   factory Question.fromMap(Map<String, dynamic> json) {
     return Question(
       id: json["id"],
-      title: TechnicalName.fromMap(json["title"]),
-      sub_title: TechnicalName.fromMap(json["sub_title"]),
+      title: json["title"],
+      sub_title: json["sub_title"],
       type: json["type"],
       axis_count: json["axis_count"],
       is_multiple_choice: (json["is_multiple_choice"] == 1) ? true : false,
-      info_url: TechnicalName.fromMap(json["info_url"]),
-      info_description: TechnicalName.fromMap(json["info_description"]),
-      answer_required: json["answer_required"],
+      info_url: json["info_url"],
+      info_description: json["info_description"],
+      task_id: json["task_id"],
       creator_id: json["creator_id"],
       created_at: json["created_at"],
       updated_at: json["updated_at"],
@@ -83,14 +79,14 @@ class Question {
   Map<String, dynamic> toMap() {
     return {
       "id": id,
-      "title": title.toMap(),
-      "sub_title": sub_title.toMap(),
+      "title": title,
+      "sub_title": sub_title,
       "type": type,
       "axis_count": axis_count,
       "is_multiple_choice": is_multiple_choice ? 1 : 0,
-      "info_url": info_url.toMap(),
-      "info_description": info_description.toMap(),
-      "answer_required": answer_required,
+      "info_url": info_url,
+      "info_description": info_description,
+      "task_id": task_id,
       "creator_id": creator_id,
       "created_at": created_at,
       "updated_at": updated_at,

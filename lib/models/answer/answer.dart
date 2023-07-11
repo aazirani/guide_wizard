@@ -4,10 +4,10 @@ import 'package:flutter/material.dart';
 class Answer {
   int id;
   int question_id;
-  TechnicalName title;
+  int title;
   int order;
   String? image;
-  bool selected;
+  bool selected; // Not in JSON, only for saving in datasource
   bool is_enabled;
   int creator_id;
   String created_at;
@@ -55,11 +55,10 @@ class Answer {
   }
 
   factory Answer.fromMap(Map<String, dynamic> json) {
-
     return Answer(
       id: json["id"],
       question_id: json["question_id"],
-      title: TechnicalName.fromMap(json["title"]),
+      title: json["title"],
       order: json["order"],
       image: json["image"],
       is_enabled: json["is_enabled"] == 1 ? true : false,
@@ -73,7 +72,7 @@ class Answer {
   Map<String, dynamic> toMap() => {
         "id": id,
         "question_id": question_id,
-        "title": title.toMap(),
+        "title": title,
         "order": order,
         "image": image,
         "is_enabled": is_enabled ? 1 : 0,
@@ -84,6 +83,6 @@ class Answer {
       };
 
   int getAnswerTitleID() {
-    return title.id;
+    return title;
   }
 }

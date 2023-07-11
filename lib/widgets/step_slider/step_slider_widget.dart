@@ -33,8 +33,7 @@ class _StepSliderWidgetState extends State<StepSliderWidget> {
     // initializing stores
     _dataStore = Provider.of<DataStore>(context);
     _stepStore = Provider.of<StepStore>(context);
-    _technicalNameWithTranslationsStore =
-        Provider.of<TechnicalNameWithTranslationsStore>(context);
+    _technicalNameWithTranslationsStore = Provider.of<TechnicalNameWithTranslationsStore>(context);
     _currentStepStore = Provider.of<CurrentStepStore>(context);
   }
 
