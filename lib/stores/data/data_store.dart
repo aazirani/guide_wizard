@@ -264,7 +264,7 @@ abstract class _DataStore with Store {
   }
 
   int getStepTitleId(stepIndex) {
-    return this.stepList.steps[stepIndex].name.id;
+    return this.stepList.steps[stepIndex].name;
   }
 
   int getTaskTitleId(stepIndex, taskIndex) {

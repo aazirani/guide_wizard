@@ -1,3 +1,4 @@
+import 'package:boilerplate/models/technical_name/technical_name.dart';
 import 'package:boilerplate/models/technical_name/technical_name_with_translations_list.dart';
 import 'package:mobx/mobx.dart';
 import 'package:boilerplate/data/repository.dart';

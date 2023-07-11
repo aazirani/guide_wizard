@@ -5,8 +5,8 @@ import 'package:boilerplate/models/technical_name/technical_name.dart';
 class Task {
   int id;
   int step_id;
-  TechnicalName text;
-  TechnicalName description;
+  int text;
+  int description;
   String? image_1;
   String? image_2;
   List<SubTask> sub_tasks;
@@ -35,8 +35,8 @@ class Task {
     return Task(
       id: json["id"],
       step_id: json["step_id"],
-      text: TechnicalName.fromMap(json["text"]),
-      description: TechnicalName.fromMap(json["description"]),
+      text: json["text"],
+      description: json["description"],
       image_1: json["image_1"],
       image_2: json["image_2"],
       creator_id: json["creator_id"],
@@ -53,8 +53,8 @@ class Task {
   Map<String, dynamic> toMap() => {
     "id": id,
     "step_id": step_id,
-    "text": text.toMap(),
-    "description": description.toMap(),
+    "text": text,
+    "description": description,
     "image_1": image_1,
     "image_2": image_2,
     "sub_tasks": sub_tasks.map((sub_task) => sub_task.toMap()).toList(),

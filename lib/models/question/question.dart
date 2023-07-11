@@ -4,14 +4,16 @@ import 'package:boilerplate/models/technical_name/technical_name.dart';
 class Question {
   //Server Values
   int id;
-  TechnicalName title;
-  TechnicalName sub_title;
+  int title;
+  int sub_title;
   String type;
   int axis_count;
   bool is_multiple_choice;
-  TechnicalName info_url;
-  TechnicalName info_description;
+  int info_url;
+  int info_description;
   int answer_required;
+  bool answers_selected_by_default;
+  int task_id;
   int creator_id;
   String created_at;
   String updated_at;
@@ -27,6 +29,8 @@ class Question {
     required this.info_url,
     required this.info_description,
     required this.answer_required,
+    required this.answers_selected_by_default,
+    required this.task_id,
     required this.creator_id,
     required this.created_at,
     required this.updated_at,

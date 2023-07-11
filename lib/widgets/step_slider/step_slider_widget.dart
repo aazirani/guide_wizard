@@ -144,7 +144,7 @@ class _StepSliderWidgetState extends State<StepSliderWidget> {
   }
 
   Widget _buildStepTitle(currentStepNo) {
-    var step_title_id = _dataStore.stepList.steps[currentStepNo].name.id;
+    var step_title_id = _dataStore.stepList.steps[currentStepNo].name;
     return Text(
       "${_technicalNameWithTranslationsStore.getTechnicalNames(step_title_id)}",
       style: TextStyle(fontSize: Dimens.stepTitleFont, color: AppColors.main_color),
