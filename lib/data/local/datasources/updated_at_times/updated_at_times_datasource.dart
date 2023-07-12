@@ -53,15 +53,12 @@ class UpdatedAtTimesDataSource {
     final recordSnapshots = await _updatedAtTimesStore.find(
       _db,
     );
-    // Making a List<Post> out of List<RecordSnapshot>
-    if (recordSnapshots.length > 0) {
-      updatedAtTimes = recordSnapshots.map((snapshot) {
-        UpdatedAtTimes.fromMap(snapshot.value);
-        }
-      );
-    }
+    List listOfUpdatedAtTimes = recordSnapshots.map((snapshot) {
+      updatedAtTimes = UpdatedAtTimes.fromMap(snapshot.value);
+      return updatedAtTimes;
+    }).toList();
 
-    return updatedAtTimes;
+    return listOfUpdatedAtTimes[0];
   }
 
   Future<int> update(UpdatedAtTimes updatedAtTimes) async {

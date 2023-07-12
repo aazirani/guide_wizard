@@ -16,4 +16,6 @@ class Endpoints {
   static const String getTechnicalNames = baseUrl + "/translations";
 
   static const String getUpdatedAtTimes = baseUrl + "/lastUpdates";
+
+  static const String imageBaseUrl = "http://dev-wg.collegiality.de/tasks/image/";
 }

@@ -26,10 +26,6 @@ class Answer {
     this.selected = false,
   });
 
-  bool get hasTitle {
-    return title.string != "";
-  }
-
   bool get isSelected {
     return selected;
   }
@@ -48,10 +44,6 @@ class Answer {
 
   String get getImage {
     return image!;
-  }
-
-  String get getTitle {
-    return title.string;
   }
 
   factory Answer.fromMap(Map<String, dynamic> json) {

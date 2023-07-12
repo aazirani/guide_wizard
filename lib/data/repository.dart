@@ -318,7 +318,6 @@ class Repository {
 
   // TranslationsWithTechnicalName: ---------------------------------------------------------------------
   Future<TechnicalNameWithTranslationsList> getTechnicalNameWithTranslations() async {
-    await truncateTechnicalNameWithTranslations();
     return await _technicalNameWithTranslationsDataSource.count() > 0
         ? _technicalNameWithTranslationsDataSource.getTranslationsFromDb()
         : _technicalNameApi.getTechnicalNamesWithTranslations().then((t) {
@@ -426,7 +425,7 @@ class Repository {
   }
 
   bool isUpdated(String maybeUpdated, String old) {
-    if (maybeUpdated.compareTo(old) == 1) {
+    if (maybeUpdated != old) {
       return true;
     }
     return false;
@@ -437,17 +436,21 @@ class Repository {
   }
 
   // UpdatedAtTimes: -----------------------------------------------------------------
-  Future<bool> isContentUpdated(UpdatedAtTimes originUpdatedAt) async {
+  Future<bool> isContentUpdated() async {
     UpdatedAtTimes localUpdatedAt = await getTheLastUpdatedAtTimes();
+    UpdatedAtTimes originUpdatedAt = await getUpdatedAtTimesFromApi();
     print("origin: " + originUpdatedAt.last_updated_at_content);
     print("local: " + localUpdatedAt.last_updated_at_content);
+    print("origin: " + originUpdatedAt.last_updated_at_technical_names);
+    print("local: " + localUpdatedAt.last_updated_at_technical_names);
     return isUpdated(originUpdatedAt.last_updated_at_content,
-        localUpdatedAt.last_updated_at_content);
+        localUpdatedAt.last_updated_at_content) || isUpdated(originUpdatedAt.last_updated_at_technical_names,
+        localUpdatedAt.last_updated_at_technical_names);
   }
 
   Future updateContentIfNeeded() async {
     UpdatedAtTimes originUpdatedAt = await getUpdatedAtTimesFromApi();
-    if (await isContentUpdated(originUpdatedAt)) {
+    if (await isContentUpdated()) {
       StepList _stepList = await getStep();
       await truncateContent();
       StepList stepList = await _stepApi.getSteps();
@@ -487,9 +490,8 @@ class Repository {
   }
 
   Future<UpdatedAtTimes> getUpdatedAtTimesFromApi() async {
-    return await _updatedAtTimesApi.getUpdatedAtTimes().then((updatedAtTimes) {
-      return updatedAtTimes;
-    });
+    UpdatedAtTimes updatedAtTimes = await _updatedAtTimesApi.getUpdatedAtTimes();
+    return updatedAtTimes;
   }
 
   Future<List<UpdatedAtTimes>> findUpdatedAtTimesByID(int id) {

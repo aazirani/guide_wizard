@@ -65,7 +65,7 @@ class Task {
     "isDone": isDone,
   };
 
-  bool get isTypeOfText => image_1 == "" && image_2 == "";
+  bool get isTypeOfText => image_1 == null && image_2 == null;
   bool get isTypeOfImage => !isTypeOfText;
   int get subTaskCount => sub_tasks.length;
 
@@ -75,9 +75,5 @@ class Task {
 
   void toggleDone() {
     isDone = !isDone;
-  }
-
-  bool getDeadline() {
-    return sub_tasks.any((sub_task) => sub_task.deadline.technical_name.isNotEmpty);
   }
 }

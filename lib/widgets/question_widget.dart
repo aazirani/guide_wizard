@@ -308,7 +308,7 @@ class _QuestionWidgetState extends State<QuestionWidget>
   }
 
   Widget _buildImageOptionSubtitle(int index) {
-    if (widget.question.answersHasTitle) {
+    if (answerHasTitle(widget.question)) {
       var answer_title_id = widget.question.getAnswerByIndex(index).title;
       return Padding(
         padding: const EdgeInsets.only(top: 5, bottom: 5),
@@ -352,8 +352,15 @@ class _QuestionWidgetState extends State<QuestionWidget>
     }
   }
 
+  bool answerHasTitle(Question question) {
+    if(question.answers.length != 0) {
+      return _technicalNameWithTranslationsStore.getTechnicalNames(question.answers.elementAt(0).id)!.isNotEmpty;
+    }
+    return false;
+  }
+
   Widget _buildImageCheckBox(int index) {
-    if (widget.question.answersHasTitle) {
+    if (answerHasTitle(widget.question)) {
       return SizedBox();
     }
     return Checkbox(

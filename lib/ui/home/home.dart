@@ -66,9 +66,12 @@ class _HomeScreenState extends State<HomeScreen> {
       print(_languageStore.locale);
 
       // Loading data (from datasource if data is downloaded before):
-      await _loadDataWithoutErrorHandling(context);
+      await _loadDataWithoutErrorHandling(context); // TODO: delete this one
       // Checking whether there is an update:
       await _checkForUpdate(context);
+      // Loading data (from datasource if data is downloaded before):
+      await _loadDataWithoutErrorHandling(context);
+
     });
   }
 
@@ -185,11 +188,10 @@ class _HomeScreenState extends State<HomeScreen> {
         height: 75.0,
         hideText: false,
         indicatorColor: Colors.red);
-    await _technicalNameWithTranslationsStore
-        .getTechnicalNameWithTranslations();
-    await _updatedAtTimesStore.updateContentIfNeeded();
-    await _dataStore.getAllTasks();
-    await _dataStore.getQuestions();
+    // _dialog!.hide();
+    if (!_updatedAtTimesStore.loading) {
+      await _updatedAtTimesStore.updateContentIfNeeded(); //TODO: handle network exception here
+    }
     _dialog!.hide();
   }
 
@@ -204,9 +206,7 @@ class _HomeScreenState extends State<HomeScreen> {
         hideText: false,
         indicatorColor: AppColors.main_color);
     if (!_dataStore.stepLoading) {
-      //fill stores with updated data
-      await _technicalNameWithTranslationsStore
-          .getTechnicalNameWithTranslations();
+      await _technicalNameWithTranslationsStore.getTechnicalNameWithTranslations();
       await _dataStore.getSteps();
       await _currentStepStore.setStepsCount(_dataStore.stepList.steps.length);
       await _dataStore.getAllTasks();

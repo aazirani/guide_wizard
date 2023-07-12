@@ -1,5 +1,6 @@
 import 'package:boilerplate/constants/colors.dart';
 import 'package:boilerplate/constants/dimens.dart';
+import 'package:boilerplate/data/network/constants/endpoints.dart';
 import 'package:boilerplate/stores/current_step/current_step_store.dart';
 import 'package:boilerplate/stores/step/step_store.dart';
 import 'package:boilerplate/ui/questions/questions_list_page.dart';
@@ -111,6 +112,7 @@ class _StepSliderWidgetState extends State<StepSliderWidget> {
   }
 
   Widget _buildAvatar(int index) {
+    if(_dataStore.getStepImage(index) == null) return SizedBox();
     return Padding(
       padding: Dimens.stepAvatar,
       child: Container(
@@ -118,7 +120,7 @@ class _StepSliderWidgetState extends State<StepSliderWidget> {
           alignment: Alignment.centerRight,
           decoration: BoxDecoration(
             image: DecorationImage(
-                image: NetworkImage(_dataStore.getStepImage(index))),
+                image: NetworkImage(Endpoints.imageBaseUrl + _dataStore.getStepImage(index)!)),
           )),
     );
   }
@@ -163,7 +165,7 @@ class _StepSliderWidgetState extends State<StepSliderWidget> {
       child: TextButton(
         style: _buildButtonStyle(),
         onPressed: () {
-          if (_stepStore.currentStep == 1) {
+          if (currentStepNo == 0) {
             Navigator.push(context,
                 MaterialPageRoute(builder: (context) => QuestionsListPage()));
           } else {

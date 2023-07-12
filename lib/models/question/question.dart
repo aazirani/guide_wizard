@@ -33,22 +33,6 @@ class Question {
     required this.answers,
   });
 
-
-  bool get answersHasTitle {
-    if(answers.length != 0) {
-      return answers.elementAt(0).hasTitle;
-    }
-    return false;
-  }
-
-  String get getTitle {
-    return title.string;
-  }
-
-  String get getSubTitle {
-    return sub_title.string;
-  }
-
   List<Answer> getAnswers() {
     return answers;
   }

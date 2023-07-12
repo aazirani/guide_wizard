@@ -251,8 +251,8 @@ abstract class _DataStore with Store {
   }
 }
  //.............................................................................
-  String getStepImage(int stepNum) {
-    return this.stepList.steps[stepNum].image!;
+  String? getStepImage(int stepNum) {
+    return this.stepList.steps[stepNum].image;
   }
 
   int getNumberOfSteps() {
@@ -268,11 +268,11 @@ abstract class _DataStore with Store {
   }
 
   int getTaskTitleId(stepIndex, taskIndex) {
-    return this.stepList.steps[stepIndex].tasks[taskIndex].text.id;
+    return this.stepList.steps[stepIndex].tasks[taskIndex].text;
   }
 
   int getTaskTitleIdByIndex(taskIndex) {
-    return this.taskList.tasks[taskIndex].text.id;
+    return this.taskList.tasks[taskIndex].text;
   }
 
   int getTaskId(taskIndex) {
@@ -291,9 +291,9 @@ abstract class _DataStore with Store {
     return this.taskList.tasks[taskIndex].isDone;
   }
 
-  getTaskDeadlineStatus(taskIndex) {
-    return this.taskList.tasks[taskIndex].getDeadline();
-  }
+  // getTaskDeadlineStatus(taskIndex) {
+  //   return this.taskList.tasks[taskIndex].sub_tasks.any((sub_task) => sub_task.deadline.isNotEmpty);
+  // }
 
   bool getTaskType(taskIndex) {
     return this.taskList.tasks[taskIndex].isTypeOfText;

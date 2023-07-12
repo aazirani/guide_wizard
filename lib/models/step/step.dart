@@ -7,7 +7,7 @@ class Step {
   int description;
   int order;
   String? image;
-  String creator_id;
+  int creator_id;
   String created_at;
   String updated_at;
   List<Task> tasks;
