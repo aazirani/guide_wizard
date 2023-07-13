@@ -34,7 +34,8 @@ class _StepSliderWidgetState extends State<StepSliderWidget> {
     // initializing stores
     _dataStore = Provider.of<DataStore>(context);
     _stepStore = Provider.of<StepStore>(context);
-    _technicalNameWithTranslationsStore = Provider.of<TechnicalNameWithTranslationsStore>(context);
+    _technicalNameWithTranslationsStore =
+        Provider.of<TechnicalNameWithTranslationsStore>(context);
     _currentStepStore = Provider.of<CurrentStepStore>(context);
   }
 
@@ -112,7 +113,7 @@ class _StepSliderWidgetState extends State<StepSliderWidget> {
   }
 
   Widget _buildAvatar(int index) {
-    if(_dataStore.getStepImage(index) == null) return SizedBox();
+    if (_dataStore.getStepImage(index) == null) return SizedBox();
     return Padding(
       padding: Dimens.stepAvatar,
       child: Container(
@@ -120,7 +121,8 @@ class _StepSliderWidgetState extends State<StepSliderWidget> {
           alignment: Alignment.centerRight,
           decoration: BoxDecoration(
             image: DecorationImage(
-                image: NetworkImage(Endpoints.imageBaseUrl + _dataStore.getStepImage(index)!)),
+                image: NetworkImage(
+                    Endpoints.imageBaseUrl + _dataStore.getStepImage(index)!)),
           )),
     );
   }
@@ -148,7 +150,8 @@ class _StepSliderWidgetState extends State<StepSliderWidget> {
     var step_title_id = _dataStore.stepList.steps[currentStepNo].name;
     return Text(
       "${_technicalNameWithTranslationsStore.getTechnicalNames(step_title_id)}",
-      style: TextStyle(fontSize: Dimens.stepTitleFont, color: AppColors.main_color),
+      style: TextStyle(
+          fontSize: Dimens.stepTitleFont, color: AppColors.main_color),
     );
   }
 
@@ -157,7 +160,8 @@ class _StepSliderWidgetState extends State<StepSliderWidget> {
         "${_dataStore.getNumberOfTasksFromAStep(currentStepNo)}" +
             " " +
             AppLocalizations.of(context).translate('tasks'),
-        style: TextStyle(fontSize: Dimens.numOfTasksFont, color: AppColors.main_color));
+        style: TextStyle(
+            fontSize: Dimens.numOfTasksFont, color: AppColors.main_color));
   }
 
   Widget _buildContinueButton(currentStepNo) {
@@ -169,7 +173,8 @@ class _StepSliderWidgetState extends State<StepSliderWidget> {
             Navigator.push(context,
                 MaterialPageRoute(builder: (context) => QuestionsListPage()));
           } else {
-            _dataStore.getTasks(_stepStore.currentStep);
+            var stepId = _dataStore.getStepId(_stepStore.currentStep - 1);
+            _dataStore.getTasks(stepId);
             Navigator.push(
                 context,
                 MaterialPageRoute(
@@ -180,7 +185,8 @@ class _StepSliderWidgetState extends State<StepSliderWidget> {
         },
         child: Row(mainAxisAlignment: MainAxisAlignment.center, children: [
           Text(AppLocalizations.of(context).translate("continue"),
-              style: TextStyle(fontSize: Dimens.continueFont, color: AppColors.main_color)),
+              style: TextStyle(
+                  fontSize: Dimens.continueFont, color: AppColors.main_color)),
           SizedBox(width: 1),
           Icon(
             Icons.arrow_forward_ios_rounded,
@@ -210,7 +216,8 @@ class _StepSliderWidgetState extends State<StepSliderWidget> {
       child: Padding(
           padding: Dimens.stepSliderprogressBarPadding,
           child: ClipRRect(
-            borderRadius: BorderRadius.all(Radius.circular(Dimens.progressBarRadius)),
+            borderRadius:
+                BorderRadius.all(Radius.circular(Dimens.progressBarRadius)),
             child: LinearProgressIndicator(
                 // minHeight: 4,
                 value: percentage,
@@ -222,15 +229,19 @@ class _StepSliderWidgetState extends State<StepSliderWidget> {
   }
 
   Border _buildPendingBorder() {
-    return Border.all(width: Dimens.pendingSliderBorder, color: AppColors.main_color);
+    return Border.all(
+        width: Dimens.pendingSliderBorder, color: AppColors.main_color);
   }
 
   Border _buildDoneBorder() {
-    return Border.all(width: Dimens.doneSliderBorder, color: AppColors.main_color);
+    return Border.all(
+        width: Dimens.doneSliderBorder, color: AppColors.main_color);
   }
 
   Border _buildNotStartedBorder() {
-    return Border.all(width: Dimens.notStartedSliderBorder, color: AppColors.stepSliderUnavailableBorder);
+    return Border.all(
+        width: Dimens.notStartedSliderBorder,
+        color: AppColors.stepSliderUnavailableBorder);
   }
 
   //general methods ............................................................
