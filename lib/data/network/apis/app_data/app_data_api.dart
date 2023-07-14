@@ -19,7 +19,6 @@ class StepApi {
   Future<StepList> getSteps(String parameters) async {
     try {
       final res = await _dioClient.get(Endpoints.getAppData + parameters);
-      print("url is ${Endpoints.getAppData + parameters}");
       return StepList.fromJson(res["rows"]);
     } catch (e) {
       print(e.toString());

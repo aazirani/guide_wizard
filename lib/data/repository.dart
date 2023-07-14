@@ -439,15 +439,11 @@ class Repository {
   Future<bool> isContentUpdated() async {
     UpdatedAtTimes localUpdatedAt = await getTheLastUpdatedAtTimes();
     UpdatedAtTimes originUpdatedAt = await getUpdatedAtTimesFromApi();
-    print("origin: " + originUpdatedAt.last_updated_at_content);
-    print("local: " + localUpdatedAt.last_updated_at_content);
-    print("origin: " + originUpdatedAt.last_updated_at_technical_names);
-    print("local: " + localUpdatedAt.last_updated_at_technical_names);
-    bool status = isUpdated(originUpdatedAt.last_updated_at_content,
-        localUpdatedAt.last_updated_at_content) || isUpdated(originUpdatedAt.last_updated_at_technical_names,
-        localUpdatedAt.last_updated_at_technical_names);
-    print("is json updated: {$status}");
-    return status;
+    bool isContentUpdated = isUpdated(originUpdatedAt.last_updated_at_content,
+        localUpdatedAt.last_updated_at_content);
+    bool isTranslationUpdated = isUpdated(originUpdatedAt.last_updated_at_technical_names,
+    localUpdatedAt.last_updated_at_technical_names);
+    return isContentUpdated || isTranslationUpdated;
   }
 
   Future updateContentIfNeeded() async {
