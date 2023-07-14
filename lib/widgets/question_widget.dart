@@ -2,6 +2,7 @@ import 'dart:math' as math;
 
 import 'package:boilerplate/constants/colors.dart';
 import 'package:boilerplate/constants/dimens.dart';
+import 'package:boilerplate/data/network/constants/endpoints.dart';
 import 'package:boilerplate/models/question/question.dart';
 import 'package:boilerplate/stores/current_step/current_step_store.dart';
 import 'package:boilerplate/stores/step/step_store.dart';
@@ -272,7 +273,7 @@ class _QuestionWidgetState extends State<QuestionWidget>
                 title: Column(
                   children: [
                     _buildImageLoader(
-                        widget.question.getAnswerByIndex(index).getImage),
+                        Endpoints.imageBaseUrl + widget.question.getAnswerByIndex(index).getImage),
                     _buildImageOptionSubtitle(index),
                   ],
                 ),
@@ -354,7 +355,7 @@ class _QuestionWidgetState extends State<QuestionWidget>
 
   bool answerHasTitle(Question question) {
     if(question.answers.length != 0) {
-      return _technicalNameWithTranslationsStore.getTechnicalNames(question.answers.elementAt(0).id)!.isNotEmpty;
+      return _technicalNameWithTranslationsStore.getTechnicalNames(question.answers.elementAt(0).title)!.isNotEmpty;
     }
     return false;
   }
