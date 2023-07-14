@@ -443,9 +443,11 @@ class Repository {
     print("local: " + localUpdatedAt.last_updated_at_content);
     print("origin: " + originUpdatedAt.last_updated_at_technical_names);
     print("local: " + localUpdatedAt.last_updated_at_technical_names);
-    return isUpdated(originUpdatedAt.last_updated_at_content,
+    bool status = isUpdated(originUpdatedAt.last_updated_at_content,
         localUpdatedAt.last_updated_at_content) || isUpdated(originUpdatedAt.last_updated_at_technical_names,
         localUpdatedAt.last_updated_at_technical_names);
+    print("is json updated: {$status}");
+    return status;
   }
 
   Future updateContentIfNeeded() async {
