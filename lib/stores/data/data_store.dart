@@ -304,11 +304,18 @@ abstract class _DataStore with Store {
     return this.taskList.tasks[taskIndex].isDone;
   }
 
-  // getTaskDeadlineStatus(taskIndex) {
-  //   return this.taskList.tasks[taskIndex].sub_tasks.any((sub_task) => sub_task.deadline.isNotEmpty);
-  // }
-
   bool getTaskType(taskIndex) {
     return this.taskList.tasks[taskIndex].isTypeOfText;
+  }
+
+  List<Answer> getSelectedAnswers() {
+    List<Answer> selectedAnswers = [];
+    if(this.stepList.steps.length == 0 || this.stepList.steps[0].tasks.length == 0) return selectedAnswers;
+    this.stepList.steps[0].tasks[0].questions.forEach((question) {
+      question.answers.forEach((answer) {
+        if (answer.isSelected) selectedAnswers.add(answer);
+      });
+    });
+    return selectedAnswers;
   }
 }

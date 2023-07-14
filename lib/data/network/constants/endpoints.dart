@@ -11,11 +11,11 @@ class Endpoints {
   static const int connectionTimeout = 30000;
 
   // booking endpoints
-  static const String getAppData = baseUrl + "/content";
+  static const String getAppData = baseUrl + "/content?";
 
-  static const String getTechnicalNames = baseUrl + "/translations";
+  static const String getTechnicalNames = baseUrl + "/translations?";
 
-  static const String getUpdatedAtTimes = baseUrl + "/lastUpdates";
+  static const String getUpdatedAtTimes = baseUrl + "/lastUpdates?";
 
   static const String imageBaseUrl = "http://dev-wg.collegiality.de/tasks/image/";
 }

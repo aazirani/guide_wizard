@@ -16,9 +16,9 @@ class UpdatedAtTimesApi{
   UpdatedAtTimesApi(this._dioClient, this._restClient);
 
   /// Returns list of post in response
-  Future<UpdatedAtTimes> getUpdatedAtTimes() async {
+  Future<UpdatedAtTimes> getUpdatedAtTimes(String parameters) async {
     try {
-      final res = json.decode(await _dioClient.get(Endpoints.getUpdatedAtTimes));
+      final res = json.decode(await _dioClient.get(Endpoints.getUpdatedAtTimes + parameters));
       return UpdatedAtTimes.fromJson([res]);
     } catch (e) {
       print(e.toString());

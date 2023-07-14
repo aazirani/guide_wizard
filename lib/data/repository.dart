@@ -68,7 +68,7 @@ class Repository {
 
   Future<StepList> getStepFromApi() async {
     await truncateContent();
-    StepList stepList = await _stepApi.getSteps();
+    StepList stepList = await _stepApi.getSteps(await getUrlParameters());
     for (Step step in stepList.steps) {
       await _stepDataSource.insert(step);
       for (Task task in step.tasks) {
@@ -320,7 +320,7 @@ class Repository {
   Future<TechnicalNameWithTranslationsList> getTechnicalNameWithTranslations() async {
     return await _technicalNameWithTranslationsDataSource.count() > 0
         ? _technicalNameWithTranslationsDataSource.getTranslationsFromDb()
-        : _technicalNameApi.getTechnicalNamesWithTranslations().then((t) {
+        : _technicalNameApi.getTechnicalNamesWithTranslations(await getUrlParameters()).then((t) {
             t.technicalNameWithTranslations
                 .forEach((technicalNameWithTranslations) async {
               _technicalNameWithTranslationsDataSource
@@ -454,31 +454,33 @@ class Repository {
     UpdatedAtTimes originUpdatedAt = await getUpdatedAtTimesFromApi();
     if (await isContentUpdated()) {
       StepList _stepList = await getStep();
+      QuestionList _oldQuestions = await getQuestions();
+      StepList stepList = await _stepApi.getSteps(await getUrlParameters());
       await truncateContent();
-      StepList stepList = await _stepApi.getSteps();
       for (Step step in stepList.steps) {
-        _stepDataSource.insert(step);
+        await _stepDataSource.insert(step);
         for (Task task in step.tasks) {
-          _taskDataSource.insert(task);
+          await _taskDataSource.insert(task);
           for (SubTask subTask in task.sub_tasks) {
-            _subTaskDataSource.insert(subTask);
+            await _subTaskDataSource.insert(subTask);
             if(_stepList.findSubTaskByID(subTask.id) == null){
               task.isDone = false;
             }
           }
           for (Question question in task.questions) {
-            Question? foundOldQuestion = _stepList.findQuestionByID(question.id);
+            Question? foundOldQuestion = _oldQuestions.questions.firstWhere((q) => q.title == question.title);
+
             if (foundOldQuestion != null) {
-              _questionDataSource.insert(foundOldQuestion);
+              await _questionDataSource.insert(foundOldQuestion);
             } else {
-              _questionDataSource.insert(question);
+              await _questionDataSource.insert(question);
             }
           }
         }
       }
-      await truncateUpdatedAtTimes();
-      await _updatedAtTimesDataSource.insert(originUpdatedAt);
     }
+    await truncateUpdatedAtTimes();
+    await _updatedAtTimesDataSource.insert(originUpdatedAt);
   }
 
   Future<UpdatedAtTimes> getTheLastUpdatedAtTimes() async {
@@ -492,7 +494,7 @@ class Repository {
   }
 
   Future<UpdatedAtTimes> getUpdatedAtTimesFromApi() async {
-    UpdatedAtTimes updatedAtTimes = await _updatedAtTimesApi.getUpdatedAtTimes();
+    UpdatedAtTimes updatedAtTimes = await _updatedAtTimesApi.getUpdatedAtTimes(await getUrlParameters());
     return updatedAtTimes;
   }
 
@@ -549,4 +551,31 @@ class Repository {
       _sharedPrefsHelper.setStepsCount(value);
 
   int? get stepsCount => _sharedPrefsHelper.stepsCount;
+
+  // URL parameters: -----------------------------------------------------------------
+  Future<List<int>> getSelectedAnswers() async {
+    List<int> selectedAnswers = [];
+    QuestionList questionList;
+    try{
+      questionList = await _questionDataSource.getQuestionsFromDb();
+    } catch (error){
+      questionList = QuestionList(questions: []);
+    }
+
+    questionList.questions.forEach((question) {
+      question.answers.forEach((answer) {
+        if (answer.isSelected) selectedAnswers.add(answer.title);
+      });
+    });
+    return selectedAnswers;
+  }
+
+  Future<String> getAnswerIdsParameter() async {
+    List<int> selectedAnswers = await getSelectedAnswers();
+    return "answerIds=" + selectedAnswers.join(",");
+  }
+
+  Future<String> getUrlParameters() async {
+    return getAnswerIdsParameter();
+  }
 }
