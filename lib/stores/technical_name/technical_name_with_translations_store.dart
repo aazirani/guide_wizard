@@ -57,10 +57,6 @@ abstract class _TechnicalNameWithTranslationsStore with Store {
 
   // methods: ..................................................................
   String? getTechnicalNames(int text_id) {
-    for (var i = 0; i < technicalNameWithTranslationsList.technicalNameWithTranslations.length; i++) {
-      if (technicalNameWithTranslationsList.technicalNameWithTranslations[i].id == text_id) {
-        return technicalNameWithTranslationsList.technicalNameWithTranslations[i].translations[this.language_id!].translated_text;
-      }
-    }
+    return technicalNameWithTranslationsList.technicalNameWithTranslations.firstWhere((element) => element.id == text_id).translations[this.language_id!].translated_text;
   }
 }

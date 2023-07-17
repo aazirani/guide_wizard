@@ -425,10 +425,7 @@ class Repository {
   }
 
   bool isUpdated(String maybeUpdated, String old) {
-    if (maybeUpdated != old) {
-      return true;
-    }
-    return false;
+    return maybeUpdated != old;
   }
 
   bool isNotUpdated(String maybeUpdated, String old) {

@@ -179,22 +179,9 @@ class _HomeScreenState extends State<HomeScreen> {
   }
 
   Future _checkForUpdate(BuildContext context) async {
-    // Warning: We may need these comments later!
-
-    // _dialog ??= SimpleFontelicoProgressDialog(context: context);
-    // _dialog!.show(
-    //     message: AppLocalizations.of(context).translate("loading_dialog_text"),
-    //     type: SimpleFontelicoProgressDialogType.normal,
-    //     horizontal: true,
-    //     width: 175.0,
-    //     height: 75.0,
-    //     hideText: false,
-    //     indicatorColor: Colors.red);
-    // _dialog!.hide();
     if (!_updatedAtTimesStore.loading) {
       await _updatedAtTimesStore.updateContentIfNeeded(); //TODO: handle network exception here
     }
-    // _dialog!.hide();
   }
 
   Future _loadDataWithoutErrorHandling(BuildContext context) async {
