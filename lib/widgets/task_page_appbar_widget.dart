@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:boilerplate/models/task/task.dart';
 import 'package:boilerplate/stores/data/data_store.dart';
+import 'package:boilerplate/stores/step/step_store.dart';
 
 class BlocksAppBarWidget extends StatefulWidget implements PreferredSizeWidget {
   int taskId;
@@ -27,19 +28,21 @@ class BlocksAppBarWidget extends StatefulWidget implements PreferredSizeWidget {
 }
 
 class _BlocksAppBarWidgetState extends State<BlocksAppBarWidget> {
-
   late DataStore _dataStore;
+  late StepStore _stepStore;
   @override
   void didChangeDependencies() {
     super.didChangeDependencies();
     _dataStore = Provider.of<DataStore>(context);
+    _stepStore = Provider.of<StepStore>(context);
   }
 
   _buildDoneUndoneButtonStyle() {
     Task current_task = _dataStore.getTaskById(widget.taskId);
     return ElevatedButton.styleFrom(
         padding: EdgeInsets.all(0),
-        backgroundColor: current_task.isDone ? AppColors.white : AppColors.main_color,
+        backgroundColor:
+            current_task.isDone ? AppColors.white : AppColors.main_color,
         foregroundColor: AppColors.bright_foreground_color.withOpacity(0.1),
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(7.0),
@@ -53,7 +56,11 @@ class _BlocksAppBarWidgetState extends State<BlocksAppBarWidget> {
         onPressed: () {
           setState(() {
             current_task.isDone = !current_task.isDone;
-            _dataStore.updateTask(current_task);
+            _dataStore.updateTask(current_task).then((_) {
+              _dataStore.getTasks(_stepStore.currentStep).then((_) {
+                setState(() {});
+              });
+            });
           });
         },
         style: buttonStyle,
