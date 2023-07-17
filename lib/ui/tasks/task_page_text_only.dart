@@ -40,7 +40,7 @@ class _TaskPageTextOnlyState extends State<TaskPageTextOnly> {
 
   @override
   Widget build(BuildContext context) {
-    var titleId = _dataStore.getTaskById(widget.taskId).text.id;
+    var titleId = _dataStore.getTaskById(widget.taskId).text;
     return Scaffold(
       backgroundColor: AppColors.main_color,
       appBar: BlocksAppBarWidget(
@@ -75,7 +75,7 @@ class _TaskPageTextOnlyState extends State<TaskPageTextOnly> {
   }
 
   _buildDescription() {
-    var descriptionId = _dataStore.getTaskById(widget.taskId).description.id;
+    var descriptionId = _dataStore.getTaskById(widget.taskId).description;
     return Padding(
       padding: Dimens.taskPageTextOnlyListViewPadding,
       child: Observer(

@@ -72,7 +72,6 @@ class QuestionDataSource {
     // For filtering by key (ID), RegEx, greater than, and many other criteria,
     // we use a Finder.
     final finder = Finder(filter: Filter.byKey(question.id));
-    print("here is the map: " + question.toMap().toString());
     return await _questionsStore.update(
       _db,
       question.toMap(),

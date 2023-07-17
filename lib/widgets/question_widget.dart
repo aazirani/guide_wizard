@@ -2,6 +2,7 @@ import 'dart:math' as math;
 
 import 'package:boilerplate/constants/colors.dart';
 import 'package:boilerplate/constants/dimens.dart';
+import 'package:boilerplate/data/network/constants/endpoints.dart';
 import 'package:boilerplate/models/question/question.dart';
 import 'package:boilerplate/stores/current_step/current_step_store.dart';
 import 'package:boilerplate/stores/step/step_store.dart';
@@ -88,7 +89,7 @@ class _QuestionWidgetState extends State<QuestionWidget>
   }
 
   Widget _buildTitle() {
-    var title_id = widget.question.title.id;
+    var title_id = widget.question.title;
     return Padding(
       padding: const EdgeInsets.only(top: 20, bottom: 20, left: 15),
       child: Row(
@@ -115,7 +116,7 @@ class _QuestionWidgetState extends State<QuestionWidget>
   }
 
   Widget _buildDescription() {
-    var questionSubtitleId = widget.question.sub_title.id;
+    var questionSubtitleId = widget.question.sub_title;
     return Container(
       margin: Dimens.questionDescriptionPadding,
       child: Text(
@@ -272,7 +273,7 @@ class _QuestionWidgetState extends State<QuestionWidget>
                 title: Column(
                   children: [
                     _buildImageLoader(
-                        widget.question.getAnswerByIndex(index).getImage),
+                        Endpoints.answersImageBaseUrl + widget.question.getAnswerByIndex(index).getImage),
                     _buildImageOptionSubtitle(index),
                   ],
                 ),
@@ -308,8 +309,8 @@ class _QuestionWidgetState extends State<QuestionWidget>
   }
 
   Widget _buildImageOptionSubtitle(int index) {
-    if (widget.question.answersHasTitle) {
-      var answer_title_id = widget.question.getAnswerByIndex(index).title.id;
+    if (answerHasTitle(widget.question)) {
+      var answer_title_id = widget.question.getAnswerByIndex(index).title;
       return Padding(
         padding: const EdgeInsets.only(top: 5, bottom: 5),
         child: Row(
@@ -352,8 +353,15 @@ class _QuestionWidgetState extends State<QuestionWidget>
     }
   }
 
+  bool answerHasTitle(Question question) {
+    if(question.answers.length != 0) {
+      return _technicalNameWithTranslationsStore.getTechnicalNames(question.answers.elementAt(0).title)!.isNotEmpty;
+    }
+    return false;
+  }
+
   Widget _buildImageCheckBox(int index) {
-    if (widget.question.answersHasTitle) {
+    if (answerHasTitle(widget.question)) {
       return SizedBox();
     }
     return Checkbox(

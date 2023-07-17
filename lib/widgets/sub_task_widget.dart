@@ -50,13 +50,13 @@ class SubTaskWidgetState extends State<SubTaskWidget>
 
     Widget _buildExpansionContent() {
     
-    var markdown_id = widget.subTasks[widget.index].markdown.id;
+    var markdown_id = widget.subTasks[widget.index].markdown;
       return ExpansionContent(renderManager: widget.renderManager, markdown: _technicalNameWithTranslationsStore
             .getTechnicalNames(markdown_id)!,);
     }
 
     Widget _buildAppExpansionTileWidget() {
-    var sub_task_title_id = widget.subTasks[widget.index].title.id;
+    var sub_task_title_id = widget.subTasks[widget.index].title;
       return AppExpansionTile(
         onExpansionChanged: ((isNewState) {
           if (isNewState) {

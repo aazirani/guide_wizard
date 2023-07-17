@@ -1,5 +1,5 @@
 import 'dart:async';
-
+import 'dart:convert';
 import 'package:boilerplate/data/network/constants/endpoints.dart';
 import 'package:boilerplate/data/network/dio_client.dart';
 import 'package:boilerplate/data/network/rest_client.dart';
@@ -16,10 +16,10 @@ class UpdatedAtTimesApi{
   UpdatedAtTimesApi(this._dioClient, this._restClient);
 
   /// Returns list of post in response
-  Future<UpdatedAtTimes> getUpdatedAtTimes() async {
+  Future<UpdatedAtTimes> getUpdatedAtTimes(String parameters) async {
     try {
-      final res = await _dioClient.get(Endpoints.getUpdatedAtTimes);
-      return UpdatedAtTimes.fromJson(res["rows"]);
+      final res = json.decode(await _dioClient.get(Endpoints.getUpdatedAtTimes + parameters));
+      return UpdatedAtTimes.fromJson([res]);
     } catch (e) {
       print(e.toString());
       throw e;

@@ -2,8 +2,7 @@ class Endpoints {
   Endpoints._();
 
   // base url
-  // static const String baseUrl = "https://collegiality.de";
-  static const String baseUrl = "https://glamapp.ir/collegiality";
+  static const String baseUrl = "https://dev-wg.collegiality.de/api/app";
 
   // receiveTimeout
   static const int receiveTimeout = 15000;
@@ -12,17 +11,13 @@ class Endpoints {
   static const int connectionTimeout = 30000;
 
   // booking endpoints
-  static const String getPosts = baseUrl + "/posts";
+  static const String getAppData = baseUrl + "/content?";
 
-  static const String getAppData = baseUrl + "/2nd_sample_hierarchy.json";
-  // static const String afterUpdateGetAppData = baseUrl + "/2nd_sample_hierarchy_after_update.json";
-  // static const String getAppData = baseUrl + "/2nd_sample_hierarchy_after_update.json";
+  static const String getTechnicalNames = baseUrl + "/translations?";
 
-  static const String getTechnicalNames = baseUrl + "/sample_technical_names.json";
-  // static const String afterUpdateGetTechnicalNames = baseUrl + "/sample_technical_names_after_update.json";
-  // static const String getTechnicalNames = baseUrl + "/sample_technical_names_after_update.json";
+  static const String getUpdatedAtTimes = baseUrl + "/lastUpdates?";
 
-  static const String getUpdatedAtTimes = baseUrl + "/updated_at_times.json";
-  // static const String afterUpdateGetUpdatedAtTimes = baseUrl + "/updated_at_times_after_update.json";
-  // static const String getUpdatedAtTimes = baseUrl + "/updated_at_times_after_update.json";
+  static const String tasksImageBaseUrl = "http://dev-wg.collegiality.de/tasks/image/";
+  static const String answersImageBaseUrl = "http://dev-wg.collegiality.de/answers/image/";
+  static const String stepsImageBaseUrl = "http://dev-wg.collegiality.de/steps/image/";
 }
