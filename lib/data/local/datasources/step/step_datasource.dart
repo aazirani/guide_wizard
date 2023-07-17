@@ -65,7 +65,6 @@ class StepDataSource {
           steps: recordSnapshots.map((snapshot) {
         final step = Step.fromMap(snapshot.value);
         // An ID is a key of a record from the database.
-        // step.id = snapshot.key;
         return step;
       }).toList());
     } else {
