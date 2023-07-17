@@ -273,7 +273,7 @@ class _QuestionWidgetState extends State<QuestionWidget>
                 title: Column(
                   children: [
                     _buildImageLoader(
-                        Endpoints.imageBaseUrl + widget.question.getAnswerByIndex(index).getImage),
+                        Endpoints.answersImageBaseUrl + widget.question.getAnswerByIndex(index).getImage),
                     _buildImageOptionSubtitle(index),
                   ],
                 ),

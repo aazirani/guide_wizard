@@ -17,5 +17,7 @@ class Endpoints {
 
   static const String getUpdatedAtTimes = baseUrl + "/lastUpdates?";
 
-  static const String imageBaseUrl = "http://dev-wg.collegiality.de/tasks/image/";
+  static const String tasksImageBaseUrl = "http://dev-wg.collegiality.de/tasks/image/";
+  static const String answersImageBaseUrl = "http://dev-wg.collegiality.de/answers/image/";
+  static const String stepsImageBaseUrl = "http://dev-wg.collegiality.de/steps/image/";
 }

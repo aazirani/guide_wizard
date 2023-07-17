@@ -122,7 +122,7 @@ class _StepSliderWidgetState extends State<StepSliderWidget> {
           decoration: BoxDecoration(
             image: DecorationImage(
                 image: NetworkImage(
-                    Endpoints.imageBaseUrl + _dataStore.getStepImage(index)!)),
+                    Endpoints.stepsImageBaseUrl + _dataStore.getStepImage(index)!)),
           )),
     );
   }

@@ -22,7 +22,7 @@ class _ImageSlideState extends State<ImageSlide> {
   @override
   void initState() {
     super.initState();
-    _imagesList = widget.images.map((e) => Image.network(Endpoints.imageBaseUrl + e!, fit: BoxFit.fitHeight,),).toList();
+    _imagesList = widget.images.map((e) => Image.network(Endpoints.tasksImageBaseUrl + e!, fit: BoxFit.fitHeight,),).toList();
   }
 
   @override
