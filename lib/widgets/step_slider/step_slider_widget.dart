@@ -4,9 +4,11 @@ import 'package:boilerplate/stores/current_step/current_step_store.dart';
 import 'package:boilerplate/stores/step/step_store.dart';
 import 'package:boilerplate/ui/questions/questions_list_page.dart';
 import 'package:boilerplate/utils/locale/app_localization.dart';
+import 'package:boilerplate/widgets/step_slider/progress_bar.dart';
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
+import 'package:mobx/mobx.dart';
 import 'package:provider/provider.dart';
 import 'package:boilerplate/ui/tasklist/tasklist.dart';
 import 'package:boilerplate/stores/technical_name/technical_name_with_translations_store.dart';
@@ -22,11 +24,12 @@ class StepSliderWidget extends StatefulWidget {
 }
 
 class _StepSliderWidgetState extends State<StepSliderWidget> {
+  // ReactionDisposer _reaction;
   late DataStore _dataStore;
   late StepStore _stepStore;
   late TechnicalNameWithTranslationsStore _technicalNameWithTranslationsStore;
   late CurrentStepStore _currentStepStore;
-
+  List<double> values = [0, 1, 0.5, 0.2];
   @override
   void didChangeDependencies() {
     super.didChangeDependencies();
@@ -38,8 +41,29 @@ class _StepSliderWidgetState extends State<StepSliderWidget> {
     _currentStepStore = Provider.of<CurrentStepStore>(context);
   }
 
+  ReactionDisposer? _reaction;
+
+  @override
+  void initState() {
+    super.initState();
+    _reaction = reaction((_) => _dataStore.taskList.tasks,
+        (_) => _dataStore.completionPercentages);
+  }
+
+  @override
+  void dispose() {
+    _reaction?.call();
+    super.dispose();
+  }
+
   @override
   Widget build(BuildContext context) {
+    // setState(() {
+    //   values = _dataStore.fillTheNoOfDoneTasksInEachStepList(values);
+    //   print("valuessssssssssssssssssssssssss");
+    //   print(values);
+    // });
+    // _dataStore.fillTheNoOfDoneTasksInEachStepList();
     return _buildCarouselSliderContainer();
   }
 
@@ -137,8 +161,7 @@ class _StepSliderWidgetState extends State<StepSliderWidget> {
             SizedBox(height: 20),
             _buildContinueButton(currentStepNo),
             SizedBox(height: 10),
-            //TODO: get the progress percentage from json
-            _buildProgressBar(0.2),
+            _buildProgressBar(currentStepNo),
           ]),
     );
   }
@@ -147,7 +170,8 @@ class _StepSliderWidgetState extends State<StepSliderWidget> {
     var step_title_id = _dataStore.stepList.steps[currentStepNo].name.id;
     return Text(
       "${_technicalNameWithTranslationsStore.getTechnicalNames(step_title_id)}",
-      style: TextStyle(fontSize: Dimens.stepTitleFont, color: AppColors.main_color),
+      style: TextStyle(
+          fontSize: Dimens.stepTitleFont, color: AppColors.main_color),
     );
   }
 
@@ -156,7 +180,8 @@ class _StepSliderWidgetState extends State<StepSliderWidget> {
         "${_dataStore.getNumberOfTasksFromAStep(currentStepNo)}" +
             " " +
             AppLocalizations.of(context).translate('tasks'),
-        style: TextStyle(fontSize: Dimens.numOfTasksFont, color: AppColors.main_color));
+        style: TextStyle(
+            fontSize: Dimens.numOfTasksFont, color: AppColors.main_color));
   }
 
   Widget _buildContinueButton(currentStepNo) {
@@ -179,7 +204,8 @@ class _StepSliderWidgetState extends State<StepSliderWidget> {
         },
         child: Row(mainAxisAlignment: MainAxisAlignment.center, children: [
           Text(AppLocalizations.of(context).translate("continue"),
-              style: TextStyle(fontSize: Dimens.continueFont, color: AppColors.main_color)),
+              style: TextStyle(
+                  fontSize: Dimens.continueFont, color: AppColors.main_color)),
           SizedBox(width: 1),
           Icon(
             Icons.arrow_forward_ios_rounded,
@@ -203,33 +229,41 @@ class _StepSliderWidgetState extends State<StepSliderWidget> {
                 side: BorderSide(color: AppColors.main_color))));
   }
 
-  Widget _buildProgressBar(double percentage) {
+  Widget _buildProgressBar(currentStepNo) {
+    print("this is the valuessssssssss");
+    print(_dataStore.values);
     return Container(
       height: 20,
-      child: Padding(
-          padding: Dimens.stepSliderprogressBarPadding,
-          child: ClipRRect(
-            borderRadius: BorderRadius.all(Radius.circular(Dimens.progressBarRadius)),
-            child: LinearProgressIndicator(
-                // minHeight: 4,
-                value: percentage,
-                backgroundColor: AppColors.progressBarBackgroundColor,
-                valueColor:
-                    AlwaysStoppedAnimation(AppColors.progressBarValueColor)),
-          )),
+      child: Observer(
+        builder: (_) => Padding(
+            padding: Dimens.stepSliderprogressBarPadding,
+            child: ClipRRect(
+              borderRadius:
+                  BorderRadius.all(Radius.circular(Dimens.progressBarRadius)),
+              child: LinearProgressIndicator(
+                  value: _dataStore.values[currentStepNo],
+                  backgroundColor: AppColors.progressBarBackgroundColor,
+                  valueColor:
+                      AlwaysStoppedAnimation(AppColors.progressBarValueColor)),
+            )),
+      ),
     );
   }
 
   Border _buildPendingBorder() {
-    return Border.all(width: Dimens.pendingSliderBorder, color: AppColors.main_color);
+    return Border.all(
+        width: Dimens.pendingSliderBorder, color: AppColors.main_color);
   }
 
   Border _buildDoneBorder() {
-    return Border.all(width: Dimens.doneSliderBorder, color: AppColors.main_color);
+    return Border.all(
+        width: Dimens.doneSliderBorder, color: AppColors.main_color);
   }
 
   Border _buildNotStartedBorder() {
-    return Border.all(width: Dimens.notStartedSliderBorder, color: AppColors.stepSliderUnavailableBorder);
+    return Border.all(
+        width: Dimens.notStartedSliderBorder,
+        color: AppColors.stepSliderUnavailableBorder);
   }
 
   //general methods ............................................................

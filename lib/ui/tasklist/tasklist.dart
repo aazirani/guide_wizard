@@ -10,6 +10,8 @@ import 'package:provider/provider.dart';
 import 'package:boilerplate/ui/home/home.dart';
 import 'package:boilerplate/stores/data/data_store.dart';
 
+import '../../stores/step/step_store.dart';
+
 class TaskList extends StatefulWidget {
   int currentStepNo;
   TaskList({Key? key, required this.currentStepNo}) : super(key: key);
@@ -19,9 +21,9 @@ class TaskList extends StatefulWidget {
 }
 
 class _TaskListState extends State<TaskList> {
-
   late DataStore _dataStore;
   late TechnicalNameWithTranslationsStore _technicalNameWithTranslationsStore;
+  late StepStore _stepStore;
 
   @override
   void didChangeDependencies() {
@@ -30,6 +32,7 @@ class _TaskListState extends State<TaskList> {
     _dataStore = Provider.of<DataStore>(context);
     _technicalNameWithTranslationsStore =
         Provider.of<TechnicalNameWithTranslationsStore>(context);
+    _stepStore = Provider.of<StepStore>(context);
   }
 
   var progressBarSize = Size.zero;
@@ -125,8 +128,10 @@ class _TaskListState extends State<TaskList> {
             child: Container(
               decoration: BoxDecoration(
                   borderRadius: BorderRadius.only(
-                    topLeft: Radius.circular(Dimens.draggableScrollableSheetRadius),
-                    topRight: Radius.circular(Dimens.draggableScrollableSheetRadius),
+                    topLeft:
+                        Radius.circular(Dimens.draggableScrollableSheetRadius),
+                    topRight:
+                        Radius.circular(Dimens.draggableScrollableSheetRadius),
                   ),
                   color: AppColors.white),
               child: Observer(
@@ -147,15 +152,21 @@ class _TaskListState extends State<TaskList> {
   }
 
   Widget _buildProgressBar() {
+    var dones = _dataStore.getNumberofDoneTasks(_stepStore.currentStep - 1);
+    var all = _dataStore.getNumberOfTasksFromAStep(_stepStore.currentStep - 1);
+    // print("in taskssssssssssssssssssssslissssssssst");
+    // print(all);
+    // print(dones);
     return Container(
       height: 20,
       width: _getScreenWidth() / 1.19,
       child: Padding(
           padding: Dimens.taskListProgressBarPadding,
           child: ClipRRect(
-            borderRadius: BorderRadius.all(Radius.circular(Dimens.taskListProgressBarRadius)),
+            borderRadius: BorderRadius.all(
+                Radius.circular(Dimens.taskListProgressBarRadius)),
             child: LinearProgressIndicator(
-                value: 0.2,
+                value: dones / all,
                 backgroundColor: AppColors.white,
                 valueColor:
                     AlwaysStoppedAnimation(AppColors.progressBarValueColor)),

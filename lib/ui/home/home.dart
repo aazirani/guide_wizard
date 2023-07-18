@@ -50,6 +50,7 @@ class _HomeScreenState extends State<HomeScreen> {
     _languageStore = Provider.of<LanguageStore>(context);
     _updatedAtTimesStore = Provider.of<UpdatedAtTimesStore>(context);
     _currentStepStore = Provider.of<CurrentStepStore>(context);
+    // _dataStore.fillTheNoOfDoneTasksInEachStepList();
   }
 
   @override
@@ -68,7 +69,7 @@ class _HomeScreenState extends State<HomeScreen> {
       // Loading data (from datasource if data is downloaded before):
       await _loadDataWithoutErrorHandling(context);
       // Checking whether there is an update:
-      await _checkForUpdate(context);
+      // await _checkForUpdate(context);
     });
   }
 
@@ -188,7 +189,7 @@ class _HomeScreenState extends State<HomeScreen> {
     await _technicalNameWithTranslationsStore
         .getTechnicalNameWithTranslations();
     await _updatedAtTimesStore.updateContentIfNeeded();
-    await _dataStore.getAllTasks();
+    // await _dataStore.getAllTasks();
     await _dataStore.getQuestions();
     _dialog!.hide();
   }
@@ -209,7 +210,7 @@ class _HomeScreenState extends State<HomeScreen> {
           .getTechnicalNameWithTranslations();
       await _dataStore.getSteps();
       await _currentStepStore.setStepsCount(_dataStore.stepList.steps.length);
-      await _dataStore.getAllTasks();
+      // await _dataStore.getAllTasks();
       await _dataStore.getQuestions();
     }
     _dialog!.hide();
@@ -306,7 +307,8 @@ class _HomeScreenState extends State<HomeScreen> {
 
   Widget _buildCurrentStepText(stepStore) {
     return Observer(
-        builder: (_) => Text("${stepStore.currentStep}/${_currentStepStore.stepsCount}",
+        builder: (_) => Text(
+            "${stepStore.currentStep}/${_currentStepStore.stepsCount}",
             style: TextStyle(color: AppColors.main_color)));
   }
 

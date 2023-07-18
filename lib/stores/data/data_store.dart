@@ -20,10 +20,10 @@ class DataStore = _DataStore with _$DataStore;
 abstract class _DataStore with Store {
   Repository _repository;
   _DataStore(Repository repo) : this._repository = repo;
-  
+
   // store for handling errors
   final ErrorStore errorStore = ErrorStore();
-  
+
   //steplist observables
   static ObservableFuture<StepList> emptyStepsResponse =
       ObservableFuture.value(StepList(steps: []));
@@ -43,38 +43,39 @@ abstract class _DataStore with Store {
 
   //tasklist observables
   static ObservableFuture<TaskList?> emptyTaskResponse =
-  ObservableFuture.value(null);
+      ObservableFuture.value(null);
 
   static ObservableFuture<dynamic> emptyTruncateTaskResponse =
-  ObservableFuture.value(null);
+      ObservableFuture.value(null);
 
   @observable
   ObservableFuture<TaskList?> fetchTasksFuture =
-  ObservableFuture<TaskList?>(emptyTaskResponse);
+      ObservableFuture<TaskList?>(emptyTaskResponse);
 
   @observable
   ObservableFuture<dynamic> truncateTasksFuture =
-  ObservableFuture<dynamic>(emptyTruncateTaskResponse);
+      ObservableFuture<dynamic>(emptyTruncateTaskResponse);
 
   @observable
   TaskList taskList = TaskList(tasks: []);
-  
+  @observable
+  TaskList allTasks = TaskList(tasks: []);
   @observable
   bool tasksSuccess = false;
 
-  //questions observables: 
+  //questions observables:
   static ObservableFuture<QuestionList?> emptyQuestionResponse =
-  ObservableFuture.value(null);
+      ObservableFuture.value(null);
   static ObservableFuture<dynamic> emptyTruncateQuestionResponse =
-  ObservableFuture.value(null);
+      ObservableFuture.value(null);
 
   @observable
   ObservableFuture<QuestionList?> fetchQuestionsFuture =
-  ObservableFuture<QuestionList?>(emptyQuestionResponse);
+      ObservableFuture<QuestionList?>(emptyQuestionResponse);
 
   @observable
   ObservableFuture<dynamic> truncateQuestionsFuture =
-  ObservableFuture<dynamic>(emptyTruncateQuestionResponse);
+      ObservableFuture<dynamic>(emptyTruncateQuestionResponse);
 
   @observable
   QuestionList questionList = QuestionList(questions: []);
@@ -87,19 +88,22 @@ abstract class _DataStore with Store {
 
   @observable
   bool success = false;
-  //tasks computed: 
+  //tasks computed:
   @computed
   bool get tasksLoading => fetchTasksFuture.status == FutureStatus.pending;
 
   @computed
-  bool get tasksLoadingTruncate => truncateTasksFuture.status == FutureStatus.pending;
+  bool get tasksLoadingTruncate =>
+      truncateTasksFuture.status == FutureStatus.pending;
 
   //questions computed:
   @computed
-  bool get questionLoading => fetchQuestionsFuture.status == FutureStatus.pending;
+  bool get questionLoading =>
+      fetchQuestionsFuture.status == FutureStatus.pending;
 
   @computed
-  bool get questionLoadingTruncate => truncateQuestionsFuture.status == FutureStatus.pending;
+  bool get questionLoadingTruncate =>
+      truncateQuestionsFuture.status == FutureStatus.pending;
 
 // actions......................................................................
   @action
@@ -125,7 +129,7 @@ abstract class _DataStore with Store {
     final future = _repository.getTasks();
     fetchTasksFuture = ObservableFuture(future);
     future.then((taskList) {
-      this.taskList = taskList;
+      this.allTasks = taskList;
     }).catchError((error) {
       errorStore.errorMessage = DioErrorUtil.handleError(error);
     });
@@ -174,7 +178,7 @@ abstract class _DataStore with Store {
 
   @action
   Future truncateTasks() async {
-   await _repository.truncateTask();
+    await _repository.truncateTask();
   }
 
   //questions actions: .........................................................
@@ -193,13 +197,18 @@ abstract class _DataStore with Store {
 
   @action
   Future updateQuestion(Question question, Answer answer, bool value) async {
-    questionList.questions.firstWhere((element) => element == question).answers.firstWhere((element) => element == answer).selected = value;
+    questionList.questions
+        .firstWhere((element) => element == question)
+        .answers
+        .firstWhere((element) => element == answer)
+        .selected = value;
     await _repository.updateQuestion(question);
   }
 
   @action
   Question getQuestionById(int questionId) {
-    return questionList.questions.firstWhere((question) => question.id == questionId);
+    return questionList.questions
+        .firstWhere((question) => question.id == questionId);
   }
 
   @action
@@ -233,24 +242,25 @@ abstract class _DataStore with Store {
     await _repository.truncateQuestions();
   }
 
-  // answers actions: 
+  // answers actions:
   get getAnswers => answers;
 
   @action
   Future<void> updateAnswers() async {
-  try {
-    final stepList = await _repository.getStep();
+    try {
+      final stepList = await _repository.getStep();
 
-    answers = stepList.steps.expand((step) =>
-        step.tasks.expand((task) =>
-            task.questions.expand((question) =>
-                question.answers.where((answer) => answer.selected))))
-        .toList();
-  } on DioError catch (error) {
-    errorStore.errorMessage = DioErrorUtil.handleError(error);
+      answers = stepList.steps
+          .expand((step) => step.tasks.expand((task) => task.questions.expand(
+              (question) =>
+                  question.answers.where((answer) => answer.selected))))
+          .toList();
+    } on DioError catch (error) {
+      errorStore.errorMessage = DioErrorUtil.handleError(error);
+    }
   }
-}
- //.............................................................................
+
+  //.............................................................................
   String getStepImage(int stepNum) {
     return this.stepList.steps[stepNum].image!;
   }
@@ -299,4 +309,92 @@ abstract class _DataStore with Store {
     return this.taskList.tasks[taskIndex].isTypeOfText;
   }
 
+  @observable
+  List<double> noOfDoneTasksInEachStep = [0, 0, 0, 0];
+
+  @action
+  fillTheNoOfDoneTasksInEachStepList(values) {
+    // List<double> values = [0, 0, 0, 0];
+
+    for (var i = 0; i < noOfDoneTasksInEachStep.length; i++) {
+      print("from databaseeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee");
+      print(getNumberofDoneTasks(i));
+      print(getNumberOfTasksFromAStep(i));
+      print(getNumberofDoneTasks(i) / getNumberOfTasksFromAStep(i));
+      values[i] = getNumberofDoneTasks(i) / getNumberOfTasksFromAStep(i);
+    }
+    return values;
+  }
+
+  @action
+  incrementNoOfDoneTasks(index) {
+    // print("list of tasks");
+    // print(this.noOfDoneTasksInEachStep);
+    this.noOfDoneTasksInEachStep[index]++;
+    // print("list of tasks after inc");
+    // print(this.noOfDoneTasksInEachStep);
+  }
+
+  @action
+  decrementNoOfDoneTasks(index) {
+    // print("list of tasks in dec");
+    // print(this.noOfDoneTasksInEachStep);
+
+    this.noOfDoneTasksInEachStep[index]--;
+    // print("list after dec");
+    // print(this.noOfDoneTasksInEachStep);
+  }
+
+  @observable
+  List<double> values = [0, 0, 0, 0];
+  // @computed
+  @action
+  List<double> completionPercentages() {
+    print("secondddddddddddddddddddddddd");
+    List<double> percentages = [];
+    for (var i = 0; i < stepList.steps.length; i++) {
+      for (var j = 0; j < allTasks.tasks.length; j++) {
+        print("all tasks situationssssssss");
+        print(allTasks.tasks[j].isDone);
+      }
+      int numTasks = stepList.steps[i].numTasks;
+      print("number of tasks in task ${i}");
+      print(numTasks);
+      int numDoneTasks = allTasks.tasks
+          .where((task) => task.step_id == stepList.steps[i].id && task.isDone)
+          .length;
+
+      print("agian");
+      print(numDoneTasks);
+      double percentage = numTasks == 0 ? 0 : numDoneTasks / numTasks;
+      percentages.add(percentage);
+    }
+    print("herrrrrrrrrrrrrrreeeeeeee");
+
+    print(percentages);
+    this.values = percentages;
+    return percentages;
+  }
+
+  int getNumberofDoneTasks(currentStepNo) {
+    int numDoneTasks = taskList.tasks
+        .where((task) =>
+            task.step_id == stepList.steps[currentStepNo].id && task.isDone)
+        .length;
+    return numDoneTasks;
+  }
+
+  int getNumberOfTasksInAStep(stepId) {
+    var no = 0;
+    for (var i = 0; i < this.taskList.tasks.length; i++) {
+      if (taskList.tasks[i].step_id == stepId) {
+        no++;
+      }
+    }
+    return no;
+  }
+
+  int getNumberofTasksInTaskList() {
+    return this.taskList.tasks.length;
+  }
 }
