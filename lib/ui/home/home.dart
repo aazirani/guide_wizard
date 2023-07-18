@@ -198,7 +198,7 @@ class _HomeScreenState extends State<HomeScreen> {
       await _technicalNameWithTranslationsStore.getTechnicalNameWithTranslations();
       await _dataStore.getSteps();
       await _currentStepStore.setStepsCount(_dataStore.stepList.steps.length);
-      await _dataStore.getAllTasks();
+      // await _dataStore.getAllTasks();
       await _dataStore.getQuestions();
     }
     _dialog!.hide();
