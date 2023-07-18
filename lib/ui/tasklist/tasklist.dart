@@ -1,5 +1,6 @@
 import 'package:boilerplate/constants/colors.dart';
 import 'package:boilerplate/constants/dimens.dart';
+import 'package:boilerplate/stores/step/step_store.dart';
 import 'package:boilerplate/stores/technical_name/technical_name_with_translations_store.dart';
 import 'package:boilerplate/ui/tasklist/tasklist_timeline.dart';
 import 'package:flutter/material.dart';
@@ -19,9 +20,9 @@ class TaskList extends StatefulWidget {
 }
 
 class _TaskListState extends State<TaskList> {
-
   late DataStore _dataStore;
   late TechnicalNameWithTranslationsStore _technicalNameWithTranslationsStore;
+  late StepStore _stepStore;
 
   @override
   void didChangeDependencies() {
@@ -30,6 +31,7 @@ class _TaskListState extends State<TaskList> {
     _dataStore = Provider.of<DataStore>(context);
     _technicalNameWithTranslationsStore =
         Provider.of<TechnicalNameWithTranslationsStore>(context);
+    _stepStore = Provider.of<StepStore>(context);
   }
 
   var progressBarSize = Size.zero;
@@ -105,7 +107,7 @@ class _TaskListState extends State<TaskList> {
                       style: TextStyle(color: AppColors.white)),
                 )),
             SizedBox(height: 5),
-            _buildProgressBar(),
+            Observer(builder: (_) => _buildProgressBar()),
           ],
         ),
       )),
@@ -125,8 +127,10 @@ class _TaskListState extends State<TaskList> {
             child: Container(
               decoration: BoxDecoration(
                   borderRadius: BorderRadius.only(
-                    topLeft: Radius.circular(Dimens.draggableScrollableSheetRadius),
-                    topRight: Radius.circular(Dimens.draggableScrollableSheetRadius),
+                    topLeft:
+                        Radius.circular(Dimens.draggableScrollableSheetRadius),
+                    topRight:
+                        Radius.circular(Dimens.draggableScrollableSheetRadius),
                   ),
                   color: AppColors.white),
               child: Observer(
@@ -147,15 +151,20 @@ class _TaskListState extends State<TaskList> {
   }
 
   Widget _buildProgressBar() {
+    var noOfDoneTasksInThisStep =
+        _dataStore.getNumberofDoneTasks(_stepStore.currentStep - 1);
+    var noOfAllTasksInThisStep =
+        _dataStore.getNumberOfTasksFromAStep(_stepStore.currentStep - 1);
     return Container(
       height: 20,
       width: _getScreenWidth() / 1.19,
       child: Padding(
           padding: Dimens.taskListProgressBarPadding,
           child: ClipRRect(
-            borderRadius: BorderRadius.all(Radius.circular(Dimens.taskListProgressBarRadius)),
+            borderRadius: BorderRadius.all(
+                Radius.circular(Dimens.taskListProgressBarRadius)),
             child: LinearProgressIndicator(
-                value: 0.2,
+                value: noOfDoneTasksInThisStep / noOfAllTasksInThisStep,
                 backgroundColor: AppColors.white,
                 valueColor:
                     AlwaysStoppedAnimation(AppColors.progressBarValueColor)),

@@ -300,6 +300,15 @@ abstract class _DataStore with Store {
     return this.stepList.steps[index].numTasks;
   }
 
+  int getNumberofDoneTasks(currentStepNo) {
+    int numDoneTasks = taskList.tasks
+        .where((task) =>
+            task.step_id == stepList.steps[currentStepNo].id && task.isDone)
+        .length;
+  
+    return numDoneTasks;
+  }
+  
   bool getTaskIsDoneStatus(taskIndex) {
     return this.taskList.tasks[taskIndex].isDone;
   }
