@@ -77,15 +77,14 @@ class AppColors {
   static Color deadlineTextDoneColor = green[100]!;
   static Color deadlineTextUnDoneColor = red[100]!;
   // questionpage
-  static Color nextStepColor = green[300]!;
+  static const Color nextStepColor = Color(0xFF31EC92);
 
   static const Color title_color = Colors.white;
   static const Color main_color = const Color.fromRGBO(0, 81, 158, 1);
   static const Color grey = const Color.fromRGBO(231, 231, 231, 1);
   static const Color transparent = Colors.transparent;
   static const Color white = Colors.white;
-  static const Color button_background_color =
-      const Color.fromRGBO(217, 217, 217, 0.15);
+  static const Color button_background_color = const Color.fromRGBO(217, 217, 217, 0.15);
   static const Color bright_foreground_color = Colors.white;
   // static const Color dotted_line_color = Colors.green;
   static Color dotted_line_color = green[300]!;

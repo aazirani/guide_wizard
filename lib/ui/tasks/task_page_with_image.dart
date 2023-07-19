@@ -48,7 +48,7 @@ class _TaskPageWithImageState extends State<TaskPageWithImage> {
     return Scaffold(
       backgroundColor: AppColors.main_color,
       appBar: BlocksAppBarWidget(
-        title: _technicalNameWithTranslationsStore.getTechnicalNames(widget.task.text)!,
+        title: _technicalNameWithTranslationsStore.getTranslation(widget.task.text)!,
         appBarSize: appBarSize,
         taskId: widget.task.id,
       ),
@@ -74,7 +74,7 @@ class _TaskPageWithImageState extends State<TaskPageWithImage> {
   Widget _buildImageSlide() {
     return ImageSlide(
         images: [widget.task.image_1, widget.task.image_2],
-        description: _technicalNameWithTranslationsStore.getTechnicalNames(widget.task.description)!
+        description: _technicalNameWithTranslationsStore.getTranslation(widget.task.description)!
     );
   }
 

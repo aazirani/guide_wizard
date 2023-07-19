@@ -1,5 +1,6 @@
 import 'package:boilerplate/constants/colors.dart';
 import 'package:boilerplate/constants/dimens.dart';
+import 'package:boilerplate/url_handler.dart';
 import 'package:boilerplate/widgets/measure_size.dart';
 import 'package:dotted_line/dotted_line.dart';
 import 'package:flutter/material.dart';
@@ -62,30 +63,10 @@ class _ExpansionContentState extends State<ExpansionContent> {
     );
   }
 
-  // void _openURLInChromeSafari(String url) async{
-  //   widget.browser.open(
-  //       url: Uri.parse(url),
-  //   options: ChromeSafariBrowserClassOptions(
-  //   android: AndroidChromeCustomTabsOptions(
-  //   shareState: CustomTabsShareState.SHARE_STATE_OFF),
-  //   ios: IOSSafariOptions(barCollapsingEnabled: true)));
-  // }
-
-  Future<void> _launchInWebViewOrVC(Uri url) async {
-    if (!await launchUrl(
-      url,
-      mode: LaunchMode.inAppWebView,
-      webViewConfiguration: const WebViewConfiguration(
-          headers: <String, String>{'my_header_key': 'my_header_value'}),
-    )) {
-      throw 'Could not launch $url';
-    }
-  }
-
   Widget _buildMarkdownContent() {
     return Markdown(
         onTapLink: (text, url, title) {
-          _launchInWebViewOrVC(Uri.parse(url!));
+          UrlHandler.openUrl(context: context, url: url!);
         },
         shrinkWrap: true,
         physics: NeverScrollableScrollPhysics(),

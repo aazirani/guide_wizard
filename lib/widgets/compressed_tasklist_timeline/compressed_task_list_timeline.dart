@@ -130,7 +130,7 @@ class _CompressedTasklistTimelineState
     return Align(
       alignment: Alignment.centerLeft,
       child: Text(
-          "${_technicalNameWithTranslationsStore.getTechnicalNames(stepTitleId)}",
+          "${_technicalNameWithTranslationsStore.getTranslation(stepTitleId)}",
           style: TextStyle(
             color: AppColors.main_color,
             fontSize: 16,

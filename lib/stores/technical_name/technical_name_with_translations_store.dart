@@ -1,4 +1,5 @@
 import 'package:boilerplate/models/technical_name/technical_name.dart';
+import 'package:boilerplate/models/technical_name/technical_name_with_translations.dart';
 import 'package:boilerplate/models/technical_name/technical_name_with_translations_list.dart';
 import 'package:mobx/mobx.dart';
 import 'package:boilerplate/data/repository.dart';
@@ -56,7 +57,11 @@ abstract class _TechnicalNameWithTranslationsStore with Store {
   }
 
   // methods: ..................................................................
-  String? getTechnicalNames(int text_id) {
-    return technicalNameWithTranslationsList.technicalNameWithTranslations.firstWhere((element) => element.id == text_id).translations[this.language_id!].translated_text;
+  String? getTranslation(int id) {
+    return getTechnicalName(id).translations[this.language_id!].translated_text;
+  }
+
+  TechnicalNameWithTranslations getTechnicalName(int id) {
+    return technicalNameWithTranslationsList.technicalNameWithTranslations.firstWhere((element) => element.id == id);
   }
 }
