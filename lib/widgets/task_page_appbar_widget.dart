@@ -59,7 +59,11 @@ class _BlocksAppBarWidgetState extends State<BlocksAppBarWidget> {
           setState(() {
             currentTask.isDone = !currentTask.isDone;
             _dataStore.updateTask(currentTask).then((_) {
-              _dataStore.getTasks(stepId);
+              _dataStore.getTasks(stepId).then((_) {
+                 _dataStore.getAllTasks().then((_) {
+                  _dataStore.completionPercentages();
+                });
+              });
             });
           });
         },

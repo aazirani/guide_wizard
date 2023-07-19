@@ -155,6 +155,7 @@ class _TaskListState extends State<TaskList> {
         _dataStore.getNumberofDoneTasks(_stepStore.currentStep - 1);
     var noOfAllTasksInThisStep =
         _dataStore.getNumberOfTasksFromAStep(_stepStore.currentStep - 1);
+    var percentage = noOfAllTasksInThisStep == 0 ? 0.0 : noOfDoneTasksInThisStep / noOfAllTasksInThisStep;
     return Container(
       height: 20,
       width: _getScreenWidth() / 1.19,
@@ -164,7 +165,7 @@ class _TaskListState extends State<TaskList> {
             borderRadius: BorderRadius.all(
                 Radius.circular(Dimens.taskListProgressBarRadius)),
             child: LinearProgressIndicator(
-                value: noOfDoneTasksInThisStep / noOfAllTasksInThisStep,
+                value: percentage,
                 backgroundColor: AppColors.white,
                 valueColor:
                     AlwaysStoppedAnimation(AppColors.progressBarValueColor)),

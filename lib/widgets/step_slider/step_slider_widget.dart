@@ -141,7 +141,7 @@ class _StepSliderWidgetState extends State<StepSliderWidget> {
             _buildContinueButton(currentStepNo),
             SizedBox(height: 10),
             //TODO: get the progress percentage from json
-            _buildProgressBar(0.2),
+            _buildProgressBar(currentStepNo),
           ]),
     );
   }
@@ -210,21 +210,23 @@ class _StepSliderWidgetState extends State<StepSliderWidget> {
                 side: BorderSide(color: AppColors.main_color))));
   }
 
-  Widget _buildProgressBar(double percentage) {
+  Widget _buildProgressBar(currentStepNo) {
     return Container(
       height: 20,
-      child: Padding(
-          padding: Dimens.stepSliderprogressBarPadding,
-          child: ClipRRect(
-            borderRadius:
-                BorderRadius.all(Radius.circular(Dimens.progressBarRadius)),
-            child: LinearProgressIndicator(
-                // minHeight: 4,
-                value: percentage,
-                backgroundColor: AppColors.progressBarBackgroundColor,
-                valueColor:
-                    AlwaysStoppedAnimation(AppColors.progressBarValueColor)),
-          )),
+      child: Observer(
+        builder: (_) => Padding(
+            padding: Dimens.stepSliderprogressBarPadding,
+            child: ClipRRect(
+              borderRadius:
+                  BorderRadius.all(Radius.circular(Dimens.progressBarRadius)),
+              child: LinearProgressIndicator(
+                  // minHeight: 4,
+                  value: _dataStore.values![currentStepNo],
+                  backgroundColor: AppColors.progressBarBackgroundColor,
+                  valueColor:
+                      AlwaysStoppedAnimation(AppColors.progressBarValueColor)),
+            )),
+      ),
     );
   }
 

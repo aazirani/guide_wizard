@@ -6,7 +6,6 @@ import 'package:boilerplate/models/task/task.dart';
 import 'package:boilerplate/models/task/task_list.dart';
 import 'package:boilerplate/stores/error/error_store.dart';
 import 'package:boilerplate/utils/dio/dio_error_util.dart';
-import 'package:boilerplate/models/step/step.dart';
 import 'package:boilerplate/models/answer/answer.dart';
 import 'package:boilerplate/models/question/question.dart';
 import 'package:boilerplate/models/question/question_list.dart';
@@ -19,8 +18,19 @@ class DataStore = _DataStore with _$DataStore;
 
 abstract class _DataStore with Store {
   Repository _repository;
-  _DataStore(Repository repo) : this._repository = repo;
+  @observable
+  _DataStore(Repository repo) : this._repository = repo {
+    try {
 
+      final loadedValues = _repository.loadProgressValues();
+      this.values = ObservableList.of(loadedValues);
+
+    } catch (e) {
+
+      print("Caught exception in constructor: $e");
+    }
+  }
+  late ObservableList<double>? values = ObservableList.of([0, 0, 0, 0]);
   // store for handling errors
   final ErrorStore errorStore = ErrorStore();
 
@@ -58,6 +68,9 @@ abstract class _DataStore with Store {
 
   @observable
   TaskList taskList = TaskList(tasks: []);
+
+  @observable
+  TaskList allTasks = TaskList(tasks: []);
 
   @observable
   bool tasksSuccess = false;
@@ -128,7 +141,7 @@ abstract class _DataStore with Store {
     final future = _repository.getTasks();
     fetchTasksFuture = ObservableFuture(future);
     future.then((taskList) {
-      this.taskList = taskList;
+      this.allTasks = taskList;
     }).catchError((error) {
       errorStore.errorMessage = DioErrorUtil.handleError(error);
     });
@@ -300,15 +313,36 @@ abstract class _DataStore with Store {
     return this.stepList.steps[index].numTasks;
   }
 
+  @action
+  Future<void> saveProgressValues() async {
+    await _repository.saveProgressValueInSharedPreferences(values!);
+  }
+
+  @action
+  void completionPercentages() {
+    ObservableList<double> percentages = ObservableList<double>();
+    for (var i = 0; i < stepList.steps.length; i++) {
+      int numTasks = stepList.steps[i].numTasks;
+      int numDoneTasks = allTasks.tasks
+          .where((task) => task.step_id == stepList.steps[i].id && task.isDone)
+          .length;
+
+      double percentage = numTasks == 0 ? 0 : numDoneTasks / numTasks;
+      percentages.add(percentage);
+    }
+    this.values = percentages;
+    saveProgressValues();
+  }
+
   int getNumberofDoneTasks(currentStepNo) {
     int numDoneTasks = taskList.tasks
         .where((task) =>
             task.step_id == stepList.steps[currentStepNo].id && task.isDone)
         .length;
-  
+
     return numDoneTasks;
   }
-  
+
   bool getTaskIsDoneStatus(taskIndex) {
     return this.taskList.tasks[taskIndex].isDone;
   }

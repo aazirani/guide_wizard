@@ -32,7 +32,8 @@ class Repository {
   final TaskDataSource _taskDataSource;
   final SubTaskDataSource _subTaskDataSource;
   final QuestionDataSource _questionDataSource;
-  final TechnicalNameWithTranslationsDataSource _technicalNameWithTranslationsDataSource;
+  final TechnicalNameWithTranslationsDataSource
+      _technicalNameWithTranslationsDataSource;
   final UpdatedAtTimesDataSource _updatedAtTimesDataSource;
 
   // api objects
@@ -80,7 +81,8 @@ class Repository {
     return stepList;
   }
 
-  Future<void> _insertItems<T>(List<T> items, Future<void> Function(T) insertFunction) async {
+  Future<void> _insertItems<T>(
+      List<T> items, Future<void> Function(T) insertFunction) async {
     for (T item in items) {
       await insertFunction(item);
     }
@@ -317,10 +319,13 @@ class Repository {
       _questionDataSource.deleteAll().catchError((error) => throw error);
 
   // TranslationsWithTechnicalName: ---------------------------------------------------------------------
-  Future<TechnicalNameWithTranslationsList> getTechnicalNameWithTranslations() async {
+  Future<TechnicalNameWithTranslationsList>
+      getTechnicalNameWithTranslations() async {
     return await _technicalNameWithTranslationsDataSource.count() > 0
         ? _technicalNameWithTranslationsDataSource.getTranslationsFromDb()
-        : _technicalNameApi.getTechnicalNamesWithTranslations(await getUrlParameters()).then((t) {
+        : _technicalNameApi
+            .getTechnicalNamesWithTranslations(await getUrlParameters())
+            .then((t) {
             t.technicalNameWithTranslations
                 .forEach((technicalNameWithTranslations) async {
               _technicalNameWithTranslationsDataSource
@@ -438,8 +443,9 @@ class Repository {
     UpdatedAtTimes originUpdatedAt = await getUpdatedAtTimesFromApi();
     bool isContentUpdated = isUpdated(originUpdatedAt.last_updated_at_content,
         localUpdatedAt.last_updated_at_content);
-    bool isTranslationUpdated = isUpdated(originUpdatedAt.last_updated_at_technical_names,
-    localUpdatedAt.last_updated_at_technical_names);
+    bool isTranslationUpdated = isUpdated(
+        originUpdatedAt.last_updated_at_technical_names,
+        localUpdatedAt.last_updated_at_technical_names);
     return isContentUpdated || isTranslationUpdated;
   }
 
@@ -456,12 +462,13 @@ class Repository {
           await _taskDataSource.insert(task);
           for (SubTask subTask in task.sub_tasks) {
             await _subTaskDataSource.insert(subTask);
-            if(_stepList.findSubTaskByID(subTask.id) == null){
+            if (_stepList.findSubTaskByID(subTask.id) == null) {
               task.isDone = false;
             }
           }
           for (Question question in task.questions) {
-            Question? foundOldQuestion = _oldQuestions.questions.firstWhere((q) => q.title == question.title);
+            Question? foundOldQuestion = _oldQuestions.questions
+                .firstWhere((q) => q.title == question.title);
 
             if (foundOldQuestion != null) {
               await _questionDataSource.insert(foundOldQuestion);
@@ -487,7 +494,8 @@ class Repository {
   }
 
   Future<UpdatedAtTimes> getUpdatedAtTimesFromApi() async {
-    UpdatedAtTimes updatedAtTimes = await _updatedAtTimesApi.getUpdatedAtTimes(await getUrlParameters());
+    UpdatedAtTimes updatedAtTimes =
+        await _updatedAtTimesApi.getUpdatedAtTimes(await getUrlParameters());
     return updatedAtTimes;
   }
 
@@ -549,9 +557,9 @@ class Repository {
   Future<List<int>> getSelectedAnswers() async {
     List<int> selectedAnswers = [];
     QuestionList questionList;
-    try{
+    try {
       questionList = await _questionDataSource.getQuestionsFromDb();
-    } catch (error){
+    } catch (error) {
       questionList = QuestionList(questions: []);
     }
 
@@ -570,5 +578,15 @@ class Repository {
 
   Future<String> getUrlParameters() async {
     return getAnswerIdsParameter();
+  }
+  // Progress value:------------------------------------------------------------
+
+  Future<void> saveProgressValueInSharedPreferences(List<double> values) async {
+    _sharedPrefsHelper.setProgressValue(values);
+  }
+
+  List<double> loadProgressValues()  {
+    List<double> values = _sharedPrefsHelper.getProgressValues();
+    return values;
   }
 }
