@@ -98,4 +98,11 @@ class Dimens {
   static const questionListPageAppBarHeight = 56.0;
   static const questionListPageAppBarFontSize = 20.0;
 
+  // Question Info...................................................
+  static final infoButtonBorderRadius = BorderRadius.circular(7);
+  static const infoBottomSheetPadding = const EdgeInsets.fromLTRB(20, 25, 20, 90);
+  static const infoButtonsPadding = const EdgeInsets.only(left: 10, right: 10, bottom: 10);
+  static const infoButtonContainerMargin = const EdgeInsets.only(left: 20);
+  static const infoButtonContainerPadding = const EdgeInsets.all(12);
+
 }

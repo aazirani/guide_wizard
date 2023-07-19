@@ -16,6 +16,8 @@
 
   "next_question_button_text" : "Next question",
   "next_stage_button_text" : "Next Stage",
+  "close" : "Close",
+  "read_more" : "Read More",
   "questions_end": "-------------------------------------------------------------------------------------",
 
   "done_button_text" : "Done",
@@ -42,5 +44,10 @@
   "steps": "Steps",
   "in_progress": "In Progress",
   "info": "Info",
-  "steps_end": "------------------------------------------------------------------------------------"
+  "steps_end": "------------------------------------------------------------------------------------",
+
+  "url_dialog_title": "Open URL",
+  "url_dialog_message": "Do you want to open",
+  "cancel": "Cancel",
+  "open_link": "Open Link"
 }

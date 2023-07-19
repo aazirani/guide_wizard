@@ -89,4 +89,6 @@ class AppColors {
   // static const Color dotted_line_color = Colors.green;
   static Color dotted_line_color = green[300]!;
   // static const Color white= const Colors.white.withOpacity(0.5);
+  static Color close_button_color = Colors.grey[800]!;
+
 }

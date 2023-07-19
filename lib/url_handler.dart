@@ -1,4 +1,5 @@
 import 'package:boilerplate/constants/colors.dart';
+import 'package:boilerplate/utils/locale/app_localization.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:simple_fontellico_progress_dialog/simple_fontico_loading.dart';
@@ -38,12 +39,12 @@ class UrlHandler {
     showDialog(
       context: context,
       builder: (context) => AlertDialog(
-        title: Text("Open URL"),
+        title: Text(AppLocalizations.of(context).translate('url_dialog_title'),),
         content: Column(
           mainAxisSize: MainAxisSize.min,
           children: [
             Text(
-              "Do you want to open $url?",
+              AppLocalizations.of(context).translate('url_dialog_message') + " $url?",
               textAlign: TextAlign.left,
             ),
           ],
@@ -53,13 +54,13 @@ class UrlHandler {
               onPressed: () {
                 Navigator.of(context).pop();
               },
-              child: Text("Cancel", style: TextStyle(color: AppColors.main_color),)
+              child: Text(AppLocalizations.of(context).translate('cancel'), style: TextStyle(color: AppColors.main_color),)
           ),
           TextButton(
               onPressed: () {
                 _launchURL(url);
               },
-              child: Text("Open Link", style: TextStyle(color: AppColors.main_color),)
+              child: Text(AppLocalizations.of(context).translate('open_link'), style: TextStyle(color: AppColors.main_color),)
           ),
         ],
       ),

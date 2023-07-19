@@ -13,13 +13,9 @@ import 'package:boilerplate/utils/locale/app_localization.dart';
 import 'package:boilerplate/widgets/info_dialog.dart';
 import 'package:boilerplate/widgets/scrolling_overflow_text.dart';
 import 'package:flutter/material.dart';
-import 'package:popup_card/popup_card.dart';
 import 'package:provider/provider.dart';
-import 'package:scrollable_positioned_list/scrollable_positioned_list.dart';
 import 'package:boilerplate/providers/question_widget_state/question_widget_state.dart';
 import 'package:boilerplate/stores/data/data_store.dart';
-import 'package:simple_fontellico_progress_dialog/simple_fontico_loading.dart';
-import 'package:slide_popup_dialog_null_safety/slide_popup_dialog.dart' as slideDialog;
 
 class QuestionWidget extends StatefulWidget {
   Question question;
@@ -193,7 +189,7 @@ class _QuestionWidgetState extends State<QuestionWidget>
       shape: MaterialStateProperty.all<RoundedRectangleBorder>(
         RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(5.0),
-          side: BorderSide(color: Colors.grey[800]!, width: 2),
+          side: BorderSide(color: AppColors.close_button_color, width: 2),
         ),
       ),
     );
@@ -208,14 +204,13 @@ class _QuestionWidgetState extends State<QuestionWidget>
             Navigator.of(context).pop();
           },
           child: Text(
-            "Close",
-            style: TextStyle(color: Colors.grey[800]!, fontSize: 15),
+              AppLocalizations.of(context).translate('close'),
+            style: TextStyle(color: AppColors.close_button_color, fontSize: 15),
           ),
         ),
       );
     });
   }
-
 
   ButtonStyle _buildInfoOpenUrlButtonStyle({required double scaleBy, Color color = AppColors.main_color}) {
     return ButtonStyle(
@@ -244,7 +239,7 @@ class _QuestionWidgetState extends State<QuestionWidget>
             UrlHandler.openUrl(context: context, url: _getInfoUrl());
           },
           child: Text(
-            "Read More",
+            AppLocalizations.of(context).translate('read_more'),
             style: TextStyle(color: AppColors.white, fontSize: 15),
           ),
         ),
@@ -260,7 +255,7 @@ class _QuestionWidgetState extends State<QuestionWidget>
       builder: (BuildContext context) {
         return InfoDialog(
           content: Padding(
-            padding: const EdgeInsets.fromLTRB(20, 25, 20, 90),
+            padding: Dimens.infoBottomSheetPadding,
             child: Text(
               _technicalNameWithTranslationsStore.getTranslation(widget.question.info_description)!,
               style: TextStyle(fontSize: 17),
@@ -269,7 +264,7 @@ class _QuestionWidgetState extends State<QuestionWidget>
           bottomRow: Container(
             color: AppColors.white,
             child: Padding(
-              padding: EdgeInsets.only(left: 10, right: 10, bottom: 10),
+              padding: Dimens.infoButtonsPadding,
               child: buttonsRow,
             ),
           ),
@@ -329,15 +324,15 @@ class _QuestionWidgetState extends State<QuestionWidget>
 
   Widget _buildInfoButton() {
     return Container(
-      margin: const EdgeInsets.only(left: 20),
+      margin: Dimens.infoButtonContainerMargin,
       child: Material(
-        borderRadius: BorderRadius.circular(7),
+        borderRadius: Dimens.infoButtonBorderRadius,
         child: InkWell(
           onTap:() {
             _showInfo();
           },
           child: Container(
-            padding: const EdgeInsets.all(12),
+            padding: Dimens.infoButtonContainerPadding,
             child: Icon(
               Icons.help_outline_rounded,
               color: Colors.white,
