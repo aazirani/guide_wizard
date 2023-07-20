@@ -57,6 +57,7 @@ class Dimens {
   static const double buttonRadius = 18;
   static const double progressBarRadius = 10;
   static const sliderContainerContentPadding = EdgeInsets.only(top: 20, left: 10);
+  static const progressBarHeight = 20.0; 
   //compressed tasklist.........................................................
   static const compressedTaskListContentPadding = const EdgeInsets.only(left: 10);
   static const double contentRadius = 10;

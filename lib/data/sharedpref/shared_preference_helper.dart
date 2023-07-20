@@ -62,7 +62,8 @@ class SharedPreferenceHelper {
   }
 
   Future<void> setCurrentStep(int new_current_step) {
-    return _sharedPreference.setInt(Preferences.current_step_number, new_current_step);
+    return _sharedPreference.setInt(
+        Preferences.current_step_number, new_current_step);
   }
 
   int? get stepsCount {
@@ -71,5 +72,18 @@ class SharedPreferenceHelper {
 
   Future<void> setStepsCount(int new_steps_count) {
     return _sharedPreference.setInt(Preferences.steps_count, new_steps_count);
+  }
+
+  // progress value:------------------------------------------------
+  List<double> getProgressValues(int stepCount) {
+    List<String> stringValues =
+        _sharedPreference.getStringList(Preferences.progress_values) ??
+            List<String>.filled(stepCount, "0");
+    return stringValues.map((value) => double.tryParse(value) ?? 0.0).toList();
+  }
+
+  Future<void> setProgressValue(List<double> values) async {
+    await _sharedPreference.setStringList(Preferences.progress_values,
+        values.map((value) => value.toString()).toList());
   }
 }

@@ -52,15 +52,17 @@ class _BlocksAppBarWidgetState extends State<BlocksAppBarWidget> {
   }
 
   Widget _buildButton({required ButtonStyle? buttonStyle, IconData? icon}) {
-    Task current_task = _dataStore.getTaskById(widget.taskId);
+    Task currentTask = _dataStore.getTaskById(widget.taskId);
     int stepId = _dataStore.getStepId(_stepStore.currentStep - 1);
     return ElevatedButton(
         onPressed: () {
           setState(() {
-            current_task.isDone = !current_task.isDone;
-            _dataStore.updateTask(current_task).then((_) {
+            currentTask.isDone = !currentTask.isDone;
+            _dataStore.updateTask(currentTask).then((_) {
               _dataStore.getTasks(stepId).then((_) {
-                setState(() {});
+                 _dataStore.getAllTasks().then((_) {
+                  _dataStore.completionPercentages();
+                });
               });
             });
           });
