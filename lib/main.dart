@@ -1,6 +1,7 @@
 import 'dart:async';
 
 import 'package:boilerplate/ui/my_app.dart';
+import 'package:fast_cached_network_image/fast_cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
@@ -11,6 +12,7 @@ Future<void> main() async {
     WidgetsFlutterBinding.ensureInitialized();
     await setPreferredOrientations();
     await setupLocator();
+    await FastCachedImageConfig.init(clearCacheAfter: const Duration(days: 14));
     runApp(MyApp());
   }, (error, stack) {
     print(stack);

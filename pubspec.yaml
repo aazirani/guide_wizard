@@ -88,6 +88,8 @@ dependencies:
   internet_connection_checker: ^1.0.0+1
   devicelocale: ^0.6.0
   marquee: ^2.2.3
+  fast_cached_network_image: ^1.1.1
+  simple_circular_progress_bar: ^1.0.2
 dev_dependencies:
   flutter_test:
     sdk: flutter
