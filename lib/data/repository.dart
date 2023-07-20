@@ -88,8 +88,9 @@ class Repository {
     }
   }
 
-  Future stepDatasourceCount() =>
-      _stepDataSource.count().catchError((error) => throw error);
+  Future stepDatasourceCount() async{
+    return await _stepDataSource.count().catchError((error) => throw error);
+  }
 
   Future truncateStep() =>
       _stepDataSource.deleteAll().catchError((error) => throw error);
@@ -585,8 +586,7 @@ class Repository {
     _sharedPrefsHelper.setProgressValue(values);
   }
 
-  Future<List<double>> loadProgressValues() async {
-    var stepCount = await stepDatasourceCount();
+  Future<List<double>> loadProgressValues(stepCount) async {
     List<double> values = _sharedPrefsHelper.getProgressValues(stepCount);
     return values;
   }

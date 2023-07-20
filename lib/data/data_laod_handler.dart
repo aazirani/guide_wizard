@@ -165,6 +165,7 @@ class DataLoadHandler {
       await _currentStepStore.setStepsCount(_dataStore.stepList.steps.length);
       // await _dataStore.getAllTasks();
       await _dataStore.getQuestions();
+      await _dataStore.initializeValues();
     }
     _dialog!.hide();
   }
