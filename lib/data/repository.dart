@@ -585,8 +585,9 @@ class Repository {
     _sharedPrefsHelper.setProgressValue(values);
   }
 
-  List<double> loadProgressValues()  {
-    List<double> values = _sharedPrefsHelper.getProgressValues();
+  Future<List<double>> loadProgressValues() async {
+    var stepCount = await stepDatasourceCount();
+    List<double> values = _sharedPrefsHelper.getProgressValues(stepCount);
     return values;
   }
 }

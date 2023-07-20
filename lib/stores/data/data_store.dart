@@ -20,17 +20,19 @@ abstract class _DataStore with Store {
   Repository _repository;
   @observable
   _DataStore(Repository repo) : this._repository = repo {
+    _initializeValues();
+  }
+  _initializeValues() async{
     try {
-
-      final loadedValues = _repository.loadProgressValues();
+      final loadedValues = await _repository.loadProgressValues();
       this.values = ObservableList.of(loadedValues);
-
     } catch (e) {
-
       print("Caught exception in constructor: $e");
     }
   }
-  late ObservableList<double>? values = ObservableList.of([0, 0, 0, 0]);
+  late ObservableList<double>? values =
+      ObservableList.of(List<double>.filled(getNumberOfSteps(), 0.0));
+
   // store for handling errors
   final ErrorStore errorStore = ErrorStore();
 
@@ -328,6 +330,7 @@ abstract class _DataStore with Store {
           .length;
 
       double percentage = numTasks == 0 ? 0 : numDoneTasks / numTasks;
+      percentage = double.parse(percentage.toStringAsFixed(2));
       percentages.add(percentage);
     }
     this.values = percentages;

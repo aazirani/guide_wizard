@@ -75,9 +75,10 @@ class SharedPreferenceHelper {
   }
 
   // progress value:------------------------------------------------
-  List<double> getProgressValues() {
+  List<double> getProgressValues(int stepCount) {
     List<String> stringValues =
-        _sharedPreference.getStringList(Preferences.progress_values) ?? ["0", "0", "0", "0"];
+        _sharedPreference.getStringList(Preferences.progress_values) ??
+            List<String>.filled(stepCount, "0");
     return stringValues.map((value) => double.tryParse(value) ?? 0.0).toList();
   }
 
