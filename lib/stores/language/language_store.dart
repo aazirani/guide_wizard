@@ -72,10 +72,10 @@ abstract class _LanguageStore with Store {
     final future = _repository.getCurrentLocale();
     future.then((currentLocale) {
       if (currentLocale != null) {
+        var locale = currentLocale.split("-")[0];
         for (var i = 0; i < supportedLanguages.length; i++) {
-          if ("${supportedLanguages[i].locale! + "-" + supportedLanguages[i].code!}" ==
-              currentLocale) {
-            this._locale = currentLocale;
+          if ("${supportedLanguages[i].locale!}" == locale) {
+            this._locale = locale;
             this.language_id = i;
           }
         }
