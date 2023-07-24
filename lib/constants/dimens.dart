@@ -98,4 +98,8 @@ class Dimens {
   static const questionListPageAppBarHeight = 56.0;
   static const questionListPageAppBarFontSize = 20.0;
 
+
+  // Image Handler (Load Image With Cache)
+  static double imageCouldntLoadFontSize = 22;
+  static const imageLoadingIndicatorSize = {"width": 60.0, "height": 60.0};
 }
