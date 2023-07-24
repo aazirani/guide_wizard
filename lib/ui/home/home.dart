@@ -9,12 +9,14 @@ import 'package:boilerplate/widgets/compressed_tasklist_timeline/compressed_task
 import 'package:boilerplate/widgets/step_slider/step_slider_widget.dart';
 import 'package:boilerplate/widgets/step_timeline/step_timeline.dart';
 import 'package:boilerplate/utils/locale/app_localization.dart';
+import 'package:carousel_slider/carousel_slider.dart';
 import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:provider/provider.dart';
 import 'package:boilerplate/stores/language/language_store.dart';
 import 'package:boilerplate/stores/data/data_store.dart';
+import 'package:shimmer/shimmer.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({
@@ -42,7 +44,8 @@ class _HomeScreenState extends State<HomeScreen> {
     // initializing stores
     _dataStore = Provider.of<DataStore>(context);
     _stepStore = Provider.of<StepStore>(context);
-    _technicalNameWithTranslationsStore = Provider.of<TechnicalNameWithTranslationsStore>(context);
+    _technicalNameWithTranslationsStore =
+        Provider.of<TechnicalNameWithTranslationsStore>(context);
     _languageStore = Provider.of<LanguageStore>(context);
     _currentStepStore = Provider.of<CurrentStepStore>(context);
     _dataLoadHandler = DataLoadHandler(context);
@@ -90,22 +93,43 @@ class _HomeScreenState extends State<HomeScreen> {
 
 //body build methods ...........................................................
   Widget _buildBody(BuildContext context) {
-    return ClipRRect(
-      borderRadius: BorderRadius.only(
-          topLeft: Radius.circular(30), topRight: Radius.circular(30)),
-      child: Container(
-        height: MediaQuery.of(context).size.height,
-        width: MediaQuery.of(context).size.width,
-        decoration: BoxDecoration(
-          color: Color.fromARGB(255, 251, 251, 251),
-          borderRadius: BorderRadius.only(
-            topLeft: Radius.circular(30),
-            topRight: Radius.circular(30),
+    return Observer(
+      builder: (_) => ClipRRect(
+        borderRadius: BorderRadius.only(
+            topLeft: Radius.circular(30), topRight: Radius.circular(30)),
+        child: Container(
+          height: MediaQuery.of(context).size.height,
+          width: MediaQuery.of(context).size.width,
+          decoration: BoxDecoration(
+            color: Color.fromARGB(255, 251, 251, 251),
+            borderRadius: BorderRadius.only(
+              topLeft: Radius.circular(30),
+              topRight: Radius.circular(30),
+            ),
           ),
+          child: _dataStore.dataLoad
+              ? _buildScreenElements()
+              : _shimmerAll(),
         ),
-        child: _buildScreenElements(),
       ),
     );
+  }
+
+  Widget _shimmerAll() {
+    return Shimmer(
+                  period: Duration(seconds: 3),
+                  gradient: LinearGradient(
+                    colors: [
+                      Colors.grey[300]!,
+                      Colors.grey[200]!,
+                      // const Color.fromARGB(255, 254, 248, 248)!,
+                      Colors.grey[300]!,
+                    ],
+                    begin: Alignment(-1, -1),
+                    end: Alignment(1, 1),
+                    stops: [0.5, 0.75, 1],
+                  ),
+                  child: _buildPlaceholderScreenElements(),);
   }
 
   Widget _buildScreenElements() {
@@ -116,9 +140,7 @@ class _HomeScreenState extends State<HomeScreen> {
         //step slider
         Observer(
             builder: (_) => StepSliderWidget(stepList: _dataStore.stepList)),
-        // StepSliderWidget(),
         //step timeline
-        //TODO: save current and pending steps in shared preferences
         StepTimeLine(
           stepNo: _currentStepStore.stepsCount,
         ),
@@ -156,7 +178,8 @@ class _HomeScreenState extends State<HomeScreen> {
 
   Widget _buildCurrentStepText(stepStore) {
     return Observer(
-        builder: (_) => Text("${stepStore.currentStep}/${_currentStepStore.stepsCount}",
+        builder: (_) => Text(
+            "${stepStore.currentStep}/${_currentStepStore.stepsCount}",
             style: TextStyle(color: AppColors.main_color)));
   }
 
@@ -172,9 +195,77 @@ class _HomeScreenState extends State<HomeScreen> {
                     fontWeight: FontWeight.bold))));
   }
 
+  _buildPlaceholderScreenElements() {
+    return Column(
+    children: [
+      _buildCurrentStepIndicator(),
+      _buildPlaceholderCarouselSliderContainer(),
+      StepTimeLine(stepNo: 0),
+      SizedBox(height: 25),
+      _buildInProgressText(),
+      SizedBox(height: 10),
+      _buildPlaceholderCompressedTasklistTimeline(),
+    ],
+  );
+  }
+
+  Widget _buildPlaceholderCarouselSliderContainer() {
+    return Container(
+      alignment: Alignment.topRight,
+      padding: EdgeInsets.only(top: 20),
+      height: MediaQuery.of(context).size.height / 3.2,
+      child: _buildPlaceholderStepSliderWidget(),
+    );
+  }
+
+  Widget _buildPlaceholderStepSliderWidget() {
+  return CarouselSlider.builder(
+    itemCount: 5,
+    itemBuilder: (BuildContext context, int index, int realIndex) {
+      return Container(
+        alignment: Alignment.topLeft,
+        width: _getScreenWidth(),
+        margin: Dimens.sliderContainerMargin,
+        padding: Dimens.sliderContainerPadding,
+        decoration: BoxDecoration(
+          color: Colors.grey,
+          // border: _buildSliderBorder(index),
+          borderRadius: BorderRadius.all(Radius.circular(20)),
+        ),
+        );
+    },
+    options: CarouselOptions(
+      height: _getScreenHeight() / 4,
+      initialPage: 0,
+      enableInfiniteScroll: false,
+      autoPlay: false,
+      enlargeCenterPage: false,
+      scrollDirection: Axis.horizontal,
+    ),
+  );
+}
+
+Widget _buildPlaceholderCompressedTasklistTimeline() {
+  return Padding(
+    padding: Dimens.stepTimelineContainerPadding,
+    child: Container(
+      color: Colors.grey,
+        padding: Dimens.timelineContainerPadding,
+        height: _getScreenHeight() / 2.8,
+        width: double.infinity,
+        child: Align(
+          alignment: Alignment.topLeft,
+        ),
+      ),
+  );
+}
+
   @override
   void dispose() {
     _connectivity.disposeStream();
     super.dispose();
   }
+
+  double _getScreenHeight() => MediaQuery.of(context).size.height;
+  double _getScreenWidth() => MediaQuery.of(context).size.width;
 }

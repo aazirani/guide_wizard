@@ -4,8 +4,6 @@ import 'package:boilerplate/constants/colors.dart';
 import 'package:boilerplate/data/network/constants/endpoints.dart';
 import 'package:boilerplate/stores/current_step/current_step_store.dart';
 import 'package:boilerplate/stores/data/data_store.dart';
-import 'package:boilerplate/stores/language/language_store.dart';
-import 'package:boilerplate/stores/step/step_store.dart';
 import 'package:boilerplate/stores/technical_name/technical_name_with_translations_store.dart';
 import 'package:boilerplate/stores/updated_at_times/updated_at_times_store.dart';
 import 'package:boilerplate/utils/locale/app_localization.dart';
@@ -21,13 +19,16 @@ class DataLoadHandler {
 
   //stores:---------------------------------------------------------------------
   late DataStore _dataStore = Provider.of<DataStore>(_context, listen: false);
-  late TechnicalNameWithTranslationsStore _technicalNameWithTranslationsStore = Provider.of<TechnicalNameWithTranslationsStore>(_context, listen: false);
-  late UpdatedAtTimesStore _updatedAtTimesStore = Provider.of<UpdatedAtTimesStore>(_context, listen: false);
-  late CurrentStepStore _currentStepStore = Provider.of<CurrentStepStore>(_context, listen: false);
+  late TechnicalNameWithTranslationsStore _technicalNameWithTranslationsStore =
+      Provider.of<TechnicalNameWithTranslationsStore>(_context, listen: false);
+  late UpdatedAtTimesStore _updatedAtTimesStore =
+      Provider.of<UpdatedAtTimesStore>(_context, listen: false);
+  late CurrentStepStore _currentStepStore =
+      Provider.of<CurrentStepStore>(_context, listen: false);
   Map _source = {ConnectivityResult.none: false};
   final MyConnectivity _connectivity = MyConnectivity.instance;
 
-  Future loadDataAndCheckForUpdate() async{
+  Future loadDataAndCheckForUpdate() async {
     await loadData();
     await checkForUpdate();
   }
@@ -37,7 +38,7 @@ class DataLoadHandler {
     await _loadDataWithoutErrorHandling(); // TODO: delete this one by adding network exception handler to _checkForUpdate
   }
 
-  Future checkForUpdate() async{
+  Future checkForUpdate() async {
     // Checking whether there is an update:
     await _checkForUpdate();
     // Loading data (loads the new data from datasource if update was occurred):
@@ -145,29 +146,27 @@ class DataLoadHandler {
 
   Future _checkForUpdate() async {
     if (!_updatedAtTimesStore.loading) {
-      await _updatedAtTimesStore.updateContentIfNeeded(); //TODO: handle network exception here
+      await _updatedAtTimesStore
+          .updateContentIfNeeded(); //TODO: handle network exception here
     }
   }
 
   Future _loadDataWithoutErrorHandling() async {
-    _dialog ??= SimpleFontelicoProgressDialog(context: _context);
-    _dialog!.show(
-        message: AppLocalizations.of(_context).translate("loading_dialog_text"),
-        type: SimpleFontelicoProgressDialogType.normal,
-        horizontal: true,
-        width: 175.0,
-        height: 75.0,
-        hideText: false,
-        indicatorColor: AppColors.main_color);
+
+    _dataStore.dataNotLoaded();
     if (!_dataStore.stepLoading) {
-      await _technicalNameWithTranslationsStore.getTechnicalNameWithTranslations();
+      await _technicalNameWithTranslationsStore
+          .getTechnicalNameWithTranslations();
       await _dataStore.getSteps();
       await _currentStepStore.setStepsCount(_dataStore.stepList.steps.length);
-      // await _dataStore.getAllTasks();
+      //keep this comment for now
+      // await _dataStore.getAllTasks(); 
       await _dataStore.getQuestions();
       await _dataStore.initializeValues();
     }
-    _dialog!.hide();
+    if (_dataStore.stepSuccess) {
+      _dataStore.dataLoaded();
+    }
   }
 }
 

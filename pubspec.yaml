@@ -88,6 +88,7 @@ dependencies:
   internet_connection_checker: ^1.0.0+1
   devicelocale: ^0.6.0
   marquee: ^2.2.3
+  shimmer: ^3.0.0
 dev_dependencies:
   flutter_test:
     sdk: flutter
