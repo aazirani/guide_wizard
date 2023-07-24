@@ -283,7 +283,7 @@ class _QuestionWidgetState extends State<QuestionWidget>
   void _showInfo() {
     bool hasDescription = _hasInfoDescription();
     bool hasUrl = _hasInfoUrl();
-    if(hasDescription && hasUrl) {
+    if (hasDescription && hasUrl) {
       _showInfoInBottomSheet(
         buttonsRow: Row(
           children: [
