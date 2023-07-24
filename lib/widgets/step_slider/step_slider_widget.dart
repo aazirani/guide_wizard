@@ -5,6 +5,7 @@ import 'package:boilerplate/stores/current_step/current_step_store.dart';
 import 'package:boilerplate/stores/step/step_store.dart';
 import 'package:boilerplate/ui/questions/questions_list_page.dart';
 import 'package:boilerplate/utils/locale/app_localization.dart';
+import 'package:boilerplate/widgets/load_image_with_cache.dart';
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
@@ -118,12 +119,10 @@ class _StepSliderWidgetState extends State<StepSliderWidget> {
       padding: Dimens.stepAvatar,
       child: Container(
           width: double.maxFinite,
-          alignment: Alignment.centerRight,
-          decoration: BoxDecoration(
-            image: DecorationImage(
-                image: NetworkImage(
-                    Endpoints.stepsImageBaseUrl + _dataStore.getStepImage(index)!)),
-          )),
+          child: Center(
+          child: LoadImageWithCache(imageUrl: Endpoints.stepsImageBaseUrl + 
+          _dataStore.getStepImage(index)!, 
+          color: AppColors.main_color,))),
     );
   }
 

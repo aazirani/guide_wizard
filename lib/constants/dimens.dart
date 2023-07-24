@@ -107,4 +107,8 @@ class Dimens {
   static const infoButtonContainerMargin = const EdgeInsets.only(left: 20);
   static const infoButtonContainerPadding = const EdgeInsets.all(12);
 
+
+  // Image Handler (Load Image With Cache)
+  static double imageCouldntLoadFontSize = 22;
+  static const imageLoadingIndicatorSize = {"width": 60.0, "height": 60.0};
 }

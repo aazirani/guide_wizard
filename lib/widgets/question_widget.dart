@@ -11,6 +11,7 @@ import 'package:boilerplate/ui/home/home.dart';
 import 'package:boilerplate/url_handler.dart';
 import 'package:boilerplate/utils/locale/app_localization.dart';
 import 'package:boilerplate/widgets/info_dialog.dart';
+import 'package:boilerplate/widgets/load_image_with_cache.dart';
 import 'package:boilerplate/widgets/scrolling_overflow_text.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -413,26 +414,7 @@ class _QuestionWidgetState extends State<QuestionWidget>
   }
 
   Widget _buildImageLoader(String imageURL) {
-    return Image.network(
-      imageURL,
-      fit: BoxFit.cover,
-      loadingBuilder: (BuildContext context, Widget child,
-          ImageChunkEvent? loadingProgress) {
-        if (loadingProgress == null) return child;
-        return Padding(
-          padding: const EdgeInsets.all(20),
-          child: Center(
-            child: CircularProgressIndicator(
-              value: loadingProgress.expectedTotalBytes != null
-                  ? loadingProgress.cumulativeBytesLoaded /
-                  loadingProgress.expectedTotalBytes!
-                  : null,
-              valueColor: AlwaysStoppedAnimation<Color>(AppColors.main_color),
-            ),
-          ),
-        );
-      },
-    );
+    return LoadImageWithCache(imageUrl: imageURL, color: AppColors.main_color,);
   }
 
   Widget _buildImageOptionSubtitle(int index) {

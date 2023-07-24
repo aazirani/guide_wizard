@@ -1,5 +1,6 @@
 import 'package:boilerplate/constants/colors.dart';
 import 'package:boilerplate/data/network/constants/endpoints.dart';
+import 'package:boilerplate/widgets/load_image_with_cache.dart';
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
 import 'package:smooth_page_indicator/smooth_page_indicator.dart';
@@ -17,12 +18,12 @@ class ImageSlide extends StatefulWidget {
 class _ImageSlideState extends State<ImageSlide> {
 
   int _slideIndex = 0;
-  late List<Image> _imagesList;
+  late List<LoadImageWithCache> _imagesList;
 
   @override
   void initState() {
     super.initState();
-    _imagesList = widget.images.map((e) => Image.network(Endpoints.tasksImageBaseUrl + e!, fit: BoxFit.fitHeight,),).toList();
+    _imagesList = widget.images.map((e) => LoadImageWithCache(imageUrl: Endpoints.tasksImageBaseUrl + e!, color: AppColors.grey,),).toList();
   }
 
   @override
