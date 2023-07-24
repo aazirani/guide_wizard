@@ -1,8 +1,10 @@
 import 'package:boilerplate/constants/colors.dart';
 import 'package:boilerplate/constants/dimens.dart';
+import 'package:boilerplate/stores/current_step/current_step_store.dart';
 import 'package:boilerplate/stores/step/step_store.dart';
 import 'package:boilerplate/widgets/scrolling_overflow_text.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:provider/provider.dart';
 import 'package:boilerplate/models/task/task.dart';
 import 'package:boilerplate/stores/data/data_store.dart';
@@ -30,12 +32,14 @@ class BlocksAppBarWidget extends StatefulWidget implements PreferredSizeWidget {
 class _BlocksAppBarWidgetState extends State<BlocksAppBarWidget> {
   late DataStore _dataStore;
   late StepStore _stepStore;
+  late CurrentStepStore _currentStepStore;
 
   @override
   void didChangeDependencies() {
     super.didChangeDependencies();
     _dataStore = Provider.of<DataStore>(context);
     _stepStore = Provider.of<StepStore>(context);
+    _currentStepStore = Provider.of<CurrentStepStore>(context);
   }
 
   _buildDoneUndoneButtonStyle() {
@@ -46,7 +50,7 @@ class _BlocksAppBarWidgetState extends State<BlocksAppBarWidget> {
             current_task.isDone ? AppColors.white : AppColors.main_color,
         foregroundColor: AppColors.bright_foreground_color.withOpacity(0.1),
         shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(7.0),
+          borderRadius: BorderRadius.circular(Dimens.doneUndoneButtonBorderRadius),
         ),
         side: BorderSide(color: AppColors.white, width: 1.5));
   }
@@ -60,8 +64,8 @@ class _BlocksAppBarWidgetState extends State<BlocksAppBarWidget> {
             currentTask.isDone = !currentTask.isDone;
             _dataStore.updateTask(currentTask).then((_) {
               _dataStore.getTasks(stepId).then((_) {
-                 _dataStore.getAllTasks().then((_) {
-                  _dataStore.completionPercentages();
+                _dataStore.getAllTasks().then((_) {
+                  _dataStore.completionPercentages(_currentStepStore);
                 });
               });
             });
@@ -104,16 +108,25 @@ class _BlocksAppBarWidgetState extends State<BlocksAppBarWidget> {
             text: widget.title,
             textStyle: TextStyle(
               color: AppColors.bright_foreground_color,
-              fontSize: 20,
+              fontSize: Dimens.taskTitleFont,
             ),
           ),
           SizedBox(
             width: 10,
           ),
-          Padding(
-            padding: Dimens.doneButtonPadding,
-            child: Container(
-                height: 25, width: 25, child: _buildDoneUnDoneButton()),
+          Observer(
+            builder: (_) {
+              return Padding(
+                padding: Dimens.doneButtonPadding,
+                child: (_stepStore.currentStep - 1 ==
+                            _currentStepStore.currentStepNumber)
+                    ? Container(
+                        height: Dimens.doneUndoneButtonHeight, 
+                        width: Dimens.doneUndoneButtonWidth, 
+                        child: _buildDoneUnDoneButton())
+                    : null,
+              );
+            },
           ),
         ],
       ),

@@ -98,5 +98,9 @@ class Dimens {
   // Question List Page AppBar
   static const questionListPageAppBarHeight = 56.0;
   static const questionListPageAppBarFontSize = 20.0;
-
+  //Task page appBar widget
+  static const doneUndoneButtonHeight = 25.0;
+  static const doneUndoneButtonWidth = 25.0;
+  static const taskTitleFont = 20.0;
+  static const doneUndoneButtonBorderRadius = 7.0;
 }
