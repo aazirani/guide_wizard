@@ -119,7 +119,10 @@ class _StepSliderWidgetState extends State<StepSliderWidget> {
       padding: Dimens.stepAvatar,
       child: Container(
           width: double.maxFinite,
-          child: Center(child: LoadImageWithCache(imageUrl: Endpoints.stepsImageBaseUrl + _dataStore.getStepImage(index)!, color: AppColors.main_color,))),
+          child: Center(
+          child: LoadImageWithCache(imageUrl: Endpoints.stepsImageBaseUrl + 
+          _dataStore.getStepImage(index)!, 
+          color: AppColors.main_color,))),
     );
   }
 
