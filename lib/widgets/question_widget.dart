@@ -294,7 +294,7 @@ class _QuestionWidgetState extends State<QuestionWidget>
         ),
       );
     }
-    else if(hasDescription && !hasUrl) {
+    else if (hasDescription && !hasUrl) {
       _showInfoInBottomSheet(
         buttonsRow: Row(
           children: [
@@ -303,7 +303,7 @@ class _QuestionWidgetState extends State<QuestionWidget>
         ),
       );
     }
-    else if(!hasDescription && hasUrl) {
+    else if (!hasDescription && hasUrl) {
       UrlHandler.openUrl(context: context, url: _getInfoUrl());
     }
 
