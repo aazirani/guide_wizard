@@ -126,13 +126,7 @@ class _QuestionWidgetState extends State<QuestionWidget>
 
   ButtonStyle _buildQuestionsButtonStyle(Color color) {
     return ButtonStyle(
-      minimumSize: MaterialStateProperty.all(Size(
-          math.max(
-              _getScreenWidth() -
-                  Dimens.buildQuestionsButtonStyle[
-                  "pixels_smaller_than_screen_width"]!,
-              0),
-          Dimens.buildQuestionsButtonStyle["height"]!)),
+      minimumSize: MaterialStateProperty.all(sizeOfButton()),
       backgroundColor: MaterialStateProperty.all<Color>(color),
       shape: MaterialStateProperty.all<RoundedRectangleBorder>(
         RoundedRectangleBorder(
@@ -184,11 +178,10 @@ class _QuestionWidgetState extends State<QuestionWidget>
 
   ButtonStyle _buildInfoCloseButtonStyle({required double scaleBy}) {
     return ButtonStyle(
-      minimumSize: MaterialStateProperty.all(Size(math.max((_getScreenWidth() - Dimens.buildQuestionsButtonStyle["pixels_smaller_than_screen_width"]!) / scaleBy, 0), Dimens.buildQuestionsButtonStyle["height"]!)),
-      // backgroundColor: MaterialStateProperty.all<Color>(),
+      minimumSize: MaterialStateProperty.all(sizeOfButton(scaleBy: scaleBy)),
       shape: MaterialStateProperty.all<RoundedRectangleBorder>(
         RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(5.0),
+          borderRadius: Dimens.infoInsideDialogButtonsRadius,
           side: BorderSide(color: AppColors.close_button_color, width: 2),
         ),
       ),
@@ -214,13 +207,7 @@ class _QuestionWidgetState extends State<QuestionWidget>
 
   ButtonStyle _buildInfoOpenUrlButtonStyle({required double scaleBy, Color color = AppColors.main_color}) {
     return ButtonStyle(
-      minimumSize: MaterialStateProperty.all(Size(
-          math.max(
-              _getScreenWidth() -
-                  (Dimens.buildQuestionsButtonStyle[
-                  "pixels_smaller_than_screen_width"]!) / scaleBy,
-              0),
-          Dimens.buildQuestionsButtonStyle["height"]!)),
+      minimumSize: MaterialStateProperty.all(sizeOfButton(scaleBy: scaleBy)),
       backgroundColor: MaterialStateProperty.all<Color>(color),
       shape: MaterialStateProperty.all<RoundedRectangleBorder>(
         RoundedRectangleBorder(
@@ -257,7 +244,7 @@ class _QuestionWidgetState extends State<QuestionWidget>
           content: Padding(
             padding: Dimens.infoBottomSheetPadding,
             child: Text(
-              _technicalNameWithTranslationsStore.getTranslation(widget.question.info_description)!,
+              _getInfoDescription(),
               style: TextStyle(fontSize: 17),
             ),
           ),
@@ -274,11 +261,11 @@ class _QuestionWidgetState extends State<QuestionWidget>
   }
 
   bool _hasInfoDescription() {
-    return _technicalNameWithTranslationsStore.getTechnicalName(widget.question.info_description).translations.length != 0;
+    return _technicalNameWithTranslationsStore.isTranslationsNotEmpty(widget.question.info_description);
   }
 
   bool _hasInfoUrl() {
-    return _technicalNameWithTranslationsStore.getTechnicalName(widget.question.info_url).translations.length != 0;
+    return _technicalNameWithTranslationsStore.isTranslationsNotEmpty(widget.question.info_url);
   }
 
   bool _hasInfo() {
@@ -554,5 +541,9 @@ class _QuestionWidgetState extends State<QuestionWidget>
       ))
           .toList(),
     );
+  }
+
+  Size sizeOfButton({scaleBy = 1}){
+    return Size(math.max(_getScreenWidth() - (Dimens.buildQuestionsButtonStyle["pixels_smaller_than_screen_width"]!) / scaleBy, 0), Dimens.buildQuestionsButtonStyle["height"]!);
   }
 }

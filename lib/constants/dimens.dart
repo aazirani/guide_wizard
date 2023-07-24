@@ -100,6 +100,7 @@ class Dimens {
 
   // Question Info...................................................
   static final infoButtonBorderRadius = BorderRadius.circular(7);
+  static final infoInsideDialogButtonsRadius = BorderRadius.circular(5);
   static const infoBottomSheetPadding = const EdgeInsets.fromLTRB(20, 25, 20, 90);
   static const infoButtonsPadding = const EdgeInsets.only(left: 10, right: 10, bottom: 10);
   static const infoButtonContainerMargin = const EdgeInsets.only(left: 20);

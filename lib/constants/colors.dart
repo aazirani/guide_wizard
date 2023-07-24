@@ -77,7 +77,7 @@ class AppColors {
   static Color deadlineTextDoneColor = green[100]!;
   static Color deadlineTextUnDoneColor = red[100]!;
   // questionpage
-  static const Color nextStepColor = Color(0xFF31EC92);
+  static Color nextStepColor = green[100]!;
 
   static const Color title_color = Colors.white;
   static const Color main_color = const Color.fromRGBO(0, 81, 158, 1);

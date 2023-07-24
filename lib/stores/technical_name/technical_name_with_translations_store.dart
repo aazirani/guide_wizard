@@ -64,4 +64,16 @@ abstract class _TechnicalNameWithTranslationsStore with Store {
   TechnicalNameWithTranslations getTechnicalName(int id) {
     return technicalNameWithTranslationsList.technicalNameWithTranslations.firstWhere((element) => element.id == id);
   }
+
+  int getTranslationsLength(int id) {
+    return getTechnicalName(id).translations.length;
+  }
+
+  bool isTranslationsEmpty(int id) {
+    return getTranslationsLength(id) == 0;
+  }
+
+  bool isTranslationsNotEmpty(int id) {
+    return !isTranslationsEmpty(id);
+  }
 }
