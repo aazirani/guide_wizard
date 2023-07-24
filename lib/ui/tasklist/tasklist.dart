@@ -54,7 +54,7 @@ class _TaskListState extends State<TaskList> {
         titleSpacing: Dimens.appBar["titleSpacing"],
         title: Text(
             _technicalNameWithTranslationsStore
-                .getTechnicalNames(step_title_id)!,
+                .getTranslation(step_title_id)!,
             style: TextStyle(
                 color: AppColors.white,
                 fontSize: 20,

@@ -138,7 +138,7 @@ class _TaskListTimeLineState extends State<TaskListTimeLine> {
     return Align(
       alignment: Alignment.centerLeft,
       child: Text(
-          "${_technicalNameWithTranslationsStore.getTechnicalNames(title_id)} ",
+          "${_technicalNameWithTranslationsStore.getTranslation(title_id)} ",
           style: TextStyle(
             color: AppColors.main_color,
             fontSize: 16,
@@ -185,7 +185,7 @@ class _TaskListTimeLineState extends State<TaskListTimeLine> {
   double _getScreenWidth() => MediaQuery.of(context).size.width;
 
   bool _deadLineAvailable(taskNumber) {
-    bool status = _dataStore.taskList.tasks[taskNumber].sub_tasks.any((sub_task) => _technicalNameWithTranslationsStore.getTechnicalNames(sub_task.deadline)!.isNotEmpty);
+    bool status = _dataStore.taskList.tasks[taskNumber].sub_tasks.any((sub_task) => _technicalNameWithTranslationsStore.getTranslation(sub_task.deadline)!.isNotEmpty);
     switch (status) {
       case false:
         return false;
