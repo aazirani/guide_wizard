@@ -1,3 +1,4 @@
+import 'package:boilerplate/stores/current_step/current_step_store.dart';
 import 'package:dio/dio.dart';
 import 'package:mobx/mobx.dart';
 import 'package:boilerplate/models/step/step_list.dart';
@@ -20,7 +21,6 @@ abstract class _DataStore with Store {
   Repository _repository;
   @observable
   _DataStore(Repository repo) : this._repository = repo;
-  
 
   late ObservableList<double>? values =
       ObservableList.of(List<double>.filled(getNumberOfSteps(), 0.0));

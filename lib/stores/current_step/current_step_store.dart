@@ -21,6 +21,7 @@
     // current step number from 0 to steps_count-1
     late int currentStepNumber;
     // steps count (usually 4)
+    @observable
     late int stepsCount = 4;
 
     // constructor:---------------------------------------------------------------

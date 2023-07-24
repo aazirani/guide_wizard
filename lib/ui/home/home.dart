@@ -42,7 +42,8 @@ class _HomeScreenState extends State<HomeScreen> {
     // initializing stores
     _dataStore = Provider.of<DataStore>(context);
     _stepStore = Provider.of<StepStore>(context);
-    _technicalNameWithTranslationsStore = Provider.of<TechnicalNameWithTranslationsStore>(context);
+    _technicalNameWithTranslationsStore =
+        Provider.of<TechnicalNameWithTranslationsStore>(context);
     _languageStore = Provider.of<LanguageStore>(context);
     _currentStepStore = Provider.of<CurrentStepStore>(context);
     _dataLoadHandler = DataLoadHandler(context);
@@ -119,8 +120,10 @@ class _HomeScreenState extends State<HomeScreen> {
         // StepSliderWidget(),
         //step timeline
         //TODO: save current and pending steps in shared preferences
-        StepTimeLine(
-          stepNo: _currentStepStore.stepsCount,
+        Observer(
+          builder: (_) => StepTimeLine(
+            stepNo: _currentStepStore.stepsCount,
+          ),
         ),
         SizedBox(height: 25),
         _buildInProgressText(),
@@ -156,7 +159,8 @@ class _HomeScreenState extends State<HomeScreen> {
 
   Widget _buildCurrentStepText(stepStore) {
     return Observer(
-        builder: (_) => Text("${stepStore.currentStep}/${_currentStepStore.stepsCount}",
+        builder: (_) => Text(
+            "${stepStore.currentStep}/${_currentStepStore.stepsCount}",
             style: TextStyle(color: AppColors.main_color)));
   }
 
