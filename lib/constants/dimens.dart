@@ -98,5 +98,13 @@ class Dimens {
   // Question List Page AppBar
   static const questionListPageAppBarHeight = 56.0;
   static const questionListPageAppBarFontSize = 20.0;
-
+  // Home page
+  static const homeBodyBorderRadius = 30.0;
+  static const placeHolderCompressedTaskListHeightRatio = 2.8; 
+  static const placeHolderCarouselSliderHeightRatio = 3.2; 
+  static const placeHolderCarouselSliderContainerPadding = EdgeInsets.only(top: 20);
+  static const placeHolderStepSliderBorderRadius = 20.0;
+  static const placeHolderCarouselHeightRatio = 4;
+  static const inProgressTextPadding = EdgeInsets.only(left: 20, top: 10);
+  static const inProgressTextFont = 18.0;
 }

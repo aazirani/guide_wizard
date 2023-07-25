@@ -96,15 +96,15 @@ class _HomeScreenState extends State<HomeScreen> {
     return Observer(
       builder: (_) => ClipRRect(
         borderRadius: BorderRadius.only(
-            topLeft: Radius.circular(30), topRight: Radius.circular(30)),
+            topLeft: Radius.circular(Dimens.homeBodyBorderRadius), topRight: Radius.circular(Dimens.homeBodyBorderRadius)),
         child: Container(
           height: MediaQuery.of(context).size.height,
           width: MediaQuery.of(context).size.width,
           decoration: BoxDecoration(
-            color: Color.fromARGB(255, 251, 251, 251),
+            color: AppColors.homeBodyColor,
             borderRadius: BorderRadius.only(
-              topLeft: Radius.circular(30),
-              topRight: Radius.circular(30),
+              topLeft: Radius.circular(Dimens.homeBodyBorderRadius),
+              topRight: Radius.circular(Dimens.homeBodyBorderRadius),
             ),
           ),
           child: _dataStore.dataLoad
@@ -120,10 +120,9 @@ class _HomeScreenState extends State<HomeScreen> {
                   period: Duration(seconds: 3),
                   gradient: LinearGradient(
                     colors: [
-                      Colors.grey[300]!,
-                      Colors.grey[200]!,
-                      // const Color.fromARGB(255, 254, 248, 248)!,
-                      Colors.grey[300]!,
+                      AppColors.shimmerGradientGreys[50]!,
+                      AppColors.shimmerGradientGreys[100]!,
+                      AppColors.shimmerGradientGreys[200]!,
                     ],
                     begin: Alignment(-1, -1),
                     end: Alignment(1, 1),
@@ -185,12 +184,12 @@ class _HomeScreenState extends State<HomeScreen> {
 
   Widget _buildInProgressText() {
     return Padding(
-        padding: EdgeInsets.only(left: 20, top: 10),
+        padding: Dimens.inProgressTextPadding,
         child: Align(
             alignment: Alignment.centerLeft,
             child: Text(AppLocalizations.of(context).translate("in_progress"),
                 style: TextStyle(
-                    fontSize: 18,
+                    fontSize: Dimens.inProgressTextFont,
                     color: AppColors.main_color,
                     fontWeight: FontWeight.bold))));
   }
@@ -212,8 +211,8 @@ class _HomeScreenState extends State<HomeScreen> {
   Widget _buildPlaceholderCarouselSliderContainer() {
     return Container(
       alignment: Alignment.topRight,
-      padding: EdgeInsets.only(top: 20),
-      height: MediaQuery.of(context).size.height / 3.2,
+      padding: Dimens.placeHolderCarouselSliderContainerPadding,
+      height: MediaQuery.of(context).size.height / Dimens.placeHolderCarouselSliderHeightRatio,
       child: _buildPlaceholderStepSliderWidget(),
     );
   }
@@ -229,13 +228,12 @@ class _HomeScreenState extends State<HomeScreen> {
         padding: Dimens.sliderContainerPadding,
         decoration: BoxDecoration(
           color: Colors.grey,
-          // border: _buildSliderBorder(index),
-          borderRadius: BorderRadius.all(Radius.circular(20)),
+          borderRadius: BorderRadius.all(Radius.circular(Dimens.placeHolderStepSliderBorderRadius)),
         ),
         );
     },
     options: CarouselOptions(
-      height: _getScreenHeight() / 4,
+      height: _getScreenHeight() / Dimens.placeHolderCarouselHeightRatio,
       initialPage: 0,
       enableInfiniteScroll: false,
       autoPlay: false,
@@ -251,7 +249,7 @@ Widget _buildPlaceholderCompressedTasklistTimeline() {
     child: Container(
       color: Colors.grey,
         padding: Dimens.timelineContainerPadding,
-        height: _getScreenHeight() / 2.8,
+        height: _getScreenHeight() / Dimens.placeHolderCompressedTaskListHeightRatio,
         width: double.infinity,
         child: Align(
           alignment: Alignment.topLeft,
