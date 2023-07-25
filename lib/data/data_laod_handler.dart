@@ -21,13 +21,16 @@ class DataLoadHandler {
 
   //stores:---------------------------------------------------------------------
   late DataStore _dataStore = Provider.of<DataStore>(_context, listen: false);
-  late TechnicalNameWithTranslationsStore _technicalNameWithTranslationsStore = Provider.of<TechnicalNameWithTranslationsStore>(_context, listen: false);
-  late UpdatedAtTimesStore _updatedAtTimesStore = Provider.of<UpdatedAtTimesStore>(_context, listen: false);
-  late CurrentStepStore _currentStepStore = Provider.of<CurrentStepStore>(_context, listen: false);
+  late TechnicalNameWithTranslationsStore _technicalNameWithTranslationsStore =
+      Provider.of<TechnicalNameWithTranslationsStore>(_context, listen: false);
+  late UpdatedAtTimesStore _updatedAtTimesStore =
+      Provider.of<UpdatedAtTimesStore>(_context, listen: false);
+  late CurrentStepStore _currentStepStore =
+      Provider.of<CurrentStepStore>(_context, listen: false);
   Map _source = {ConnectivityResult.none: false};
   final MyConnectivity _connectivity = MyConnectivity.instance;
 
-  Future loadDataAndCheckForUpdate() async{
+  Future loadDataAndCheckForUpdate() async {
     await loadData();
     await checkForUpdate();
   }
@@ -37,7 +40,7 @@ class DataLoadHandler {
     await _loadDataWithoutErrorHandling(); // TODO: delete this one by adding network exception handler to _checkForUpdate
   }
 
-  Future checkForUpdate() async{
+  Future checkForUpdate() async {
     // Checking whether there is an update:
     await _checkForUpdate();
     // Loading data (loads the new data from datasource if update was occurred):
@@ -145,7 +148,8 @@ class DataLoadHandler {
 
   Future _checkForUpdate() async {
     if (!_updatedAtTimesStore.loading) {
-      await _updatedAtTimesStore.updateContentIfNeeded(); //TODO: handle network exception here
+      await _updatedAtTimesStore
+          .updateContentIfNeeded(); //TODO: handle network exception here
     }
   }
 
@@ -160,7 +164,8 @@ class DataLoadHandler {
         hideText: false,
         indicatorColor: AppColors.main_color);
     if (!_dataStore.stepLoading) {
-      await _technicalNameWithTranslationsStore.getTechnicalNameWithTranslations();
+      await _technicalNameWithTranslationsStore
+          .getTechnicalNameWithTranslations();
       await _dataStore.getSteps();
       await _currentStepStore.setStepsCount(_dataStore.stepList.steps.length);
       // await _dataStore.getAllTasks();
