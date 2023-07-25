@@ -266,6 +266,12 @@ abstract class _DataStore with Store {
     }
   }
 
+  @action
+  changeCurrentStep(CurrentStepStore _currentStepStore, int newStep) {
+    _currentStepStore.currentStepNumber = newStep;
+  }
+
+
   //.............................................................................
   String? getStepImage(int stepNum) {
     return this.stepList.steps[stepNum].image;
@@ -313,16 +319,20 @@ abstract class _DataStore with Store {
   }
 
   @action
-  void completionPercentages() {
+  void completionPercentages(CurrentStepStore _currentStepStore) {
     ObservableList<double> percentages = ObservableList<double>();
     for (var i = 0; i < stepList.steps.length; i++) {
       int numTasks = stepList.steps[i].numTasks;
       int numDoneTasks = allTasks.tasks
           .where((task) => task.step_id == stepList.steps[i].id && task.isDone)
           .length;
-
+   
       double percentage = numTasks == 0 ? 0 : numDoneTasks / numTasks;
       percentage = double.parse(percentage.toStringAsFixed(2));
+
+      if (percentage == 1.0 && i < stepList.steps.length) {
+        changeCurrentStep(_currentStepStore, i + 1);
+      } 
       percentages.add(percentage);
     }
     this.values = percentages;

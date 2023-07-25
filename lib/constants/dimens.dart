@@ -98,6 +98,12 @@ class Dimens {
   // Question List Page AppBar
   static const questionListPageAppBarHeight = 56.0;
   static const questionListPageAppBarFontSize = 20.0;
+  
+  //Task page appBar widget
+  static const doneUndoneButtonHeight = 25.0;
+  static const doneUndoneButtonWidth = 25.0;
+  static const taskTitleFont = 20.0;
+  static const doneUndoneButtonBorderRadius = 7.0;
 
   // Question Info...................................................
   static final infoButtonBorderRadius = BorderRadius.circular(7);
@@ -111,4 +117,5 @@ class Dimens {
   // Image Handler (Load Image With Cache)
   static double imageCouldntLoadFontSize = 22;
   static const imageLoadingIndicatorSize = {"width": 60.0, "height": 60.0};
+
 }
