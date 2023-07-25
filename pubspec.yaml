@@ -88,6 +88,13 @@ dependencies:
   internet_connection_checker: ^1.0.0+1
   devicelocale: ^0.6.0
   marquee: ^2.2.3
+  popup_card: ^0.1.0
+  slide_popup_dialog_null_safety: ^1.0.0
+  animated_text_kit: ^4.2.1
+  font_awesome_flutter: ^9.1.0
+  xen_popup_card: ^0.0.1
+  fast_cached_network_image: ^1.1.1
+  simple_circular_progress_bar: ^1.0.2
 dev_dependencies:
   flutter_test:
     sdk: flutter

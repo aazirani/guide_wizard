@@ -8,11 +8,13 @@ import 'package:boilerplate/stores/current_step/current_step_store.dart';
 import 'package:boilerplate/stores/step/step_store.dart';
 import 'package:boilerplate/stores/technical_name/technical_name_with_translations_store.dart';
 import 'package:boilerplate/ui/home/home.dart';
+import 'package:boilerplate/url_handler.dart';
 import 'package:boilerplate/utils/locale/app_localization.dart';
+import 'package:boilerplate/widgets/info_dialog.dart';
+import 'package:boilerplate/widgets/load_image_with_cache.dart';
 import 'package:boilerplate/widgets/scrolling_overflow_text.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:scrollable_positioned_list/scrollable_positioned_list.dart';
 import 'package:boilerplate/providers/question_widget_state/question_widget_state.dart';
 import 'package:boilerplate/stores/data/data_store.dart';
 
@@ -97,17 +99,14 @@ class _QuestionWidgetState extends State<QuestionWidget>
         children: [
           ScrollingOverflowText(
             text: _technicalNameWithTranslationsStore
-                .getTechnicalNames(title_id)!,
+                .getTranslation(title_id)!,
             textStyle: TextStyle(fontSize: 22, fontWeight: FontWeight.w500),
             height: 30,
             width: _getScreenWidth() - 100,
           ),
-          SizedBox(
-            width: 10,
-          ),
           Provider.of<QuestionsWidgetState>(context)
-              .isWidgetExpanded(widget.index)
-              ? _buildHelpButton()
+              .isWidgetExpanded(widget.index) && _hasInfo()
+              ? _buildInfoButton()
               : SizedBox(),
           // _buildHelpButton(),
         ],
@@ -121,20 +120,14 @@ class _QuestionWidgetState extends State<QuestionWidget>
       margin: Dimens.questionDescriptionPadding,
       child: Text(
         _technicalNameWithTranslationsStore
-            .getTechnicalNames(questionSubtitleId)!,
+            .getTranslation(questionSubtitleId)!,
       ),
     );
   }
 
   ButtonStyle _buildQuestionsButtonStyle(Color color) {
     return ButtonStyle(
-      minimumSize: MaterialStateProperty.all(Size(
-          math.max(
-              _getScreenWidth() -
-                  Dimens.buildQuestionsButtonStyle[
-                  "pixels_smaller_than_screen_width"]!,
-              0),
-          Dimens.buildQuestionsButtonStyle["height"]!)),
+      minimumSize: MaterialStateProperty.all(sizeOfButton()),
       backgroundColor: MaterialStateProperty.all<Color>(color),
       shape: MaterialStateProperty.all<RoundedRectangleBorder>(
         RoundedRectangleBorder(
@@ -184,23 +177,158 @@ class _QuestionWidgetState extends State<QuestionWidget>
     });
   }
 
-  Widget _buildHelpButton() {
+  ButtonStyle _buildInfoCloseButtonStyle({required double scaleBy}) {
+    return ButtonStyle(
+      minimumSize: MaterialStateProperty.all(sizeOfButton(scaleBy: scaleBy)),
+      shape: MaterialStateProperty.all<RoundedRectangleBorder>(
+        RoundedRectangleBorder(
+          borderRadius: Dimens.infoInsideDialogButtonsRadius,
+          side: BorderSide(color: AppColors.close_button_color, width: 2),
+        ),
+      ),
+    );
+  }
+
+  Widget _buildInfoCloseButton({double scaleBy = 1}) {
+    return Consumer<QuestionsWidgetState>(builder: (context, builder, child) {
+      return Flexible(
+        child: TextButton(
+          style: _buildInfoCloseButtonStyle(scaleBy: scaleBy),
+          onPressed: () {
+            Navigator.of(context).pop();
+          },
+          child: Text(
+              AppLocalizations.of(context).translate('close'),
+            style: TextStyle(color: AppColors.close_button_color, fontSize: 15),
+          ),
+        ),
+      );
+    });
+  }
+
+  ButtonStyle _buildInfoOpenUrlButtonStyle({required double scaleBy, Color color = AppColors.main_color}) {
+    return ButtonStyle(
+      minimumSize: MaterialStateProperty.all(sizeOfButton(scaleBy: scaleBy)),
+      backgroundColor: MaterialStateProperty.all<Color>(color),
+      shape: MaterialStateProperty.all<RoundedRectangleBorder>(
+        RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(5.0),
+        ),
+      ),
+    );
+  }
+
+  Widget _buildInfoOpenUrlButton({double scaleBy = 1}) {
+    return Consumer<QuestionsWidgetState>(builder: (context, builder, child) {
+      return Flexible(
+        child: TextButton(
+          style: _buildInfoOpenUrlButtonStyle(scaleBy: scaleBy),
+          onPressed: () {
+            UrlHandler.openUrl(context: context, url: _getInfoUrl());
+          },
+          child: Text(
+            AppLocalizations.of(context).translate('read_more'),
+            style: TextStyle(color: AppColors.white, fontSize: 15),
+          ),
+        ),
+      );
+    });
+  }
+
+  void _showInfoInBottomSheet({required Widget buttonsRow}) {
+    showModalBottomSheet(
+      context: context,
+      isScrollControlled: true,
+      backgroundColor: Colors.transparent,
+      builder: (BuildContext context) {
+        return InfoDialog(
+          content: Padding(
+            padding: Dimens.infoBottomSheetPadding,
+            child: Text(
+              _getInfoDescription(),
+              style: TextStyle(fontSize: 17),
+            ),
+          ),
+          bottomRow: Container(
+            color: AppColors.white,
+            child: Padding(
+              padding: Dimens.infoButtonsPadding,
+              child: buttonsRow,
+            ),
+          ),
+        );
+      },
+    );
+  }
+
+  bool _hasInfoDescription() {
+    return _technicalNameWithTranslationsStore.isTranslationsNotEmpty(widget.question.info_description);
+  }
+
+  bool _hasInfoUrl() {
+    return _technicalNameWithTranslationsStore.isTranslationsNotEmpty(widget.question.info_url);
+  }
+
+  bool _hasInfo() {
+    return _hasInfoDescription() || _hasInfoUrl();
+  }
+
+  String _getInfoDescription() {
+    return _technicalNameWithTranslationsStore.getTranslation(widget.question.info_description)!;
+  }
+
+  String _getInfoUrl() {
+    return _technicalNameWithTranslationsStore.getTranslation(widget.question.info_url)!;
+  }
+
+  void _showInfo() {
+    bool hasDescription = _hasInfoDescription();
+    bool hasUrl = _hasInfoUrl();
+    if (hasDescription && hasUrl) {
+      _showInfoInBottomSheet(
+        buttonsRow: Row(
+          children: [
+            _buildInfoCloseButton(scaleBy: 2),
+            SizedBox(width: 10,),
+            _buildInfoOpenUrlButton(scaleBy: 2),
+          ],
+        ),
+      );
+    }
+    else if (hasDescription && !hasUrl) {
+      _showInfoInBottomSheet(
+        buttonsRow: Row(
+          children: [
+            _buildInfoCloseButton(scaleBy: 1),
+          ],
+        ),
+      );
+    }
+    else if (!hasDescription && hasUrl) {
+      UrlHandler.openUrl(context: context, url: _getInfoUrl());
+    }
+
+  }
+
+  Widget _buildInfoButton() {
     return Container(
+      margin: Dimens.infoButtonContainerMargin,
       child: Material(
+        borderRadius: Dimens.infoButtonBorderRadius,
         child: InkWell(
-          onTap: () {},
+          onTap:() {
+            _showInfo();
+          },
           child: Container(
-            padding: const EdgeInsets.all(12),
+            padding: Dimens.infoButtonContainerPadding,
             child: Icon(
-              Icons.question_mark_rounded,
+              Icons.help_outline_rounded,
               color: Colors.white,
             ),
           ),
         ),
-        color: Colors.transparent,
+        color: AppColors.main_color,
       ),
-      decoration:
-      BoxDecoration(borderRadius: BorderRadius.all(Radius.circular(5))),
     );
   }
 
@@ -286,26 +414,7 @@ class _QuestionWidgetState extends State<QuestionWidget>
   }
 
   Widget _buildImageLoader(String imageURL) {
-    return Image.network(
-      imageURL,
-      fit: BoxFit.cover,
-      loadingBuilder: (BuildContext context, Widget child,
-          ImageChunkEvent? loadingProgress) {
-        if (loadingProgress == null) return child;
-        return Padding(
-          padding: const EdgeInsets.all(20),
-          child: Center(
-            child: CircularProgressIndicator(
-              value: loadingProgress.expectedTotalBytes != null
-                  ? loadingProgress.cumulativeBytesLoaded /
-                  loadingProgress.expectedTotalBytes!
-                  : null,
-              valueColor: AlwaysStoppedAnimation<Color>(AppColors.main_color),
-            ),
-          ),
-        );
-      },
-    );
+    return LoadImageWithCache(imageUrl: imageURL, color: AppColors.main_color,);
   }
 
   Widget _buildImageOptionSubtitle(int index) {
@@ -339,7 +448,7 @@ class _QuestionWidgetState extends State<QuestionWidget>
             Flexible(
               child: Text(
                 _technicalNameWithTranslationsStore
-                    .getTechnicalNames(answer_title_id)!,
+                    .getTranslation(answer_title_id)!,
                 style: TextStyle(
                   fontSize: 15,
                 ),
@@ -355,7 +464,7 @@ class _QuestionWidgetState extends State<QuestionWidget>
 
   bool answerHasTitle(Question question) {
     if(question.answers.length != 0) {
-      return _technicalNameWithTranslationsStore.getTechnicalNames(question.answers.elementAt(0).title)!.isNotEmpty;
+      return _technicalNameWithTranslationsStore.getTranslation(question.answers.elementAt(0).title)!.isNotEmpty;
     }
     return false;
   }
@@ -405,7 +514,7 @@ class _QuestionWidgetState extends State<QuestionWidget>
           },
           title: Text(
             _technicalNameWithTranslationsStore
-                .getTechnicalNames(option.getAnswerTitleID())!,
+                .getTranslation(option.getAnswerTitleID())!,
           ),
           controlAffinity: ListTileControlAffinity.leading,
           tileColor: AppColors.white,
@@ -416,4 +525,7 @@ class _QuestionWidgetState extends State<QuestionWidget>
     );
   }
 
+  Size sizeOfButton({scaleBy = 1}){
+    return Size(math.max(_getScreenWidth() - (Dimens.buildQuestionsButtonStyle["pixels_smaller_than_screen_width"]!) / scaleBy, 0), Dimens.buildQuestionsButtonStyle["height"]!);
+  }
 }

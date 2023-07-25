@@ -9,10 +9,7 @@ import 'package:boilerplate/constants/dimens.dart';
 
 class StepTimeLine extends StatefulWidget {
   final int stepNo;
-  StepTimeLine(
-      {Key? key,
-      required this.stepNo})
-      : super(key: key);
+  StepTimeLine({Key? key, required this.stepNo}) : super(key: key);
 
   @override
   State<StepTimeLine> createState() => _StepTimeLineState();
@@ -50,7 +47,7 @@ class _StepTimeLineState extends State<StepTimeLine> {
                   blurRadius: 0.3,
                   offset: Offset(0, 2))
             ]),
-        child:_buildTimeline(),
+        child: _buildTimeline(),
       ),
     );
   }
@@ -60,7 +57,7 @@ class _StepTimeLineState extends State<StepTimeLine> {
       direction: Axis.horizontal,
       builder: TimelineTileBuilder(
         itemCount: _currentStepStore.stepsCount,
-        itemExtent: (_getScreenWidth() - 50) / 4,
+        itemExtent: (_getScreenWidth() - 50) / _currentStepStore.stepsCount,
         indicatorBuilder: (context, index) =>
             Observer(builder: (_) => _buildIndicator(index)),
         startConnectorBuilder: (context, index) => _buildStartConnector(index),
@@ -70,14 +67,13 @@ class _StepTimeLineState extends State<StepTimeLine> {
   }
 
   Widget _buildIndicator(index) {
-    
     if (_isCurrentStep(index)) {
       return _buildCurrent(index);
     }
     if (_isPendingStep(index)) {
       return _buildPendingIndicator();
     }
-  
+
     if (_isDoneStep(index)) {
       return _buildDoneIndicator();
     }
@@ -170,7 +166,9 @@ class _StepTimeLineState extends State<StepTimeLine> {
 
   Widget _buildPendingEndConnectorGradient() {
     return DecoratedLineConnector(
-        thickness: Dimens.pendingEndConnectorGradientThickness, decoration: _buildEndGradient(), indent: Dimens.pendingEndConnectorGradientIndent);
+        thickness: Dimens.pendingEndConnectorGradientThickness,
+        decoration: _buildEndGradient(),
+        indent: Dimens.pendingEndConnectorGradientIndent);
   }
 
   Widget _buildNotStartedStartConnector() {
