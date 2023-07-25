@@ -98,6 +98,7 @@ class Dimens {
   // Question List Page AppBar
   static const questionListPageAppBarHeight = 56.0;
   static const questionListPageAppBarFontSize = 20.0;
+
   // Home page
   static const homeBodyBorderRadius = 30.0;
   static const placeHolderCompressedTaskListHeightRatio = 2.8; 
@@ -107,4 +108,24 @@ class Dimens {
   static const placeHolderCarouselHeightRatio = 4;
   static const inProgressTextPadding = EdgeInsets.only(left: 20, top: 10);
   static const inProgressTextFont = 18.0;
+
+  //Task page appBar widget
+  static const doneUndoneButtonHeight = 25.0;
+  static const doneUndoneButtonWidth = 25.0;
+  static const taskTitleFont = 20.0;
+  static const doneUndoneButtonBorderRadius = 7.0;
+
+  // Question Info...................................................
+  static final infoButtonBorderRadius = BorderRadius.circular(7);
+  static final infoInsideDialogButtonsRadius = BorderRadius.circular(5);
+  static const infoBottomSheetPadding = const EdgeInsets.fromLTRB(20, 25, 20, 90);
+  static const infoButtonsPadding = const EdgeInsets.only(left: 10, right: 10, bottom: 10);
+  static const infoButtonContainerMargin = const EdgeInsets.only(left: 20);
+  static const infoButtonContainerPadding = const EdgeInsets.all(12);
+
+
+  // Image Handler (Load Image With Cache)
+  static double imageCouldntLoadFontSize = 22;
+  static const imageLoadingIndicatorSize = {"width": 60.0, "height": 60.0};
+
 }

@@ -137,8 +137,11 @@ class _HomeScreenState extends State<HomeScreen> {
         _buildCurrentStepIndicator(),
         Observer(
             builder: (_) => StepSliderWidget(stepList: _dataStore.stepList)),
-        StepTimeLine(
-          stepNo: _currentStepStore.stepsCount,
+
+        Observer(
+          builder: (_) => StepTimeLine(
+            stepNo: _currentStepStore.stepsCount,
+          ),
         ),
         SizedBox(height: 25),
         _buildInProgressText(),
