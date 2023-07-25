@@ -134,19 +134,15 @@ class _HomeScreenState extends State<HomeScreen> {
   Widget _buildScreenElements() {
     return Column(
       children: [
-        //steps (/)
         _buildCurrentStepIndicator(),
-        //step slider
         Observer(
             builder: (_) => StepSliderWidget(stepList: _dataStore.stepList)),
-        //step timeline
         StepTimeLine(
           stepNo: _currentStepStore.stepsCount,
         ),
         SizedBox(height: 25),
         _buildInProgressText(),
         SizedBox(height: 10),
-        //task compressed timeline
         Observer(
             builder: (_) =>
                 CompressedTasklistTimeline(stepList: _dataStore.stepList)),
