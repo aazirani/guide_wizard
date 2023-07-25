@@ -50,7 +50,8 @@ class _BlocksAppBarWidgetState extends State<BlocksAppBarWidget> {
             current_task.isDone ? AppColors.white : AppColors.main_color,
         foregroundColor: AppColors.bright_foreground_color.withOpacity(0.1),
         shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(Dimens.doneUndoneButtonBorderRadius),
+          borderRadius:
+              BorderRadius.circular(Dimens.doneUndoneButtonBorderRadius),
         ),
         side: BorderSide(color: AppColors.white, width: 1.5));
   }
@@ -86,6 +87,13 @@ class _BlocksAppBarWidgetState extends State<BlocksAppBarWidget> {
     );
   }
 
+  Widget _buildDoneUndoneButtonContainer() {
+    return Container(
+        height: Dimens.doneUndoneButtonHeight,
+        width: Dimens.doneUndoneButtonWidth,
+        child: _buildDoneUnDoneButton());
+  }
+
   @override
   Widget build(BuildContext context) {
     return AppBar(
@@ -118,12 +126,8 @@ class _BlocksAppBarWidgetState extends State<BlocksAppBarWidget> {
             builder: (_) {
               return Padding(
                 padding: Dimens.doneButtonPadding,
-                child: (_stepStore.currentStep - 1 ==
-                            _currentStepStore.currentStepNumber)
-                    ? Container(
-                        height: Dimens.doneUndoneButtonHeight, 
-                        width: Dimens.doneUndoneButtonWidth, 
-                        child: _buildDoneUnDoneButton())
+                child: (_stepStore.currentStep - 1 == _currentStepStore.currentStepNumber)
+                    ? _buildDoneUndoneButtonContainer()
                     : null,
               );
             },
