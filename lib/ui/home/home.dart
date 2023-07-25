@@ -159,8 +159,7 @@ class _HomeScreenState extends State<HomeScreen> {
 
   Widget _buildCurrentStepText(stepStore) {
     return Observer(
-        builder: (_) => Text(
-            "${stepStore.currentStep}/${_currentStepStore.stepsCount}",
+        builder: (_) => Text("${stepStore.currentStep}/${_currentStepStore.stepsCount}",
             style: TextStyle(color: AppColors.main_color)));
   }
 
