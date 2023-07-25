@@ -45,6 +45,14 @@ class AppColors {
     // 200: Color.fromARGB(255, 115, 213, 172),
     200: Color(0xFF31EC92),
   };
+
+  static Map<int, Color> shimmerGradientGreys = <int, Color>{
+    50: Colors.grey[300]!,
+    100: Colors.grey[200]!,
+    200: Colors.grey[300]!,
+  };
+  //home page
+  static Color homeBodyColor = Color.fromARGB(255, 251, 251, 251);
   //step timeline
   static Color stepTimelinePendingColor = green[300]!;
   static Color stepTimelineNotStartedNodeColor = greys[300]!;

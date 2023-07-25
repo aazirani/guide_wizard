@@ -22,6 +22,17 @@ abstract class _DataStore with Store {
   @observable
   _DataStore(Repository repo) : this._repository = repo;
 
+  @observable
+  bool dataLoad = false;
+  @action
+  void dataLoaded() {
+    this.dataLoad = true;
+  }
+
+  @action
+  void dataNotLoaded() {
+    this.dataLoad = false;
+  }
   late ObservableList<double>? values =
       ObservableList.of(List<double>.filled(getNumberOfSteps(), 0.0));
 
@@ -39,8 +50,8 @@ abstract class _DataStore with Store {
   @observable
   StepList stepList = StepList(steps: []);
 
-  @observable
-  bool stepSuccess = false;
+  @computed
+  bool get stepSuccess => fetchStepsFuture.status == FutureStatus.fulfilled;
 
   @computed
   bool get stepLoading => fetchStepsFuture.status == FutureStatus.pending;

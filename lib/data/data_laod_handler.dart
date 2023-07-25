@@ -4,8 +4,6 @@ import 'package:boilerplate/constants/colors.dart';
 import 'package:boilerplate/data/network/constants/endpoints.dart';
 import 'package:boilerplate/stores/current_step/current_step_store.dart';
 import 'package:boilerplate/stores/data/data_store.dart';
-import 'package:boilerplate/stores/language/language_store.dart';
-import 'package:boilerplate/stores/step/step_store.dart';
 import 'package:boilerplate/stores/technical_name/technical_name_with_translations_store.dart';
 import 'package:boilerplate/stores/updated_at_times/updated_at_times_store.dart';
 import 'package:boilerplate/utils/locale/app_localization.dart';
@@ -154,25 +152,21 @@ class DataLoadHandler {
   }
 
   Future _loadDataWithoutErrorHandling() async {
-    _dialog ??= SimpleFontelicoProgressDialog(context: _context);
-    _dialog!.show(
-        message: AppLocalizations.of(_context).translate("loading_dialog_text"),
-        type: SimpleFontelicoProgressDialogType.normal,
-        horizontal: true,
-        width: 175.0,
-        height: 75.0,
-        hideText: false,
-        indicatorColor: AppColors.main_color);
+
+    _dataStore.dataNotLoaded();
     if (!_dataStore.stepLoading) {
       await _technicalNameWithTranslationsStore
           .getTechnicalNameWithTranslations();
       await _dataStore.getSteps();
       await _currentStepStore.setStepsCount(_dataStore.stepList.steps.length);
-      // await _dataStore.getAllTasks();
+      //keep this comment for now
+      // await _dataStore.getAllTasks(); 
       await _dataStore.getQuestions();
       await _dataStore.initializeValues();
     }
-    _dialog!.hide();
+    if (_dataStore.stepSuccess) {
+      _dataStore.dataLoaded();
+    }
   }
 }
 
