@@ -478,8 +478,7 @@ class _QuestionWidgetState extends State<QuestionWidget>
       value: widget.question.getAnswerByIndex(index).isSelected,
       onChanged: (value) {
         setState(() {
-          _dataStore.updateQuestion(widget.question,
-              widget.question.getAnswerByIndex(index), value ?? false);
+          answerOnTapFunction(widget.question.getAnswerByIndex(index), value);
         });
       },
       checkColor: AppColors.white,
@@ -533,6 +532,6 @@ class _QuestionWidgetState extends State<QuestionWidget>
         widget.question.answers.forEach((answer) { answer.selected = false; });
     }
     widget.question.answers.firstWhere((answer) => answer.id == option.id).selected = value ?? false;
-    await _dataStore.updateQuestion(widget.question, option, value ?? false);
+    await _dataStore.updateQuestion(widget.question);
   }
 }

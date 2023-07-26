@@ -213,7 +213,7 @@ abstract class _DataStore with Store {
   }
 
   @action
-  Future updateQuestion(Question question, Answer answer, bool value) async {
+  Future updateQuestion(Question question) async {
     await _repository.updateQuestion(question);
   }
 
