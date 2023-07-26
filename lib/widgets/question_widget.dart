@@ -3,6 +3,7 @@ import 'dart:math' as math;
 import 'package:boilerplate/constants/colors.dart';
 import 'package:boilerplate/constants/dimens.dart';
 import 'package:boilerplate/data/network/constants/endpoints.dart';
+import 'package:boilerplate/models/answer/answer.dart';
 import 'package:boilerplate/models/question/question.dart';
 import 'package:boilerplate/stores/current_step/current_step_store.dart';
 import 'package:boilerplate/stores/step/step_store.dart';
@@ -40,6 +41,13 @@ class _QuestionWidgetState extends State<QuestionWidget>
   late StepStore _stepStore;
   late TechnicalNameWithTranslationsStore _technicalNameWithTranslationsStore;
   late CurrentStepStore _currentStepStore;
+  Answer? lastSelectedOption;
+
+  @override
+  void initState() {
+    super.initState();
+    lastSelectedOption = null;
+  }
 
   @override
   void didChangeDependencies() {
@@ -384,10 +392,8 @@ class _QuestionWidgetState extends State<QuestionWidget>
                 contentPadding: EdgeInsets.zero,
                 onTap: () {
                   setState(() {
-                    _dataStore.updateQuestion(
-                        widget.question,
-                        widget.question.getAnswerByIndex(index),
-                        !widget.question.getAnswerByIndex(index).selected);
+                    Answer option = widget.question.getAnswerByIndex(index);
+                    answerOnTapFunction(option, !option.selected);
                   });
                 },
                 shape: RoundedRectangleBorder(
@@ -430,10 +436,7 @@ class _QuestionWidgetState extends State<QuestionWidget>
                   value: widget.question.getAnswerByIndex(index).isSelected,
                   onChanged: (value) {
                     setState(() {
-                      _dataStore.updateQuestion(
-                          widget.question,
-                          widget.question.getAnswerByIndex(index),
-                          value ?? false);
+                      answerOnTapFunction(widget.question.getAnswerByIndex(index), value);
                     });
                   },
                   checkColor: Colors.white,
@@ -491,8 +494,7 @@ class _QuestionWidgetState extends State<QuestionWidget>
 
   Widget _buildTextOptions() {
     return Column(
-      children: widget.question
-          .getAnswers()
+      children: widget.question.getAnswers()
           .map((option) => Container(
         margin: const EdgeInsets.only(left: 15, right: 15, top: 10),
         child: CheckboxListTile(
@@ -508,8 +510,7 @@ class _QuestionWidgetState extends State<QuestionWidget>
           value: option.isSelected,
           onChanged: (value) {
             setState(() {
-              _dataStore.updateQuestion(
-                  widget.question, option, value ?? false);
+              answerOnTapFunction(option, value);
             });
           },
           title: Text(
@@ -527,5 +528,16 @@ class _QuestionWidgetState extends State<QuestionWidget>
 
   Size sizeOfButton({scaleBy = 1}){
     return Size(math.max(_getScreenWidth() - (Dimens.buildQuestionsButtonStyle["pixels_smaller_than_screen_width"]!) / scaleBy, 0), Dimens.buildQuestionsButtonStyle["height"]!);
+  }
+
+  void answerOnTapFunction(Answer option, bool? value) async {
+    await _dataStore.updateQuestion(widget.question, option, value ?? false);
+    if(!widget.question.is_multiple_choice && lastSelectedOption != null) {
+      await _dataStore.updateQuestion(widget.question, lastSelectedOption!, false);
+    }
+    if(lastSelectedOption == option) {
+      lastSelectedOption = null;
+    }
+    else lastSelectedOption = option;
   }
 }
