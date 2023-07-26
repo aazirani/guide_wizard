@@ -64,10 +64,7 @@ class _TaskListState extends State<TaskList> {
           child: IconButton(
               icon: Icon(Icons.arrow_back),
               onPressed: () {
-                Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                        builder: (context) => const HomeScreen()));
+                Navigator.pop(context);
               },
               color: AppColors.white),
         ));
