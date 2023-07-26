@@ -58,6 +58,7 @@ abstract class _TechnicalNameWithTranslationsStore with Store {
 
   // methods: ..................................................................
   String? getTranslation(int id) {
+    if(isTranslationsEmpty(id)) return "";
     return getTechnicalName(id).translations[this.language_id!].translated_text;
   }
 
