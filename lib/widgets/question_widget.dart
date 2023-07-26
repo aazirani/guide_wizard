@@ -41,12 +41,10 @@ class _QuestionWidgetState extends State<QuestionWidget>
   late StepStore _stepStore;
   late TechnicalNameWithTranslationsStore _technicalNameWithTranslationsStore;
   late CurrentStepStore _currentStepStore;
-  Answer? lastSelectedOption;
 
   @override
   void initState() {
     super.initState();
-    lastSelectedOption = null;
   }
 
   @override
@@ -531,13 +529,10 @@ class _QuestionWidgetState extends State<QuestionWidget>
   }
 
   void answerOnTapFunction(Answer option, bool? value) async {
+    if(!widget.question.is_multiple_choice) {
+        widget.question.answers.forEach((answer) { answer.selected = false; });
+    }
+    widget.question.answers.firstWhere((answer) => answer.id == option.id).selected = value ?? false;
     await _dataStore.updateQuestion(widget.question, option, value ?? false);
-    if(!widget.question.is_multiple_choice && lastSelectedOption != null) {
-      await _dataStore.updateQuestion(widget.question, lastSelectedOption!, false);
-    }
-    if(lastSelectedOption == option) {
-      lastSelectedOption = null;
-    }
-    else lastSelectedOption = option;
   }
 }
