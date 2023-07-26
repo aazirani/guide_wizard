@@ -33,6 +33,7 @@ abstract class _DataStore with Store {
   void dataNotLoaded() {
     this.dataLoad = false;
   }
+
   late ObservableList<double>? values =
       ObservableList.of(List<double>.filled(getNumberOfSteps(), 0.0));
 
@@ -128,6 +129,7 @@ abstract class _DataStore with Store {
     final future = _repository.getStep();
     fetchStepsFuture = ObservableFuture(future);
     await future.then((stepList) {
+      stepList.steps.sort((a, b) => a.order.compareTo(b.order));
       this.stepList = stepList;
     });
   }
@@ -277,7 +279,6 @@ abstract class _DataStore with Store {
     _currentStepStore.currentStepNumber = newStep;
   }
 
-
   //.............................................................................
   String? getStepImage(int stepNum) {
     return this.stepList.steps[stepNum].image;
@@ -332,13 +333,13 @@ abstract class _DataStore with Store {
       int numDoneTasks = allTasks.tasks
           .where((task) => task.step_id == stepList.steps[i].id && task.isDone)
           .length;
-   
+
       double percentage = numTasks == 0 ? 0 : numDoneTasks / numTasks;
       percentage = double.parse(percentage.toStringAsFixed(2));
 
       if (percentage == 1.0 && i < stepList.steps.length) {
         changeCurrentStep(_currentStepStore, i + 1);
-      } 
+      }
       percentages.add(percentage);
     }
     this.values = percentages;
@@ -360,6 +361,10 @@ abstract class _DataStore with Store {
 
   bool getTaskType(taskIndex) {
     return this.taskList.tasks[taskIndex].isTypeOfText;
+  }
+
+  int getStepOrder(currentStepIndex) {
+    return this.stepList.steps[currentStepIndex].order;
   }
 
   initializeValues() async {
