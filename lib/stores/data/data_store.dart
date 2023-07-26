@@ -214,11 +214,7 @@ abstract class _DataStore with Store {
 
   @action
   Future updateQuestion(Question question, Answer answer, bool value) async {
-    questionList.questions
-        .firstWhere((element) => element == question)
-        .answers
-        .firstWhere((element) => element == answer)
-        .selected = value;
+    questionList.questions.firstWhere((element) => element == question).answers.firstWhere((element) => element == answer).selected = value;
     await _repository.updateQuestion(question);
   }
 
