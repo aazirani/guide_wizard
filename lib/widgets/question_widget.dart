@@ -530,12 +530,14 @@ class _QuestionWidgetState extends State<QuestionWidget>
     return Size(math.max(_getScreenWidth() - (Dimens.buildQuestionsButtonStyle["pixels_smaller_than_screen_width"]!) / scaleBy, 0), Dimens.buildQuestionsButtonStyle["height"]!);
   }
 
-  void answerOnTapFunction(Answer option, bool? value) {
-    _dataStore.updateQuestion(widget.question, option, value ?? false);
+  void answerOnTapFunction(Answer option, bool? value) async {
+    await _dataStore.updateQuestion(widget.question, option, value ?? false);
     if(!widget.question.is_multiple_choice && lastSelectedOption != null) {
-      _dataStore.updateQuestion(widget.question, lastSelectedOption!, false);
+      await _dataStore.updateQuestion(widget.question, lastSelectedOption!, false);
     }
-    if(lastSelectedOption == option) lastSelectedOption = null;
+    if(lastSelectedOption == option) {
+      lastSelectedOption = null;
+    }
     else lastSelectedOption = option;
   }
 }
