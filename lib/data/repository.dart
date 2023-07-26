@@ -574,14 +574,14 @@ class Repository {
 
   Future<String> getAnswerIdsParameter() async {
     List<int> selectedAnswers = await getSelectedAnswers();
-    return "answerIds=" + selectedAnswers.join(",");
+    return selectedAnswers.join(",");
   }
 
   Future<String> getUrlParameters() async {
     return getAnswerIdsParameter();
   }
-  // Progress value:------------------------------------------------------------
 
+  // Progress value:------------------------------------------------------------
   Future<void> saveProgressValueInSharedPreferences(List<double> values) async {
     _sharedPrefsHelper.setProgressValue(values);
   }
