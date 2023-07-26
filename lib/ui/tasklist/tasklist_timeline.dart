@@ -33,7 +33,11 @@ class _TaskListTimeLineState extends State<TaskListTimeLine> {
 
   @override
   Widget build(BuildContext context) {
-    return _buildTimeline(widget.taskNumber);
+    return GestureDetector(
+        onTap: () {
+          _navigateToTaskPage();
+        },
+        child: _buildTimeline(widget.taskNumber));
   }
 
   Widget _buildTimeline(taskNumber) {
@@ -95,21 +99,7 @@ class _TaskListTimeLineState extends State<TaskListTimeLine> {
   Widget _buildInsideElements(taskNumber) {
     return GestureDetector(
       onTap: () {
-        if (_dataStore.getTaskType(taskNumber)) {
-          Navigator.push(
-              context,
-              MaterialPageRoute(
-                  builder: (context) => TaskPageTextOnly(
-                        taskId: _dataStore.getTaskId(taskNumber),
-                      )));
-        } else {
-          Navigator.push(
-              context,
-              MaterialPageRoute(
-                  builder: (context) => TaskPageWithImage(
-                        task: _dataStore.getTaskByIndex(taskNumber),
-                      )));
-        }
+        _navigateToTaskPage();
       },
       child: Container(
         child: Row(
@@ -185,7 +175,10 @@ class _TaskListTimeLineState extends State<TaskListTimeLine> {
   double _getScreenWidth() => MediaQuery.of(context).size.width;
 
   bool _deadLineAvailable(taskNumber) {
-    bool status = _dataStore.taskList.tasks[taskNumber].sub_tasks.any((sub_task) => _technicalNameWithTranslationsStore.getTranslation(sub_task.deadline)!.isNotEmpty);
+    bool status = _dataStore.taskList.tasks[taskNumber].sub_tasks.any(
+        (sub_task) => _technicalNameWithTranslationsStore
+            .getTranslation(sub_task.deadline)!
+            .isNotEmpty);
     switch (status) {
       case false:
         return false;
@@ -199,5 +192,23 @@ class _TaskListTimeLineState extends State<TaskListTimeLine> {
         return true;
     }
     return false;
+  }
+
+  void _navigateToTaskPage() {
+    if (_dataStore.getTaskType(widget.taskNumber)) {
+      Navigator.push(
+          context,
+          MaterialPageRoute(
+              builder: (context) => TaskPageTextOnly(
+                    taskId: _dataStore.getTaskId(widget.taskNumber),
+                  )));
+    } else {
+      Navigator.push(
+          context,
+          MaterialPageRoute(
+              builder: (context) => TaskPageWithImage(
+                    task: _dataStore.getTaskByIndex(widget.taskNumber),
+                  )));
+    }
   }
 }
