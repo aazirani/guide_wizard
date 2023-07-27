@@ -25,6 +25,7 @@ import 'package:boilerplate/data/local/constants/db_constants.dart';
 import 'package:boilerplate/data/network/apis/app_data/app_data_api.dart';
 import 'package:devicelocale/devicelocale.dart';
 import 'package:flutter/services.dart';
+import 'package:collection/collection.dart';
 
 class Repository {
   // data source object
@@ -481,7 +482,7 @@ class Repository {
   }
 
   Future _insertUpdatedTask(Task task, TaskList oldTasks) async {
-    Task? foundOldTask = oldTasks.tasks.firstWhere((t) => t.text == task.text);
+    Task? foundOldTask = oldTasks.tasks.firstWhereOrNull((t) => t.text == task.text);
     if (foundOldTask != null) {
       task.isDone = foundOldTask.isDone;
     }
@@ -489,7 +490,7 @@ class Repository {
   }
 
   Future _insertUpdatedQuestion(Question question, QuestionList oldQuestions) async {
-    Question? foundOldQuestion = oldQuestions.questions.firstWhere((q) => q.title == question.title);
+    Question? foundOldQuestion = oldQuestions.questions.firstWhereOrNull((q) => q.title == question.title);
     if (foundOldQuestion != null) {
       question.answers.forEach((answer) {
         foundOldQuestion.answers.forEach((oldAnswer) {
