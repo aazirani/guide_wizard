@@ -1,83 +1,82 @@
-  import 'package:boilerplate/data/repository.dart';
-  import 'package:boilerplate/stores/error/error_store.dart';
-  import 'package:boilerplate/stores/form/form_store.dart';
-  import 'package:mobx/mobx.dart';
+import 'package:boilerplate/data/repository.dart';
+import 'package:boilerplate/stores/error/error_store.dart';
+import 'package:boilerplate/stores/form/form_store.dart';
+import 'package:mobx/mobx.dart';
 
+part 'current_step_store.g.dart';
 
-  part 'current_step_store.g.dart';
+class CurrentStepStore = _CurrentStepStore with _$CurrentStepStore;
 
-  class CurrentStepStore = _CurrentStepStore with _$CurrentStepStore;
+abstract class _CurrentStepStore with Store {
+  // repository instance
+  final Repository _repository;
 
-  abstract class _CurrentStepStore with Store {
-    // repository instance
-    final Repository _repository;
+  // store for handling form errors
+  final FormErrorStore formErrorStore = FormErrorStore();
 
-    // store for handling form errors
-    final FormErrorStore formErrorStore = FormErrorStore();
+  // store for handling error messages
+  final ErrorStore errorStore = ErrorStore();
 
-    // store for handling error messages
-    final ErrorStore errorStore = ErrorStore();
+  // current step number from 0 to steps_count-1
+  @observable
+  late int currentStepNumber = 0;
+  // steps count (usually 4)
+  @observable
+  late int stepsCount = 4;
 
-    // current step number from 0 to steps_count-1
-    late int currentStepNumber;
-    // steps count (usually 4)
-    @observable
-    late int stepsCount = 4;
+  // constructor:---------------------------------------------------------------
+  _CurrentStepStore(Repository repository) : this._repository = repository {
+    // setting up disposers
+    _setupDisposers();
 
-    // constructor:---------------------------------------------------------------
-    _CurrentStepStore(Repository repository) : this._repository = repository {
-      // setting up disposers
-      _setupDisposers();
+    currentStepNumber = _repository.currentStepNumber ?? 0;
+  }
 
-      currentStepNumber = _repository.currentStepNumber ?? 0;
-    }
+  // disposers:-----------------------------------------------------------------
+  late List<ReactionDisposer> _disposers;
 
-    // disposers:-----------------------------------------------------------------
-    late List<ReactionDisposer> _disposers;
+  void _setupDisposers() {
+    _disposers = [
+      reaction((_) => success, (_) => success = false, delay: 200),
+    ];
+  }
 
-    void _setupDisposers() {
-      _disposers = [
-        reaction((_) => success, (_) => success = false, delay: 200),
-      ];
-    }
+  // empty responses:-----------------------------------------------------------
+  static ObservableFuture<bool> emptyLoginResponse =
+      ObservableFuture.value(false);
 
-    // empty responses:-----------------------------------------------------------
-    static ObservableFuture<bool> emptyLoginResponse =
-    ObservableFuture.value(false);
+  // store variables:-----------------------------------------------------------
+  @observable
+  bool success = false;
 
-    // store variables:-----------------------------------------------------------
-    @observable
-    bool success = false;
+  @observable
+  ObservableFuture<bool> loginFuture = emptyLoginResponse;
 
-    @observable
-    ObservableFuture<bool> loginFuture = emptyLoginResponse;
+  @computed
+  bool get isLoading => loginFuture.status == FutureStatus.pending;
 
-    @computed
-    bool get isLoading => loginFuture.status == FutureStatus.pending;
+  // actions:-------------------------------------------------------------------
+  @action
+  Future setStepNumber(int stepNumber) async {
+    _repository.setCurrentStep(stepNumber);
+    currentStepNumber = stepNumber;
+  }
 
-    // actions:-------------------------------------------------------------------
-    @action
-    Future setStepNumber(int stepNumber) async {
-      _repository.setCurrentStep(stepNumber);
-      currentStepNumber = stepNumber;
-    }
+  @action
+  Future setStepsCount(int newStepsCount) async {
+    _repository.setStepsCount(newStepsCount);
+    stepsCount = newStepsCount;
+  }
 
-    @action
-    Future setStepsCount(int newStepsCount) async {
-      _repository.setStepsCount(newStepsCount);
-      stepsCount = newStepsCount;
-    }
+  @action
+  Future incrementStepNumber() async {
+    setStepNumber(currentStepNumber + 1);
+  }
 
-    @action
-    Future incrementStepNumber() async {
-      setStepNumber(currentStepNumber + 1);
-    }
-
-
-    // general methods:-----------------------------------------------------------
-    void dispose() {
-      for (final d in _disposers) {
-        d();
-      }
+  // general methods:-----------------------------------------------------------
+  void dispose() {
+    for (final d in _disposers) {
+      d();
     }
   }
+}

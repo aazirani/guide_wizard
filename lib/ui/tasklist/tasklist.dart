@@ -1,5 +1,6 @@
 import 'package:boilerplate/constants/colors.dart';
 import 'package:boilerplate/constants/dimens.dart';
+import 'package:boilerplate/stores/current_step/current_step_store.dart';
 import 'package:boilerplate/stores/step/step_store.dart';
 import 'package:boilerplate/stores/technical_name/technical_name_with_translations_store.dart';
 import 'package:boilerplate/ui/tasklist/tasklist_timeline.dart';
@@ -8,7 +9,6 @@ import 'package:boilerplate/widgets/measure_size.dart';
 import 'package:boilerplate/utils/locale/app_localization.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:provider/provider.dart';
-import 'package:boilerplate/ui/home/home.dart';
 import 'package:boilerplate/stores/data/data_store.dart';
 
 class TaskList extends StatefulWidget {
@@ -23,6 +23,7 @@ class _TaskListState extends State<TaskList> {
   late DataStore _dataStore;
   late TechnicalNameWithTranslationsStore _technicalNameWithTranslationsStore;
   late StepStore _stepStore;
+  late CurrentStepStore _currentStepStore;
 
   @override
   void didChangeDependencies() {
@@ -32,16 +33,25 @@ class _TaskListState extends State<TaskList> {
     _technicalNameWithTranslationsStore =
         Provider.of<TechnicalNameWithTranslationsStore>(context);
     _stepStore = Provider.of<StepStore>(context);
+    _currentStepStore = Provider.of<CurrentStepStore>(context);
   }
 
   var progressBarSize = Size.zero;
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-        backgroundColor: AppColors.main_color,
-        appBar: _buildAppBar(),
-        body: _buildBody());
+    return WillPopScope(
+      onWillPop: () async {
+        if (_dataStore.values![_currentStepStore.currentStepNumber] == 1) {
+          _currentStepStore.currentStepNumber += 1;
+        }
+        return true;
+      },
+      child: Scaffold(
+          backgroundColor: AppColors.main_color,
+          appBar: _buildAppBar(),
+          body: _buildBody()),
+    );
   }
 
   //appBar methods .............................................................
@@ -53,8 +63,7 @@ class _TaskListState extends State<TaskList> {
         toolbarHeight: Dimens.appBar["toolbarHeight"],
         titleSpacing: Dimens.appBar["titleSpacing"],
         title: Text(
-            _technicalNameWithTranslationsStore
-                .getTranslation(step_title_id)!,
+            _technicalNameWithTranslationsStore.getTranslation(step_title_id)!,
             style: TextStyle(
                 color: AppColors.white,
                 fontSize: 20,
@@ -65,6 +74,10 @@ class _TaskListState extends State<TaskList> {
               icon: Icon(Icons.arrow_back),
               onPressed: () {
                 Navigator.pop(context);
+                if (_dataStore.values![_currentStepStore.currentStepNumber] ==
+                    1) {
+                  _currentStepStore.currentStepNumber += 1;
+                }
               },
               color: AppColors.white),
         ));
@@ -152,7 +165,9 @@ class _TaskListState extends State<TaskList> {
         _dataStore.getNumberofDoneTasks(_stepStore.currentStep - 1);
     var noOfAllTasksInThisStep =
         _dataStore.getNumberOfTasksFromAStep(_stepStore.currentStep - 1);
-    var percentage = noOfAllTasksInThisStep == 0 ? 0.0 : noOfDoneTasksInThisStep / noOfAllTasksInThisStep;
+    var percentage = noOfAllTasksInThisStep == 0
+        ? 0.0
+        : noOfDoneTasksInThisStep / noOfAllTasksInThisStep;
     return Container(
       height: 20,
       width: _getScreenWidth() / 1.19,

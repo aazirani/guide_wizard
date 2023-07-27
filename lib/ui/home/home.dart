@@ -93,10 +93,11 @@ class _HomeScreenState extends State<HomeScreen> {
 
 //body build methods ...........................................................
   Widget _buildBody(BuildContext context) {
-    return Observer(
-      builder: (_) => ClipRRect(
+    return Observer(builder: (_) =>
+      ClipRRect(
         borderRadius: BorderRadius.only(
-            topLeft: Radius.circular(Dimens.homeBodyBorderRadius), topRight: Radius.circular(Dimens.homeBodyBorderRadius)),
+            topLeft: Radius.circular(Dimens.homeBodyBorderRadius),
+            topRight: Radius.circular(Dimens.homeBodyBorderRadius)),
         child: Container(
           height: MediaQuery.of(context).size.height,
           width: MediaQuery.of(context).size.width,
@@ -108,7 +109,8 @@ class _HomeScreenState extends State<HomeScreen> {
             ),
           ),
           child: _dataStore.dataLoad
-              ? _buildScreenElements()
+              ? _buildScreenElements(
+                  _currentStepStore.currentStepNumber, _dataStore.values!)
               : _shimmerAll(),
         ),
       ),
@@ -117,27 +119,27 @@ class _HomeScreenState extends State<HomeScreen> {
 
   Widget _shimmerAll() {
     return Shimmer(
-                  period: Duration(seconds: 3),
-                  gradient: LinearGradient(
-                    colors: [
-                      AppColors.shimmerGradientGreys[50]!,
-                      AppColors.shimmerGradientGreys[100]!,
-                      AppColors.shimmerGradientGreys[200]!,
-                    ],
-                    begin: Alignment(-1, -1),
-                    end: Alignment(1, 1),
-                    stops: [0.5, 0.75, 1],
-                  ),
-                  child: _buildPlaceholderScreenElements(),);
+      period: Duration(seconds: 3),
+      gradient: LinearGradient(
+        colors: [
+          AppColors.shimmerGradientGreys[50]!,
+          AppColors.shimmerGradientGreys[100]!,
+          AppColors.shimmerGradientGreys[200]!,
+        ],
+        begin: Alignment(-1, -1),
+        end: Alignment(1, 1),
+        stops: [0.5, 0.75, 1],
+      ),
+      child: _buildPlaceholderScreenElements(),
+    );
   }
 
-  Widget _buildScreenElements() {
+  Widget _buildScreenElements(int current, values) {
     return Column(
       children: [
         _buildCurrentStepIndicator(),
         Observer(
             builder: (_) => StepSliderWidget(stepList: _dataStore.stepList)),
-
         Observer(
           builder: (_) => StepTimeLine(
             stepNo: _currentStepStore.stepsCount,
@@ -195,67 +197,70 @@ class _HomeScreenState extends State<HomeScreen> {
 
   _buildPlaceholderScreenElements() {
     return Column(
-    children: [
-      _buildCurrentStepIndicator(),
-      _buildPlaceholderCarouselSliderContainer(),
-      StepTimeLine(stepNo: 0),
-      SizedBox(height: 25),
-      _buildInProgressText(),
-      SizedBox(height: 10),
-      _buildPlaceholderCompressedTasklistTimeline(),
-    ],
-  );
+      children: [
+        _buildCurrentStepIndicator(),
+        _buildPlaceholderCarouselSliderContainer(),
+        StepTimeLine(stepNo: 0),
+        SizedBox(height: 25),
+        _buildInProgressText(),
+        SizedBox(height: 10),
+        _buildPlaceholderCompressedTasklistTimeline(),
+      ],
+    );
   }
 
   Widget _buildPlaceholderCarouselSliderContainer() {
     return Container(
       alignment: Alignment.topRight,
       padding: Dimens.placeHolderCarouselSliderContainerPadding,
-      height: MediaQuery.of(context).size.height / Dimens.placeHolderCarouselSliderHeightRatio,
+      height: MediaQuery.of(context).size.height /
+          Dimens.placeHolderCarouselSliderHeightRatio,
       child: _buildPlaceholderStepSliderWidget(),
     );
   }
 
   Widget _buildPlaceholderStepSliderWidget() {
-  return CarouselSlider.builder(
-    itemCount: 5,
-    itemBuilder: (BuildContext context, int index, int realIndex) {
-      return Container(
-        alignment: Alignment.topLeft,
-        width: _getScreenWidth(),
-        margin: Dimens.sliderContainerMargin,
-        padding: Dimens.sliderContainerPadding,
-        decoration: BoxDecoration(
-          color: Colors.grey,
-          borderRadius: BorderRadius.all(Radius.circular(Dimens.placeHolderStepSliderBorderRadius)),
-        ),
+    return CarouselSlider.builder(
+      itemCount: 5,
+      itemBuilder: (BuildContext context, int index, int realIndex) {
+        return Container(
+          alignment: Alignment.topLeft,
+          width: _getScreenWidth(),
+          margin: Dimens.sliderContainerMargin,
+          padding: Dimens.sliderContainerPadding,
+          decoration: BoxDecoration(
+            color: Colors.grey,
+            borderRadius: BorderRadius.all(
+                Radius.circular(Dimens.placeHolderStepSliderBorderRadius)),
+          ),
         );
-    },
-    options: CarouselOptions(
-      height: _getScreenHeight() / Dimens.placeHolderCarouselHeightRatio,
-      initialPage: 0,
-      enableInfiniteScroll: false,
-      autoPlay: false,
-      enlargeCenterPage: false,
-      scrollDirection: Axis.horizontal,
-    ),
-  );
-}
+      },
+      options: CarouselOptions(
+        height: _getScreenHeight() / Dimens.placeHolderCarouselHeightRatio,
+        initialPage: 0,
+        enableInfiniteScroll: false,
+        autoPlay: false,
+        enlargeCenterPage: false,
+        scrollDirection: Axis.horizontal,
+      ),
+    );
+  }
 
-Widget _buildPlaceholderCompressedTasklistTimeline() {
-  return Padding(
-    padding: Dimens.stepTimelineContainerPadding,
-    child: Container(
-      color: Colors.grey,
+  Widget _buildPlaceholderCompressedTasklistTimeline() {
+    return Padding(
+      padding: Dimens.stepTimelineContainerPadding,
+      child: Container(
+        color: Colors.grey,
         padding: Dimens.timelineContainerPadding,
-        height: _getScreenHeight() / Dimens.placeHolderCompressedTaskListHeightRatio,
+        height: _getScreenHeight() /
+            Dimens.placeHolderCompressedTaskListHeightRatio,
         width: double.infinity,
         child: Align(
           alignment: Alignment.topLeft,
         ),
       ),
-  );
-}
+    );
+  }
 
   @override
   void dispose() {
