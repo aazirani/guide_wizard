@@ -450,17 +450,20 @@ class Repository {
     return isContentUpdated || isTranslationUpdated;
   }
 
+
+
   Future updateContentIfNeeded() async {
     UpdatedAtTimes originUpdatedAt = await getUpdatedAtTimesFromApi();
     if (await isContentUpdated()) {
       StepList _stepList = await getStep();
-      QuestionList _oldQuestions = await getQuestions();
+      QuestionList oldQuestions = await getQuestions();
       StepList stepList = await _stepApi.getSteps(await getUrlParameters());
+      TaskList oldTasks = await getTasks();
       await truncateContent();
       for (Step step in stepList.steps) {
         await _stepDataSource.insert(step);
         for (Task task in step.tasks) {
-          await _taskDataSource.insert(task);
+          await _insertUpdatedTask(task, oldTasks);
           for (SubTask subTask in task.sub_tasks) {
             await _subTaskDataSource.insert(subTask);
             if (_stepList.findSubTaskByID(subTask.id) == null) {
@@ -468,20 +471,35 @@ class Repository {
             }
           }
           for (Question question in task.questions) {
-            Question? foundOldQuestion = _oldQuestions.questions
-                .firstWhere((q) => q.title == question.title);
-
-            if (foundOldQuestion != null) {
-              await _questionDataSource.insert(foundOldQuestion);
-            } else {
-              await _questionDataSource.insert(question);
-            }
+            await _insertUpdatedQuestion(question, oldQuestions);
           }
         }
       }
     }
     await truncateUpdatedAtTimes();
     await _updatedAtTimesDataSource.insert(originUpdatedAt);
+  }
+
+  Future _insertUpdatedTask(Task task, TaskList oldTasks) async {
+    Task? foundOldTask = oldTasks.tasks.firstWhere((t) => t.text == task.text);
+    if (foundOldTask != null) {
+      task.isDone = foundOldTask.isDone;
+    }
+    await _taskDataSource.insert(task);
+  }
+
+  Future _insertUpdatedQuestion(Question question, QuestionList oldQuestions) async {
+    Question? foundOldQuestion = oldQuestions.questions.firstWhere((q) => q.title == question.title);
+    if (foundOldQuestion != null) {
+      question.answers.forEach((answer) {
+        foundOldQuestion.answers.forEach((oldAnswer) {
+          if(answer.id == oldAnswer.id) {
+            answer.selected = oldAnswer.selected;
+          }
+        });
+      });
+    }
+    await _questionDataSource.insert(question);
   }
 
   Future<UpdatedAtTimes> getTheLastUpdatedAtTimes() async {
