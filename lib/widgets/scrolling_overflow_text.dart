@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:marquee/marquee.dart';
 
 class ScrollingOverflowText extends StatefulWidget {
@@ -17,17 +18,38 @@ class _ScrollingOverflowTextState extends State<ScrollingOverflowText> {
 
   @override
   Widget build(BuildContext context) {
-    return Expanded(
-      child: Container(
-        height: widget.height,
-        width: widget.width ?? _getScreenWidth(),
-        child: Marquee(
+    return LayoutBuilder(
+      builder: (context, constraints) {
+        final span = TextSpan(
           text: widget.text,
           style: widget.textStyle,
-          velocity: widget.velocity,
-          blankSpace: 20.0,
-          pauseAfterRound: Duration(milliseconds: 2000),
-        ),
+        );
+        final painter = TextPainter(
+          text: span,
+          maxLines: 1,
+          textScaleFactor: MediaQuery.of(context).textScaleFactor,
+          textDirection: TextDirection.ltr,
+        );
+        painter.layout();
+        final overflow = painter.size.width > constraints.maxWidth || painter.size.width > _getScreenWidth() * 0.7;
+        return overflow ? getScrollingText() : Text(widget.text, style: widget.textStyle,);
+      },
+    );
+  }
+
+  Widget getScrollingText() {
+    return Container(
+      height: widget.height,
+      width: widget.width ?? _getScreenWidth() * 0.75,
+      child: Marquee(
+        text: widget.text,
+        style: widget.textStyle,
+        showFadingOnlyWhenScrolling: false,
+        startAfter: Duration(seconds: 5),
+        pauseAfterRound: Duration(seconds: 3),
+        fadingEdgeEndFraction: 0.3,
+        blankSpace: 100,
+        velocity: 40,
       ),
     );
   }

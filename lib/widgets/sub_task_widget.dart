@@ -7,6 +7,7 @@ import 'package:boilerplate/widgets/app_expansiontile.dart';
 import 'package:boilerplate/widgets/scrolling_overflow_text.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
+import 'package:marquee/marquee.dart';
 import 'package:provider/provider.dart';
 import 'package:render_metrics/render_metrics.dart';
 
@@ -66,7 +67,10 @@ class SubTaskWidgetState extends State<SubTaskWidget>
         maintainState: true,
         textColor: AppColors.main_color,
         iconColor: AppColors.main_color,
-        title: ScrollingOverflowText(text: _technicalNameWithTranslationsStore.getTranslation(sub_task_title_id)!, textStyle: TextStyle(fontSize: 19),),
+        title: ScrollingOverflowText(
+          text: _technicalNameWithTranslationsStore.getTranslation(sub_task_title_id)!,
+          textStyle: TextStyle(fontSize: 19),
+        ),
         key: widget.subTasks[widget.index].globalKey,
         children: <Widget>[
           _buildExpansionContent(),
