@@ -41,12 +41,7 @@ class _TaskListState extends State<TaskList> {
   @override
   Widget build(BuildContext context) {
     return WillPopScope(
-      onWillPop: () async {
-        if (_dataStore.values![_currentStepStore.currentStepNumber] == 1) {
-          _currentStepStore.currentStepNumber += 1;
-        }
-        return true;
-      },
+      onWillPop: () async => _changeStepAndNavigateHome(),
       child: Scaffold(
           backgroundColor: AppColors.main_color,
           appBar: _buildAppBar(),
@@ -74,10 +69,7 @@ class _TaskListState extends State<TaskList> {
               icon: Icon(Icons.arrow_back),
               onPressed: () {
                 Navigator.pop(context);
-                if (_dataStore.values![_currentStepStore.currentStepNumber] ==
-                    1) {
-                  _currentStepStore.currentStepNumber += 1;
-                }
+                _changeStepAndNavigateHome();
               },
               color: AppColors.white),
         ));
@@ -186,6 +178,13 @@ class _TaskListState extends State<TaskList> {
   }
 
   // general methods ...........................................................
+  _changeStepAndNavigateHome() {
+    if (_dataStore.values![_currentStepStore.currentStepNumber] == 1) {
+      _currentStepStore.currentStepNumber += 1;
+    }
+    return true;
+  }
+
   double _getProgressBarHeight() {
     return (_getScreenHeight() -
             (progressBarSize.height + _getStatusBarHeight())) /

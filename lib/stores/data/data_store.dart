@@ -36,9 +36,9 @@ abstract class _DataStore with Store {
   }
 
   @action
-  setValues(someValues) {
-    // this.values = someValues;
-    this.values = ObservableList.of(someValues);
+  setValues(newValues) {
+
+    this.values = ObservableList.of(newValues);
   }
 
   // store for handling errors

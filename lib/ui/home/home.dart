@@ -93,8 +93,8 @@ class _HomeScreenState extends State<HomeScreen> {
 
 //body build methods ...........................................................
   Widget _buildBody(BuildContext context) {
-    return Observer(builder: (_) =>
-      ClipRRect(
+    return Observer(
+      builder: (_) => ClipRRect(
         borderRadius: BorderRadius.only(
             topLeft: Radius.circular(Dimens.homeBodyBorderRadius),
             topRight: Radius.circular(Dimens.homeBodyBorderRadius)),
@@ -157,10 +157,7 @@ class _HomeScreenState extends State<HomeScreen> {
 
   Widget _buildCurrentStepIndicator() {
     return Padding(
-        padding: EdgeInsets.only(
-          top: 30,
-          left: 15,
-        ),
+        padding: Dimens.currentStepIndicatorPadding,
         child: Row(children: [
           _buildStepsText(),
           SizedBox(width: 10),
@@ -172,7 +169,7 @@ class _HomeScreenState extends State<HomeScreen> {
     return Text(AppLocalizations.of(context).translate("steps"),
         style: TextStyle(
             color: AppColors.main_color,
-            fontSize: 18,
+            fontSize: Dimens.stepsTextFont,
             fontWeight: FontWeight.bold));
   }
 
@@ -198,15 +195,23 @@ class _HomeScreenState extends State<HomeScreen> {
   _buildPlaceholderScreenElements() {
     return Column(
       children: [
-        _buildCurrentStepIndicator(),
+        _buildPlaceholderCurrentStepIndicator(),
         _buildPlaceholderCarouselSliderContainer(),
         StepTimeLine(stepNo: 0),
-        SizedBox(height: 25),
+        SizedBox(height: Dimens.StepTimelineProgressBarDistance),
         _buildInProgressText(),
-        SizedBox(height: 10),
+        SizedBox(height: Dimens.progressBarCompressedTaskListDistance),
         _buildPlaceholderCompressedTasklistTimeline(),
       ],
     );
+  }
+
+  _buildPlaceholderCurrentStepIndicator() {
+    return Padding(
+        padding: Dimens.currentStepIndicatorPadding,
+        child: Row(children: [
+          _buildStepsText(),
+        ]));
   }
 
   Widget _buildPlaceholderCarouselSliderContainer() {

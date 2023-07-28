@@ -8,13 +8,11 @@ part 'current_step_store.g.dart';
 class CurrentStepStore = _CurrentStepStore with _$CurrentStepStore;
 
 abstract class _CurrentStepStore with Store {
-  // repository instance
+
   final Repository _repository;
 
-  // store for handling form errors
   final FormErrorStore formErrorStore = FormErrorStore();
 
-  // store for handling error messages
   final ErrorStore errorStore = ErrorStore();
 
   // current step number from 0 to steps_count-1
@@ -22,7 +20,7 @@ abstract class _CurrentStepStore with Store {
   late int currentStepNumber = 0;
   // steps count (usually 4)
   @observable
-  late int stepsCount = 4;
+  late int stepsCount = 0;
 
   // constructor:---------------------------------------------------------------
   _CurrentStepStore(Repository repository) : this._repository = repository {
