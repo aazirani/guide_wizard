@@ -26,6 +26,7 @@ abstract class _DataStore with Store {
 
   @observable
   bool dataLoad = false;
+
   @action
   void dataLoaded() {
     this.dataLoad = true;
@@ -141,6 +142,9 @@ abstract class _DataStore with Store {
 
   @action
   Future stepDataSourceCount() => _repository.stepDatasourceCount();
+
+  @action
+  Future isDataSourceEmpty() async =>  (await _repository.stepDatasourceCount()) == 0;
 
   @action
   Future truncateSteps() async {

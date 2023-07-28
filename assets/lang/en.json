@@ -29,8 +29,8 @@
   "tasks_end": "-------------------------------------------------------------------------------------",
 
 
-  "no_internet_title": "No Internet Connection",
-  "no_internet_content": "Please check your internet connection and try again.",
+  "no_internet_message": "No Internet Connection",
+  "cant_reach_server": "Can't Reach The Server!",
   "no_internet_button_text": "Try Again",
 
 

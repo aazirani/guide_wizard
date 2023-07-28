@@ -6,6 +6,7 @@ import 'package:boilerplate/stores/current_step/current_step_store.dart';
 import 'package:boilerplate/stores/step/step_store.dart';
 import 'package:boilerplate/stores/technical_name/technical_name_with_translations_store.dart';
 import 'package:boilerplate/widgets/compressed_tasklist_timeline/compressed_task_list_timeline.dart';
+import 'package:boilerplate/widgets/info_dialog.dart';
 import 'package:boilerplate/widgets/step_slider/step_slider_widget.dart';
 import 'package:boilerplate/widgets/step_timeline/step_timeline.dart';
 import 'package:boilerplate/utils/locale/app_localization.dart';
@@ -34,8 +35,6 @@ class _HomeScreenState extends State<HomeScreen> {
   late TechnicalNameWithTranslationsStore _technicalNameWithTranslationsStore;
   late LanguageStore _languageStore;
   late CurrentStepStore _currentStepStore;
-  Map _source = {ConnectivityResult.none: false};
-  final MyConnectivity _connectivity = MyConnectivity.instance;
   late DataLoadHandler _dataLoadHandler;
 
   @override
@@ -48,24 +47,48 @@ class _HomeScreenState extends State<HomeScreen> {
         Provider.of<TechnicalNameWithTranslationsStore>(context);
     _languageStore = Provider.of<LanguageStore>(context);
     _currentStepStore = Provider.of<CurrentStepStore>(context);
-    _dataLoadHandler = DataLoadHandler(context);
+    _dataLoadHandler = DataLoadHandler(context: context);
   }
 
   @override
   void initState() {
     super.initState();
-    _connectivity.initialise();
-    _connectivity.myStream.listen((source) {
-      setState(() => _source = source);
-    });
     Future.delayed(Duration(milliseconds: 000), () async {
       _languageStore.init();
-      _technicalNameWithTranslationsStore
-          .getCurrentLan(_languageStore.language_id!);
+      _technicalNameWithTranslationsStore.getCurrentLan(_languageStore.language_id!);
       print(_languageStore.locale);
-
       await _dataLoadHandler.loadDataAndCheckForUpdate();
     });
+  }
+
+  @override
+  void dispose() {
+    super.dispose();
+  }
+
+  void showNoInternetConnectionDialog(BuildContext context) {
+    showModalBottomSheet(
+      context: context,
+      isScrollControlled: true,
+      backgroundColor: Colors.transparent,
+      builder: (BuildContext context) {
+        return InfoDialog(
+          content: Padding(
+            padding: Dimens.infoBottomSheetPadding,
+            child: Image.asset("assets/images"),
+          ),
+          bottomRow: Container(
+            color: AppColors.white,
+            child: Padding(
+              padding: Dimens.infoButtonsPadding,
+              child: Row(
+                children: [],
+              ),
+            ),
+          ),
+        );
+      },
+    );
   }
 
   @override
@@ -265,12 +288,6 @@ class _HomeScreenState extends State<HomeScreen> {
         ),
       ),
     );
-  }
-
-  @override
-  void dispose() {
-    _connectivity.disposeStream();
-    super.dispose();
   }
 
   double _getScreenHeight() => MediaQuery.of(context).size.height;

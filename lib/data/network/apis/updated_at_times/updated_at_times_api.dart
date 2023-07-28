@@ -1,5 +1,6 @@
 import 'dart:async';
 import 'dart:convert';
+import 'package:boilerplate/data/data_laod_handler.dart';
 import 'package:boilerplate/data/network/constants/endpoints.dart';
 import 'package:boilerplate/data/network/dio_client.dart';
 import 'package:boilerplate/data/network/rest_client.dart';
@@ -21,7 +22,7 @@ class UpdatedAtTimesApi{
       final res = json.decode(await _dioClient.get(Endpoints.getUpdatedAtTimes + parameters));
       return UpdatedAtTimes.fromJson([res]);
     } catch (e) {
-      print(e.toString());
+      // print(e.toString());
       throw e;
     }
   }
