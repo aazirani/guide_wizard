@@ -195,20 +195,18 @@ class _TaskListTimeLineState extends State<TaskListTimeLine> {
   }
 
   void _navigateToTaskPage() {
-    if (_dataStore.getTaskType(widget.taskNumber)) {
-      Navigator.push(
-          context,
-          MaterialPageRoute(
-              builder: (context) => TaskPageTextOnly(
-                    taskId: _dataStore.getTaskId(widget.taskNumber),
-                  )));
-    } else {
-      Navigator.push(
-          context,
-          MaterialPageRoute(
-              builder: (context) => TaskPageWithImage(
-                    task: _dataStore.getTaskByIndex(widget.taskNumber),
-                  )));
-    }
+    final taskNumber = widget.taskNumber;
+    final taskType = _dataStore.getTaskType(taskNumber);
+    final taskId = _dataStore.getTaskId(taskNumber);
+    final task = _dataStore.getTaskByIndex(taskNumber);
+
+    final taskPage = taskType
+        ? TaskPageTextOnly(taskId: taskId)
+        : TaskPageWithImage(task: task);
+
+    Navigator.push(
+      context,
+      MaterialPageRoute(builder: (_) => taskPage),
+    );
   }
 }
