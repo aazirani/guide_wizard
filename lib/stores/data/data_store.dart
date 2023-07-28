@@ -18,6 +18,7 @@ class DataStore = _DataStore with _$DataStore;
 
 abstract class _DataStore with Store {
   Repository _repository;
+  
   @observable
   late ObservableList<double>? values =
       ObservableList.of(List<double>.filled(getNumberOfSteps(), 0.0));
@@ -133,6 +134,7 @@ abstract class _DataStore with Store {
     final future = _repository.getStep();
     fetchStepsFuture = ObservableFuture(future);
     await future.then((stepList) {
+      stepList.steps.sort((a, b) => a.order.compareTo(b.order));
       this.stepList = stepList;
     });
   }
@@ -357,6 +359,10 @@ abstract class _DataStore with Store {
 
   bool getTaskType(taskIndex) {
     return this.taskList.tasks[taskIndex].isTypeOfText;
+  }
+
+  int getStepOrder(currentStepIndex) {
+    return this.stepList.steps[currentStepIndex].order;
   }
 
   initializeValues() async {
