@@ -1,4 +1,3 @@
-import 'package:boilerplate/stores/current_step/current_step_store.dart';
 import 'package:dio/dio.dart';
 import 'package:mobx/mobx.dart';
 import 'package:boilerplate/models/step/step_list.dart';
@@ -19,7 +18,10 @@ class DataStore = _DataStore with _$DataStore;
 
 abstract class _DataStore with Store {
   Repository _repository;
+  
   @observable
+  late ObservableList<double>? values =
+      ObservableList.of(List<double>.filled(getNumberOfSteps(), 0.0));
   _DataStore(Repository repo) : this._repository = repo;
 
   @observable
@@ -34,8 +36,11 @@ abstract class _DataStore with Store {
     this.dataLoad = false;
   }
 
-  late ObservableList<double>? values =
-      ObservableList.of(List<double>.filled(getNumberOfSteps(), 0.0));
+  @action
+  setValues(newValues) {
+
+    this.values = ObservableList.of(newValues);
+  }
 
   // store for handling errors
   final ErrorStore errorStore = ErrorStore();
@@ -274,11 +279,6 @@ abstract class _DataStore with Store {
     }
   }
 
-  @action
-  changeCurrentStep(CurrentStepStore _currentStepStore, int newStep) {
-    _currentStepStore.currentStepNumber = newStep;
-  }
-
   //.............................................................................
   String? getStepImage(int stepNum) {
     return this.stepList.steps[stepNum].image;
@@ -326,7 +326,7 @@ abstract class _DataStore with Store {
   }
 
   @action
-  void completionPercentages(CurrentStepStore _currentStepStore) {
+  void completionPercentages() {
     ObservableList<double> percentages = ObservableList<double>();
     for (var i = 0; i < stepList.steps.length; i++) {
       int numTasks = stepList.steps[i].numTasks;
@@ -337,12 +337,10 @@ abstract class _DataStore with Store {
       double percentage = numTasks == 0 ? 0 : numDoneTasks / numTasks;
       percentage = double.parse(percentage.toStringAsFixed(2));
 
-      if (percentage == 1.0 && i < stepList.steps.length) {
-        changeCurrentStep(_currentStepStore, i + 1);
-      }
       percentages.add(percentage);
     }
-    this.values = percentages;
+
+    setValues(percentages);
     saveProgressValues();
   }
 

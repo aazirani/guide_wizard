@@ -66,7 +66,7 @@ class _BlocksAppBarWidgetState extends State<BlocksAppBarWidget> {
             _dataStore.updateTask(currentTask).then((_) {
               _dataStore.getTasks(stepId).then((_) {
                 _dataStore.getAllTasks().then((_) {
-                  _dataStore.completionPercentages(_currentStepStore);
+                  _dataStore.completionPercentages();
                 });
               });
             });
@@ -122,15 +122,12 @@ class _BlocksAppBarWidgetState extends State<BlocksAppBarWidget> {
           SizedBox(
             width: 10,
           ),
-          Observer(
-            builder: (_) {
-              return Padding(
-                padding: Dimens.doneButtonPadding,
-                child: (_stepStore.currentStep - 1 == _currentStepStore.currentStepNumber)
-                    ? _buildDoneUndoneButtonContainer()
-                    : null,
-              );
-            },
+          Padding(
+            padding: Dimens.doneButtonPadding,
+            child: (_stepStore.currentStep - 1 ==
+                    _currentStepStore.currentStepNumber)
+                ? _buildDoneUndoneButtonContainer()
+                : null,
           ),
         ],
       ),

@@ -34,7 +34,7 @@ class Dimens {
   static const double notStartedEndConnectorIndent = 10;
   static const double notStartedEndConnectorGap = 2;
   static const double doneEndConnectorThickness = 3;
-  static const double doneEndConnectorIndent = 10 ;
+  static const double doneEndConnectorIndent = 10;
 
   //for Home screen - Carousel Slider
   static const sliderContainerMargin = EdgeInsets.symmetric(horizontal: 10.0);
@@ -57,7 +57,7 @@ class Dimens {
   static const double buttonRadius = 18;
   static const double progressBarRadius = 10;
   static const sliderContainerContentPadding = EdgeInsets.only(top: 20, left: 10);
-  static const progressBarHeight = 20.0; 
+  static const progressBarHeight = 20.0;
   //compressed tasklist.........................................................
   static const compressedTaskListContentPadding = const EdgeInsets.only(left: 10);
   static const double contentRadius = 10;
@@ -101,13 +101,15 @@ class Dimens {
 
   // Home page
   static const homeBodyBorderRadius = 30.0;
-  static const placeHolderCompressedTaskListHeightRatio = 2.8; 
-  static const placeHolderCarouselSliderHeightRatio = 3.2; 
+  static const placeHolderCompressedTaskListHeightRatio = 2.8;
+  static const placeHolderCarouselSliderHeightRatio = 3.2;
   static const placeHolderCarouselSliderContainerPadding = EdgeInsets.only(top: 20);
   static const placeHolderStepSliderBorderRadius = 20.0;
   static const placeHolderCarouselHeightRatio = 4;
   static const inProgressTextPadding = EdgeInsets.only(left: 20, top: 10);
   static const inProgressTextFont = 18.0;
+  static const currentStepIndicatorPadding = EdgeInsets.only(top: 30, left: 15,);
+  static const stepsTextFont = 18.0;
 
   //Task page appBar widget
   static const doneUndoneButtonHeight = 25.0;
@@ -123,9 +125,11 @@ class Dimens {
   static const infoButtonContainerMargin = const EdgeInsets.only(left: 20);
   static const infoButtonContainerPadding = const EdgeInsets.all(12);
 
-
   // Image Handler (Load Image With Cache)
   static double imageCouldntLoadFontSize = 22;
   static const imageLoadingIndicatorSize = {"width": 60.0, "height": 60.0};
 
+  // home page - shimmering place holders
+  static const StepTimelineProgressBarDistance = 25.0;
+  static const progressBarCompressedTaskListDistance = 10.0;
 }
