@@ -1,3 +1,4 @@
+import 'package:boilerplate/constants/widgets_constants/scrolling_overflow_text_constants.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:marquee/marquee.dart';
@@ -5,9 +6,9 @@ import 'package:marquee/marquee.dart';
 class ScrollingOverflowText extends StatefulWidget {
   String text;
   TextStyle? textStyle;
-  double height, velocity;
+  double height, overflowRatio;
   double? width;
-  ScrollingOverflowText({Key? key, required this.text, this.textStyle, this.height = 30, this.width, this.velocity = 30}) : super(key: key);
+  ScrollingOverflowText({Key? key, required this.text, this.textStyle, this.height = ScrollingOverflowTextConstants.defaultHeight, this.width, this.overflowRatio = ScrollingOverflowTextConstants.defaultOverflowRatio}) : super(key: key);
 
   @override
   State<ScrollingOverflowText> createState() => _ScrollingOverflowTextState();
@@ -27,11 +28,11 @@ class _ScrollingOverflowTextState extends State<ScrollingOverflowText> {
         final painter = TextPainter(
           text: span,
           maxLines: 1,
+          textDirection: Directionality.of(context),
           textScaleFactor: MediaQuery.of(context).textScaleFactor,
-          textDirection: TextDirection.ltr,
         );
         painter.layout();
-        final overflow = painter.size.width > constraints.maxWidth || painter.size.width > _getScreenWidth() * 0.7;
+        final overflow = painter.size.width > constraints.maxWidth || painter.size.width > _getScreenWidth() * widget.overflowRatio;
         return overflow ? getScrollingText() : Text(widget.text, style: widget.textStyle,);
       },
     );
@@ -40,16 +41,16 @@ class _ScrollingOverflowTextState extends State<ScrollingOverflowText> {
   Widget getScrollingText() {
     return Container(
       height: widget.height,
-      width: widget.width ?? _getScreenWidth() * 0.75,
+      width: widget.width ?? _getScreenWidth() * widget.overflowRatio,
       child: Marquee(
         text: widget.text,
         style: widget.textStyle,
-        showFadingOnlyWhenScrolling: false,
-        startAfter: Duration(seconds: 5),
-        pauseAfterRound: Duration(seconds: 3),
-        fadingEdgeEndFraction: 0.3,
-        blankSpace: 100,
-        velocity: 40,
+        showFadingOnlyWhenScrolling: ScrollingOverflowTextConstants.showFadingOnlyWhenScrolling,
+        startAfter: ScrollingOverflowTextConstants.startAfter,
+        pauseAfterRound: ScrollingOverflowTextConstants.pauseAfterRound,
+        fadingEdgeEndFraction: ScrollingOverflowTextConstants.fadingEdgeEndFraction,
+        blankSpace: ScrollingOverflowTextConstants.blankSpace,
+        velocity: ScrollingOverflowTextConstants.velocity,
       ),
     );
   }

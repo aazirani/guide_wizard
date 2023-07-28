@@ -69,7 +69,7 @@ class SubTaskWidgetState extends State<SubTaskWidget>
         iconColor: AppColors.main_color,
         title: ScrollingOverflowText(
           text: _technicalNameWithTranslationsStore.getTranslation(sub_task_title_id)!,
-          textStyle: TextStyle(fontSize: 19),
+          textStyle: TextStyle(fontSize: Dimens.subtaskTitleFontSize),
         ),
         key: widget.subTasks[widget.index].globalKey,
         children: <Widget>[

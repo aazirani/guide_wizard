@@ -58,7 +58,6 @@ class StepDataSource {
       _db,
     );
 
-    print("snapss: $recordSnapshots");
     // Making a List<Post> out of List<RecordSnapshot>
     if (recordSnapshots.length > 0) {
       stepsList = StepList(

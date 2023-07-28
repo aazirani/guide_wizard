@@ -18,6 +18,10 @@ class Dimens {
   static const contentContainerBorderRadius = const BorderRadius.all(Radius.circular(16.0));
   static const contentDeadlineTopPadding = EdgeInsets.only(top: 20);
   static const contentDeadlineBorderRadius = BorderRadius.all(Radius.circular(20));
+
+  // Subtask: ------------------------------------------------------------
+  static const double subtaskTitleFontSize = 19;
+
   //for Home Screen - step timeline
   static const stepTimelineContainerBorderRadius = BorderRadius.all(Radius.circular(30));
   static const stepTimelineContainerPadding = const EdgeInsets.only(left: 25, right: 25);
