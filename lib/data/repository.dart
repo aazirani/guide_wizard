@@ -451,8 +451,6 @@ class Repository {
     return isContentUpdated || isTranslationUpdated;
   }
 
-
-
   Future updateContentIfNeeded() async {
     UpdatedAtTimes originUpdatedAt = await getUpdatedAtTimesFromApi();
     if (await isContentUpdated()) {
