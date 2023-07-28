@@ -66,31 +66,6 @@ class _HomeScreenState extends State<HomeScreen> {
     super.dispose();
   }
 
-  void showNoInternetConnectionDialog(BuildContext context) {
-    showModalBottomSheet(
-      context: context,
-      isScrollControlled: true,
-      backgroundColor: Colors.transparent,
-      builder: (BuildContext context) {
-        return InfoDialog(
-          content: Padding(
-            padding: Dimens.infoBottomSheetPadding,
-            child: Image.asset("assets/images"),
-          ),
-          bottomRow: Container(
-            color: AppColors.white,
-            child: Padding(
-              padding: Dimens.infoButtonsPadding,
-              child: Row(
-                children: [],
-              ),
-            ),
-          ),
-        );
-      },
-    );
-  }
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
