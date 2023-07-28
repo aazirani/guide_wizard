@@ -14,6 +14,7 @@ import 'package:boilerplate/ui/tasklist/tasklist.dart';
 import 'package:boilerplate/stores/technical_name/technical_name_with_translations_store.dart';
 import 'package:boilerplate/models/step/step_list.dart';
 import 'package:boilerplate/stores/data/data_store.dart';
+import 'package:boilerplate/constants/settings.dart';
 
 class StepSliderWidget extends StatefulWidget {
   StepList stepList;
@@ -139,8 +140,7 @@ class _StepSliderWidgetState extends State<StepSliderWidget> {
             SizedBox(height: 20),
             _buildContinueButton(currentStepNo),
             SizedBox(height: 10),
-            //TODO: get the progress percentage from json
-            _buildProgressBar(currentStepNo),
+            (_dataStore.getStepOrder(currentStepNo) != SettingsConstants.infoStepOrder) ? _buildProgressBar(currentStepNo) : Container(),
           ]),
     );
   }
