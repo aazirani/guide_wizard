@@ -21,7 +21,7 @@ class TechnicalNameApi {
       final res = await _dioClient.get(Endpoints.getTechnicalNames + parameters);
       return TechnicalNameWithTranslationsList.fromJson(res["rows"]);
     } catch (e) {
-      // print(e.toString());
+      print(e.toString());
       DataLoadHandler().showServerErrorMessage();
       throw e;
     }

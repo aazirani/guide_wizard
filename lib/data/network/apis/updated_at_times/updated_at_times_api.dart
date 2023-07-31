@@ -22,7 +22,7 @@ class UpdatedAtTimesApi{
       final res = json.decode(await _dioClient.get(Endpoints.getUpdatedAtTimes + parameters));
       return UpdatedAtTimes.fromJson([res]);
     } catch (e) {
-      // print(e.toString());
+      print(e.toString());
       throw e;
     }
   }
