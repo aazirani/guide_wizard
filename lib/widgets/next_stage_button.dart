@@ -1,7 +1,7 @@
 import 'dart:math' as math;
 import 'package:boilerplate/constants/colors.dart';
 import 'package:boilerplate/constants/dimens.dart';
-import 'package:boilerplate/stores/current_step/current_step_store.dart';
+import 'package:boilerplate/stores/app_settings/app_settings_store.dart';
 import 'package:boilerplate/stores/data/data_store.dart';
 import 'package:boilerplate/stores/step/step_store.dart';
 import 'package:boilerplate/ui/home/home.dart';
@@ -20,7 +20,7 @@ class _NextStageButtonState extends State<NextStageButton> {
   // stores:--------------------------------------------------------------------
   late DataStore _dataStore;
   late StepStore _stepStore;
-  late CurrentStepStore _currentStepStore;
+  late AppSettingsStore _currentStepStore;
   double _getScreenWidth() => MediaQuery.of(context).size.width;
 
   @override
@@ -34,7 +34,7 @@ class _NextStageButtonState extends State<NextStageButton> {
     // initializing stores
     _dataStore = Provider.of<DataStore>(context);
     _stepStore = Provider.of<StepStore>(context);
-    _currentStepStore = Provider.of<CurrentStepStore>(context);
+    _currentStepStore = Provider.of<AppSettingsStore>(context);
   }
 
 

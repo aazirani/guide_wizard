@@ -4,7 +4,7 @@ import 'package:boilerplate/data/repository.dart';
 import 'package:boilerplate/di/components/service_locator.dart';
 import 'package:boilerplate/providers/internet_connection_state.dart';
 import 'package:boilerplate/providers/question_widget_state/question_widget_state.dart';
-import 'package:boilerplate/stores/current_step/current_step_store.dart';
+import 'package:boilerplate/stores/app_settings/app_settings_store.dart';
 import 'package:boilerplate/stores/language/language_store.dart';
 import 'package:boilerplate/stores/step/step_store.dart';
 import 'package:boilerplate/stores/technical_name/technical_name_with_translations_store.dart';
@@ -29,7 +29,7 @@ class MyApp extends StatelessWidget {
   final DataStore _dataStore = DataStore(getIt<Repository>());
   final TechnicalNameWithTranslationsStore _technicalNameWithTranslationsStore = TechnicalNameWithTranslationsStore(getIt<Repository>());
   final UpdatedAtTimesStore _updatedAtTimesStore = UpdatedAtTimesStore(getIt<Repository>());
-  final CurrentStepStore _currentStepStore = CurrentStepStore(getIt<Repository>());
+  final AppSettingsStore _currentStepStore = AppSettingsStore(getIt<Repository>());
 
   @override
   Widget build(BuildContext context) {
@@ -44,7 +44,7 @@ class MyApp extends StatelessWidget {
         Provider<TechnicalNameWithTranslationsStore>(create: (_) => _technicalNameWithTranslationsStore),
         Provider<LanguageStore>(create: (_) => _languageStore),
         Provider<UpdatedAtTimesStore>(create: (_) => _updatedAtTimesStore),
-        Provider<CurrentStepStore>(create: (_) => _currentStepStore),
+        Provider<AppSettingsStore>(create: (_) => _currentStepStore),
       ],
       child: Observer(
         name: 'global-observer',

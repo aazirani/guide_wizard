@@ -1,5 +1,5 @@
 import 'package:boilerplate/constants/colors.dart';
-import 'package:boilerplate/stores/current_step/current_step_store.dart';
+import 'package:boilerplate/stores/app_settings/app_settings_store.dart';
 import 'package:flutter/material.dart';
 import 'package:timelines/timelines.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
@@ -17,14 +17,14 @@ class StepTimeLine extends StatefulWidget {
 
 class _StepTimeLineState extends State<StepTimeLine> {
   late StepStore _stepStore;
-  late CurrentStepStore _currentStepStore;
+  late AppSettingsStore _currentStepStore;
 
   @override
   void didChangeDependencies() {
     super.didChangeDependencies();
     // initializing stores
     _stepStore = Provider.of<StepStore>(context);
-    _currentStepStore = Provider.of<CurrentStepStore>(context);
+    _currentStepStore = Provider.of<AppSettingsStore>(context);
   }
 
   @override

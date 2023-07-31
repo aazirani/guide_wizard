@@ -2,7 +2,7 @@ import 'dart:async';
 import 'package:boilerplate/constants/colors.dart';
 import 'package:boilerplate/constants/dimens.dart';
 import 'package:boilerplate/data/data_laod_handler.dart';
-import 'package:boilerplate/stores/current_step/current_step_store.dart';
+import 'package:boilerplate/stores/app_settings/app_settings_store.dart';
 import 'package:boilerplate/stores/step/step_store.dart';
 import 'package:boilerplate/stores/technical_name/technical_name_with_translations_store.dart';
 import 'package:boilerplate/widgets/compressed_tasklist_timeline/compressed_task_list_timeline.dart';
@@ -34,7 +34,7 @@ class _HomeScreenState extends State<HomeScreen> {
   late StepStore _stepStore;
   late TechnicalNameWithTranslationsStore _technicalNameWithTranslationsStore;
   late LanguageStore _languageStore;
-  late CurrentStepStore _currentStepStore;
+  late AppSettingsStore _currentStepStore;
   late DataLoadHandler _dataLoadHandler;
 
   @override
@@ -46,7 +46,7 @@ class _HomeScreenState extends State<HomeScreen> {
     _technicalNameWithTranslationsStore =
         Provider.of<TechnicalNameWithTranslationsStore>(context);
     _languageStore = Provider.of<LanguageStore>(context);
-    _currentStepStore = Provider.of<CurrentStepStore>(context);
+    _currentStepStore = Provider.of<AppSettingsStore>(context);
     _dataLoadHandler = DataLoadHandler(context: context);
   }
 

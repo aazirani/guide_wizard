@@ -4,7 +4,7 @@ import 'package:boilerplate/constants/dimens.dart';
 import 'package:boilerplate/data/network/constants/endpoints.dart';
 import 'package:boilerplate/models/answer/answer.dart';
 import 'package:boilerplate/models/question/question.dart';
-import 'package:boilerplate/stores/current_step/current_step_store.dart';
+import 'package:boilerplate/stores/app_settings/app_settings_store.dart';
 import 'package:boilerplate/stores/step/step_store.dart';
 import 'package:boilerplate/stores/technical_name/technical_name_with_translations_store.dart';
 import 'package:boilerplate/url_handler.dart';
@@ -36,7 +36,7 @@ class QuestionWidget extends StatefulWidget {
 class _QuestionWidgetState extends State<QuestionWidget> with AutomaticKeepAliveClientMixin {
   late DataStore _dataStore;
   late StepStore _stepStore;
-  late CurrentStepStore _currentStepStore;
+  late AppSettingsStore _currentStepStore;
   late TechnicalNameWithTranslationsStore _technicalNameWithTranslationsStore;
 
   @override
@@ -50,7 +50,7 @@ class _QuestionWidgetState extends State<QuestionWidget> with AutomaticKeepAlive
     // initializing stores
     _dataStore = Provider.of<DataStore>(context);
     _stepStore = Provider.of<StepStore>(context);
-    _currentStepStore = Provider.of<CurrentStepStore>(context);
+    _currentStepStore = Provider.of<AppSettingsStore>(context);
     _technicalNameWithTranslationsStore = Provider.of<TechnicalNameWithTranslationsStore>(context);
   }
 

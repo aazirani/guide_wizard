@@ -1,6 +1,6 @@
 import 'package:boilerplate/constants/colors.dart';
 import 'package:boilerplate/constants/dimens.dart';
-import 'package:boilerplate/stores/current_step/current_step_store.dart';
+import 'package:boilerplate/stores/app_settings/app_settings_store.dart';
 import 'package:boilerplate/stores/step/step_store.dart';
 import 'package:boilerplate/stores/technical_name/technical_name_with_translations_store.dart';
 import 'package:boilerplate/ui/tasklist/tasklist_timeline.dart';
@@ -23,7 +23,7 @@ class _TaskListState extends State<TaskList> {
   late DataStore _dataStore;
   late TechnicalNameWithTranslationsStore _technicalNameWithTranslationsStore;
   late StepStore _stepStore;
-  late CurrentStepStore _currentStepStore;
+  late AppSettingsStore _currentStepStore;
 
   @override
   void didChangeDependencies() {
@@ -33,7 +33,7 @@ class _TaskListState extends State<TaskList> {
     _technicalNameWithTranslationsStore =
         Provider.of<TechnicalNameWithTranslationsStore>(context);
     _stepStore = Provider.of<StepStore>(context);
-    _currentStepStore = Provider.of<CurrentStepStore>(context);
+    _currentStepStore = Provider.of<AppSettingsStore>(context);
   }
 
   var progressBarSize = Size.zero;

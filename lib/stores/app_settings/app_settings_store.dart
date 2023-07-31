@@ -3,11 +3,11 @@ import 'package:boilerplate/stores/error/error_store.dart';
 import 'package:boilerplate/stores/form/form_store.dart';
 import 'package:mobx/mobx.dart';
 
-part 'current_step_store.g.dart';
+part 'app_settings_store.g.dart';
 
-class CurrentStepStore = _CurrentStepStore with _$CurrentStepStore;
+class AppSettingsStore = _AppSettingsStore with _$AppSettingsStore;
 
-abstract class _CurrentStepStore with Store {
+abstract class _AppSettingsStore with Store {
 
   final Repository _repository;
 
@@ -23,7 +23,7 @@ abstract class _CurrentStepStore with Store {
   late int stepsCount = 0;
 
   // constructor:---------------------------------------------------------------
-  _CurrentStepStore(Repository repository) : this._repository = repository {
+  _AppSettingsStore(Repository repository) : this._repository = repository {
     // setting up disposers
     _setupDisposers();
 

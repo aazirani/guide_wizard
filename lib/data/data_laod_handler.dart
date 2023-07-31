@@ -1,6 +1,6 @@
 import 'dart:async';
 import 'package:boilerplate/constants/settings.dart';
-import 'package:boilerplate/stores/current_step/current_step_store.dart';
+import 'package:boilerplate/stores/app_settings/app_settings_store.dart';
 import 'package:boilerplate/stores/data/data_store.dart';
 import 'package:boilerplate/stores/technical_name/technical_name_with_translations_store.dart';
 import 'package:boilerplate/stores/updated_at_times/updated_at_times_store.dart';
@@ -23,7 +23,7 @@ class DataLoadHandler { // This class is SINGLETON
   late DataStore _dataStore = Provider.of<DataStore>(context, listen: false);
   late TechnicalNameWithTranslationsStore _technicalNameWithTranslationsStore =Provider.of<TechnicalNameWithTranslationsStore>(context, listen: false);
   late UpdatedAtTimesStore _updatedAtTimesStore = Provider.of<UpdatedAtTimesStore>(context, listen: false);
-  late CurrentStepStore _currentStepStore = Provider.of<CurrentStepStore>(context, listen: false);
+  late AppSettingsStore _currentStepStore = Provider.of<AppSettingsStore>(context, listen: false);
 
   void showErrorMessage({required String message, String? buttonLabel}) {
     buttonLabel ??= AppLocalizations.of(context).translate("no_internet_button_text");
