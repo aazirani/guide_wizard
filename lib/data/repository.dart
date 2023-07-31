@@ -65,10 +65,14 @@ class Repository {
   Future<StepList> getStep() async {
     return await _stepDataSource.count() > 0
         ? _stepDataSource.getStepsFromDb()
-        : getStepFromApi();
+        : getStepFromApiAndInsert();
   }
 
   Future<StepList> getStepFromApi() async {
+    return await getStepFromApiAndInsert();
+  }
+
+  Future<StepList> getStepFromApiAndInsert() async {
     await truncateContent();
     StepList stepList = await _stepApi.getSteps(await getUrlParameters());
     for (Step step in stepList.steps) {
@@ -118,7 +122,7 @@ class Repository {
 
   Future<TaskList> getTasksFromApi() async {
     List<Task> tasks = [];
-    return await getStepFromApi().then((stepList) {
+    return await getStepFromApiAndInsert().then((stepList) {
       stepList.steps.forEach((step) {
         step.tasks.forEach((task) {
           tasks.add(task);
@@ -194,7 +198,7 @@ class Repository {
   Future<SubTaskList> getSubTask() async {
     return await _subTaskDataSource.count() > 0
         ? _subTaskDataSource.getSubTasksFromDb()
-        : getStepFromApi().then((stepList) {
+        : getStepFromApiAndInsert().then((stepList) {
             List<SubTask> subTasks = [];
             SubTaskList subTaskList = SubTaskList(subTasks: []);
             stepList.steps.forEach((step) {

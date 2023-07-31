@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'package:boilerplate/data/data_laod_handler.dart';
 import 'package:boilerplate/data/network/constants/endpoints.dart';
 import 'package:boilerplate/data/network/dio_client.dart';
 import 'package:boilerplate/data/network/rest_client.dart';
@@ -22,6 +23,7 @@ class StepApi {
       return StepList.fromJson(res["rows"]);
     } catch (e) {
       print(e.toString());
+      DataLoadHandler().showServerErrorMessage();
       throw e;
     }
   }

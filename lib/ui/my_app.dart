@@ -2,6 +2,7 @@ import 'package:boilerplate/constants/app_theme.dart';
 import 'package:boilerplate/constants/strings.dart';
 import 'package:boilerplate/data/repository.dart';
 import 'package:boilerplate/di/components/service_locator.dart';
+import 'package:boilerplate/providers/internet_connection_state.dart';
 import 'package:boilerplate/providers/question_widget_state/question_widget_state.dart';
 import 'package:boilerplate/stores/current_step/current_step_store.dart';
 import 'package:boilerplate/stores/language/language_store.dart';
@@ -15,6 +16,7 @@ import 'package:boilerplate/utils/routes/routes.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
+import 'package:overlay_support/overlay_support.dart';
 import 'package:provider/provider.dart';
 import 'package:boilerplate/stores/data/data_store.dart';
 
@@ -38,13 +40,12 @@ class MyApp extends StatelessWidget {
         Provider<LanguageStore>(create: (_) => _languageStore),
         Provider<StepStore>(create: (_) => _stepStore),
         Provider<DataStore>(create: (_) => _dataStore),
-        ListenableProvider<QuestionsWidgetState>(
-            create: (_) => QuestionsWidgetState(activeIndex: 0)),
+        ListenableProvider<QuestionsWidgetState>(create: (_) => QuestionsWidgetState(activeIndex: 0)),
+        ListenableProvider<InternetConnectionState>(create: (_) => InternetConnectionState()),
         Provider<TechnicalNameWithTranslationsStore>(create: (_) => _technicalNameWithTranslationsStore),
         Provider<LanguageStore>(create: (_) => _languageStore),
         Provider<UpdatedAtTimesStore>(create: (_) => _updatedAtTimesStore),
         Provider<CurrentStepStore>(create: (_) => _currentStepStore),
-
       ],
       child: Observer(
         name: 'global-observer',
