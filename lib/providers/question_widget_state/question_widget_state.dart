@@ -12,4 +12,8 @@ class QuestionsWidgetState extends ChangeNotifier {
   bool isWidgetExpanded(int? index){
     return activeIndex == index;
   }
+
+  bool isLastQuestion({required int questionsCount}) {
+    return activeIndex == questionsCount - 1;
+  }
 }

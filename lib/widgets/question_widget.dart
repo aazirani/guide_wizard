@@ -1,5 +1,4 @@
 import 'dart:math' as math;
-
 import 'package:boilerplate/constants/colors.dart';
 import 'package:boilerplate/constants/dimens.dart';
 import 'package:boilerplate/data/network/constants/endpoints.dart';
@@ -8,11 +7,11 @@ import 'package:boilerplate/models/question/question.dart';
 import 'package:boilerplate/stores/current_step/current_step_store.dart';
 import 'package:boilerplate/stores/step/step_store.dart';
 import 'package:boilerplate/stores/technical_name/technical_name_with_translations_store.dart';
-import 'package:boilerplate/ui/home/home.dart';
 import 'package:boilerplate/url_handler.dart';
 import 'package:boilerplate/utils/locale/app_localization.dart';
 import 'package:boilerplate/widgets/info_dialog.dart';
 import 'package:boilerplate/widgets/load_image_with_cache.dart';
+import 'package:boilerplate/widgets/next_stage_button.dart';
 import 'package:boilerplate/widgets/scrolling_overflow_text.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -21,26 +20,24 @@ import 'package:boilerplate/stores/data/data_store.dart';
 
 class QuestionWidget extends StatefulWidget {
   Question question;
-  bool isLastQuestion;
-  int index;
+  int index, questionsCount;
 
   QuestionWidget({
     Key? key,
     required this.index,
     required this.question,
-    required this.isLastQuestion,
+    required this.questionsCount,
   }) : super(key: key);
 
   @override
   State<QuestionWidget> createState() => _QuestionWidgetState();
 }
 
-class _QuestionWidgetState extends State<QuestionWidget>
-    with AutomaticKeepAliveClientMixin {
+class _QuestionWidgetState extends State<QuestionWidget> with AutomaticKeepAliveClientMixin {
   late DataStore _dataStore;
   late StepStore _stepStore;
-  late TechnicalNameWithTranslationsStore _technicalNameWithTranslationsStore;
   late CurrentStepStore _currentStepStore;
+  late TechnicalNameWithTranslationsStore _technicalNameWithTranslationsStore;
 
   @override
   void initState() {
@@ -53,9 +50,8 @@ class _QuestionWidgetState extends State<QuestionWidget>
     // initializing stores
     _dataStore = Provider.of<DataStore>(context);
     _stepStore = Provider.of<StepStore>(context);
-    _technicalNameWithTranslationsStore =
-        Provider.of<TechnicalNameWithTranslationsStore>(context);
     _currentStepStore = Provider.of<CurrentStepStore>(context);
+    _technicalNameWithTranslationsStore = Provider.of<TechnicalNameWithTranslationsStore>(context);
   }
 
   @override
@@ -84,9 +80,7 @@ class _QuestionWidgetState extends State<QuestionWidget>
               children: [
                 _buildDescription(),
                 _buildOptions(),
-                widget.isLastQuestion
-                    ? _buildNextStageButton()
-                    : _buildNextQuestionButton(),
+                _buildQuestionButton(),
               ],
             ),
             isExpanded: builder.isWidgetExpanded(widget.index),
@@ -94,6 +88,14 @@ class _QuestionWidgetState extends State<QuestionWidget>
         ],
       );
     });
+  }
+
+  bool _isLastQuestion() {
+    return widget.index == widget.questionsCount - 1;
+  }
+
+  Widget _buildQuestionButton() {
+    return _isLastQuestion() ? _buildNextStageButton() : _buildNextQuestionButton();
   }
 
   Widget _buildTitle() {
@@ -144,25 +146,7 @@ class _QuestionWidgetState extends State<QuestionWidget>
   }
 
   Widget _buildNextStageButton() {
-    return Padding(
-      padding: Dimens.questionButtonPadding,
-      child: TextButton(
-        style: _buildQuestionsButtonStyle(AppColors.nextStepColor),
-        onPressed: () {
-          _dataStore.getTasks(_stepStore.currentStep);
-          _currentStepStore.setStepNumber(1);
-          Navigator.of(context)
-              .pushAndRemoveUntil(
-              MaterialPageRoute(builder: (context) => HomeScreen()),
-                  (Route<dynamic> route) => false)
-              .then((value) => setState(() {}));
-        },
-        child: Text(
-          AppLocalizations.of(context).translate('next_stage_button_text'),
-          style: TextStyle(color: Colors.white, fontSize: 15),
-        ),
-      ),
-    );
+    return NextStageButton();
   }
 
   Widget _buildNextQuestionButton() {

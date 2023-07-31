@@ -1,6 +1,7 @@
+import 'dart:math' as math;
 import 'package:boilerplate/constants/colors.dart';
-import 'package:boilerplate/constants/dimens.dart';
-import 'package:boilerplate/utils/locale/app_localization.dart';
+import 'package:boilerplate/providers/question_widget_state/question_widget_state.dart';
+import 'package:boilerplate/widgets/next_stage_button.dart';
 import 'package:boilerplate/widgets/question_widget.dart';
 import 'package:boilerplate/widgets/questions_list_page_appBar.dart';
 import 'package:flutter/material.dart';
@@ -18,6 +19,12 @@ class QuestionsListPage extends StatefulWidget {
 class _QuestionsListPageState extends State<QuestionsListPage> {
   // stores:--------------------------------------------------------------------
   late DataStore _dataStore;
+  get _questionsCount => _dataStore.questionList.length;
+
+  @override
+  void initState() {
+    super.initState();
+  }
 
   @override
   void didChangeDependencies() {
@@ -27,44 +34,45 @@ class _QuestionsListPageState extends State<QuestionsListPage> {
   }
 
   @override
-  void initState() {
-    super.initState();
-  }
-
-  @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: QuestionsListAppBar(),
-      backgroundColor: AppColors.main_color,
-      body: ClipRRect(
-        borderRadius: BorderRadius.only(
-            topLeft: Radius.circular(30), topRight: Radius.circular(30)),
-        child: Container(
-          height: MediaQuery.of(context).size.height,
-          width: MediaQuery.of(context).size.width,
-          decoration: BoxDecoration(
-            color: AppColors.white,
-            borderRadius: BorderRadius.only(
-              topLeft: Radius.circular(30),
-              topRight: Radius.circular(30),
+    return Consumer<QuestionsWidgetState>(builder: (context, builder, child) {
+      return Scaffold(
+        appBar: QuestionsListAppBar(),
+        backgroundColor: AppColors.main_color,
+        body: ClipRRect(
+          borderRadius: BorderRadius.only(
+              topLeft: Radius.circular(30), topRight: Radius.circular(30)),
+          child: Container(
+            height: MediaQuery.of(context).size.height,
+            width: MediaQuery.of(context).size.width,
+            decoration: BoxDecoration(
+              color: AppColors.white,
+              borderRadius: BorderRadius.only(
+                topLeft: Radius.circular(30),
+                topRight: Radius.circular(30),
+              ),
+            ),
+            child: ScrollablePositionedList.builder(
+              itemCount: _questionsCount,
+              itemBuilder: (context, index) => Card(
+                  margin: EdgeInsets.all(5.0),
+                  child: _buildQuestionWidget(index)),
             ),
           ),
-          child: ScrollablePositionedList.builder(
-            itemCount: _dataStore.questionList.length,
-            itemBuilder: (context, index) => Card(
-                margin: EdgeInsets.all(5.0),
-                child: _buildQuestionWidget(index)),
-          ),
         ),
-      ),
-    );
+        floatingActionButton: Visibility(
+          visible: !builder.isLastQuestion(questionsCount: _questionsCount),
+          child: NextStageButton(),
+        ),
+      );
+    });
   }
 
   Widget _buildQuestionWidget(int index) {
     return QuestionWidget(
       index: index,
       question: _dataStore.questionList.elementAt(index),
-      isLastQuestion: index == _dataStore.questionList.length - 1,
+      questionsCount: _dataStore.questionList.length,
     );
   }
 }
