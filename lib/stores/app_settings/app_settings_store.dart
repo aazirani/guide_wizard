@@ -72,7 +72,7 @@ abstract class _AppSettingsStore with Store {
 
   // must update methods:-----------------------------------------------------------
   @action
-  Future getMustUpdate() async {
+  Future<bool?> getMustUpdate() async {
     return _repository.getMustUpdate;
   }
 

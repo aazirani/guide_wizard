@@ -611,7 +611,7 @@ class Repository {
   }
 
   // Must Update Value: -----------------------------------------------------------------
-  bool get getMustUpdate => _sharedPrefsHelper.mustUpdate;
+  bool? get getMustUpdate => _sharedPrefsHelper.mustUpdate;
 
   Future<void> setMustUpdate(bool mustUpdate) => _sharedPrefsHelper.setMustUpdate(mustUpdate);
 }

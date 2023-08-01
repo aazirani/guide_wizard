@@ -89,8 +89,8 @@ class SharedPreferenceHelper {
   }
 
   // current step:---------------------------------------------------
-  bool get mustUpdate {
-    return _sharedPreference.getBool(Preferences.must_update) ?? false;
+  bool? get mustUpdate {
+    return _sharedPreference.getBool(Preferences.must_update);
   }
 
   Future<void> setMustUpdate(bool mustUpdate) {

@@ -105,13 +105,6 @@ class _NextStageButtonState extends State<NextStageButton> {
     );
   }
 
-
-  void setButtonState(ButtonState buttonState) {
-    setState(() {
-      this.buttonState = buttonState;
-    });
-  }
-
   void onTapFunction() async {
     if(!await DataLoadHandler().hasInternet()) {
       setButtonState(ButtonState.fail);
@@ -120,16 +113,32 @@ class _NextStageButtonState extends State<NextStageButton> {
       });
       return;
     }
+
     setButtonState(ButtonState.loading);
-    if(await _appSettingsStore.getMustUpdate()){
+
+    await updateIfAnswersHasChanged();
+
+    await _dataStore.getTasks(_stepStore.currentStep);
+    await _appSettingsStore.setStepNumber(1);
+
+    setButtonState(ButtonState.success);
+
+    Future.delayed(Duration(milliseconds: 1500), () {
+      Navigator.of(context).pushAndRemoveUntil(MaterialPageRoute(builder: (context) => HomeScreen()), (Route<dynamic> route) => false);
+    });
+  }
+
+  Future<void> updateIfAnswersHasChanged() async {
+    bool mustUpdate = await _appSettingsStore.getMustUpdate() ?? true;
+    if(mustUpdate) {
       await DataLoadHandler().checkForUpdate(forceUpdate: true);
       await _appSettingsStore.setMustUpdate(false);
     }
-    await _dataStore.getTasks(_stepStore.currentStep);
-    await _appSettingsStore.setStepNumber(1);
-    setButtonState(ButtonState.success);
-    Future.delayed(Duration(milliseconds: 1500), () {
-      Navigator.of(context).pushAndRemoveUntil(MaterialPageRoute(builder: (context) => HomeScreen()), (Route<dynamic> route) => false);
+  }
+
+  void setButtonState(ButtonState buttonState) {
+    setState(() {
+      this.buttonState = buttonState;
     });
   }
 
