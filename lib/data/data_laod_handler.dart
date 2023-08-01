@@ -46,10 +46,7 @@ class DataLoadHandler { // This class is SINGLETON
     bool hasInternetConnection = await hasInternet();
     bool thereIsNoLocalData = await hasNoLocalData();
     bool mustUpdate = await isUpdatedNecessary();
-    if(mustUpdate) {
-      checkIfUpdateIsNecessary();
-    }
-    else if (!hasInternetConnection && thereIsNoLocalData && processId == criticalId) {
+    if (!hasInternetConnection && thereIsNoLocalData && processId == criticalId && !mustUpdate) {
       showNoInternetError();
       Future.delayed(SettingsConstants.internetCheckingPeriod, () {
         loadDataAndCheckForUpdate(processId: processId);
@@ -58,9 +55,17 @@ class DataLoadHandler { // This class is SINGLETON
     else if (thereIsNoLocalData || !hasInternetConnection) {
       ScaffoldMessenger.of(context).clearSnackBars();
       await loadData();
+      if(mustUpdate) {
+        await checkIfUpdateIsNecessary();
+      }
     }
     else {
-      await checkForUpdate();
+      if(mustUpdate) {
+        await checkIfUpdateIsNecessary();
+      }
+      else{
+        await checkForUpdate();
+      }
     }
   }
 
