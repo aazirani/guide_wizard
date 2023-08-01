@@ -45,7 +45,7 @@ class DataLoadHandler { // This class is SINGLETON
   Future loadDataAndCheckForUpdate({int processId = 0}) async {
     bool hasInternetConnection = await hasInternet();
     bool thereIsNoLocalData = await hasNoLocalData();
-    bool mustUpdate = await _appSettingsStore.getMustUpdate() ?? false;
+    bool mustUpdate = await isUpdatedNecessary();
     if(mustUpdate) {
       checkIfUpdateIsNecessary();
     }
@@ -67,6 +67,8 @@ class DataLoadHandler { // This class is SINGLETON
   Future<bool> hasInternet() async => await InternetConnectionChecker().hasConnection;
 
   Future<bool> hasNoLocalData() async => await _dataStore.isDataSourceEmpty();
+
+  Future<bool> isUpdatedNecessary() async => await _appSettingsStore.getMustUpdate() ?? false;
 
   void showServerErrorMessage() {
     showErrorMessage(
@@ -112,7 +114,7 @@ class DataLoadHandler { // This class is SINGLETON
   }
 
   Future<void> checkIfUpdateIsNecessary() async {
-    bool mustUpdate = await _appSettingsStore.getMustUpdate() ?? false;
+    bool mustUpdate = await isUpdatedNecessary();
     bool hasInternetConnection = await hasInternet();
     if(mustUpdate) {
       if(!hasInternetConnection){
@@ -133,5 +135,10 @@ class DataLoadHandler { // This class is SINGLETON
   void forceUpdate() async {
     await checkForUpdate(forceUpdate: true);
     await _appSettingsStore.setMustUpdate(false);
+  }
+
+  Future<void> checkTimeAndForceUpdate() async {
+    await updateContentIfNeeded(forceUpdate: await isUpdatedNecessary()); // Checks whether there is an update and will insert it in database
+    await loadData(); // Loads the new data from datasource if update was occurred
   }
 }

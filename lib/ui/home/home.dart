@@ -6,12 +6,10 @@ import 'package:boilerplate/stores/app_settings/app_settings_store.dart';
 import 'package:boilerplate/stores/step/step_store.dart';
 import 'package:boilerplate/stores/technical_name/technical_name_with_translations_store.dart';
 import 'package:boilerplate/widgets/compressed_tasklist_timeline/compressed_task_list_timeline.dart';
-import 'package:boilerplate/widgets/info_dialog.dart';
 import 'package:boilerplate/widgets/step_slider/step_slider_widget.dart';
 import 'package:boilerplate/widgets/step_timeline/step_timeline.dart';
 import 'package:boilerplate/utils/locale/app_localization.dart';
 import 'package:carousel_slider/carousel_slider.dart';
-import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:provider/provider.dart';
@@ -71,7 +69,18 @@ class _HomeScreenState extends State<HomeScreen> {
     return Scaffold(
       backgroundColor: AppColors.main_color,
       appBar: _buildAppBar(),
-      body: _buildBody(context),
+      body: RefreshIndicator(
+        onRefresh: () async {
+          DataLoadHandler(context: context).checkTimeAndForceUpdate();
+        },
+        child: SingleChildScrollView(
+          physics: AlwaysScrollableScrollPhysics(),
+          child: Container(
+            height: MediaQuery.of(context).size.height - _buildAppBar().preferredSize.height - MediaQuery.of(context).padding.top,
+            child: _buildBody(context),
+          ),
+        ),
+      ),
     );
   }
 
