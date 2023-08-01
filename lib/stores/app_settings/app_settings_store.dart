@@ -40,8 +40,7 @@ abstract class _AppSettingsStore with Store {
   }
 
   // empty responses:-----------------------------------------------------------
-  static ObservableFuture<bool> emptyLoginResponse =
-      ObservableFuture.value(false);
+  static ObservableFuture<bool> emptyLoginResponse = ObservableFuture.value(false);
 
   // store variables:-----------------------------------------------------------
   @observable
@@ -53,7 +52,7 @@ abstract class _AppSettingsStore with Store {
   @computed
   bool get isLoading => loginFuture.status == FutureStatus.pending;
 
-  // actions:-------------------------------------------------------------------
+  // step number methods:-------------------------------------------------------------------
   @action
   Future setStepNumber(int stepNumber) async {
     _repository.setCurrentStep(stepNumber);
@@ -69,6 +68,17 @@ abstract class _AppSettingsStore with Store {
   @action
   Future incrementStepNumber() async {
     setStepNumber(currentStepNumber + 1);
+  }
+
+  // must update methods:-----------------------------------------------------------
+  @action
+  Future getMustUpdate() async {
+    return _repository.getMustUpdate;
+  }
+
+  @action
+  Future setMustUpdate(bool mustUpdate) async {
+    _repository.setMustUpdate(mustUpdate);
   }
 
   // general methods:-----------------------------------------------------------

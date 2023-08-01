@@ -35,8 +35,7 @@ class QuestionWidget extends StatefulWidget {
 
 class _QuestionWidgetState extends State<QuestionWidget> with AutomaticKeepAliveClientMixin {
   late DataStore _dataStore;
-  late StepStore _stepStore;
-  late AppSettingsStore _currentStepStore;
+  late AppSettingsStore _appSettingsStore;
   late TechnicalNameWithTranslationsStore _technicalNameWithTranslationsStore;
 
   @override
@@ -49,8 +48,7 @@ class _QuestionWidgetState extends State<QuestionWidget> with AutomaticKeepAlive
     super.didChangeDependencies();
     // initializing stores
     _dataStore = Provider.of<DataStore>(context);
-    _stepStore = Provider.of<StepStore>(context);
-    _currentStepStore = Provider.of<AppSettingsStore>(context);
+    _appSettingsStore = Provider.of<AppSettingsStore>(context);
     _technicalNameWithTranslationsStore = Provider.of<TechnicalNameWithTranslationsStore>(context);
   }
 
@@ -95,7 +93,8 @@ class _QuestionWidgetState extends State<QuestionWidget> with AutomaticKeepAlive
   }
 
   Widget _buildQuestionButton() {
-    return _isLastQuestion() ? _buildNextStageButton() : _buildNextQuestionButton();
+    // return _isLastQuestion() ? _buildNextStageButton() : _buildNextQuestionButton();
+    return _isLastQuestion() ? SizedBox() : _buildNextQuestionButton();
   }
 
   Widget _buildTitle() {
@@ -517,5 +516,6 @@ class _QuestionWidgetState extends State<QuestionWidget> with AutomaticKeepAlive
     }
     widget.question.answers.firstWhere((answer) => answer.id == option.id).selected = value ?? false;
     await _dataStore.updateQuestion(widget.question);
+    await _appSettingsStore.setMustUpdate(true);
   }
 }

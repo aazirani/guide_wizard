@@ -17,14 +17,14 @@ class StepTimeLine extends StatefulWidget {
 
 class _StepTimeLineState extends State<StepTimeLine> {
   late StepStore _stepStore;
-  late AppSettingsStore _currentStepStore;
+  late AppSettingsStore _appSettingsStore;
 
   @override
   void didChangeDependencies() {
     super.didChangeDependencies();
     // initializing stores
     _stepStore = Provider.of<StepStore>(context);
-    _currentStepStore = Provider.of<AppSettingsStore>(context);
+    _appSettingsStore = Provider.of<AppSettingsStore>(context);
   }
 
   @override
@@ -56,8 +56,8 @@ class _StepTimeLineState extends State<StepTimeLine> {
     return FixedTimeline.tileBuilder(
       direction: Axis.horizontal,
       builder: TimelineTileBuilder(
-        itemCount: _currentStepStore.stepsCount,
-        itemExtent: (_getScreenWidth() - 50) / _currentStepStore.stepsCount,
+        itemCount: _appSettingsStore.stepsCount,
+        itemExtent: (_getScreenWidth() - 50) / _appSettingsStore.stepsCount,
         indicatorBuilder: (context, index) =>
             Observer(builder: (_) => _buildIndicator(index)),
         startConnectorBuilder: (context, index) => _buildStartConnector(index),
@@ -220,7 +220,7 @@ class _StepTimeLineState extends State<StepTimeLine> {
     if (_isPendingStep(index)) {
       return _buildNotStartedEndConnector();
     }
-    if (index == _currentStepStore.currentStepNumber - 1) {
+    if (index == _appSettingsStore.currentStepNumber - 1) {
       return _buildPendingEndConnectorGradient();
     }
     if (_isNotStartedStep(index)) {
@@ -237,14 +237,14 @@ class _StepTimeLineState extends State<StepTimeLine> {
   }
 
   _isPendingStep(index) {
-    return index == _currentStepStore.currentStepNumber;
+    return index == _appSettingsStore.currentStepNumber;
   }
 
   _isDoneStep(index) {
-    return index < _currentStepStore.currentStepNumber;
+    return index < _appSettingsStore.currentStepNumber;
   }
 
   _isNotStartedStep(index) {
-    return index > _currentStepStore.currentStepNumber;
+    return index > _appSettingsStore.currentStepNumber;
   }
 }

@@ -31,14 +31,14 @@ class BlocksAppBarWidget extends StatefulWidget implements PreferredSizeWidget {
 class _BlocksAppBarWidgetState extends State<BlocksAppBarWidget> {
   late DataStore _dataStore;
   late StepStore _stepStore;
-  late AppSettingsStore _currentStepStore;
+  late AppSettingsStore _appSettingsStore;
 
   @override
   void didChangeDependencies() {
     super.didChangeDependencies();
     _dataStore = Provider.of<DataStore>(context);
     _stepStore = Provider.of<StepStore>(context);
-    _currentStepStore = Provider.of<AppSettingsStore>(context);
+    _appSettingsStore = Provider.of<AppSettingsStore>(context);
   }
 
   _buildDoneUndoneButtonStyle() {
@@ -124,7 +124,7 @@ class _BlocksAppBarWidgetState extends State<BlocksAppBarWidget> {
           Padding(
             padding: Dimens.doneButtonPadding,
             child: (_stepStore.currentStep - 1 ==
-                    _currentStepStore.currentStepNumber)
+                    _appSettingsStore.currentStepNumber)
                 ? _buildDoneUndoneButtonContainer()
                 : null,
           ),

@@ -23,7 +23,7 @@ class DataLoadHandler { // This class is SINGLETON
   late DataStore _dataStore = Provider.of<DataStore>(context, listen: false);
   late TechnicalNameWithTranslationsStore _technicalNameWithTranslationsStore =Provider.of<TechnicalNameWithTranslationsStore>(context, listen: false);
   late UpdatedAtTimesStore _updatedAtTimesStore = Provider.of<UpdatedAtTimesStore>(context, listen: false);
-  late AppSettingsStore _currentStepStore = Provider.of<AppSettingsStore>(context, listen: false);
+  late AppSettingsStore _appSettingsStore = Provider.of<AppSettingsStore>(context, listen: false);
 
   void showErrorMessage({required String message, String? buttonLabel}) {
     buttonLabel ??= AppLocalizations.of(context).translate("no_internet_button_text");
@@ -67,8 +67,8 @@ class DataLoadHandler { // This class is SINGLETON
     }
   }
 
-  Future checkForUpdate() async {
-    await updateContentIfNeeded(); // Checks whether there is an update and will insert it in database
+  Future checkForUpdate({forceUpdate = false}) async {
+    await updateContentIfNeeded(forceUpdate: forceUpdate); // Checks whether there is an update and will insert it in database
     await loadData(); // Loads the new data from datasource if update was occurred
   }
 
@@ -77,7 +77,7 @@ class DataLoadHandler { // This class is SINGLETON
     if (!_dataStore.stepLoading) {
       await _technicalNameWithTranslationsStore.getTechnicalNameWithTranslations();
       await _dataStore.getSteps();
-      await _currentStepStore.setStepsCount(_dataStore.stepList.steps.length);
+      await _appSettingsStore.setStepsCount(_dataStore.stepList.steps.length);
       // keep this comment for now:
       // await _dataStore.getAllTasks();
       await _dataStore.getQuestions();
@@ -88,7 +88,7 @@ class DataLoadHandler { // This class is SINGLETON
     }
   }
 
-  Future updateContentIfNeeded() async {
-    await _updatedAtTimesStore.updateContentIfNeeded();
+  Future updateContentIfNeeded({forceUpdate = false}) async {
+    await _updatedAtTimesStore.updateContentIfNeeded(forceUpdate: forceUpdate);
   }
 }

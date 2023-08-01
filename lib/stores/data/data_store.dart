@@ -20,8 +20,7 @@ abstract class _DataStore with Store {
   Repository _repository;
   
   @observable
-  late ObservableList<double>? values =
-      ObservableList.of(List<double>.filled(getNumberOfSteps(), 0.0));
+  late ObservableList<double>? values = ObservableList.of(List<double>.filled(getNumberOfSteps(), 0.0));
   _DataStore(Repository repo) : this._repository = repo;
 
   @observable
@@ -39,7 +38,6 @@ abstract class _DataStore with Store {
 
   @action
   setValues(newValues) {
-
     this.values = ObservableList.of(newValues);
   }
 
@@ -47,12 +45,10 @@ abstract class _DataStore with Store {
   final ErrorStore errorStore = ErrorStore();
 
   //steplist observables
-  static ObservableFuture<StepList> emptyStepsResponse =
-      ObservableFuture.value(StepList(steps: []));
+  static ObservableFuture<StepList> emptyStepsResponse = ObservableFuture.value(StepList(steps: []));
 
   @observable
-  ObservableFuture<StepList> fetchStepsFuture =
-      ObservableFuture<StepList>(emptyStepsResponse);
+  ObservableFuture<StepList> fetchStepsFuture = ObservableFuture<StepList>(emptyStepsResponse);
 
   @observable
   StepList stepList = StepList(steps: []);
@@ -64,19 +60,15 @@ abstract class _DataStore with Store {
   bool get stepLoading => fetchStepsFuture.status == FutureStatus.pending;
 
   //tasklist observables
-  static ObservableFuture<TaskList?> emptyTaskResponse =
-      ObservableFuture.value(null);
+  static ObservableFuture<TaskList?> emptyTaskResponse = ObservableFuture.value(null);
 
-  static ObservableFuture<dynamic> emptyTruncateTaskResponse =
-      ObservableFuture.value(null);
+  static ObservableFuture<dynamic> emptyTruncateTaskResponse = ObservableFuture.value(null);
 
   @observable
-  ObservableFuture<TaskList?> fetchTasksFuture =
-      ObservableFuture<TaskList?>(emptyTaskResponse);
+  ObservableFuture<TaskList?> fetchTasksFuture = ObservableFuture<TaskList?>(emptyTaskResponse);
 
   @observable
-  ObservableFuture<dynamic> truncateTasksFuture =
-      ObservableFuture<dynamic>(emptyTruncateTaskResponse);
+  ObservableFuture<dynamic> truncateTasksFuture = ObservableFuture<dynamic>(emptyTruncateTaskResponse);
 
   @observable
   TaskList taskList = TaskList(tasks: []);
@@ -88,18 +80,14 @@ abstract class _DataStore with Store {
   bool tasksSuccess = false;
 
   //questions observables:
-  static ObservableFuture<QuestionList?> emptyQuestionResponse =
-      ObservableFuture.value(null);
-  static ObservableFuture<dynamic> emptyTruncateQuestionResponse =
-      ObservableFuture.value(null);
+  static ObservableFuture<QuestionList?> emptyQuestionResponse = ObservableFuture.value(null);
+  static ObservableFuture<dynamic> emptyTruncateQuestionResponse = ObservableFuture.value(null);
 
   @observable
-  ObservableFuture<QuestionList?> fetchQuestionsFuture =
-      ObservableFuture<QuestionList?>(emptyQuestionResponse);
+  ObservableFuture<QuestionList?> fetchQuestionsFuture = ObservableFuture<QuestionList?>(emptyQuestionResponse);
 
   @observable
-  ObservableFuture<dynamic> truncateQuestionsFuture =
-      ObservableFuture<dynamic>(emptyTruncateQuestionResponse);
+  ObservableFuture<dynamic> truncateQuestionsFuture = ObservableFuture<dynamic>(emptyTruncateQuestionResponse);
 
   @observable
   QuestionList questionList = QuestionList(questions: []);
@@ -117,17 +105,14 @@ abstract class _DataStore with Store {
   bool get tasksLoading => fetchTasksFuture.status == FutureStatus.pending;
 
   @computed
-  bool get tasksLoadingTruncate =>
-      truncateTasksFuture.status == FutureStatus.pending;
+  bool get tasksLoadingTruncate => truncateTasksFuture.status == FutureStatus.pending;
 
   //questions computed:
   @computed
-  bool get questionLoading =>
-      fetchQuestionsFuture.status == FutureStatus.pending;
+  bool get questionLoading => fetchQuestionsFuture.status == FutureStatus.pending;
 
   @computed
-  bool get questionLoadingTruncate =>
-      truncateQuestionsFuture.status == FutureStatus.pending;
+  bool get questionLoadingTruncate => truncateQuestionsFuture.status == FutureStatus.pending;
 
 // actions......................................................................
   @action

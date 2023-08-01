@@ -29,7 +29,7 @@ class MyApp extends StatelessWidget {
   final DataStore _dataStore = DataStore(getIt<Repository>());
   final TechnicalNameWithTranslationsStore _technicalNameWithTranslationsStore = TechnicalNameWithTranslationsStore(getIt<Repository>());
   final UpdatedAtTimesStore _updatedAtTimesStore = UpdatedAtTimesStore(getIt<Repository>());
-  final AppSettingsStore _currentStepStore = AppSettingsStore(getIt<Repository>());
+  final AppSettingsStore _appSettingsStore = AppSettingsStore(getIt<Repository>());
 
   @override
   Widget build(BuildContext context) {
@@ -44,7 +44,7 @@ class MyApp extends StatelessWidget {
         Provider<TechnicalNameWithTranslationsStore>(create: (_) => _technicalNameWithTranslationsStore),
         Provider<LanguageStore>(create: (_) => _languageStore),
         Provider<UpdatedAtTimesStore>(create: (_) => _updatedAtTimesStore),
-        Provider<AppSettingsStore>(create: (_) => _currentStepStore),
+        Provider<AppSettingsStore>(create: (_) => _appSettingsStore),
       ],
       child: Observer(
         name: 'global-observer',

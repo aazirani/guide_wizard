@@ -28,7 +28,7 @@ class _StepSliderWidgetState extends State<StepSliderWidget> {
   late DataStore _dataStore;
   late StepStore _stepStore;
   late TechnicalNameWithTranslationsStore _technicalNameWithTranslationsStore;
-  late AppSettingsStore _currentStepStore;
+  late AppSettingsStore _appSettingsStore;
 
   @override
   void didChangeDependencies() {
@@ -38,7 +38,7 @@ class _StepSliderWidgetState extends State<StepSliderWidget> {
     _stepStore = Provider.of<StepStore>(context);
     _technicalNameWithTranslationsStore =
         Provider.of<TechnicalNameWithTranslationsStore>(context);
-    _currentStepStore = Provider.of<AppSettingsStore>(context);
+    _appSettingsStore = Provider.of<AppSettingsStore>(context);
   }
 
   @override
@@ -100,15 +100,15 @@ class _StepSliderWidgetState extends State<StepSliderWidget> {
   }
 
   BoxBorder _buildSliderBorder(index) {
-    if (index < _currentStepStore.currentStepNumber)
+    if (index < _appSettingsStore.currentStepNumber)
       return _buildDoneBorder();
-    else if (index == _currentStepStore.currentStepNumber)
+    else if (index == _appSettingsStore.currentStepNumber)
       return _buildPendingBorder();
     return _buildNotStartedBorder();
   }
 
   Color _buildSliderColor(index) {
-    if (index <= _currentStepStore.currentStepNumber) {
+    if (index <= _appSettingsStore.currentStepNumber) {
       return AppColors.stepSliderAvailableColor;
     }
     return AppColors.stepSliderUnavailableColor;

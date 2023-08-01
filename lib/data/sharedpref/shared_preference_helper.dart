@@ -87,4 +87,13 @@ class SharedPreferenceHelper {
     await _sharedPreference.setStringList(Preferences.progress_values,
         values.map((value) => value.toString()).toList());
   }
+
+  // current step:---------------------------------------------------
+  bool get mustUpdate {
+    return _sharedPreference.getBool(Preferences.must_update) ?? false;
+  }
+
+  Future<void> setMustUpdate(bool mustUpdate) {
+    return _sharedPreference.setBool(Preferences.must_update, mustUpdate);
+  }
 }

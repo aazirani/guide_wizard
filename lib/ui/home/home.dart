@@ -34,7 +34,7 @@ class _HomeScreenState extends State<HomeScreen> {
   late StepStore _stepStore;
   late TechnicalNameWithTranslationsStore _technicalNameWithTranslationsStore;
   late LanguageStore _languageStore;
-  late AppSettingsStore _currentStepStore;
+  late AppSettingsStore _appSettingsStore;
   late DataLoadHandler _dataLoadHandler;
 
   @override
@@ -46,7 +46,7 @@ class _HomeScreenState extends State<HomeScreen> {
     _technicalNameWithTranslationsStore =
         Provider.of<TechnicalNameWithTranslationsStore>(context);
     _languageStore = Provider.of<LanguageStore>(context);
-    _currentStepStore = Provider.of<AppSettingsStore>(context);
+    _appSettingsStore = Provider.of<AppSettingsStore>(context);
     _dataLoadHandler = DataLoadHandler(context: context);
   }
 
@@ -108,7 +108,7 @@ class _HomeScreenState extends State<HomeScreen> {
           ),
           child: _dataStore.dataLoad
               ? _buildScreenElements(
-                  _currentStepStore.currentStepNumber, _dataStore.values!)
+                  _appSettingsStore.currentStepNumber, _dataStore.values!)
               : _shimmerAll(),
         ),
       ),
@@ -140,7 +140,7 @@ class _HomeScreenState extends State<HomeScreen> {
             builder: (_) => StepSliderWidget(stepList: _dataStore.stepList)),
         Observer(
           builder: (_) => StepTimeLine(
-            stepNo: _currentStepStore.stepsCount,
+            stepNo: _appSettingsStore.stepsCount,
           ),
         ),
         SizedBox(height: 25),
@@ -174,7 +174,7 @@ class _HomeScreenState extends State<HomeScreen> {
   Widget _buildCurrentStepText(stepStore) {
     return Observer(
         builder: (_) => Text(
-            "${stepStore.currentStep}/${_currentStepStore.stepsCount}",
+            "${stepStore.currentStep}/${_appSettingsStore.stepsCount}",
             style: TextStyle(color: AppColors.main_color)));
   }
 

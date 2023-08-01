@@ -61,9 +61,11 @@ class _QuestionsListPageState extends State<QuestionsListPage> {
           ),
         ),
         floatingActionButton: Visibility(
-          visible: !builder.isLastQuestion(questionsCount: _questionsCount),
+          // visible: !builder.isLastQuestion(questionsCount: _questionsCount),
+          visible: true,
           child: NextStageButton(),
         ),
+        floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
       );
     });
   }

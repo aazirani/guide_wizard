@@ -9,4 +9,5 @@ class Preferences {
   static const String current_step_number = "currentStepNumber";
   static const String steps_count = "stepsCount";
   static const String progress_values = "progressValue";
+  static const String must_update = "mustUpdate";
 }
