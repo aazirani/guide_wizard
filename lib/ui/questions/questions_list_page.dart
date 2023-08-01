@@ -41,8 +41,9 @@ class _QuestionsListPageState extends State<QuestionsListPage> {
   @override
   Widget build(BuildContext context) {
     return WillPopScope(
-      onWillPop: () {
-        return DataLoadHandler().questionOnPopFunction();
+      onWillPop: () async {
+        await DataLoadHandler(context: context).checkIfUpdateIsNecessary();
+        return true;
       },
       child: Consumer<QuestionsWidgetState>(builder: (context, builder, child) {
         return Scaffold(

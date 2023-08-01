@@ -5,6 +5,7 @@ import 'package:boilerplate/stores/data/data_store.dart';
 import 'package:boilerplate/stores/technical_name/technical_name_with_translations_store.dart';
 import 'package:boilerplate/stores/updated_at_times/updated_at_times_store.dart';
 import 'package:boilerplate/utils/locale/app_localization.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:internet_connection_checker/internet_connection_checker.dart';
@@ -44,7 +45,11 @@ class DataLoadHandler { // This class is SINGLETON
   Future loadDataAndCheckForUpdate({int processId = 0}) async {
     bool hasInternetConnection = await hasInternet();
     bool thereIsNoLocalData = await hasNoLocalData();
-    if (!hasInternetConnection && thereIsNoLocalData && processId == criticalId) {
+    bool mustUpdate = await _appSettingsStore.getMustUpdate() ?? false;
+    if(mustUpdate) {
+      checkIfUpdateIsNecessary();
+    }
+    else if (!hasInternetConnection && thereIsNoLocalData && processId == criticalId) {
       showNoInternetError();
       Future.delayed(SettingsConstants.internetCheckingPeriod, () {
         loadDataAndCheckForUpdate(processId: processId);
@@ -106,24 +111,27 @@ class DataLoadHandler { // This class is SINGLETON
     await _updatedAtTimesStore.updateContentIfNeeded(forceUpdate: forceUpdate);
   }
 
-  Future<bool> questionOnPopFunction() async {
+  Future<void> checkIfUpdateIsNecessary() async {
     bool mustUpdate = await _appSettingsStore.getMustUpdate() ?? false;
     bool hasInternetConnection = await hasInternet();
     if(mustUpdate) {
       if(!hasInternetConnection){
         DataLoadHandler().showErrorMessage(
-            duration: Duration(milliseconds: 3000),
+            duration: Duration(milliseconds: 5000),
             message: "Steps need an update,\nPlease check your Internet connection.",
             onPressedButton: () {
-              questionOnPopFunction();
+              checkIfUpdateIsNecessary();
             }
         );
       }
       else {
-        await _updatedAtTimesStore.updateContentIfNeeded(forceUpdate: true);
-        await _appSettingsStore.setMustUpdate(false);
+        forceUpdate();
       }
     }
-    return true;
+  }
+
+  void forceUpdate() async {
+    await checkForUpdate(forceUpdate: true);
+    await _appSettingsStore.setMustUpdate(false);
   }
 }

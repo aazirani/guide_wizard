@@ -35,7 +35,7 @@ class _QuestionsListAppBarState extends State<QuestionsListAppBar> {
       titleSpacing: Dimens.appBar["titleSpacing"],
       leading: IconButton(
         onPressed: () {
-          DataLoadHandler().questionOnPopFunction();
+          DataLoadHandler(context: context).checkIfUpdateIsNecessary();
           Navigator.pop(context);
         },
         icon: Icon(
