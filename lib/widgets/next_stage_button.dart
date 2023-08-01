@@ -53,19 +53,19 @@ class _NextStageButtonState extends State<NextStageButton> {
       radius: 5.0,
       stateWidgets: {
         ButtonState.idle: Text(
-          "Update steps",
+          AppLocalizations.of(context).translate("update_steps"),
           style: TextStyle(color: Colors.white,),
         ),
         ButtonState.loading: Text(
-          "Loading",
+          AppLocalizations.of(context).translate("getting_updates"),
           style: TextStyle(color: Colors.white,),
         ),
         ButtonState.fail: Text(
-          "Check your Internet Connection and Try Again",
+          AppLocalizations.of(context).translate("next_stage_check_internet"),
           style: TextStyle(color: Colors.white,),
         ),
         ButtonState.success: Text(
-          "Success",
+          AppLocalizations.of(context).translate("update_finished"),
           style: TextStyle(color: Colors.white,),
         )
       },
