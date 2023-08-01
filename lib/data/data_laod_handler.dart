@@ -120,7 +120,7 @@ class DataLoadHandler { // This class is SINGLETON
       if(!hasInternetConnection){
         DataLoadHandler().showErrorMessage(
             duration: Duration(milliseconds: 5000),
-            message: "Steps need an update,\nPlease check your Internet connection.",
+            message: AppLocalizations.of(context).translate("update_is_necessary_message_text"),
             onPressedButton: () {
               checkIfUpdateIsNecessary();
             }
