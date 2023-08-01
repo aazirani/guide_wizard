@@ -70,6 +70,7 @@ class _HomeScreenState extends State<HomeScreen> {
       backgroundColor: AppColors.main_color,
       appBar: _buildAppBar(),
       body: RefreshIndicator(
+        color: AppColors.main_color,
         onRefresh: () async {
           DataLoadHandler(context: context).checkTimeAndForceUpdate();
         },
