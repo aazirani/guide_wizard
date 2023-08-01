@@ -25,35 +25,27 @@ class DataLoadHandler { // This class is SINGLETON
   late UpdatedAtTimesStore _updatedAtTimesStore = Provider.of<UpdatedAtTimesStore>(context, listen: false);
   late AppSettingsStore _appSettingsStore = Provider.of<AppSettingsStore>(context, listen: false);
 
-  void showErrorMessage({required String message, String? buttonLabel}) {
+  void showErrorMessage({required String message, String? buttonLabel, required var onPressedButton, Duration? duration}) {
+    ScaffoldMessenger.of(context).clearSnackBars();
     buttonLabel ??= AppLocalizations.of(context).translate("no_internet_button_text");
+    duration ??= SettingsConstants.errorSnackBarDuration;
     final snackBar = SnackBar(
-      duration: SettingsConstants.errorSnackBarDuration,
+      duration: duration,
       dismissDirection: DismissDirection.none,
       content: Text(message),
       action: SnackBarAction(
           label: buttonLabel,
-          onPressed: () {
-            loadDataAndCheckForUpdate(processId: ++criticalId);
-          }
+          onPressed: onPressedButton,
       ),
     );
     ScaffoldMessenger.of(context).showSnackBar(snackBar);
   }
 
-  void showServerErrorMessage() {
-    showErrorMessage(message: AppLocalizations.of(context).translate("cant_reach_server"));
-  }
-
-  Future<bool> hasInternet() async => await InternetConnectionChecker().hasConnection;
-
-  Future<bool> hasNoLocalData() async => await _dataStore.isDataSourceEmpty();
-
   Future loadDataAndCheckForUpdate({int processId = 0}) async {
     bool hasInternetConnection = await hasInternet();
     bool thereIsNoLocalData = await hasNoLocalData();
     if (!hasInternetConnection && thereIsNoLocalData && processId == criticalId) {
-      showErrorMessage(message: AppLocalizations.of(context).translate("no_internet_message"));
+      showNoInternetError();
       Future.delayed(SettingsConstants.internetCheckingPeriod, () {
         loadDataAndCheckForUpdate(processId: processId);
       });
@@ -65,6 +57,28 @@ class DataLoadHandler { // This class is SINGLETON
     else {
       await checkForUpdate();
     }
+  }
+
+  Future<bool> hasInternet() async => await InternetConnectionChecker().hasConnection;
+
+  Future<bool> hasNoLocalData() async => await _dataStore.isDataSourceEmpty();
+
+  void showServerErrorMessage() {
+    showErrorMessage(
+        message: AppLocalizations.of(context).translate("cant_reach_server"),
+        onPressedButton: () {
+          loadDataAndCheckForUpdate(processId: ++criticalId);
+        }
+    );
+  }
+
+  void showNoInternetError() {
+    showErrorMessage(
+        message: AppLocalizations.of(context).translate("no_internet_message"),
+        onPressedButton: () {
+          loadDataAndCheckForUpdate(processId: ++criticalId);
+        }
+    );
   }
 
   Future checkForUpdate({forceUpdate = false}) async {
@@ -90,5 +104,26 @@ class DataLoadHandler { // This class is SINGLETON
 
   Future updateContentIfNeeded({forceUpdate = false}) async {
     await _updatedAtTimesStore.updateContentIfNeeded(forceUpdate: forceUpdate);
+  }
+
+  Future<bool> questionOnPopFunction() async {
+    bool mustUpdate = await _appSettingsStore.getMustUpdate() ?? false;
+    bool hasInternetConnection = await hasInternet();
+    if(mustUpdate) {
+      if(!hasInternetConnection){
+        DataLoadHandler().showErrorMessage(
+            duration: Duration(milliseconds: 3000),
+            message: "Steps need an update,\nPlease check your Internet connection.",
+            onPressedButton: () {
+              questionOnPopFunction();
+            }
+        );
+      }
+      else {
+        await _updatedAtTimesStore.updateContentIfNeeded(forceUpdate: true);
+        await _appSettingsStore.setMustUpdate(false);
+      }
+    }
+    return true;
   }
 }

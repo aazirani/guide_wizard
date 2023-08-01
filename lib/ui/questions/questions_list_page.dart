@@ -1,6 +1,8 @@
 import 'dart:math' as math;
 import 'package:boilerplate/constants/colors.dart';
+import 'package:boilerplate/data/data_laod_handler.dart';
 import 'package:boilerplate/providers/question_widget_state/question_widget_state.dart';
+import 'package:boilerplate/stores/app_settings/app_settings_store.dart';
 import 'package:boilerplate/widgets/next_stage_button.dart';
 import 'package:boilerplate/widgets/question_widget.dart';
 import 'package:boilerplate/widgets/questions_list_page_appBar.dart';
@@ -17,9 +19,11 @@ class QuestionsListPage extends StatefulWidget {
 }
 
 class _QuestionsListPageState extends State<QuestionsListPage> {
+  get _questionsCount => _dataStore.questionList.length;
+
   // stores:--------------------------------------------------------------------
   late DataStore _dataStore;
-  get _questionsCount => _dataStore.questionList.length;
+  late AppSettingsStore _appSettingsStore;
 
   @override
   void initState() {
@@ -31,43 +35,49 @@ class _QuestionsListPageState extends State<QuestionsListPage> {
     super.didChangeDependencies();
     // initializing stores
     _dataStore = Provider.of<DataStore>(context);
+    _appSettingsStore = Provider.of<AppSettingsStore>(context);
   }
 
   @override
   Widget build(BuildContext context) {
-    return Consumer<QuestionsWidgetState>(builder: (context, builder, child) {
-      return Scaffold(
-        appBar: QuestionsListAppBar(),
-        backgroundColor: AppColors.main_color,
-        body: ClipRRect(
-          borderRadius: BorderRadius.only(
-              topLeft: Radius.circular(30), topRight: Radius.circular(30)),
-          child: Container(
-            height: MediaQuery.of(context).size.height,
-            width: MediaQuery.of(context).size.width,
-            decoration: BoxDecoration(
-              color: AppColors.white,
-              borderRadius: BorderRadius.only(
-                topLeft: Radius.circular(30),
-                topRight: Radius.circular(30),
+    return WillPopScope(
+      onWillPop: () {
+        return DataLoadHandler().questionOnPopFunction();
+      },
+      child: Consumer<QuestionsWidgetState>(builder: (context, builder, child) {
+        return Scaffold(
+          appBar: QuestionsListAppBar(),
+          backgroundColor: AppColors.main_color,
+          body: ClipRRect(
+            borderRadius: BorderRadius.only(
+                topLeft: Radius.circular(30), topRight: Radius.circular(30)),
+            child: Container(
+              height: MediaQuery.of(context).size.height,
+              width: MediaQuery.of(context).size.width,
+              decoration: BoxDecoration(
+                color: AppColors.white,
+                borderRadius: BorderRadius.only(
+                  topLeft: Radius.circular(30),
+                  topRight: Radius.circular(30),
+                ),
+              ),
+              child: ScrollablePositionedList.builder(
+                itemCount: _questionsCount,
+                itemBuilder: (context, index) => Card(
+                    margin: EdgeInsets.all(5.0),
+                    child: _buildQuestionWidget(index)),
               ),
             ),
-            child: ScrollablePositionedList.builder(
-              itemCount: _questionsCount,
-              itemBuilder: (context, index) => Card(
-                  margin: EdgeInsets.all(5.0),
-                  child: _buildQuestionWidget(index)),
-            ),
           ),
-        ),
-        floatingActionButton: Visibility(
-          // visible: !builder.isLastQuestion(questionsCount: _questionsCount),
-          visible: true,
-          child: NextStageButton(),
-        ),
-        floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
-      );
-    });
+          floatingActionButton: Visibility(
+            // visible: !builder.isLastQuestion(questionsCount: _questionsCount),
+            visible: true,
+            child: NextStageButton(),
+          ),
+          floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
+        );
+      }),
+    );
   }
 
   Widget _buildQuestionWidget(int index) {
