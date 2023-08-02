@@ -56,7 +56,9 @@ abstract class _AppSettingsStore with Store {
   @action
   Future setStepNumber(int stepNumber) async {
     _repository.setCurrentStep(stepNumber);
-    currentStepNumber = stepNumber;
+    if(stepNumber <= stepsCount - 1) {
+      currentStepNumber = stepNumber;
+    }
   }
 
   @action
