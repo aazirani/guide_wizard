@@ -585,7 +585,7 @@ class Repository {
 
     questionList.questions.forEach((question) {
       question.answers.forEach((answer) {
-        if (answer.isSelected) selectedAnswers.add(answer.title);
+        if (answer.isSelected) selectedAnswers.add(answer.id);
       });
     });
     return selectedAnswers;
