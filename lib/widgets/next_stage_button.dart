@@ -129,7 +129,7 @@ class _NextStageButtonState extends State<NextStageButton> {
   }
 
   Future<void> updateIfAnswersHasChanged() async {
-    bool mustUpdate = await _appSettingsStore.getMustUpdate() ?? true;
+    bool mustUpdate = await _appSettingsStore.getMustUpdate() ?? false;
     if(mustUpdate) {
       await DataLoadHandler().checkForUpdate(forceUpdate: true);
       await _appSettingsStore.setMustUpdate(false);
