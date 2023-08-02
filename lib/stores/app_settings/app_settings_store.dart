@@ -70,6 +70,11 @@ abstract class _AppSettingsStore with Store {
     setStepNumber(currentStepNumber + 1);
   }
 
+  @action
+  bool isFirstStep() {
+    return currentStepNumber == 0;
+  }
+
   // must update methods:-----------------------------------------------------------
   @action
   Future<bool?> getMustUpdate() async {

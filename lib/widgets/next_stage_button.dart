@@ -53,7 +53,7 @@ class _NextStageButtonState extends State<NextStageButton> {
       radius: 5.0,
       stateWidgets: {
         ButtonState.idle: Text(
-          AppLocalizations.of(context).translate("update_steps"),
+          _appSettingsStore.isFirstStep() ?  AppLocalizations.of(context).translate("next_step_button_text") : AppLocalizations.of(context).translate("update_steps"),
           style: TextStyle(color: Colors.white,),
         ),
         ButtonState.loading: Text(
