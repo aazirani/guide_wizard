@@ -32,7 +32,7 @@
   "no_internet_message": "No Internet Connection",
   "cant_reach_server": "Can't Reach The Server!",
   "no_internet_button_text": "Try Again",
-  "Steps require an update. \nPlease verify your internet connection.",
+  "update_is_necessary_message_text": "Steps require an update.\nPlease verify your internet connection.",
 
 
   "unable_to_reach_server_title": "Can not connect to Server",

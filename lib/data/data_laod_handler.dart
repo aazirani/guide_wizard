@@ -5,7 +5,6 @@ import 'package:boilerplate/stores/data/data_store.dart';
 import 'package:boilerplate/stores/technical_name/technical_name_with_translations_store.dart';
 import 'package:boilerplate/stores/updated_at_times/updated_at_times_store.dart';
 import 'package:boilerplate/utils/locale/app_localization.dart';
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:internet_connection_checker/internet_connection_checker.dart';
@@ -45,7 +44,7 @@ class DataLoadHandler { // This class is SINGLETON
   Future loadDataAndCheckForUpdate({int processId = 0}) async {
     bool hasInternetConnection = await hasInternet();
     bool thereIsNoLocalData = await hasNoLocalData();
-    bool mustUpdate = await isUpdatedNecessary();
+    bool mustUpdate = await isUpdateNecessary();
     if (!hasInternetConnection && thereIsNoLocalData && processId == criticalId && !mustUpdate) {
       showNoInternetError();
       Future.delayed(SettingsConstants.internetCheckingPeriod, () {
@@ -59,13 +58,11 @@ class DataLoadHandler { // This class is SINGLETON
         await checkIfUpdateIsNecessary();
       }
     }
-    else {
-      if(mustUpdate) {
-        await checkIfUpdateIsNecessary();
-      }
-      else{
-        await checkForUpdate();
-      }
+    else if(mustUpdate) {
+      await checkIfUpdateIsNecessary();
+    }
+    else{
+      await checkForUpdate();
     }
   }
 
@@ -73,7 +70,7 @@ class DataLoadHandler { // This class is SINGLETON
 
   Future<bool> hasNoLocalData() async => await _dataStore.isDataSourceEmpty();
 
-  Future<bool> isUpdatedNecessary() async => await _appSettingsStore.getMustUpdate() ?? false;
+  Future<bool> isUpdateNecessary() async => await _appSettingsStore.getMustUpdate() ?? false;
 
   void showServerErrorMessage() {
     showErrorMessage(
@@ -119,7 +116,7 @@ class DataLoadHandler { // This class is SINGLETON
   }
 
   Future<void> checkIfUpdateIsNecessary() async {
-    bool mustUpdate = await isUpdatedNecessary();
+    bool mustUpdate = await isUpdateNecessary();
     bool hasInternetConnection = await hasInternet();
     if(mustUpdate) {
       if(!hasInternetConnection){
@@ -143,7 +140,7 @@ class DataLoadHandler { // This class is SINGLETON
   }
 
   Future<void> checkTimeAndForceUpdate() async {
-    await updateContentIfNeeded(forceUpdate: await isUpdatedNecessary()); // Checks whether there is an update and will insert it in database
+    await updateContentIfNeeded(forceUpdate: await isUpdateNecessary()); // Checks whether there is an update and will insert it in database
     await loadData(); // Loads the new data from datasource if update was occurred
   }
 }

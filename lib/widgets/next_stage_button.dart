@@ -50,23 +50,23 @@ class _NextStageButtonState extends State<NextStageButton> {
 
   Widget newVersionButton() {
     return ProgressButton(
-      radius: 5.0,
+      radius: Dimens.nextStageButtonRadius,
       stateWidgets: {
         ButtonState.idle: Text(
           _appSettingsStore.isFirstStep() ?  AppLocalizations.of(context).translate("next_step_button_text") : AppLocalizations.of(context).translate("update_steps"),
-          style: TextStyle(color: Colors.white,),
+          style: TextStyle(color: AppColors.white,),
         ),
         ButtonState.loading: Text(
           AppLocalizations.of(context).translate("getting_updates"),
-          style: TextStyle(color: Colors.white,),
+          style: TextStyle(color: AppColors.white,),
         ),
         ButtonState.fail: Text(
           AppLocalizations.of(context).translate("next_stage_check_internet"),
-          style: TextStyle(color: Colors.white,),
+          style: TextStyle(color: AppColors.white,),
         ),
         ButtonState.success: Text(
           AppLocalizations.of(context).translate("update_finished"),
-          style: TextStyle(color: Colors.white,),
+          style: TextStyle(color: AppColors.white,),
         )
       },
       stateColors: {
@@ -78,37 +78,14 @@ class _NextStageButtonState extends State<NextStageButton> {
       minWidthStates: [],
       onPressed: onTapFunction,
       state: buttonState,
-      padding: EdgeInsets.all(8.0),
-    );
-  }
-
-  Widget oldVersionButton() {
-    return TextButton(
-      style: _buildQuestionsButtonStyle(AppColors.nextStepColor),
-      onPressed: onTapFunction,
-      child: Text(
-        AppLocalizations.of(context).translate('next_stage_button_text'),
-        style: TextStyle(color: Colors.white, fontSize: 15),
-      ),
-    );
-  }
-
-  ButtonStyle _buildQuestionsButtonStyle(Color color) {
-    return ButtonStyle(
-      minimumSize: MaterialStateProperty.all(sizeOfButton()),
-      backgroundColor: MaterialStateProperty.all<Color>(color),
-      shape: MaterialStateProperty.all<RoundedRectangleBorder>(
-        RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(5.0),
-        ),
-      ),
+      padding: Dimens.nextStageButtonPadding,
     );
   }
 
   void onTapFunction() async {
     if(!await DataLoadHandler().hasInternet()) {
       setButtonState(ButtonState.fail);
-      Future.delayed(Duration(milliseconds: 3000), (){
+      Future.delayed(Duration(milliseconds: 2000), (){
         setButtonState(ButtonState.idle);
       });
       return;
@@ -145,4 +122,27 @@ class _NextStageButtonState extends State<NextStageButton> {
   Size sizeOfButton({scaleBy = 1}){
     return Size(math.max(_getScreenWidth() - (Dimens.buildQuestionsButtonStyle["pixels_smaller_than_screen_width"]!) / scaleBy, 0), Dimens.buildQuestionsButtonStyle["height"]!);
   }
+
+// Widget oldVersionButton() {
+//   return TextButton(
+//     style: _buildQuestionsButtonStyle(AppColors.nextStepColor),
+//     onPressed: onTapFunction,
+//     child: Text(
+//       AppLocalizations.of(context).translate('next_stage_button_text'),
+//       style: TextStyle(color: Colors.white, fontSize: 15),
+//     ),
+//   );
+// }
+
+// ButtonStyle _buildQuestionsButtonStyle(Color color) {
+//   return ButtonStyle(
+//     minimumSize: MaterialStateProperty.all(sizeOfButton()),
+//     backgroundColor: MaterialStateProperty.all<Color>(color),
+//     shape: MaterialStateProperty.all<RoundedRectangleBorder>(
+//       RoundedRectangleBorder(
+//         borderRadius: BorderRadius.circular(5.0),
+//       ),
+//     ),
+//   );
+// }
 }
