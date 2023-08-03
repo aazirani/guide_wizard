@@ -3,11 +3,11 @@ import 'package:boilerplate/stores/error/error_store.dart';
 import 'package:boilerplate/stores/form/form_store.dart';
 import 'package:mobx/mobx.dart';
 
-part 'current_step_store.g.dart';
+part 'app_settings_store.g.dart';
 
-class CurrentStepStore = _CurrentStepStore with _$CurrentStepStore;
+class AppSettingsStore = _AppSettingsStore with _$AppSettingsStore;
 
-abstract class _CurrentStepStore with Store {
+abstract class _AppSettingsStore with Store {
 
   final Repository _repository;
 
@@ -23,7 +23,7 @@ abstract class _CurrentStepStore with Store {
   late int stepsCount = 0;
 
   // constructor:---------------------------------------------------------------
-  _CurrentStepStore(Repository repository) : this._repository = repository {
+  _AppSettingsStore(Repository repository) : this._repository = repository {
     // setting up disposers
     _setupDisposers();
 
@@ -40,8 +40,7 @@ abstract class _CurrentStepStore with Store {
   }
 
   // empty responses:-----------------------------------------------------------
-  static ObservableFuture<bool> emptyLoginResponse =
-      ObservableFuture.value(false);
+  static ObservableFuture<bool> emptyLoginResponse = ObservableFuture.value(false);
 
   // store variables:-----------------------------------------------------------
   @observable
@@ -53,11 +52,13 @@ abstract class _CurrentStepStore with Store {
   @computed
   bool get isLoading => loginFuture.status == FutureStatus.pending;
 
-  // actions:-------------------------------------------------------------------
+  // step number methods:-------------------------------------------------------------------
   @action
   Future setStepNumber(int stepNumber) async {
     _repository.setCurrentStep(stepNumber);
-    currentStepNumber = stepNumber;
+    if(stepNumber <= stepsCount - 1) {
+      currentStepNumber = stepNumber;
+    }
   }
 
   @action
@@ -69,6 +70,22 @@ abstract class _CurrentStepStore with Store {
   @action
   Future incrementStepNumber() async {
     setStepNumber(currentStepNumber + 1);
+  }
+
+  @action
+  bool isFirstStep() {
+    return currentStepNumber == 0;
+  }
+
+  // must update methods:-----------------------------------------------------------
+  @action
+  Future<bool?> getMustUpdate() async {
+    return _repository.getMustUpdate;
+  }
+
+  @action
+  Future setMustUpdate(bool mustUpdate) async {
+    _repository.setMustUpdate(mustUpdate);
   }
 
   // general methods:-----------------------------------------------------------

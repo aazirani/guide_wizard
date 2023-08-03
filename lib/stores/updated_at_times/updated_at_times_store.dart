@@ -46,8 +46,8 @@ abstract class _UpdatedAtTimesStore with Store {
 
   // actions:-------------------------------------------------------------------
   @action
-  Future updateContentIfNeeded() async {
-    await _repository.updateContentIfNeeded();
+  Future updateContentIfNeeded({forceUpdate = false}) async {
+    await _repository.updateContentIfNeeded(forceUpdate: forceUpdate);
   }
 
   @action

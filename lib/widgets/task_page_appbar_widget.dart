@@ -1,10 +1,9 @@
 import 'package:boilerplate/constants/colors.dart';
 import 'package:boilerplate/constants/dimens.dart';
-import 'package:boilerplate/stores/current_step/current_step_store.dart';
+import 'package:boilerplate/stores/app_settings/app_settings_store.dart';
 import 'package:boilerplate/stores/step/step_store.dart';
 import 'package:boilerplate/widgets/scrolling_overflow_text.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:provider/provider.dart';
 import 'package:boilerplate/models/task/task.dart';
 import 'package:boilerplate/stores/data/data_store.dart';
@@ -32,14 +31,14 @@ class BlocksAppBarWidget extends StatefulWidget implements PreferredSizeWidget {
 class _BlocksAppBarWidgetState extends State<BlocksAppBarWidget> {
   late DataStore _dataStore;
   late StepStore _stepStore;
-  late CurrentStepStore _currentStepStore;
+  late AppSettingsStore _appSettingsStore;
 
   @override
   void didChangeDependencies() {
     super.didChangeDependencies();
     _dataStore = Provider.of<DataStore>(context);
     _stepStore = Provider.of<StepStore>(context);
-    _currentStepStore = Provider.of<CurrentStepStore>(context);
+    _appSettingsStore = Provider.of<AppSettingsStore>(context);
   }
 
   _buildDoneUndoneButtonStyle() {
@@ -125,7 +124,7 @@ class _BlocksAppBarWidgetState extends State<BlocksAppBarWidget> {
           Padding(
             padding: Dimens.doneButtonPadding,
             child: (_stepStore.currentStep - 1 ==
-                    _currentStepStore.currentStepNumber)
+                    _appSettingsStore.currentStepNumber)
                 ? _buildDoneUndoneButtonContainer()
                 : null,
           ),

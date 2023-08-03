@@ -15,7 +15,7 @@
   "home_end": "-------------------------------------------------------------------------------------",
 
   "next_question_button_text" : "Next question",
-  "next_stage_button_text" : "Next Stage",
+  "next_step_button_text" : "Next Step",
   "close" : "Close",
   "read_more" : "Read More",
   "questions_end": "-------------------------------------------------------------------------------------",
@@ -32,6 +32,7 @@
   "no_internet_message": "No Internet Connection",
   "cant_reach_server": "Can't Reach The Server!",
   "no_internet_button_text": "Try Again",
+  "update_is_necessary_message_text": "Steps require an update.\nPlease verify your internet connection.",
 
 
   "unable_to_reach_server_title": "Can not connect to Server",
@@ -52,5 +53,11 @@
   "open_link": "Open Link",
   "steps_end": "------------------------------------------------------------------------------------",
 
-  "could_not_load": "Couldn't load"
+  "could_not_load": "Couldn't load",
+
+  "update_steps": "Update steps",
+  "getting_updates": "Updating",
+  "next_stage_check_internet": "Check your Internet Connection and Try Again",
+  "update_finished": "Updating Finished",
+  "next_stage_button_end": "------------------------------------------------------------------------------------"
 }

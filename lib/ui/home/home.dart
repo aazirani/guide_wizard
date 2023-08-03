@@ -2,16 +2,14 @@ import 'dart:async';
 import 'package:boilerplate/constants/colors.dart';
 import 'package:boilerplate/constants/dimens.dart';
 import 'package:boilerplate/data/data_laod_handler.dart';
-import 'package:boilerplate/stores/current_step/current_step_store.dart';
+import 'package:boilerplate/stores/app_settings/app_settings_store.dart';
 import 'package:boilerplate/stores/step/step_store.dart';
 import 'package:boilerplate/stores/technical_name/technical_name_with_translations_store.dart';
 import 'package:boilerplate/widgets/compressed_tasklist_timeline/compressed_task_list_timeline.dart';
-import 'package:boilerplate/widgets/info_dialog.dart';
 import 'package:boilerplate/widgets/step_slider/step_slider_widget.dart';
 import 'package:boilerplate/widgets/step_timeline/step_timeline.dart';
 import 'package:boilerplate/utils/locale/app_localization.dart';
 import 'package:carousel_slider/carousel_slider.dart';
-import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:provider/provider.dart';
@@ -34,7 +32,7 @@ class _HomeScreenState extends State<HomeScreen> {
   late StepStore _stepStore;
   late TechnicalNameWithTranslationsStore _technicalNameWithTranslationsStore;
   late LanguageStore _languageStore;
-  late CurrentStepStore _currentStepStore;
+  late AppSettingsStore _appSettingsStore;
   late DataLoadHandler _dataLoadHandler;
 
   @override
@@ -46,7 +44,7 @@ class _HomeScreenState extends State<HomeScreen> {
     _technicalNameWithTranslationsStore =
         Provider.of<TechnicalNameWithTranslationsStore>(context);
     _languageStore = Provider.of<LanguageStore>(context);
-    _currentStepStore = Provider.of<CurrentStepStore>(context);
+    _appSettingsStore = Provider.of<AppSettingsStore>(context);
     _dataLoadHandler = DataLoadHandler(context: context);
   }
 
@@ -71,7 +69,19 @@ class _HomeScreenState extends State<HomeScreen> {
     return Scaffold(
       backgroundColor: AppColors.main_color,
       appBar: _buildAppBar(),
-      body: _buildBody(context),
+      body: RefreshIndicator(
+        color: AppColors.main_color,
+        onRefresh: () async {
+          DataLoadHandler(context: context).checkTimeAndForceUpdate();
+        },
+        child: SingleChildScrollView(
+          physics: AlwaysScrollableScrollPhysics(),
+          child: Container(
+            height: MediaQuery.of(context).size.height - _buildAppBar().preferredSize.height - MediaQuery.of(context).padding.top,
+            child: _buildBody(context),
+          ),
+        ),
+      ),
     );
   }
 
@@ -108,7 +118,7 @@ class _HomeScreenState extends State<HomeScreen> {
           ),
           child: _dataStore.dataLoad
               ? _buildScreenElements(
-                  _currentStepStore.currentStepNumber, _dataStore.values!)
+                  _appSettingsStore.currentStepNumber, _dataStore.values!)
               : _shimmerAll(),
         ),
       ),
@@ -140,7 +150,7 @@ class _HomeScreenState extends State<HomeScreen> {
             builder: (_) => StepSliderWidget(stepList: _dataStore.stepList)),
         Observer(
           builder: (_) => StepTimeLine(
-            stepNo: _currentStepStore.stepsCount,
+            stepNo: _appSettingsStore.stepsCount,
           ),
         ),
         SizedBox(height: 25),
@@ -174,7 +184,7 @@ class _HomeScreenState extends State<HomeScreen> {
   Widget _buildCurrentStepText(stepStore) {
     return Observer(
         builder: (_) => Text(
-            "${stepStore.currentStep}/${_currentStepStore.stepsCount}",
+            "${stepStore.currentStep}/${_appSettingsStore.stepsCount}",
             style: TextStyle(color: AppColors.main_color)));
   }
 

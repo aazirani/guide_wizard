@@ -455,9 +455,9 @@ class Repository {
     return isContentUpdated || isTranslationUpdated;
   }
 
-  Future updateContentIfNeeded() async {
+  Future updateContentIfNeeded({forceUpdate = false}) async {
     UpdatedAtTimes originUpdatedAt = await getUpdatedAtTimesFromApi();
-    if (await isContentUpdated()) {
+    if (forceUpdate || await isContentUpdated()) {
       StepList _stepList = await getStep();
       QuestionList oldQuestions = await getQuestions();
       StepList stepList = await _stepApi.getSteps(await getUrlParameters());
@@ -565,13 +565,11 @@ class Repository {
   }
 
   // Current Step Number: -----------------------------------------------------------------
-  Future<void> setCurrentStep(int value) =>
-      _sharedPrefsHelper.setCurrentStep(value);
+  Future<void> setCurrentStep(int value) => _sharedPrefsHelper.setCurrentStep(value);
 
   int? get currentStepNumber => _sharedPrefsHelper.currentStepNumber;
 
-  Future<void> setStepsCount(int value) =>
-      _sharedPrefsHelper.setStepsCount(value);
+  Future<void> setStepsCount(int value) => _sharedPrefsHelper.setStepsCount(value);
 
   int? get stepsCount => _sharedPrefsHelper.stepsCount;
 
@@ -587,7 +585,7 @@ class Repository {
 
     questionList.questions.forEach((question) {
       question.answers.forEach((answer) {
-        if (answer.isSelected) selectedAnswers.add(answer.title);
+        if (answer.isSelected) selectedAnswers.add(answer.id);
       });
     });
     return selectedAnswers;
@@ -611,4 +609,9 @@ class Repository {
     List<double> values = _sharedPrefsHelper.getProgressValues(stepCount);
     return values;
   }
+
+  // Must Update Value: -----------------------------------------------------------------
+  bool? get getMustUpdate => _sharedPrefsHelper.mustUpdate;
+
+  Future<void> setMustUpdate(bool mustUpdate) => _sharedPrefsHelper.setMustUpdate(mustUpdate);
 }
