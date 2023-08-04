@@ -63,9 +63,11 @@ class TaskDataSource {
           tasks: recordSnapshots.map((snapshot) {
         final task = Task.fromMap(snapshot.value);
         // An ID is a key of a record from the database.
-        task.id = snapshot.key;
         return task;
       }).toList());
+    }
+    else {
+      tasksList = TaskList(tasks: []);
     }
 
     return tasksList;

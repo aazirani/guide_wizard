@@ -458,8 +458,8 @@ class Repository {
     if (forceUpdate || await isContentUpdated()) {
       StepList _stepList = await getStep();
       QuestionList oldQuestions = await getQuestions();
-      StepList stepList = await _stepApi.getSteps(await getUrlParameters());
       TaskList oldTasks = await getTasks();
+      StepList stepList = await _stepApi.getSteps(await getUrlParameters());
       await truncateContent();
       for (Step step in stepList.steps) {
         await _stepDataSource.insert(step);

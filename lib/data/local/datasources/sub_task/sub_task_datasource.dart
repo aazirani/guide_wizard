@@ -61,7 +61,6 @@ class SubTaskDataSource {
           subTasks: recordSnapshots.map((snapshot) {
         final subTask = SubTask.fromMap(snapshot.value);
         // An ID is a key of a record from the database.
-        subTask.id = snapshot.key;
         return subTask;
       }).toList());
     }
