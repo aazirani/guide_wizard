@@ -20,8 +20,6 @@ class StepApi {
   Future<StepList> getSteps(String parameters) async {
     try {
       final res = await _dioClient.get(Endpoints.getAppData + parameters);
-      // print("here it is:");
-      // print(res["rows"]);
       return StepList.fromJson(res["rows"]);
     } catch (e) {
       print(e.toString());
