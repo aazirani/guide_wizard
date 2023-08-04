@@ -13,7 +13,6 @@ class Task {
   int creator_id;
   String created_at;
   String updated_at;
-  List<Question> questions;
   bool isDone;
 
   Task({
@@ -27,7 +26,6 @@ class Task {
     required this.creator_id,
     required this.created_at,
     required this.updated_at,
-    required this.questions,
     this.isDone = false,
   });
 
@@ -42,10 +40,7 @@ class Task {
       creator_id: json["creator_id"],
       created_at: json["created_at"],
       updated_at: json["updated_at"],
-      questions: List<Question>.from(
-          json["questions"].map((x) => Question.fromMap(x))),
-      sub_tasks:
-          List<SubTask>.from(json["sub_tasks"].map((x) => SubTask.fromMap(x))),
+      sub_tasks: List<SubTask>.from(json["sub_tasks"].map((x) => SubTask.fromMap(x))),
       isDone: json["isDone"] ?? false,
     );
   }
@@ -61,7 +56,6 @@ class Task {
     "creator_id": creator_id,
     "created_at": created_at,
     "updated_at": updated_at,
-    "questions": questions.map((question) => question.toMap()).toList(),
     "isDone": isDone,
   };
 
