@@ -11,7 +11,7 @@ class Question {
   bool is_multiple_choice;
   int info_url;
   int info_description;
-  int task_id;
+  int step_id;
   int creator_id;
   String created_at;
   String updated_at;
@@ -26,7 +26,7 @@ class Question {
     required this.is_multiple_choice,
     required this.info_url,
     required this.info_description,
-    required this.task_id,
+    required this.step_id,
     required this.creator_id,
     required this.created_at,
     required this.updated_at,
@@ -51,7 +51,7 @@ class Question {
       is_multiple_choice: (json["is_multiple_choice"] == 1) ? true : false,
       info_url: json["info_url"],
       info_description: json["info_description"],
-      task_id: json["task_id"],
+      step_id: json["step_id"],
       creator_id: json["creator_id"],
       created_at: json["created_at"],
       updated_at: json["updated_at"],
@@ -70,7 +70,7 @@ class Question {
       "is_multiple_choice": is_multiple_choice ? 1 : 0,
       "info_url": info_url,
       "info_description": info_description,
-      "task_id": task_id,
+      "step_id": step_id,
       "creator_id": creator_id,
       "created_at": created_at,
       "updated_at": updated_at,

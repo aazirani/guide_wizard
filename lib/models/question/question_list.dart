@@ -17,8 +17,7 @@ class QuestionList {
   }
 
   factory QuestionList.fromJson(List<dynamic> json) {
-    List<Question> questions =
-        json.map((question) => Question.fromMap(question)).toList();
+    List<Question> questions = json.map((question) => Question.fromMap(question)).toList();
 
     return QuestionList(
       questions: questions,

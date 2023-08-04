@@ -64,6 +64,9 @@ class QuestionDataSource {
         return question;
       }).toList());
     }
+    else {
+      questionsList = QuestionList(questions: []);
+    }
 
     return questionsList;
   }

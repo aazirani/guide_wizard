@@ -77,17 +77,16 @@ class Repository {
     StepList stepList = await _stepApi.getSteps(await getUrlParameters());
     for (Step step in stepList.steps) {
       await _stepDataSource.insert(step);
+      await _insertItems(step.questions, _questionDataSource.insert);
       for (Task task in step.tasks) {
         await _taskDataSource.insert(task);
         await _insertItems(task.sub_tasks, _subTaskDataSource.insert);
-        await _insertItems(task.questions, _questionDataSource.insert);
       }
     }
     return stepList;
   }
 
-  Future<void> _insertItems<T>(
-      List<T> items, Future<void> Function(T) insertFunction) async {
+  Future<void> _insertItems<T>(List<T> items, Future<void> Function(T) insertFunction) async {
     for (T item in items) {
       await insertFunction(item);
     }
@@ -239,11 +238,10 @@ class Repository {
 
   Future<QuestionList> getQuestionsFromApi() async {
     List<Question> questions = [];
-    return await getTasksFromApi().then((taskList) {
-      taskList.tasks.forEach((task) {
-        task.questions.forEach((question) {
+    return await getStepFromApiAndInsert().then((stepList) {
+      stepList.steps.forEach((step) {
+        step.questions.forEach((question) {
           questions.add(question);
-          _questionDataSource.insert(question);
         });
       });
       QuestionList questionList = QuestionList(questions: questions);
@@ -460,11 +458,14 @@ class Repository {
     if (forceUpdate || await isContentUpdated()) {
       StepList _stepList = await getStep();
       QuestionList oldQuestions = await getQuestions();
-      StepList stepList = await _stepApi.getSteps(await getUrlParameters());
       TaskList oldTasks = await getTasks();
+      StepList stepList = await _stepApi.getSteps(await getUrlParameters());
       await truncateContent();
       for (Step step in stepList.steps) {
         await _stepDataSource.insert(step);
+        for (Question question in step.questions) {
+          await _insertUpdatedQuestion(question, oldQuestions);
+        }
         for (Task task in step.tasks) {
           await _insertUpdatedTask(task, oldTasks);
           for (SubTask subTask in task.sub_tasks) {
@@ -472,9 +473,6 @@ class Repository {
             if (_stepList.findSubTaskByID(subTask.id) == null) {
               task.isDone = false;
             }
-          }
-          for (Question question in task.questions) {
-            await _insertUpdatedQuestion(question, oldQuestions);
           }
         }
       }

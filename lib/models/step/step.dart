@@ -1,5 +1,5 @@
+import 'package:boilerplate/models/question/question.dart';
 import 'package:boilerplate/models/task/task.dart';
-import 'package:boilerplate/models/technical_name/technical_name.dart';
 
 class Step {
   int id;
@@ -10,6 +10,7 @@ class Step {
   int creator_id;
   String created_at;
   String updated_at;
+  List<Question> questions;
   List<Task> tasks;
 
   Step(
@@ -21,6 +22,7 @@ class Step {
       required this.creator_id,
       required this.created_at,
       required this.updated_at,
+      required this.questions,
       required this.tasks});
 
   factory Step.fromMap(Map<String, dynamic> json) {
@@ -33,22 +35,23 @@ class Step {
       creator_id: json["creator_id"],
       created_at: json["created_at"],
       updated_at: json["updated_at"],
-      tasks:
-          json["tasks"].map((task) => Task.fromMap(task)).toList().cast<Task>(),
+      questions: List<Question>.from(json["questions"].map((x) => Question.fromMap(x))),
+      tasks: json["tasks"].map((task) => Task.fromMap(task)).toList().cast<Task>(),
     );
   }
 
   Map<String, dynamic> toMap() => {
-        "id": id,
-        "name": name,
-        "description": description,
-        "order": order,
-        "image": image,
-        "creator_id": creator_id,
-        "created_at": created_at,
-        "updated_at": updated_at,
-        "tasks": tasks.map((task) => task.toMap()).toList(),
-      };
+      "id": id,
+      "name": name,
+      "description": description,
+      "order": order,
+      "image": image,
+      "creator_id": creator_id,
+      "created_at": created_at,
+      "updated_at": updated_at,
+      "questions": questions.map((question) => question.toMap()).toList(),
+      "tasks": tasks.map((task) => task.toMap()).toList(),
+  };
 
   int get numTasks {
     return tasks.length;

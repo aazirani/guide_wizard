@@ -259,10 +259,8 @@ abstract class _DataStore with Store {
       final stepList = await _repository.getStep();
 
       answers = stepList.steps
-          .expand((step) => step.tasks.expand((task) => task.questions.expand(
-              (question) =>
-                  question.answers.where((answer) => answer.selected))))
-          .toList();
+        .expand((step) => step.questions.expand((question) => question.answers.where((answer) => answer.selected)))
+        .toList();
     } on DioError catch (error) {
       errorStore.errorMessage = DioErrorUtil.handleError(error);
     }
