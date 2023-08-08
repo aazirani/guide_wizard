@@ -7,11 +7,13 @@ import 'package:flutter/material.dart';
 class QuestionsListAppBar extends StatefulWidget implements PreferredSizeWidget {
   double appBarSize;
   double fontSize;
+  String title;
 
   QuestionsListAppBar(
       {Key? key,
         this.appBarSize = Dimens.questionListPageAppBarHeight,
         this.fontSize = Dimens.questionListPageAppBarFontSize,
+        required this.title,
       })
       : super(key: key);
 
@@ -44,7 +46,7 @@ class _QuestionsListAppBarState extends State<QuestionsListAppBar> {
         ),
       ),
       title: Text(
-        AppLocalizations.of(context).translate("info"),
+        widget.title,
         style: TextStyle(color: AppColors.white, fontSize: 20),
       ),
     );

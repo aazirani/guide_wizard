@@ -307,6 +307,10 @@ abstract class _DataStore with Store {
     return this.stepList.steps[index].numTasks;
   }
 
+  getNumberOfQuestionsFromAStep(index) {
+    return this.stepList.steps[index].questions.length;
+  }
+
   @action
   Future<void> saveProgressValues() async {
     await _repository.saveProgressValueInSharedPreferences(values!);
