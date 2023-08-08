@@ -73,9 +73,9 @@ class _QuestionsListPageState extends State<QuestionsListPage> {
           floatingActionButton: Visibility(
             // visible: !builder.isLastQuestion(questionsCount: _questionsCount),
             visible: true,
-            child: NextStageButton(),
+            child: _buildDockedNextStageButton(),
           ),
-          floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
+          floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
         );
       }),
     );
@@ -86,6 +86,12 @@ class _QuestionsListPageState extends State<QuestionsListPage> {
       index: index,
       question: _dataStore.questionList.elementAt(index),
       questionsCount: _dataStore.questionList.length,
+    );
+  }
+
+  Widget _buildDockedNextStageButton() {
+    return Container(
+      child: NextStageButton(),
     );
   }
 }

@@ -1,6 +1,7 @@
 import 'package:boilerplate/models/technical_name/technical_name.dart';
 import 'package:boilerplate/models/technical_name/technical_name_with_translations.dart';
 import 'package:boilerplate/models/technical_name/technical_name_with_translations_list.dart';
+import 'package:get/get.dart';
 import 'package:mobx/mobx.dart';
 import 'package:boilerplate/data/repository.dart';
 
@@ -59,15 +60,16 @@ abstract class _TechnicalNameWithTranslationsStore with Store {
   // methods: ..................................................................
   String? getTranslation(int id) {
     if(isTranslationsEmpty(id)) return "";
-    return getTechnicalName(id).translations[this.language_id!].translated_text;
+    return getTechnicalName(id)!.translations[this.language_id!].translated_text;
   }
 
-  TechnicalNameWithTranslations getTechnicalName(int id) {
-    return technicalNameWithTranslationsList.technicalNameWithTranslations.firstWhere((element) => element.id == id);
+  TechnicalNameWithTranslations? getTechnicalName(int id) {
+    return technicalNameWithTranslationsList.technicalNameWithTranslations.firstWhereOrNull((element) => element.id == id);
   }
 
   int getTranslationsLength(int id) {
-    return getTechnicalName(id).translations.length;
+    if(getTechnicalName(id) == null) return 0;
+    return getTechnicalName(id)!.translations.length;
   }
 
   bool isTranslationsEmpty(int id) {

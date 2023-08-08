@@ -53,39 +53,23 @@ class _QuestionWidgetState extends State<QuestionWidget> with AutomaticKeepAlive
   }
 
   @override
-  bool get wantKeepAlive => true;
+  bool get wantKeepAlive => false;
   double _getScreenWidth() => MediaQuery.of(context).size.width;
 
   @override
   Widget build(BuildContext context) {
     super.build(context);
-    return Consumer<QuestionsWidgetState>(builder: (context, builder, child) {
-      return ExpansionPanelList(
-        expandedHeaderPadding: EdgeInsets.zero,
-        elevation: 0,
-        expansionCallback: (int index, bool isExpanded) {
-          setState(() {
-            builder.setActiveIndex(widget.index);
-          });
-        },
+    return ListTile(
+      contentPadding: EdgeInsets.zero,
+      title: _buildTitle(),
+      subtitle: Column(
         children: [
-          ExpansionPanel(
-            canTapOnHeader: true,
-            headerBuilder: (BuildContext context, bool isExpanded) {
-              return _buildTitle();
-            },
-            body: Column(
-              children: [
-                _buildDescription(),
-                _buildOptions(),
-                _buildQuestionButton(),
-              ],
-            ),
-            isExpanded: builder.isWidgetExpanded(widget.index),
-          ),
+          _buildDescription(),
+          _buildOptions(),
+          // _buildQuestionButton(),
         ],
-      );
-    });
+      ),
+    );
   }
 
   bool _isLastQuestion() {
