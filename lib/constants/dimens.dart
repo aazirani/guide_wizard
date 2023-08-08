@@ -140,5 +140,6 @@ class Dimens {
   // Next Stage Button
   static const nextStageButtonRadius = 5.0;
   static const nextStageButtonPadding = EdgeInsets.all(8.0);
-
+  static const nextStageSurroundingContainerHeight = 110.0;
+  static const nextStageDistanceFromBottom = 10.0;
 }

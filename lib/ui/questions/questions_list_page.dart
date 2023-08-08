@@ -1,5 +1,6 @@
 import 'dart:math' as math;
 import 'package:boilerplate/constants/colors.dart';
+import 'package:boilerplate/constants/dimens.dart';
 import 'package:boilerplate/data/data_laod_handler.dart';
 import 'package:boilerplate/providers/question_widget_state/question_widget_state.dart';
 import 'package:boilerplate/stores/app_settings/app_settings_store.dart';
@@ -63,10 +64,8 @@ class _QuestionsListPageState extends State<QuestionsListPage> {
                 ),
               ),
               child: ScrollablePositionedList.builder(
-                itemCount: _questionsCount,
-                itemBuilder: (context, index) => Card(
-                    margin: EdgeInsets.all(5.0),
-                    child: _buildQuestionWidget(index)),
+                itemCount: _questionsCount + 1,
+                itemBuilder: (context, index) => _buildScrollablePositionedListItem(index),
               ),
             ),
           ),
@@ -81,17 +80,46 @@ class _QuestionsListPageState extends State<QuestionsListPage> {
     );
   }
 
+  Widget _buildScrollablePositionedListItem(int index) {
+    return _isItemAfterQuestions(index) ? SizedBox(height: Dimens.nextStageSurroundingContainerHeight,) : _buildQuestionWidget(index);
+  }
+
+  bool _isItemAfterQuestions(index) => index == _questionsCount;
+
   Widget _buildQuestionWidget(int index) {
-    return QuestionWidget(
-      index: index,
-      question: _dataStore.questionList.elementAt(index),
-      questionsCount: _dataStore.questionList.length,
+    return Card(
+      child: QuestionWidget(
+        index: index,
+        question: _dataStore.questionList.elementAt(index),
+        questionsCount: _dataStore.questionList.length,
+      ),
     );
   }
 
   Widget _buildDockedNextStageButton() {
     return Container(
-      child: NextStageButton(),
+      width: MediaQuery.of(context).size.width,
+      height: Dimens.nextStageSurroundingContainerHeight,
+      decoration: BoxDecoration(
+          gradient: LinearGradient(
+            begin: Alignment.topCenter,
+            end: Alignment.bottomCenter,
+            colors: [
+              Colors.white.withOpacity(0),
+              Colors.white,
+              Colors.white,
+            ],
+          )
+      ),
+      child: Stack(
+        alignment: AlignmentDirectional.bottomCenter,
+        children: [
+          Positioned(
+            bottom: Dimens.nextStageDistanceFromBottom,
+            child: NextStageButton()
+          ),
+        ],
+      ),
     );
   }
 }
