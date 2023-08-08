@@ -136,6 +136,7 @@ class Dimens {
   // home page - shimmering place holders
   static const StepTimelineProgressBarDistance = 25.0;
   static const progressBarCompressedTaskListDistance = 10.0;
+  static const compressedTaskListBorderRadius = 15.0;
 
   // Next Stage Button
   static const nextStageButtonRadius = 5.0;
