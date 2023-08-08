@@ -68,6 +68,8 @@ class Dimens {
   static const timelineContainerPadding = EdgeInsets.only(left: 20, right: 20, top: 25);
   static const timelineNodePosition = 0.009;
   static const contentLeftMargin = EdgeInsets.only(left: 20);
+  static const taskTitleFontSize = 16.0;
+  static const timelineIndicatorDimens = 8.0;
   //Question page...................................................
   static const questionButtonPadding = EdgeInsets.only(bottom: 20, top: 15);
   static const questionDescriptionPadding = EdgeInsets.only(left: 10, right: 10, bottom: 10);
