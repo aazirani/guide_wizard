@@ -321,37 +321,35 @@ class _QuestionWidgetState extends State<QuestionWidget> with AutomaticKeepAlive
     );
   }
 
-  Widget _buildOptions() {
+  Widget _buildSingleOption(int index) {
     if (widget.question.isImageQuestion) {
-      return _buildImageOptions();
+      return _buildSingleImageOption(index);
     } else {
-      return _buildTextOptions();
+      return _buildSingleTextOption(index);
     }
   }
 
-  Widget _buildImageOptions() {
+  Widget _buildOptions() {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        for (int row = 0;
-        row <= widget.question.answers.length / widget.question.axis_count;
-        row++)
-          _buildAImageOptionsRow(
-              row * widget.question.axis_count,
-              math.min((row + 1) * widget.question.axis_count,
-                  widget.question.answers.length)),
+        for (int row = 0; row <= widget.question.answers.length / widget.question.axis_count; row++)
+        _buildAOptionsRow(
+            row * widget.question.axis_count,
+            math.min((row + 1) * widget.question.axis_count, widget.question.answers.length)
+        ),
       ],
     );
   }
 
-  Widget _buildAImageOptionsRow(int begin, int end) {
+  Widget _buildAOptionsRow(int begin, int end) {
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 10),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
           for (int index = begin; index < end; index++)
-            _buildSingleImageOption(index),
+            _buildSingleOption(index),
         ],
       ),
     );
@@ -406,7 +404,7 @@ class _QuestionWidgetState extends State<QuestionWidget> with AutomaticKeepAlive
 
   Widget _buildImageOptionSubtitle(int index) {
     if (answerHasTitle(widget.question)) {
-      var answer_title_id = widget.question.getAnswerByIndex(index).title;
+      var answerTitleId = widget.question.getAnswerByIndex(index).title;
       return Padding(
         padding: const EdgeInsets.only(top: 5, bottom: 5),
         child: Row(
@@ -431,8 +429,7 @@ class _QuestionWidgetState extends State<QuestionWidget> with AutomaticKeepAlive
             ),
             Flexible(
               child: Text(
-                _technicalNameWithTranslationsStore
-                    .getTranslation(answer_title_id)!,
+                _technicalNameWithTranslationsStore.getTranslation(answerTitleId)!,
                 style: TextStyle(
                   fontSize: 15,
                 ),
@@ -471,11 +468,10 @@ class _QuestionWidgetState extends State<QuestionWidget> with AutomaticKeepAlive
     );
   }
 
-
-  Widget _buildTextOptions() {
-    return Column(
-      children: widget.question.getAnswers()
-          .map((option) => Container(
+  Widget _buildSingleTextOption(int index) {
+    Answer option = widget.question.getAnswerByIndex(index);
+    return Flexible(
+      child: Container(
         margin: const EdgeInsets.only(left: 15, right: 15, top: 10),
         child: CheckboxListTile(
           shape: RoundedRectangleBorder(
@@ -494,15 +490,13 @@ class _QuestionWidgetState extends State<QuestionWidget> with AutomaticKeepAlive
             });
           },
           title: Text(
-            _technicalNameWithTranslationsStore
-                .getTranslation(option.getAnswerTitleID())!,
+            _technicalNameWithTranslationsStore.getTranslation(option.getAnswerTitleID())!,
           ),
           controlAffinity: ListTileControlAffinity.leading,
           tileColor: AppColors.white,
           activeColor: AppColors.main_color,
         ),
-      ))
-          .toList(),
+      ),
     );
   }
 
