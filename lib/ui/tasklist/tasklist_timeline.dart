@@ -114,8 +114,6 @@ class _TaskListTimeLineState extends State<TaskListTimeLine> {
                     ]
                   : [Center(child: _buildContentTitle(taskNumber))],
             ),
-            Spacer(),
-            _buildContentMoreIcon(),
           ],
         ),
       ),
@@ -163,12 +161,6 @@ class _TaskListTimeLineState extends State<TaskListTimeLine> {
                     color: (_taskDone(taskNumber)
                         ? AppColors.deadlineTextDoneColor
                         : AppColors.deadlineTextUnDoneColor)))));
-  }
-
-  Widget _buildContentMoreIcon() {
-    return Align(
-        alignment: Alignment.centerRight,
-        child: Icon(Icons.more_vert, color: AppColors.main_color));
   }
 
   //general methods ............................................................
