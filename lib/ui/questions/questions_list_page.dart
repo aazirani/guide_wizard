@@ -3,6 +3,7 @@ import 'package:boilerplate/constants/colors.dart';
 import 'package:boilerplate/data/data_laod_handler.dart';
 import 'package:boilerplate/providers/question_widget_state/question_widget_state.dart';
 import 'package:boilerplate/stores/app_settings/app_settings_store.dart';
+import 'package:boilerplate/stores/technical_name/technical_name_with_translations_store.dart';
 import 'package:boilerplate/widgets/next_stage_button.dart';
 import 'package:boilerplate/widgets/question_widget.dart';
 import 'package:boilerplate/widgets/questions_list_page_appBar.dart';
@@ -12,7 +13,8 @@ import 'package:scrollable_positioned_list/scrollable_positioned_list.dart';
 import 'package:boilerplate/stores/data/data_store.dart';
 
 class QuestionsListPage extends StatefulWidget {
-  QuestionsListPage({Key? key}) : super(key: key);
+  int stepNumber;
+  QuestionsListPage({required this.stepNumber, Key? key}) : super(key: key);
 
   @override
   State<QuestionsListPage> createState() => _QuestionsListPageState();
@@ -24,6 +26,7 @@ class _QuestionsListPageState extends State<QuestionsListPage> {
   // stores:--------------------------------------------------------------------
   late DataStore _dataStore;
   late AppSettingsStore _appSettingsStore;
+  late TechnicalNameWithTranslationsStore _technicalNameWithTranslationsStore;
 
   @override
   void initState() {
@@ -36,6 +39,7 @@ class _QuestionsListPageState extends State<QuestionsListPage> {
     // initializing stores
     _dataStore = Provider.of<DataStore>(context);
     _appSettingsStore = Provider.of<AppSettingsStore>(context);
+    _technicalNameWithTranslationsStore = Provider.of<TechnicalNameWithTranslationsStore>(context);
   }
 
   @override
@@ -47,7 +51,7 @@ class _QuestionsListPageState extends State<QuestionsListPage> {
       },
       child: Consumer<QuestionsWidgetState>(builder: (context, builder, child) {
         return Scaffold(
-          appBar: QuestionsListAppBar(),
+          appBar: QuestionsListAppBar(title: _appBarTitleString(),),
           backgroundColor: AppColors.main_color,
           body: ClipRRect(
             borderRadius: BorderRadius.only(
@@ -87,5 +91,10 @@ class _QuestionsListPageState extends State<QuestionsListPage> {
       question: _dataStore.questionList.elementAt(index),
       questionsCount: _dataStore.questionList.length,
     );
+  }
+
+  String _appBarTitleString() {
+    int titleId = _dataStore.stepList.steps[widget.stepNumber].name;
+    return _technicalNameWithTranslationsStore.getTranslation(titleId)!;
   }
 }
