@@ -472,7 +472,7 @@ class _QuestionWidgetState extends State<QuestionWidget> with AutomaticKeepAlive
     Answer option = widget.question.getAnswerByIndex(index);
     return Flexible(
       child: Container(
-        margin: const EdgeInsets.only(left: 15, right: 15, top: 10),
+        margin: Dimens.singleTextOptionPadding,
         child: CheckboxListTile(
           shape: RoundedRectangleBorder(
             side: BorderSide(
