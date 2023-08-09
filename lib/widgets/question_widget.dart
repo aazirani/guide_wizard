@@ -317,9 +317,6 @@ class _QuestionWidgetState extends State<QuestionWidget> with AutomaticKeepAlive
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        for (int row = 0;
-        row <= widget.question.answers.length / widget.question.axis_count; row++)
-          _buildAImageOptionsRow(row * widget.question.axis_count, math.min((row + 1) * widget.question.axis_count, widget.question.answers.length)),
         for (int row = 0; row <= widget.question.answers.length / widget.question.axis_count; row++)
         _buildAOptionsRow(
             row * widget.question.axis_count,
