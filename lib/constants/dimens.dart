@@ -88,6 +88,8 @@ class Dimens {
     right: 15,
   );
 
+  static const singleTextOptionPadding = const EdgeInsets.only(left: 15, right: 15, top: 10);
+
   static const expansionPadding = EdgeInsets.symmetric(horizontal: 20);
   static BorderRadiusGeometry expansionTileBorderRadius = BorderRadius.circular(16);
   static BorderRadiusGeometry blockPageAppBarButtonBorderRadius = BorderRadius.circular(100.0);
