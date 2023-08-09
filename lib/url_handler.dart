@@ -36,6 +36,17 @@ class UrlHandler {
   }
 
   static openUrl({required BuildContext context, required String url}) {
+    ButtonStyle _textButtonStyle() {
+      return ButtonStyle(
+        overlayColor: MaterialStateColor.resolveWith((states) => AppColors.main_color.withOpacity(0.13)),
+        shape: MaterialStateProperty.all<RoundedRectangleBorder>(
+          RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(5.0),
+          ),
+        ),
+      );
+    }
+
     showDialog(
       context: context,
       builder: (context) => AlertDialog(
@@ -51,16 +62,18 @@ class UrlHandler {
         ),
         actions: [
           TextButton(
-              onPressed: () {
-                Navigator.of(context).pop();
-              },
-              child: Text(AppLocalizations.of(context).translate('cancel'), style: TextStyle(color: AppColors.main_color),)
+            onPressed: () {
+              Navigator.of(context).pop();
+            },
+            child: Text(AppLocalizations.of(context).translate('cancel'), style: TextStyle(color: AppColors.main_color),),
+            style: _textButtonStyle(),
           ),
           TextButton(
-              onPressed: () {
-                _launchURL(url);
-              },
-              child: Text(AppLocalizations.of(context).translate('open_link'), style: TextStyle(color: AppColors.main_color),)
+            onPressed: () {
+              _launchURL(url);
+            },
+            child: Text(AppLocalizations.of(context).translate('open_link'), style: TextStyle(color: AppColors.main_color),),
+            style: _textButtonStyle(),
           ),
         ],
       ),
