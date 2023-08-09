@@ -13,7 +13,8 @@ import 'package:progress_state_button/progress_button.dart';
 import 'package:provider/provider.dart';
 
 class NextStageButton extends StatefulWidget {
-  const NextStageButton({Key? key}) : super(key: key);
+  double height;
+  NextStageButton({this.height = 53, Key? key}) : super(key: key);
 
   @override
   State<NextStageButton> createState() => _NextStageButtonState();
@@ -50,6 +51,7 @@ class _NextStageButtonState extends State<NextStageButton> {
 
   Widget newVersionButton() {
     return ProgressButton(
+      height: widget.height,
       radius: Dimens.nextStageButtonRadius,
       stateWidgets: {
         ButtonState.idle: Text(
@@ -72,8 +74,8 @@ class _NextStageButtonState extends State<NextStageButton> {
       stateColors: {
         ButtonState.idle: AppColors.nextStepColor,
         ButtonState.loading: AppColors.nextStepColor,
-        ButtonState.fail: Colors.red.shade300,
-        ButtonState.success: Colors.green.shade400,
+        ButtonState.fail: AppColors.red[100]!,
+        ButtonState.success: AppColors.nextStepColor,
       },
       minWidthStates: [],
       onPressed: onTapFunction,
@@ -119,9 +121,9 @@ class _NextStageButtonState extends State<NextStageButton> {
     });
   }
 
-  Size sizeOfButton({scaleBy = 1}){
-    return Size(math.max(_getScreenWidth() - (Dimens.buildQuestionsButtonStyle["pixels_smaller_than_screen_width"]!) / scaleBy, 0), Dimens.buildQuestionsButtonStyle["height"]!);
-  }
+  // Size sizeOfButton({scaleBy = 1}){
+  //   return Size(math.max(_getScreenWidth() - (Dimens.buildQuestionsButtonStyle["pixels_smaller_than_screen_width"]!) / scaleBy, 0), Dimens.buildQuestionsButtonStyle["height"]!);
+  // }
 
 // Widget oldVersionButton() {
 //   return TextButton(

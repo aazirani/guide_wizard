@@ -3,10 +3,10 @@ import 'package:flutter/material.dart';
 class Dimens {
   Dimens._();
 
-  //for all screens
+  // for all screens
   static const double horizontal_padding = 12.0;
   static const double vertical_padding = 12.0;
-  //tasklist page
+  // tasklist page
   static const double taskListProgressBarRadius = 10;
   static const taskListProgressBarPadding = EdgeInsets.only(right: 0, bottom: 15);
   static const double draggableScrollableSheetRadius = 25;
@@ -21,8 +21,9 @@ class Dimens {
 
   // Subtask: ------------------------------------------------------------
   static const double subtaskTitleFontSize = 19;
+  static const listTilePadding = EdgeInsets.symmetric(horizontal: 10, vertical: 5);
 
-  //for Home Screen - step timeline
+  // for Home Screen - step timeline
   static const stepTimelineContainerBorderRadius = BorderRadius.all(Radius.circular(30));
   static const stepTimelineContainerPadding = const EdgeInsets.only(left: 25, right: 25);
   static const stepTimelineCurrentStepOuterCirclePadding = const EdgeInsets.all(2);
@@ -40,17 +41,17 @@ class Dimens {
   static const double doneEndConnectorThickness = 3;
   static const double doneEndConnectorIndent = 10;
 
-  //for Home screen - Carousel Slider
+  // for Home screen - Carousel Slider
   static const sliderContainerMargin = EdgeInsets.symmetric(horizontal: 10.0);
   static const sliderContainerPadding = EdgeInsets.only(top: 10);
   static const avatarBoyPadding = EdgeInsets.only(left: 140, bottom: 70);
   static const avatarGirlPadding = EdgeInsets.only(left: 200, bottom: 40, top: 20);
   static const stepAvatar = EdgeInsets.only(left: 160, bottom: 40, top: 20);
 
-  //task page appbar widget
+  // task page appbar widget
   static const doneButtonPadding = const EdgeInsets.only(right: 20, left: 10, top: 10);
 
-  //step slider widget
+  // step slider widget
   static const double numOfTasksFont = 15;
   static const double continueFont = 12;
   static const double stepTitleFont = 17;
@@ -62,16 +63,16 @@ class Dimens {
   static const double progressBarRadius = 10;
   static const sliderContainerContentPadding = EdgeInsets.only(top: 20, left: 10);
   static const progressBarHeight = 20.0;
-  //compressed tasklist.........................................................
+  // compressed tasklist.........................................................
   static const compressedTaskListContentPadding = const EdgeInsets.only(left: 10);
   static const double contentRadius = 10;
   static const timelineContainerPadding = EdgeInsets.only(left: 20, right: 20, top: 25);
   static const timelineNodePosition = 0.009;
   static const contentLeftMargin = EdgeInsets.only(left: 20);
-  //Question page...................................................
+  // Question page...................................................
   static const questionButtonPadding = EdgeInsets.only(bottom: 20, top: 15);
-  static const questionDescriptionPadding = EdgeInsets.only(left: 10, right: 10, bottom: 10);
-  static const listTilePadding = EdgeInsets.symmetric(horizontal: 10, vertical: 5);
+  static const questionDescriptionPadding = EdgeInsets.only(left: 23, right: 10, bottom: 10);
+  static const questionWidgetListTilePadding = EdgeInsets.only(bottom: 15);
   static const Map<String, double> appBar = {
     "toolbarHeight": 60,
     "titleSpacing": 5,
@@ -142,5 +143,6 @@ class Dimens {
   // Next Stage Button
   static const nextStageButtonRadius = 5.0;
   static const nextStageButtonPadding = EdgeInsets.all(8.0);
-
+  static const nextStageSurroundingContainerHeight = 110.0;
+  static const nextStageDistanceFromBottom = 10.0;
 }
