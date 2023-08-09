@@ -11,6 +11,7 @@ import 'package:boilerplate/url_handler.dart';
 import 'package:boilerplate/utils/locale/app_localization.dart';
 import 'package:boilerplate/widgets/info_dialog.dart';
 import 'package:boilerplate/widgets/load_image_with_cache.dart';
+import 'package:boilerplate/widgets/measure_size.dart';
 import 'package:boilerplate/widgets/next_stage_button.dart';
 import 'package:boilerplate/widgets/scrolling_overflow_text.dart';
 import 'package:flutter/material.dart';
@@ -55,6 +56,7 @@ class _QuestionWidgetState extends State<QuestionWidget> with AutomaticKeepAlive
   @override
   bool get wantKeepAlive => true;
   double _getScreenWidth() => MediaQuery.of(context).size.width;
+  double _getScreenHeight() => MediaQuery.of(context).size.height;
 
   @override
   Widget build(BuildContext context) {
@@ -172,7 +174,7 @@ class _QuestionWidgetState extends State<QuestionWidget> with AutomaticKeepAlive
       shape: MaterialStateProperty.all<RoundedRectangleBorder>(
         RoundedRectangleBorder(
           borderRadius: Dimens.infoInsideDialogButtonsRadius,
-          side: BorderSide(color: AppColors.close_button_color, width: 2),
+          side: BorderSide(color:  AppColors.close_button_color, width: 2),
         ),
       ),
     );
