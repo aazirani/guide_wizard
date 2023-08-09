@@ -81,7 +81,7 @@ class _QuestionsListPageState extends State<QuestionsListPage> {
   }
 
   Widget _buildScrollablePositionedListItem(int index) {
-    return _isItemAfterQuestions(index) ? SizedBox(height: Dimens.nextStageSurroundingContainerHeight,) : _buildQuestionWidget(index);
+    return _isItemAfterQuestions(index) ? SizedBox(height: Dimens.nextStageSurroundingContainerHeight - (Dimens.nextStageSurroundingContainerHeight - NextStageButton().height) / 2 - Dimens.questionWidgetListTilePadding.bottom,) : _buildQuestionWidget(index);
   }
 
   bool _isItemAfterQuestions(index) => index == _questionsCount;
@@ -116,7 +116,7 @@ class _QuestionsListPageState extends State<QuestionsListPage> {
         children: [
           Positioned(
             bottom: Dimens.nextStageDistanceFromBottom,
-            child: NextStageButton()
+            child: NextStageButton(),
           ),
         ],
       ),

@@ -60,9 +60,10 @@ class _QuestionWidgetState extends State<QuestionWidget> with AutomaticKeepAlive
   Widget build(BuildContext context) {
     super.build(context);
     return ListTile(
-      contentPadding: EdgeInsets.zero,
+      contentPadding: Dimens.questionWidgetListTilePadding,
       title: _buildTitle(),
       subtitle: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           _buildDescription(),
           _buildOptions(),
@@ -82,23 +83,24 @@ class _QuestionWidgetState extends State<QuestionWidget> with AutomaticKeepAlive
   }
 
   Widget _buildTitle() {
-    var title_id = widget.question.title;
+    var titleId = widget.question.title;
     return Padding(
-      padding: const EdgeInsets.only(top: 20, bottom: 20, left: 15),
+      padding: const EdgeInsets.only(top: 20, bottom: 22, left: 17),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
-          ScrollingOverflowText(
-            text: _technicalNameWithTranslationsStore
-                .getTranslation(title_id)!,
-            textStyle: TextStyle(fontSize: 22, fontWeight: FontWeight.w500),
-            height: 30,
-            width: _getScreenWidth() - 100,
+          Flexible(
+            child: Text(
+              _technicalNameWithTranslationsStore.getTranslation(titleId)!,
+              style: TextStyle(fontSize: 20, fontWeight: FontWeight.w500),
+            ),
           ),
-          Provider.of<QuestionsWidgetState>(context)
-              .isWidgetExpanded(widget.index) && _hasInfo()
-              ? _buildInfoButton()
-              : SizedBox(),
+          Padding(
+            padding: const EdgeInsets.only(right: 20),
+            child: _hasInfo()
+                ? _buildInfoButton()
+                : SizedBox(),
+          ),
           // _buildHelpButton(),
         ],
       ),
@@ -110,8 +112,8 @@ class _QuestionWidgetState extends State<QuestionWidget> with AutomaticKeepAlive
     return Container(
       margin: Dimens.questionDescriptionPadding,
       child: Text(
-        _technicalNameWithTranslationsStore
-            .getTranslation(questionSubtitleId)!,
+        _technicalNameWithTranslationsStore.getTranslation(questionSubtitleId)!,
+        style: TextStyle(fontSize: 19),
       ),
     );
   }
@@ -318,12 +320,8 @@ class _QuestionWidgetState extends State<QuestionWidget> with AutomaticKeepAlive
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         for (int row = 0;
-        row <= widget.question.answers.length / widget.question.axis_count;
-        row++)
-          _buildAImageOptionsRow(
-              row * widget.question.axis_count,
-              math.min((row + 1) * widget.question.axis_count,
-                  widget.question.answers.length)),
+        row <= widget.question.answers.length / widget.question.axis_count; row++)
+          _buildAImageOptionsRow(row * widget.question.axis_count, math.min((row + 1) * widget.question.axis_count, widget.question.answers.length)),
       ],
     );
   }
