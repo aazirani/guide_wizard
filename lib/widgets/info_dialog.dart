@@ -35,7 +35,7 @@ class _InfoDialogState extends State<InfoDialog> {
   @override
   Widget build(BuildContext context) {
     return Container(
-      height: math.min(widgetHeight, MediaQuery.of(context).size.height - QuestionsListAppBar().preferredSize.height - MediaQuery.of(context).padding.top - MediaQuery.of(context).padding.bottom),
+      height: math.min(widgetHeight +  MediaQuery.of(context).padding.bottom, MediaQuery.of(context).size.height - QuestionsListAppBar().preferredSize.height - MediaQuery.of(context).padding.top - MediaQuery.of(context).padding.bottom),
       child: MakeDismissible(
         child: DraggableScrollableSheet(
           maxChildSize: 1,
