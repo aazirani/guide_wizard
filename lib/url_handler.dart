@@ -59,6 +59,7 @@ class UrlHandler {
           TextButton(
               onPressed: () {
                 _launchURL(url);
+                Navigator.of(context).pop();
               },
               child: Text(AppLocalizations.of(context).translate('open_link'), style: TextStyle(color: AppColors.main_color),)
           ),

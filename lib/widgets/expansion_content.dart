@@ -8,8 +8,6 @@ import 'package:flutter/rendering.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_markdown/flutter_markdown.dart';
 import 'package:render_metrics/render_metrics.dart';
-import 'package:url_launcher/url_launcher.dart';
-// import 'package:flutter_inappwebview/flutter_inappwebview.dart';
 
 class ExpansionContent extends StatefulWidget {
   String markdown;
@@ -51,12 +49,13 @@ class _ExpansionContentState extends State<ExpansionContent> {
           child: Padding(
             padding: Dimens.expansionContentPadding,
             child: MeasureSize(
-                onChange: (Size size) {
-                  setState(() {
-                    widgetHeight = size.height;
-                  });
-                },
-                child: _buildMarkdownContent()),
+              onChange: (Size size) {
+                setState(() {
+                  widgetHeight = size.height;
+                });
+              },
+              child: _buildMarkdownContent()
+            ),
           ),
         ),
       ],
@@ -65,12 +64,12 @@ class _ExpansionContentState extends State<ExpansionContent> {
 
   Widget _buildMarkdownContent() {
     return Markdown(
-        onTapLink: (text, url, title) {
-          UrlHandler.openUrl(context: context, url: url!);
-        },
-        shrinkWrap: true,
-        physics: NeverScrollableScrollPhysics(),
-        data: fixedJsonMarkdown(widget.markdown));
+      onTapLink: (text, url, title) {
+        UrlHandler.openUrl(context: context, url: url!);
+      },
+      shrinkWrap: true,
+      physics: NeverScrollableScrollPhysics(),
+      data: fixedJsonMarkdown(widget.markdown));
   }
 
   String fixedJsonMarkdown(String json_markdown){
