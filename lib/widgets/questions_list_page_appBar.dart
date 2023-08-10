@@ -13,7 +13,7 @@ class QuestionsListAppBar extends StatefulWidget implements PreferredSizeWidget 
       {Key? key,
         this.appBarSize = Dimens.questionListPageAppBarHeight,
         this.fontSize = Dimens.questionListPageAppBarFontSize,
-        required this.title,
+        this.title = "",
       })
       : super(key: key);
 
