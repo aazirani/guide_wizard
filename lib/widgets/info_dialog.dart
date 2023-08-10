@@ -35,7 +35,7 @@ class _InfoDialogState extends State<InfoDialog> {
   @override
   Widget build(BuildContext context) {
     return Container(
-      height: math.min(widgetHeight +  MediaQuery.of(context).padding.bottom, MediaQuery.of(context).size.height - QuestionsListAppBar().preferredSize.height - MediaQuery.of(context).padding.top - MediaQuery.of(context).padding.bottom),
+      height:  _calculateDialogContainerHeight(),
       child: MakeDismissible(
         child: DraggableScrollableSheet(
           maxChildSize: 1,
@@ -61,11 +61,13 @@ class _InfoDialogState extends State<InfoDialog> {
                     ),
                   ],
                 ),
-                Positioned(
-                  left: 0,
-                  right: 0,
-                  bottom: 0,
-                  child: SafeArea(child: widget.bottomRow),
+                SafeArea(
+                  child: Positioned(
+                    left: 0,
+                    right: 0,
+                    bottom: 0,
+                    child: widget.bottomRow,
+                  ),
                 ),
               ],
             ),
@@ -73,5 +75,9 @@ class _InfoDialogState extends State<InfoDialog> {
         ),
       ),
     );
+  }
+
+  double _calculateDialogContainerHeight() {
+    return math.min(widgetHeight +  MediaQuery.of(context).padding.bottom, MediaQuery.of(context).size.height - QuestionsListAppBar().preferredSize.height - MediaQuery.of(context).padding.top - MediaQuery.of(context).padding.bottom);
   }
 }
