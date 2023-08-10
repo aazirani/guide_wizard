@@ -127,14 +127,16 @@ class _CompressedTasklistTimelineState
 
   Widget _buildContentTitle(index, stepStore) {
     var stepTitleId = _dataStore.getTaskTitleId(stepStore.currentStep - 1, index);
-    return Align(
-      alignment: Alignment.centerLeft,
-      child: Text(
-          "${_technicalNameWithTranslationsStore.getTranslation(stepTitleId)}",
-          style: TextStyle(
-            color: AppColors.main_color,
-            fontSize: 16,
-          )),
+    return Flexible(
+      child: Align(
+        alignment: Alignment.centerLeft,
+        child: Text(
+            "${_technicalNameWithTranslationsStore.getTranslation(stepTitleId)}",
+            style: TextStyle(
+              color: AppColors.main_color,
+              fontSize: 16,
+            )),
+      ),
     );
   }
 
