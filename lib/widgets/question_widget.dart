@@ -155,6 +155,7 @@ class _QuestionWidgetState extends State<QuestionWidget> with AutomaticKeepAlive
   ButtonStyle _buildInfoCloseButtonStyle({required double scaleBy}) {
     return ButtonStyle(
       minimumSize: MaterialStateProperty.all(sizeOfButton(scaleBy: scaleBy)),
+      overlayColor: MaterialStateColor.resolveWith((states) => AppColors.close_button_color.withOpacity(0.1)),
       shape: MaterialStateProperty.all<RoundedRectangleBorder>(
         RoundedRectangleBorder(
           borderRadius: Dimens.infoInsideDialogButtonsRadius,
@@ -184,6 +185,7 @@ class _QuestionWidgetState extends State<QuestionWidget> with AutomaticKeepAlive
   ButtonStyle _buildInfoOpenUrlButtonStyle({required double scaleBy, Color color = AppColors.main_color}) {
     return ButtonStyle(
       minimumSize: MaterialStateProperty.all(sizeOfButton(scaleBy: scaleBy)),
+      overlayColor: MaterialStateColor.resolveWith((states) => AppColors.white.withOpacity(0.13)),
       backgroundColor: MaterialStateProperty.all<Color>(color),
       shape: MaterialStateProperty.all<RoundedRectangleBorder>(
         RoundedRectangleBorder(

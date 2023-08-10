@@ -222,14 +222,16 @@ class _StepSliderWidgetState extends State<StepSliderWidget> {
 
   ButtonStyle _buildButtonStyle() {
     return ButtonStyle(
-        fixedSize: MaterialStateProperty.all(
-            Size.fromWidth(MediaQuery.of(context).size.width / 4)),
-        backgroundColor: MaterialStateProperty.all(
-            AppColors.stepSliderContinueButton.withOpacity(0.5)),
-        shape: MaterialStateProperty.all<RoundedRectangleBorder>(
-            RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(Dimens.buttonRadius),
-                side: BorderSide(color: AppColors.main_color))));
+      fixedSize: MaterialStateProperty.all(Size.fromWidth(MediaQuery.of(context).size.width / 4)),
+      backgroundColor: MaterialStateProperty.all(AppColors.stepSliderContinueButton.withOpacity(0.5)),
+      overlayColor: MaterialStateColor.resolveWith((states) => AppColors.green[100]!.withOpacity(0.3)),
+      shape: MaterialStateProperty.all<RoundedRectangleBorder>(
+        RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(Dimens.buttonRadius),
+            side: BorderSide(color: AppColors.main_color)
+        ),
+      ),
+    );
   }
 
   Widget _buildProgressBar(currentStepNo) {
