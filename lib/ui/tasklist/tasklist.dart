@@ -58,7 +58,7 @@ class _TaskListState extends State<TaskList> {
         toolbarHeight: Dimens.appBar["toolbarHeight"],
         titleSpacing: Dimens.appBar["titleSpacing"],
         title: Text(
-            _technicalNameWithTranslationsStore.getTranslation(step_title_id)!,
+            _technicalNameWithTranslationsStore.getTranslation(step_title_id),
             style: TextStyle(
                 color: AppColors.white,
                 fontSize: 20,

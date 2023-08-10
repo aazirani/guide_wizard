@@ -113,7 +113,7 @@ class Dimens {
   static const placeHolderCarouselSliderContainerPadding = EdgeInsets.only(top: 20);
   static const placeHolderStepSliderBorderRadius = 20.0;
   static const placeHolderCarouselHeightRatio = 4;
-  static const inProgressTextPadding = EdgeInsets.only(left: 20, top: 10);
+  static const inProgressTextPadding = EdgeInsets.only(left: 20, top: 35, bottom: 10);
   static const inProgressTextFont = 18.0;
   static const currentStepIndicatorPadding = EdgeInsets.only(top: 30, left: 15,);
   static const stepsTextFont = 18.0;

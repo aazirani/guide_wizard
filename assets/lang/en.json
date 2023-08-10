@@ -47,6 +47,7 @@
   "steps_title": "Welcome Guide",
   "steps": "Steps",
   "in_progress": "In Progress",
+  "description": "Description",
   "steps_end": "------------------------------------------------------------------------------------",
 
   "url_dialog_title": "Open URL",

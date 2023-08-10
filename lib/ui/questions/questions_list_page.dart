@@ -129,6 +129,6 @@ class _QuestionsListPageState extends State<QuestionsListPage> {
 
   String _appBarTitleString() {
     int titleId = _dataStore.stepList.steps[widget.stepNumber].name;
-    return _technicalNameWithTranslationsStore.getTranslation(titleId)!;
+    return _technicalNameWithTranslationsStore.getTranslation(titleId);
   }
 }

@@ -89,7 +89,7 @@ class _QuestionWidgetState extends State<QuestionWidget> with AutomaticKeepAlive
         children: [
           Flexible(
             child: Text(
-              _technicalNameWithTranslationsStore.getTranslation(titleId)!,
+              _technicalNameWithTranslationsStore.getTranslation(titleId),
               style: TextStyle(fontSize: 20, fontWeight: FontWeight.w500),
             ),
           ),
@@ -247,7 +247,7 @@ class _QuestionWidgetState extends State<QuestionWidget> with AutomaticKeepAlive
   }
 
   String _getInfoDescription() {
-    return _technicalNameWithTranslationsStore.getTranslation(widget.question.info_description)!;
+    return _technicalNameWithTranslationsStore.getTranslation(widget.question.info_description);
   }
 
   String _getInfoUrl() {
@@ -413,7 +413,7 @@ class _QuestionWidgetState extends State<QuestionWidget> with AutomaticKeepAlive
             ),
             Flexible(
               child: Text(
-                _technicalNameWithTranslationsStore.getTranslation(answerTitleId)!,
+                _technicalNameWithTranslationsStore.getTranslation(answerTitleId),
                 style: TextStyle(
                   fontSize: 15,
                 ),
@@ -474,7 +474,7 @@ class _QuestionWidgetState extends State<QuestionWidget> with AutomaticKeepAlive
             });
           },
           title: Text(
-            _technicalNameWithTranslationsStore.getTranslation(option.getAnswerTitleID())!,
+            _technicalNameWithTranslationsStore.getTranslation(option.getAnswerTitleID()),
           ),
           controlAffinity: ListTileControlAffinity.leading,
           tileColor: AppColors.white,

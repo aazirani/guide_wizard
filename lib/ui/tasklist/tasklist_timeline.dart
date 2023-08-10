@@ -177,7 +177,7 @@ class _TaskListTimeLineState extends State<TaskListTimeLine> {
   bool _deadLineAvailable(taskNumber) {
     bool status = _dataStore.taskList.tasks[taskNumber].sub_tasks.any(
         (sub_task) => _technicalNameWithTranslationsStore
-            .getTranslation(sub_task.deadline)!
+            .getTranslation(sub_task.deadline)
             .isNotEmpty);
     switch (status) {
       case false:

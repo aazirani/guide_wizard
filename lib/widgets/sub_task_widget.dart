@@ -53,7 +53,7 @@ class SubTaskWidgetState extends State<SubTaskWidget>
     
     var markdown_id = widget.subTasks[widget.index].markdown;
       return ExpansionContent(renderManager: widget.renderManager, markdown: _technicalNameWithTranslationsStore
-            .getTranslation(markdown_id)!,);
+            .getTranslation(markdown_id),);
     }
 
     Widget _buildAppExpansionTileWidget() {
@@ -68,7 +68,7 @@ class SubTaskWidgetState extends State<SubTaskWidget>
         textColor: AppColors.main_color,
         iconColor: AppColors.main_color,
         title: ScrollingOverflowText(
-          text: _technicalNameWithTranslationsStore.getTranslation(sub_task_title_id)!,
+          text: _technicalNameWithTranslationsStore.getTranslation(sub_task_title_id),
           textStyle: TextStyle(fontSize: Dimens.subtaskTitleFontSize),
         ),
         key: widget.subTasks[widget.index].globalKey,
