@@ -25,7 +25,6 @@ class TaskPageWithImage extends StatefulWidget {
 class _TaskPageWithImageState extends State<TaskPageWithImage> {
   RenderParametersManager renderManager = RenderParametersManager<dynamic>();
   late TechnicalNameWithTranslationsStore _technicalNameWithTranslationsStore;
-  // double appBarSize = Dimens.blocksAppBarWidgetHeight;
   var imageSlideSize = Size.zero;
 
   @override
@@ -96,11 +95,11 @@ class _TaskPageWithImageState extends State<TaskPageWithImage> {
         builder: (BuildContext context, ScrollController scrollController) {
           return Container(
             decoration: BoxDecoration(
-                borderRadius: BorderRadius.only(
-                  topLeft: Radius.circular(25),
-                  topRight: Radius.circular(25),
-                ),
-                color: AppColors.bright_foreground_color),
+              borderRadius: BorderRadius.only(
+                topLeft: Radius.circular(25),
+                topRight: Radius.circular(25),
+              ),
+            color: AppColors.bright_foreground_color),
             child: ListView.builder(
               scrollDirection: Axis.vertical,
               shrinkWrap: true,
@@ -117,7 +116,7 @@ class _TaskPageWithImageState extends State<TaskPageWithImage> {
   Widget _buildDraggableSheetItems(context, i) {
     if(i == 0) return _buildDescription();
     return SubTaskWidget(
-      index: i-1,
+      index: i - 1,
       subTasks: widget.task.sub_tasks,
       renderManager: renderManager,
     );
@@ -130,7 +129,7 @@ class _TaskPageWithImageState extends State<TaskPageWithImage> {
         builder: (context) {
           return Text(
             _technicalNameWithTranslationsStore.getTranslation(widget.task.description)!,
-            style: TextStyle(fontSize: 18, color: AppColors.main_color),
+            style: TextStyle(fontSize: Dimens.descriptionFontSize, color: AppColors.main_color),
           );
         },
       ),
