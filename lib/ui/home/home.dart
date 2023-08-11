@@ -205,8 +205,8 @@ class _HomeScreenState extends State<HomeScreen> {
         Container(
           height: math.min(descriptionWidgetHeight, MediaQuery.of(context).size.height / 3),
           // width: _getScreenWidth() / 1.23,
-          margin: const EdgeInsets.only(left: 30, right: 30, top: 12, bottom: 25),
-          padding: const EdgeInsets.all(20),
+          margin: Dimens.questionsStepDescMargin,
+          padding: Dimens.questionsStepDescPadding,
           decoration: BoxDecoration(
             color: AppColors.timelineCompressedContainerColor,
             borderRadius: BorderRadius.all(Radius.circular(Dimens.contentRadius)),
@@ -223,7 +223,7 @@ class _HomeScreenState extends State<HomeScreen> {
                   _technicalNameWithTranslationsStore.getTranslation(questionDescId),
                   style: TextStyle(
                     color: AppColors.main_color,
-                    fontSize: 16,
+                    fontSize: Dimens.questionsStepDescFontSize,
                   ),
                 ),
               ),

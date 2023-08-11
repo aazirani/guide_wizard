@@ -132,6 +132,11 @@ class Dimens {
   static const infoButtonContainerMargin = const EdgeInsets.only(left: 20);
   static const infoButtonContainerPadding = const EdgeInsets.all(12);
 
+  // Question description.............................................
+  static double questionsStepDescFontSize = 16;
+  static const questionsStepDescMargin = const EdgeInsets.only(left: 30, right: 30, top: 12, bottom: 25);
+  static const questionsStepDescPadding = const EdgeInsets.all(20);
+
   // Image Handler (Load Image With Cache)
   static double imageCouldntLoadFontSize = 22;
   static const imageLoadingIndicatorSize = {"width": 60.0, "height": 60.0};
