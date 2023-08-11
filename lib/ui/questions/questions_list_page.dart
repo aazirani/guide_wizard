@@ -113,7 +113,7 @@ class _QuestionsListPageState extends State<QuestionsListPage> {
                 Colors.white,
                 Colors.white,
               ],
-            )
+            ),
         ),
         child: Stack(
           alignment: AlignmentDirectional.bottomCenter,
