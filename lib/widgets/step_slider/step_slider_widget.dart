@@ -116,8 +116,8 @@ class _StepSliderWidgetState extends State<StepSliderWidget> {
 
   Widget _buildAvatar(int index) {
     if (_dataStore.getStepImage(index) == null) return SizedBox();
-    return Container(
-      child: Flexible(
+    return Flexible(
+      child: Container(
         child: Padding(
           padding: Dimens.stepAvatar,
           child: LoadImageWithCache(imageUrl: Endpoints.stepsImageBaseUrl +
@@ -129,15 +129,15 @@ class _StepSliderWidgetState extends State<StepSliderWidget> {
   }
 
   Widget _buildContent(currentStepNo) {
-    return Padding(
-      padding: Dimens.sliderContainerContentPadding,
-      child: Flexible(
+    return Flexible(
+      child: Padding(
+        padding: Dimens.sliderContainerContentPadding,
         child: Column(
             mainAxisAlignment: MainAxisAlignment.start,
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Flexible(
-                child: _buildStepTitle(currentStepNo),
+                child: SingleChildScrollView(child: _buildStepTitle(currentStepNo)),
               ),
               SizedBox(height: 10),
               _buildStepNoOfTasksOrQuestions(currentStepNo),
