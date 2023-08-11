@@ -10,6 +10,7 @@ import 'package:boilerplate/widgets/measure_size.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:provider/provider.dart';
 import 'package:render_metrics/render_metrics.dart';
 
@@ -41,7 +42,7 @@ class _TaskPageWithImageState extends State<TaskPageWithImage> {
 
   double _getHeightOfDraggableScrollableSheet() {
     double screenHeight = MediaQuery.of(context).size.height;
-    return (screenHeight - (QuestionsListAppBar().appBarSize + imageSlideSize.height)) / (screenHeight);
+    return (screenHeight - (QuestionsListAppBar().appBarSize + imageSlideSize.height) + 35) / (screenHeight);
   }
 
   @override
@@ -94,22 +95,36 @@ class _TaskPageWithImageState extends State<TaskPageWithImage> {
                   topRight: Radius.circular(25),
                 ),
                 color: AppColors.bright_foreground_color),
-            child: Padding(
-              padding: const EdgeInsets.only(top: 25),
-              child: ListView.builder(
-                scrollDirection: Axis.vertical,
-                shrinkWrap: true,
-                controller: scrollController,
-                itemCount: widget.task.subTaskCount,
-                itemBuilder: (context, i) {
-                  return SubTaskWidget(
-                    index: i,
-                    subTasks: widget.task.sub_tasks,
-                    renderManager: renderManager,
-                  );
-                },
-              ),
+            child: ListView.builder(
+              scrollDirection: Axis.vertical,
+              shrinkWrap: true,
+              controller: scrollController,
+              itemCount: 1 + widget.task.subTaskCount,
+              itemBuilder: _buildDraggableSheetItems,
             ),
+          );
+        },
+      ),
+    );
+  }
+
+  Widget _buildDraggableSheetItems(context, i) {
+    if(i == 0) return _buildDescription();
+    return SubTaskWidget(
+      index: i-1,
+      subTasks: widget.task.sub_tasks,
+      renderManager: renderManager,
+    );
+  }
+
+  _buildDescription() {
+    return Padding(
+      padding: Dimens.taskPageTextOnlyListViewPadding,
+      child: Observer(
+        builder: (context) {
+          return Text(
+            _technicalNameWithTranslationsStore.getTranslation(widget.task.description)!,
+            style: TextStyle(fontSize: 18, color: AppColors.main_color),
           );
         },
       ),
