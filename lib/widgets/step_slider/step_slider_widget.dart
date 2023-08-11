@@ -136,7 +136,7 @@ class _StepSliderWidgetState extends State<StepSliderWidget> {
           children: [
             _buildStepTitle(currentStepNo),
             SizedBox(height: 10),
-            _buildStepNoOfTasks(currentStepNo),
+            _buildStepNoOfTasksOrQuestions(currentStepNo),
             SizedBox(height: 20),
             _buildContinueButton(currentStepNo),
             SizedBox(height: 10),
@@ -154,13 +154,36 @@ class _StepSliderWidgetState extends State<StepSliderWidget> {
     );
   }
 
-  Widget _buildStepNoOfTasks(currentStepNo) {
+  Widget _buildStepNoOfTasksOrQuestions(currentStepNo) {
     return Text(
-        "${_dataStore.getNumberOfTasksFromAStep(currentStepNo)}" +
-            " " +
-            AppLocalizations.of(context).translate('tasks'),
-        style: TextStyle(
-            fontSize: Dimens.numOfTasksFont, color: AppColors.main_color));
+      isQuestionsStep(currentStepNo) ? noOfQuestionsString(currentStepNo) : noOfTasksString(currentStepNo),
+      style: TextStyle(
+          fontSize: Dimens.numOfTasksFont, color: AppColors.main_color,
+      )
+    );
+  }
+
+  bool isQuestionsStep(currentStepNo) => isFirstStep(currentStepNo);
+  bool isFirstStep(currentStepNo) => currentStepNo == 0;
+
+  String noOfTasksString(currentStepNo) {
+    int noOfTasks = _dataStore.getNumberOfTasksFromAStep(currentStepNo);
+    String str = "$noOfTasks ";
+    switch (noOfTasks) {
+      case 1: str += AppLocalizations.of(context).translate('task'); break;
+      default: str += AppLocalizations.of(context).translate('tasks'); break;
+    }
+    return str;
+  }
+
+  String noOfQuestionsString(currentStepNo) {
+    int noOfQuestions = _dataStore.getNumberOfQuestionsFromAStep(currentStepNo);
+    String str = "$noOfQuestions ";
+    switch (noOfQuestions) {
+      case 1: str += AppLocalizations.of(context).translate('question'); break;
+      default: str += AppLocalizations.of(context).translate('questions'); break;
+    }
+    return str;
   }
 
   Widget _buildContinueButton(currentStepNo) {
@@ -170,7 +193,7 @@ class _StepSliderWidgetState extends State<StepSliderWidget> {
         onPressed: () {
           if (currentStepNo == 0) {
             Navigator.push(context,
-                MaterialPageRoute(builder: (context) => QuestionsListPage()));
+                MaterialPageRoute(builder: (context) => QuestionsListPage(stepNumber: currentStepNo,)));
           } else {
             var stepId = _dataStore.getStepId(_stepStore.currentStep - 1);
             _dataStore.getTasks(stepId);
@@ -199,14 +222,16 @@ class _StepSliderWidgetState extends State<StepSliderWidget> {
 
   ButtonStyle _buildButtonStyle() {
     return ButtonStyle(
-        fixedSize: MaterialStateProperty.all(
-            Size.fromWidth(MediaQuery.of(context).size.width / 4)),
-        backgroundColor: MaterialStateProperty.all(
-            AppColors.stepSliderContinueButton.withOpacity(0.5)),
-        shape: MaterialStateProperty.all<RoundedRectangleBorder>(
-            RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(Dimens.buttonRadius),
-                side: BorderSide(color: AppColors.main_color))));
+      fixedSize: MaterialStateProperty.all(Size.fromWidth(MediaQuery.of(context).size.width / 4)),
+      backgroundColor: MaterialStateProperty.all(AppColors.stepSliderContinueButton.withOpacity(0.5)),
+      overlayColor: MaterialStateColor.resolveWith((states) => AppColors.green[100]!.withOpacity(0.3)),
+      shape: MaterialStateProperty.all<RoundedRectangleBorder>(
+        RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(Dimens.buttonRadius),
+            side: BorderSide(color: AppColors.main_color)
+        ),
+      ),
+    );
   }
 
   Widget _buildProgressBar(currentStepNo) {

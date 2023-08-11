@@ -72,8 +72,9 @@ class _TaskPageWithImageState extends State<TaskPageWithImage> {
   }
 
   Widget _buildImageSlide() {
+    List<String?> imagesList = [widget.task.image_1, widget.task.image_2];
     return ImageSlide(
-        images: [widget.task.image_1, widget.task.image_2],
+        images: imagesList..removeWhere((element) => element == null),
         description: _technicalNameWithTranslationsStore.getTranslation(widget.task.description)!
     );
   }

@@ -2,7 +2,10 @@ class Endpoints {
   Endpoints._();
 
   // base url
-  static const String baseUrl = "https://dev-wg.collegiality.de/api/app";
+  static const String baseUrl = "https://dev-wg.collegiality.de";
+
+  // app api
+  static const String appApiUrl = baseUrl + "/api/app";
 
   // receiveTimeout
   static const int receiveTimeout = 15000;
@@ -11,13 +14,13 @@ class Endpoints {
   static const int connectionTimeout = 30000;
 
   // booking endpoints
-  static const String getAppData = baseUrl + "/content/answerIds/";
+  static const String getAppData = appApiUrl + "/content/answerIds/";
 
-  static const String getTechnicalNames = baseUrl + "/translations?answerIds=";
+  static const String getTechnicalNames = appApiUrl + "/translations?answerIds=";
 
-  static const String getUpdatedAtTimes = baseUrl + "/lastUpdates?answerIds=";
+  static const String getUpdatedAtTimes = appApiUrl + "/lastUpdates?answerIds=";
 
-  static const String tasksImageBaseUrl = "http://dev-wg.collegiality.de/tasks/image/";
-  static const String answersImageBaseUrl = "http://dev-wg.collegiality.de/answers/image/";
-  static const String stepsImageBaseUrl = "http://dev-wg.collegiality.de/steps/image/";
+  static const String tasksImageBaseUrl = baseUrl + "/tasks/image/";
+  static const String answersImageBaseUrl = baseUrl + "/answers/image/";
+  static const String stepsImageBaseUrl = baseUrl + "/steps/image/";
 }

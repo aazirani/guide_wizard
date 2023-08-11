@@ -23,7 +23,10 @@
   "done_button_text" : "Done",
   "undone_button_text" : "Undone",
 
-  "tasks": "tasks",
+  "task": "Task",
+  "tasks": "Tasks",
+  "question": "Question",
+  "questions": "Questions",
   "deadline": "Deadline",
   "continue": "Continue",
   "tasks_end": "-------------------------------------------------------------------------------------",
@@ -44,7 +47,6 @@
   "steps_title": "Welcome Guide",
   "steps": "Steps",
   "in_progress": "In Progress",
-  "info": "Info",
   "steps_end": "------------------------------------------------------------------------------------",
 
   "url_dialog_title": "Open URL",
