@@ -54,9 +54,10 @@ class _StepSliderWidgetState extends State<StepSliderWidget> {
       child: _buildCarouselSlider(),
     );
   }
-
+  final CarouselController _carouselController = CarouselController();
   _buildCarouselSlider() {
     return CarouselSlider(
+      carouselController: _carouselController,
       options: CarouselOptions(
           initialPage: _stepStore.currentStep - 1,
           onPageChanged: (index, reason) {
@@ -71,7 +72,9 @@ class _StepSliderWidgetState extends State<StepSliderWidget> {
         return Builder(
           builder: (BuildContext context) {
             return GestureDetector(
-              onTap: () {},
+              onTap: () {
+                _carouselController.animateToPage(index);
+              },
               child: _buildSliderContainer(index),
             );
           },
@@ -195,7 +198,7 @@ class _StepSliderWidgetState extends State<StepSliderWidget> {
             Navigator.push(context,
                 MaterialPageRoute(builder: (context) => QuestionsListPage(stepNumber: currentStepNo,)));
           } else {
-            var stepId = _dataStore.getStepId(_stepStore.currentStep - 1);
+            var stepId = _dataStore.getStepId(currentStepNo);
             _dataStore.getTasks(stepId);
             Navigator.push(
                 context,
