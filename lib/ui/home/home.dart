@@ -218,13 +218,11 @@ class _HomeScreenState extends State<HomeScreen> {
                   descriptionWidgetHeight = size.height;
                 });
               },
-              child: Flexible(
-                child: Text(
-                  _technicalNameWithTranslationsStore.getTranslation(questionDescId),
-                  style: TextStyle(
-                    color: AppColors.main_color,
-                    fontSize: Dimens.questionsStepDescFontSize,
-                  ),
+              child: Text(
+                _technicalNameWithTranslationsStore.getTranslation(questionDescId),
+                style: TextStyle(
+                  color: AppColors.main_color,
+                  fontSize: Dimens.questionsStepDescFontSize,
                 ),
               ),
             ),
@@ -258,7 +256,7 @@ class _HomeScreenState extends State<HomeScreen> {
         _buildPlaceholderCarouselSliderContainer(),
         StepTimeLine(stepNo: 0),
         SizedBox(height: Dimens.StepTimelineProgressBarDistance),
-        _buildInProgressCompressedTaskList(),
+        // _buildInProgressCompressedTaskList(),
         SizedBox(height: Dimens.progressBarCompressedTaskListDistance),
         _buildPlaceholderCompressedTasklistTimeline(),
       ],
