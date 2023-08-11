@@ -45,6 +45,11 @@ class _TaskPageWithImageState extends State<TaskPageWithImage> {
     return (screenHeight - (QuestionsListAppBar().appBarSize + imageSlideSize.height) + 35) / (screenHeight);
   }
 
+  double _getMaxHeightOfDraggableScrollableSheet() {
+    double screenHeight = MediaQuery.of(context).size.height;
+    return (screenHeight - 20) / (screenHeight);
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -87,6 +92,7 @@ class _TaskPageWithImageState extends State<TaskPageWithImage> {
         snap: true,
         initialChildSize: _getHeightOfDraggableScrollableSheet(),
         minChildSize: _getHeightOfDraggableScrollableSheet(),
+        maxChildSize: _getMaxHeightOfDraggableScrollableSheet(),
         builder: (BuildContext context, ScrollController scrollController) {
           return Container(
             decoration: BoxDecoration(
