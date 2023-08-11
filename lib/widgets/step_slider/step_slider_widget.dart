@@ -88,16 +88,16 @@ class _StepSliderWidgetState extends State<StepSliderWidget> {
         alignment: Alignment.topLeft,
         width: _getScreenWidth(),
         margin: Dimens.sliderContainerMargin,
-        padding: Dimens.sliderContainerPadding,
         decoration: BoxDecoration(
           color: _buildSliderColor(index),
           border: _buildSliderBorder(index),
           borderRadius: BorderRadius.all(Radius.circular(20)),
         ),
-        child: Stack(
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
-            _buildAvatar(index),
             _buildContent(index),
+            _buildAvatar(index),
           ],
         ));
   }
@@ -119,32 +119,38 @@ class _StepSliderWidgetState extends State<StepSliderWidget> {
 
   Widget _buildAvatar(int index) {
     if (_dataStore.getStepImage(index) == null) return SizedBox();
-    return Padding(
-      padding: Dimens.stepAvatar,
+    return Flexible(
       child: Container(
-          width: double.maxFinite,
-          child: Center(
-          child: LoadImageWithCache(imageUrl: Endpoints.stepsImageBaseUrl + 
-          _dataStore.getStepImage(index)!, 
-          color: AppColors.main_color,))),
+        child: Padding(
+          padding: Dimens.stepAvatar,
+          child: LoadImageWithCache(imageUrl: Endpoints.stepsImageBaseUrl +
+          _dataStore.getStepImage(index)!,
+          color: AppColors.main_color,),
+        ),
+      ),
     );
   }
 
   Widget _buildContent(currentStepNo) {
-    return Padding(
-      padding: Dimens.sliderContainerContentPadding,
-      child: Column(
-          mainAxisAlignment: MainAxisAlignment.start,
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            _buildStepTitle(currentStepNo),
-            SizedBox(height: 10),
-            _buildStepNoOfTasksOrQuestions(currentStepNo),
-            SizedBox(height: 20),
-            _buildContinueButton(currentStepNo),
-            SizedBox(height: 10),
-            (_dataStore.getStepOrder(currentStepNo) != SettingsConstants.infoStepOrder) ? _buildProgressBar(currentStepNo) : Container(),
-          ]),
+    return Flexible(
+      child: Padding(
+        padding: Dimens.sliderContainerContentPadding,
+        child: Column(
+            mainAxisAlignment: MainAxisAlignment.start,
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Flexible(
+                child: SingleChildScrollView(child: _buildStepTitle(currentStepNo)),
+              ),
+              SizedBox(height: 10),
+              _buildStepNoOfTasksOrQuestions(currentStepNo),
+              SizedBox(height: 20),
+              _buildContinueButton(currentStepNo),
+              SizedBox(height: 10),
+              (_dataStore.getStepOrder(currentStepNo) != SettingsConstants.infoStepOrder) ? _buildProgressBar(currentStepNo) : Container(),
+              SizedBox(height: 10),
+            ]),
+      ),
     );
   }
 
