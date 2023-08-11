@@ -18,6 +18,7 @@ class Dimens {
   static const contentContainerBorderRadius = const BorderRadius.all(Radius.circular(16.0));
   static const contentDeadlineTopPadding = EdgeInsets.only(top: 20);
   static const contentDeadlineBorderRadius = BorderRadius.all(Radius.circular(20));
+  static const descriptionFontSize = 18.0;
 
   // Subtask: ------------------------------------------------------------
   static const double subtaskTitleFontSize = 19;
