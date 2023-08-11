@@ -2,6 +2,7 @@ import 'package:boilerplate/constants/colors.dart';
 import 'package:boilerplate/constants/dimens.dart';
 import 'package:boilerplate/models/task/task.dart';
 import 'package:boilerplate/stores/technical_name/technical_name_with_translations_store.dart';
+import 'package:boilerplate/widgets/questions_list_page_appBar.dart';
 import 'package:boilerplate/widgets/sub_task_widget.dart';
 import 'package:boilerplate/widgets/task_page_appbar_widget.dart';
 import 'package:boilerplate/widgets/image_slide.dart';
@@ -23,7 +24,7 @@ class TaskPageWithImage extends StatefulWidget {
 class _TaskPageWithImageState extends State<TaskPageWithImage> {
   RenderParametersManager renderManager = RenderParametersManager<dynamic>();
   late TechnicalNameWithTranslationsStore _technicalNameWithTranslationsStore;
-  double appBarSize = Dimens.blocksAppBarWidgetHeight;
+  // double appBarSize = Dimens.blocksAppBarWidgetHeight;
   var imageSlideSize = Size.zero;
 
   @override
@@ -38,20 +39,19 @@ class _TaskPageWithImageState extends State<TaskPageWithImage> {
     super.initState();
   }
 
-    double _getHeightOfDraggableScrollableSheet(){
+  double _getHeightOfDraggableScrollableSheet() {
     double screenHeight = MediaQuery.of(context).size.height;
-    return (screenHeight - (appBarSize + imageSlideSize.height * 0.44)) / screenHeight;
+    return (screenHeight - (QuestionsListAppBar().appBarSize + imageSlideSize.height)) / (screenHeight);
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: AppColors.main_color,
-      appBar: BlocksAppBarWidget(
+      appBar: QuestionsListAppBar(
         title: _technicalNameWithTranslationsStore.getTranslation(widget.task.text)!,
-        appBarSize: appBarSize,
-        taskId: widget.task.id,
       ),
+
       body: _buildScaffoldBody(),
     );
   }
@@ -65,7 +65,8 @@ class _TaskPageWithImageState extends State<TaskPageWithImage> {
                 imageSlideSize = size;
               });
             },
-            child: _buildImageSlide()),
+            child: _buildImageSlide()
+        ),
         _buildDraggableScrollableSheet(),
       ],
     );
@@ -87,29 +88,26 @@ class _TaskPageWithImageState extends State<TaskPageWithImage> {
         minChildSize: _getHeightOfDraggableScrollableSheet(),
         builder: (BuildContext context, ScrollController scrollController) {
           return Container(
-            color: AppColors.main_color,
-            child: Container(
-              decoration: BoxDecoration(
-                  borderRadius: BorderRadius.only(
-                    topLeft: Radius.circular(25),
-                    topRight: Radius.circular(25),
-                  ),
-                  color: AppColors.bright_foreground_color),
-              child: Padding(
-                padding: const EdgeInsets.only(top: 25),
-                child: ListView.builder(
-                  scrollDirection: Axis.vertical,
-                  shrinkWrap: true,
-                  controller: scrollController,
-                  itemCount: widget.task.subTaskCount,
-                  itemBuilder: (context, i) {
-                    return SubTaskWidget(
-                      index: i,
-                      subTasks: widget.task.sub_tasks,
-                      renderManager: renderManager,
-                    );
-                  },
+            decoration: BoxDecoration(
+                borderRadius: BorderRadius.only(
+                  topLeft: Radius.circular(25),
+                  topRight: Radius.circular(25),
                 ),
+                color: AppColors.bright_foreground_color),
+            child: Padding(
+              padding: const EdgeInsets.only(top: 25),
+              child: ListView.builder(
+                scrollDirection: Axis.vertical,
+                shrinkWrap: true,
+                controller: scrollController,
+                itemCount: widget.task.subTaskCount,
+                itemBuilder: (context, i) {
+                  return SubTaskWidget(
+                    index: i,
+                    subTasks: widget.task.sub_tasks,
+                    renderManager: renderManager,
+                  );
+                },
               ),
             ),
           );

@@ -32,37 +32,28 @@ class _ImageSlideState extends State<ImageSlide> {
     double screenHeight = MediaQuery.of(context).size.height;
 
     return Column(
-        children: [
-          Flexible(
-            child: CarouselSlider(
-              options: CarouselOptions(
-                height: screenHeight / 3,
-                viewportFraction: 1,
-                autoPlay: true,
-                enlargeCenterPage: true,
-                enableInfiniteScroll: false,
-                onPageChanged: (index, reason) =>
-                    setState(() => _slideIndex = index),
-              ),
-              items: _imagesList,
-            ),
-          ),
-          SizedBox(height: 15,),
-          Stack(
+      mainAxisSize: MainAxisSize.min,
+      children: [
+        Stack(
             children: [
-              Align(
-                alignment: AlignmentDirectional.centerStart,
-                child: Padding(
-                  padding: const EdgeInsets.only(left: 35,),
-                  child: Text(
-                    widget.description,
-                    style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold, fontSize: 25),
+              Flexible(
+                child: CarouselSlider(
+                  options: CarouselOptions(
+                    height: screenHeight / 3,
+                    viewportFraction: 1,
+                    autoPlay: true,
+                    enlargeCenterPage: true,
+                    enableInfiniteScroll: false,
+                    onPageChanged: (index, reason) =>
+                        setState(() => _slideIndex = index),
                   ),
+                  items: _imagesList,
                 ),
               ),
-              Padding(
-                padding: const EdgeInsets.only(top: 10),
-                child: Center(
+              Positioned.fill(
+                bottom: 17,
+                child: Align(
+                  alignment: Alignment.bottomCenter,
                   child: AnimatedSmoothIndicator(
                     activeIndex: _slideIndex,
                     count: _imagesList.length,
@@ -82,8 +73,18 @@ class _ImageSlideState extends State<ImageSlide> {
                 ),
               ),
             ],
+        ),
+        Align(
+          alignment: AlignmentDirectional.centerStart,
+          child: Padding(
+            padding: const EdgeInsets.only(left: 20, top: 12, bottom: 12, right: 20),
+            child: Text(
+              widget.description,
+              style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold, fontSize: 20),
+            ),
           ),
-        ]
+        ),
+      ],
     );
   }
 }
