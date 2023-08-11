@@ -123,6 +123,7 @@ class Dimens {
   static const doneUndoneButtonWidth = 25.0;
   static const taskTitleFont = 20.0;
   static const doneUndoneButtonBorderRadius = 7.0;
+  static const taskListTimeLineContentTitle = 16.0;
 
   // Question Info...................................................
   static final infoButtonBorderRadius = BorderRadius.circular(7);

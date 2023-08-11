@@ -134,7 +134,7 @@ class _CompressedTasklistTimelineState
             "${_technicalNameWithTranslationsStore.getTranslation(stepTitleId)}",
             style: TextStyle(
               color: AppColors.main_color,
-              fontSize: 16,
+              fontSize: Dimens.taskListTimeLineContentTitle,
             )),
       ),
     );

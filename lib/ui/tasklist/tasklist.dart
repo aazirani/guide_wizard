@@ -62,7 +62,7 @@ class _TaskListState extends State<TaskList> {
           _technicalNameWithTranslationsStore.getTranslation(step_title_id)!,
           style: TextStyle(
               color: AppColors.white,
-              fontSize: 20,
+              fontSize: Dimens.taskTitleFont,
               fontWeight: FontWeight.bold),
           overflowRatio: 0.77,
         ),

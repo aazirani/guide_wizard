@@ -77,7 +77,6 @@ class _TaskListTimeLineState extends State<TaskListTimeLine> {
           borderRadius: Dimens.contentContainerBorderRadius,
           child: Container(
             width: _getScreenWidth() / 1.23,
-            // height: 100,
             padding: Dimens.contentPadding,
             decoration: BoxDecoration(
               color: AppColors.contentColor,
@@ -134,7 +133,7 @@ class _TaskListTimeLineState extends State<TaskListTimeLine> {
           "${_technicalNameWithTranslationsStore.getTranslation(title_id)} ",
           style: TextStyle(
             color: AppColors.main_color,
-            fontSize: 16,
+            fontSize: Dimens.taskListTimeLineContentTitle,
           ),
         ),
       ),
