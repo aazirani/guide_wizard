@@ -51,6 +51,8 @@ class _NextStageButtonState extends State<NextStageButton> {
 
   Widget newVersionButton() {
     return ProgressButton(
+      minWidth: _getScreenWidth() - 20,
+      maxWidth: _getScreenWidth() - 20,
       height: widget.height,
       radius: Dimens.nextStageButtonRadius,
       stateWidgets: {
