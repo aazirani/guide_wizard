@@ -4,6 +4,7 @@ import 'package:boilerplate/stores/app_settings/app_settings_store.dart';
 import 'package:boilerplate/stores/step/step_store.dart';
 import 'package:boilerplate/stores/technical_name/technical_name_with_translations_store.dart';
 import 'package:boilerplate/ui/tasklist/tasklist_timeline.dart';
+import 'package:boilerplate/widgets/scrolling_overflow_text.dart';
 import 'package:flutter/material.dart';
 import 'package:boilerplate/widgets/measure_size.dart';
 import 'package:boilerplate/utils/locale/app_localization.dart';
@@ -57,12 +58,14 @@ class _TaskListState extends State<TaskList> {
         backgroundColor: AppColors.main_color,
         toolbarHeight: Dimens.appBar["toolbarHeight"],
         titleSpacing: Dimens.appBar["titleSpacing"],
-        title: Text(
-            _technicalNameWithTranslationsStore.getTranslation(step_title_id)!,
-            style: TextStyle(
-                color: AppColors.white,
-                fontSize: 20,
-                fontWeight: FontWeight.bold)),
+        title: ScrollingOverflowText(
+          _technicalNameWithTranslationsStore.getTranslation(step_title_id)!,
+          style: TextStyle(
+              color: AppColors.white,
+              fontSize: Dimens.taskTitleFont,
+              fontWeight: FontWeight.bold),
+          overflowRatio: 0.77,
+        ),
         leading: Padding(
           padding: Dimens.back_button,
           child: IconButton(

@@ -104,21 +104,26 @@ class _CompressedTasklistTimelineState
     );
   }
 
-
   Widget _buildContentTitle(index, stepStore) {
-    var stepTitleId =
-        _dataStore.getTaskTitleId(stepStore.currentStep - 1, index);
-    return Align(
-      alignment: Alignment.center,
-      child: Text(
-          "${_technicalNameWithTranslationsStore.getTranslation(stepTitleId)}",
-          style: TextStyle(
-            color: AppColors.main_color,
-            fontSize: Dimens.taskTitleFontSize,
-          )),
+    var stepTitleId = _dataStore.getTaskTitleId(stepStore.currentStep - 1, index);
+    return Flexible(
+      child: Align(
+        alignment: Alignment.centerLeft,
+        child: Text(
+            "${_technicalNameWithTranslationsStore.getTranslation(stepTitleId)}",
+            style: TextStyle(
+              color: AppColors.main_color,
+              fontSize: Dimens.taskListTimeLineContentTitle,
+            )),
+      ),
     );
   }
 
+  Widget _buildContentMoreButton() {
+    return Align(
+        alignment: Alignment.centerRight,
+        child: Icon(Icons.more_vert, color: AppColors.main_color));
+  }
 
   //general methods ............................................................
   double _getScreenHeight() => MediaQuery.of(context).size.height;

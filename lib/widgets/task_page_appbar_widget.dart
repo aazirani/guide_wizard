@@ -33,6 +33,9 @@ class _BlocksAppBarWidgetState extends State<BlocksAppBarWidget> {
   late StepStore _stepStore;
   late AppSettingsStore _appSettingsStore;
 
+  bool _showDoneButtonFlag() => _stepStore.currentStep - 1 == _appSettingsStore.currentStepNumber;
+
+
   @override
   void didChangeDependencies() {
     super.didChangeDependencies();
@@ -112,19 +115,19 @@ class _BlocksAppBarWidgetState extends State<BlocksAppBarWidget> {
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
           ScrollingOverflowText(
-            text: widget.title,
-            textStyle: TextStyle(
+            widget.title,
+            style: TextStyle(
               color: AppColors.bright_foreground_color,
               fontSize: Dimens.taskTitleFont,
             ),
+            overflowRatio: _showDoneButtonFlag() ? 0.7 : 0.77,
           ),
           SizedBox(
             width: 10,
           ),
           Padding(
             padding: Dimens.doneButtonPadding,
-            child: (_stepStore.currentStep - 1 ==
-                    _appSettingsStore.currentStepNumber)
+            child: _showDoneButtonFlag()
                 ? _buildDoneUndoneButtonContainer()
                 : null,
           ),
