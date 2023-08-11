@@ -45,31 +45,31 @@ class _InfoDialogState extends State<InfoDialog> {
                 color: AppColors.white,
                 borderRadius: Dimens.taskPageTextOnlyScaffoldBorder,
             ),
-            child: Stack(
-              fit: StackFit.loose,
-              children: [
-                ListView(
-                  controller: controller,
-                  children: [
-                    MeasureSize(
-                      child: widget.content,
-                      onChange: (Size size) {
-                        setState(() {
-                          widgetHeight = size.height;
-                        });
-                      },
-                    ),
-                  ],
-                ),
-                SafeArea(
-                  child: Positioned(
+            child: SafeArea(
+              child: Stack(
+                fit: StackFit.loose,
+                children: [
+                  ListView(
+                    controller: controller,
+                    children: [
+                      MeasureSize(
+                        child: widget.content,
+                        onChange: (Size size) {
+                          setState(() {
+                            widgetHeight = size.height;
+                          });
+                        },
+                      ),
+                    ],
+                  ),
+                  Positioned(
                     left: 0,
                     right: 0,
                     bottom: 0,
                     child: widget.bottomRow,
                   ),
-                ),
-              ],
+                ],
+              ),
             ),
           ),
         ),

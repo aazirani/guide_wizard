@@ -1,11 +1,7 @@
-import 'package:boilerplate/constants/colors.dart';
 import 'package:boilerplate/constants/dimens.dart';
 import 'package:boilerplate/url_handler.dart';
-import 'package:boilerplate/widgets/measure_size.dart';
-import 'package:dotted_line/dotted_line.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
-import 'package:flutter/services.dart';
 import 'package:flutter_markdown/flutter_markdown.dart';
 import 'package:render_metrics/render_metrics.dart';
 
@@ -27,35 +23,15 @@ class ExpansionContent extends StatefulWidget {
 }
 
 class _ExpansionContentState extends State<ExpansionContent> {
-  double widgetHeight = 0;
-
   @override
   Widget build(BuildContext context) {
     return Row(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Padding(
-          padding: Dimens.expansionDottedLinePadding,
-          child: DottedLine(
-            dashLength: 15,
-            dashGapLength: 15,
-            lineThickness: 7,
-            dashColor: AppColors.dotted_line_color,
-            direction: Axis.vertical,
-            lineLength: widgetHeight,
-          ),
-        ),
         Flexible(
           child: Padding(
             padding: Dimens.expansionContentPadding,
-            child: MeasureSize(
-              onChange: (Size size) {
-                setState(() {
-                  widgetHeight = size.height;
-                });
-              },
-              child: _buildMarkdownContent()
-            ),
+            child: _buildMarkdownContent(),
           ),
         ),
       ],
