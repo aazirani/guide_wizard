@@ -115,7 +115,7 @@ class Dimens {
   static const placeHolderCarouselSliderContainerPadding = EdgeInsets.only(top: 20);
   static const placeHolderStepSliderBorderRadius = 20.0;
   static const placeHolderCarouselHeightRatio = 4;
-  static const inProgressTextPadding = EdgeInsets.only(left: 20, top: 10);
+  static const inProgressTextPadding = EdgeInsets.only(left: 20, top: 35, bottom: 10);
   static const inProgressTextFont = 18.0;
   static const currentStepIndicatorPadding = EdgeInsets.only(top: 30, left: 15,);
   static const stepsTextFont = 18.0;
@@ -134,6 +134,11 @@ class Dimens {
   static const infoButtonsPadding = const EdgeInsets.only(left: 10, right: 10, bottom: 10);
   static const infoButtonContainerMargin = const EdgeInsets.only(left: 20);
   static const infoButtonContainerPadding = const EdgeInsets.all(12);
+
+  // Question description.............................................
+  static double questionsStepDescFontSize = 16;
+  static const questionsStepDescMargin = const EdgeInsets.only(left: 30, right: 30, top: 12, bottom: 25);
+  static const questionsStepDescPadding = const EdgeInsets.all(20);
 
   // Image Handler (Load Image With Cache)
   static double imageCouldntLoadFontSize = 22;

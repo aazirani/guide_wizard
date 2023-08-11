@@ -48,7 +48,7 @@ class _TaskPageWithImageState extends State<TaskPageWithImage> {
     return Scaffold(
       backgroundColor: AppColors.main_color,
       appBar: BlocksAppBarWidget(
-        title: _technicalNameWithTranslationsStore.getTranslation(widget.task.text)!,
+        title: _technicalNameWithTranslationsStore.getTranslation(widget.task.text),
         appBarSize: appBarSize,
         taskId: widget.task.id,
       ),

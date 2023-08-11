@@ -15,4 +15,14 @@ abstract class _StepStore with Store {
   dynamic increment(int stepIndex) {
     currentStep = stepIndex + 1;
   }
+
+  @action
+  bool isQuestionStep() {
+    return isFirstStep();
+  }
+
+  @action
+  bool isFirstStep() {
+    return currentStep == 1;
+  }
 }

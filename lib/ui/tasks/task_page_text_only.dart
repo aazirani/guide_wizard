@@ -45,7 +45,7 @@ class _TaskPageTextOnlyState extends State<TaskPageTextOnly> {
       backgroundColor: AppColors.main_color,
       appBar: BlocksAppBarWidget(
           taskId: widget.taskId,
-          title: _technicalNameWithTranslationsStore.getTranslation(titleId)!,
+          title: _technicalNameWithTranslationsStore.getTranslation(titleId),
       ),
       body: _buildScaffoldBody(),
     );
@@ -82,7 +82,7 @@ class _TaskPageTextOnlyState extends State<TaskPageTextOnly> {
         builder: (context) {
           return Text(
             _technicalNameWithTranslationsStore
-                .getTranslation(descriptionId)!,
+                .getTranslation(descriptionId),
             style: TextStyle(fontSize: 18, color: AppColors.main_color),
           );
         },
