@@ -1,0 +1,62 @@
+{
+  "login_start": "Nachfolgend eine Liste von Zeichenketten für die Anmeldung",
+  "login_et_user_email": "Benutzer-E-Mail eingeben",
+  "login_et_user_password": "Passwort eingeben",
+  "login_btn_forgot_password": "Passwort vergessen?",
+  "login_btn_sign_in": "Anmelden",
+  "login_error_fill_fields": "Bitte alle Felder ausfüllen",
+  "login_end": "------------------------------------------------------------------------------------",
+
+  "home_start": "Nachfolgend eine Liste von Zeichenketten für die Startseite",
+  "home_tv_posts": "Beiträge",
+  "home_tv_error": "Fehler",
+  "home_tv_no_post_found": "Keine Beiträge gefunden",
+  "home_tv_choose_language": "Sprache wählen",
+  "home_end": "-------------------------------------------------------------------------------------",
+
+  "next_question_button_text": "Nächste Frage",
+  "next_step_button_text": "Nächster Schritt",
+  "close": "Schließen",
+  "read_more": "Mehr lesen",
+  "questions_end": "-------------------------------------------------------------------------------------",
+
+  "done_button_text": "Fertig",
+  "undone_button_text": "Rückgängig",
+
+  "task": "Aufgabe",
+  "tasks": "Aufgaben",
+  "question": "Frage",
+  "questions": "Fragen",
+  "deadline": "Frist",
+  "continue": "Fortsetzen",
+  "tasks_end": "-------------------------------------------------------------------------------------",
+
+  "no_internet_message": "Keine Internetverbindung",
+  "cant_reach_server": "Kann den Server nicht erreichen!",
+  "no_internet_button_text": "Erneut versuchen",
+  "update_is_necessary_message_text": "Schritte erfordern ein Update.\nBitte überprüfen Sie Ihre Internetverbindung.",
+
+  "unable_to_reach_server_title": "Kann keine Verbindung zum Server herstellen",
+  "unable_to_reach_server_content": "Es gab ein Problem bei der Verbindung zum Server. Bitte überprüfen Sie Ihre Internetverbindung und versuchen Sie es erneut.",
+  "unable_to_reach_server_button_text": "Erneut versuchen",
+  "loading_dialog_text": "Lädt...",
+  "loading_dialog_end": "-------------------------------------------------------------------------------------",
+
+  "steps_title": "Willkommensanleitung",
+  "steps": "Schritte",
+  "in_progress": "In Bearbeitung",
+  "description": "Beschreibung",
+  "steps_end": "------------------------------------------------------------------------------------",
+
+  "url_dialog_title": "URL öffnen",
+  "url_dialog_message": "Der folgende Link wird geöffnet",
+  "cancel": "Abbrechen",
+  "open_link": "Link öffnen",
+  "could_not_load": "Konnte nicht geladen werden",
+
+  "update_steps": "Schritte aktualisieren",
+  "getting_updates": "Aktualisierung",
+  "next_stage_check_internet": "Überprüfen Sie Ihre Internetverbindung und versuchen Sie es erneut",
+  "update_finished": "Aktualisierung abgeschlossen",
+  "next_stage_button_end": "------------------------------------------------------------------------------------"
+}
