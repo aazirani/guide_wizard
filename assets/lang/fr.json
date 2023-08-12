@@ -1,27 +1,9 @@
 {
-  "login_start": "Voici une liste de chaînes pour la connexion",
-  "login_et_user_email": "Entrez l'e-mail de l'utilisateur",
-  "login_et_user_password": "Entrez le mot de passe",
-  "login_btn_forgot_password": "Mot de passe oublié?",
-  "login_btn_sign_in": "Se connecter",
-  "login_error_fill_fields": "Veuillez remplir tous les champs",
-  "login_end": "------------------------------------------------------------------------------------",
-
-  "home_start": "Voici une liste de chaînes pour l'accueil",
-  "home_tv_posts": "Publications",
-  "home_tv_error": "Erreur",
-  "home_tv_no_post_found": "Aucune publication trouvée",
-  "home_tv_choose_language": "Choisir la langue",
-  "home_end": "-------------------------------------------------------------------------------------",
-
   "next_question_button_text": "Question suivante",
   "next_step_button_text": "Étape suivante",
   "close": "Fermer",
   "read_more": "Lire la suite",
   "questions_end": "-------------------------------------------------------------------------------------",
-
-  "done_button_text": "Terminé",
-  "undone_button_text": "Annuler",
 
   "task": "Tâche",
   "tasks": "Tâches",
@@ -35,12 +17,7 @@
   "cant_reach_server": "Impossible d'atteindre le serveur!",
   "no_internet_button_text": "Réessayer",
   "update_is_necessary_message_text": "Des mises à jour sont nécessaires.\nVeuillez vérifier votre connexion internet.",
-
-  "unable_to_reach_server_title": "Impossible de se connecter au serveur",
-  "unable_to_reach_server_content": "Il y a eu un problème pour se connecter au serveur. Veuillez vérifier votre connexion internet et réessayer.",
-  "unable_to_reach_server_button_text": "Réessayer",
-  "loading_dialog_text": "Chargement...",
-  "loading_dialog_end": "-------------------------------------------------------------------------------------",
+  "no_internet_dialog_end": "-------------------------------------------------------------------------------------",
 
   "steps_title": "Guide de bienvenue",
   "steps": "Étapes",
@@ -52,7 +29,6 @@
   "url_dialog_message": "Le lien suivant s'ouvre",
   "cancel": "Annuler",
   "open_link": "Ouvrir le lien",
-  "steps_end": "------------------------------------------------------------------------------------",
 
   "could_not_load": "Impossible de charger",
   "update_steps": "Mettre à jour les étapes",

@@ -1,4 +1,6 @@
 import 'dart:async';
+
+import 'package:boilerplate/constants/lang_keys.dart';
 import 'package:boilerplate/constants/settings.dart';
 import 'package:boilerplate/stores/app_settings/app_settings_store.dart';
 import 'package:boilerplate/stores/data/data_store.dart';
@@ -6,8 +8,8 @@ import 'package:boilerplate/stores/technical_name/technical_name_with_translatio
 import 'package:boilerplate/stores/updated_at_times/updated_at_times_store.dart';
 import 'package:boilerplate/utils/locale/app_localization.dart';
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
 import 'package:internet_connection_checker/internet_connection_checker.dart';
+import 'package:provider/provider.dart';
 
 class DataLoadHandler { // This class is SINGLETON
   late BuildContext context;
@@ -27,7 +29,7 @@ class DataLoadHandler { // This class is SINGLETON
 
   void showErrorMessage({required String message, String? buttonLabel, required var onPressedButton, Duration? duration}) {
     ScaffoldMessenger.of(context).clearSnackBars();
-    buttonLabel ??= AppLocalizations.of(context).translate("no_internet_button_text");
+    buttonLabel ??= AppLocalizations.of(context).translate(LangKeys.no_internet_button_text);
     duration ??= SettingsConstants.errorSnackBarDuration;
     final snackBar = SnackBar(
       duration: duration,
@@ -74,7 +76,7 @@ class DataLoadHandler { // This class is SINGLETON
 
   void showServerErrorMessage() {
     showErrorMessage(
-        message: AppLocalizations.of(context).translate("cant_reach_server"),
+        message: AppLocalizations.of(context).translate(LangKeys.cant_reach_server),
         onPressedButton: () {
           loadDataAndCheckForUpdate(processId: ++criticalId);
         }
@@ -83,7 +85,7 @@ class DataLoadHandler { // This class is SINGLETON
 
   void showNoInternetError() {
     showErrorMessage(
-        message: AppLocalizations.of(context).translate("no_internet_message"),
+        message: AppLocalizations.of(context).translate(LangKeys.no_internet_message),
         onPressedButton: () {
           loadDataAndCheckForUpdate(processId: ++criticalId);
         }
@@ -122,7 +124,7 @@ class DataLoadHandler { // This class is SINGLETON
       if(!hasInternetConnection){
         DataLoadHandler().showErrorMessage(
             duration: Duration(milliseconds: 5000),
-            message: AppLocalizations.of(context).translate("update_is_necessary_message_text"),
+            message: AppLocalizations.of(context).translate(LangKeys.update_is_necessary_message_text),
             onPressedButton: () {
               checkIfUpdateIsNecessary();
             }

@@ -1,5 +1,5 @@
-import 'package:boilerplate/constants/colors.dart';
 import 'package:boilerplate/constants/dimens.dart';
+import 'package:boilerplate/constants/lang_keys.dart';
 import 'package:boilerplate/utils/locale/app_localization.dart';
 import 'package:fast_cached_network_image/fast_cached_network_image.dart';
 import 'package:flutter/material.dart';
@@ -28,7 +28,7 @@ class _LoadImageWithCacheState extends State<LoadImageWithCache> with SingleTick
             Icon(Icons.sentiment_dissatisfied_outlined, size: 80, color: widget.color),
             SizedBox(height: 5,),
             Text(
-              AppLocalizations.of(context).translate("could_not_load"),
+              AppLocalizations.of(context).translate(LangKeys.could_not_load),
               style: TextStyle(fontSize: Dimens.imageCouldntLoadFontSize, color: widget.color),)
           ],
         );

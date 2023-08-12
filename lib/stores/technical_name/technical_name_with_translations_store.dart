@@ -1,9 +1,8 @@
-import 'package:boilerplate/models/technical_name/technical_name.dart';
+import 'package:boilerplate/data/repository.dart';
 import 'package:boilerplate/models/technical_name/technical_name_with_translations.dart';
 import 'package:boilerplate/models/technical_name/technical_name_with_translations_list.dart';
 import 'package:get/get.dart';
 import 'package:mobx/mobx.dart';
-import 'package:boilerplate/data/repository.dart';
 
 // // Include generated file
 part 'technical_name_with_translations_store.g.dart';
@@ -60,6 +59,7 @@ abstract class _TechnicalNameWithTranslationsStore with Store {
   // methods: ..................................................................
   String getTranslation(int id) {
     if (isTranslationsEmpty(id)) return "";
+    if(getTechnicalName(id)!.translations.length <= this.language_id!) return "";
     return getTechnicalName(id)!.translations[this.language_id!].translated_text;
   }
 

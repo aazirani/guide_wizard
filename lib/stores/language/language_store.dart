@@ -33,7 +33,7 @@ abstract class _LanguageStore with Store {
   String _locale = "en";
 
   @observable
-  int? language_id;
+  int? language_id = 0;
 
   @computed
   String get locale => _locale;
