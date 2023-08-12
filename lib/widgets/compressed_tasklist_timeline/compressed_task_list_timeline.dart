@@ -1,6 +1,7 @@
 import 'package:boilerplate/constants/colors.dart';
 import 'package:boilerplate/constants/dimens.dart';
 import 'package:boilerplate/models/step/step_list.dart';
+import 'package:boilerplate/stores/data/data_store.dart';
 import 'package:boilerplate/stores/step/step_store.dart';
 import 'package:boilerplate/stores/technical_name/technical_name_with_translations_store.dart';
 import 'package:boilerplate/widgets/diamond_indicator.dart';
@@ -8,7 +9,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:provider/provider.dart';
 import 'package:timelines/timelines.dart';
-import 'package:boilerplate/stores/data/data_store.dart';
 
 class CompressedTasklistTimeline extends StatefulWidget {
   StepList stepList;
@@ -100,7 +100,11 @@ class _CompressedTasklistTimelineState
         color: AppColors.timelineCompressedContainerColor,
         borderRadius: BorderRadius.all(Radius.circular(Dimens.contentRadius)),
       ),
-      child: _buildContentTitle(index, stepStore),
+      child: Row(
+        children: [
+          _buildContentTitle(index, stepStore),
+        ],
+      ),
     );
   }
 
