@@ -1,20 +1,20 @@
-import 'package:boilerplate/constants/colors.dart';
-import 'package:boilerplate/constants/dimens.dart';
-import 'package:boilerplate/constants/lang_keys.dart';
-import 'package:boilerplate/constants/settings.dart';
-import 'package:boilerplate/data/network/constants/endpoints.dart';
-import 'package:boilerplate/models/step/step_list.dart';
-import 'package:boilerplate/stores/app_settings/app_settings_store.dart';
-import 'package:boilerplate/stores/data/data_store.dart';
-import 'package:boilerplate/stores/step/step_store.dart';
-import 'package:boilerplate/stores/technical_name/technical_name_with_translations_store.dart';
-import 'package:boilerplate/ui/questions/questions_list_page.dart';
-import 'package:boilerplate/ui/tasklist/tasklist.dart';
-import 'package:boilerplate/utils/locale/app_localization.dart';
-import 'package:boilerplate/widgets/load_image_with_cache.dart';
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
+import 'package:guide_wizard/constants/colors.dart';
+import 'package:guide_wizard/constants/dimens.dart';
+import 'package:guide_wizard/constants/lang_keys.dart';
+import 'package:guide_wizard/constants/settings.dart';
+import 'package:guide_wizard/data/network/constants/endpoints.dart';
+import 'package:guide_wizard/models/step/step_list.dart';
+import 'package:guide_wizard/stores/app_settings/app_settings_store.dart';
+import 'package:guide_wizard/stores/data/data_store.dart';
+import 'package:guide_wizard/stores/step/step_store.dart';
+import 'package:guide_wizard/stores/technical_name/technical_name_with_translations_store.dart';
+import 'package:guide_wizard/ui/questions/questions_list_page.dart';
+import 'package:guide_wizard/ui/tasklist/tasklist.dart';
+import 'package:guide_wizard/utils/locale/app_localization.dart';
+import 'package:guide_wizard/widgets/load_image_with_cache.dart';
 import 'package:provider/provider.dart';
 
 class StepSliderWidget extends StatefulWidget {

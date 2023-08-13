@@ -1,13 +1,10 @@
-import 'package:boilerplate/constants/colors.dart';
-import 'package:boilerplate/constants/dimens.dart';
-import 'package:boilerplate/models/sub_task/sub_task.dart';
-import 'package:boilerplate/stores/technical_name/technical_name_with_translations_store.dart';
-import 'package:boilerplate/widgets/expansion_content.dart';
-import 'package:boilerplate/widgets/app_expansiontile.dart';
-import 'package:boilerplate/widgets/scrolling_overflow_text.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/rendering.dart';
-import 'package:marquee/marquee.dart';
+import 'package:guide_wizard/constants/colors.dart';
+import 'package:guide_wizard/constants/dimens.dart';
+import 'package:guide_wizard/models/sub_task/sub_task.dart';
+import 'package:guide_wizard/stores/technical_name/technical_name_with_translations_store.dart';
+import 'package:guide_wizard/widgets/app_expansiontile.dart';
+import 'package:guide_wizard/widgets/expansion_content.dart';
 import 'package:provider/provider.dart';
 import 'package:render_metrics/render_metrics.dart';
 

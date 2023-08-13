@@ -1,5 +1,5 @@
-import 'package:boilerplate/models/step/step.dart' as s;
-import 'package:boilerplate/models/sub_task/sub_task.dart';
+import 'package:guide_wizard/models/step/step.dart' as s;
+import 'package:guide_wizard/models/sub_task/sub_task.dart';
 
 class StepList {
   final List<s.Step> steps;

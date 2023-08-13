@@ -1,4 +1,4 @@
-# Welcome Guide App based on the Boilerplate Project Repo
+# Guide Wizard App
 
 An app that guides international students through the initial stages of settling into a new city and university.
 
@@ -225,7 +225,7 @@ class Routes {
 This is the starting point of the application. All the application level configurations are defined in this file i.e, theme, routes, title, orientation etc.
 
 ```dart
-import 'package:boilerplate/routes.dart';
+import 'package:guide_wizard/routes.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 

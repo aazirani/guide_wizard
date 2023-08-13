@@ -1,5 +1,5 @@
-import 'package:boilerplate/models/answer/answer.dart';
-import 'package:boilerplate/models/question/question.dart';
+import 'package:guide_wizard/models/answer/answer.dart';
+import 'package:guide_wizard/models/question/question.dart';
 
 class QuestionList {
   List<Question> questions;

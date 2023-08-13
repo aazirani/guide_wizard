@@ -1,7 +1,7 @@
-import 'package:boilerplate/data/repository.dart';
-import 'package:boilerplate/models/updated_at_times/updated_at_times.dart';
-import 'package:boilerplate/stores/error/error_store.dart';
-import 'package:boilerplate/utils/dio/dio_error_util.dart';
+import 'package:guide_wizard/data/repository.dart';
+import 'package:guide_wizard/models/updated_at_times/updated_at_times.dart';
+import 'package:guide_wizard/stores/error/error_store.dart';
+import 'package:guide_wizard/utils/dio/dio_error_util.dart';
 import 'package:mobx/mobx.dart';
 
 part 'updated_at_times_store.g.dart';

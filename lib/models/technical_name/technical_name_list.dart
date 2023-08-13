@@ -1,4 +1,4 @@
-import 'package:boilerplate/models/technical_name/technical_name.dart';
+import 'package:guide_wizard/models/technical_name/technical_name.dart';
 
 class TechnicalNameList {
   final List<TechnicalName> technicalNames;

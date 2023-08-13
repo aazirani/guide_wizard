@@ -1,12 +1,12 @@
-import 'package:boilerplate/constants/colors.dart';
-import 'package:boilerplate/constants/dimens.dart';
-import 'package:boilerplate/stores/app_settings/app_settings_store.dart';
-import 'package:boilerplate/stores/step/step_store.dart';
-import 'package:boilerplate/widgets/scrolling_overflow_text.dart';
 import 'package:flutter/material.dart';
+import 'package:guide_wizard/constants/colors.dart';
+import 'package:guide_wizard/constants/dimens.dart';
+import 'package:guide_wizard/models/task/task.dart';
+import 'package:guide_wizard/stores/app_settings/app_settings_store.dart';
+import 'package:guide_wizard/stores/data/data_store.dart';
+import 'package:guide_wizard/stores/step/step_store.dart';
+import 'package:guide_wizard/widgets/scrolling_overflow_text.dart';
 import 'package:provider/provider.dart';
-import 'package:boilerplate/models/task/task.dart';
-import 'package:boilerplate/stores/data/data_store.dart';
 
 class BlocksAppBarWidget extends StatefulWidget implements PreferredSizeWidget {
   int taskId;

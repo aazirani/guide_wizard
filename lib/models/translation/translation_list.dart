@@ -1,4 +1,4 @@
-import 'package:boilerplate/models/translation/translation.dart' as t;
+import 'package:guide_wizard/models/translation/translation.dart' as t;
 
 class TranslationList {
   final List<t.Translation> translations;

@@ -1,8 +1,7 @@
-import 'package:boilerplate/constants/dimens.dart';
-import 'package:boilerplate/url_handler.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/rendering.dart';
 import 'package:flutter_markdown/flutter_markdown.dart';
+import 'package:guide_wizard/constants/dimens.dart';
+import 'package:guide_wizard/url_handler.dart';
 import 'package:render_metrics/render_metrics.dart';
 
 class ExpansionContent extends StatefulWidget {

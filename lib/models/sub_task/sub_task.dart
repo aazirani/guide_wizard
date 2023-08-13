@@ -1,6 +1,5 @@
-import 'package:boilerplate/models/technical_name/technical_name.dart';
-import 'package:boilerplate/widgets/app_expansiontile.dart';
 import 'package:flutter/material.dart';
+import 'package:guide_wizard/widgets/app_expansiontile.dart';
 
 class SubTask {
   int id;

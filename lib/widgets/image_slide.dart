@@ -1,8 +1,8 @@
-import 'package:boilerplate/constants/colors.dart';
-import 'package:boilerplate/data/network/constants/endpoints.dart';
-import 'package:boilerplate/widgets/load_image_with_cache.dart';
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
+import 'package:guide_wizard/constants/colors.dart';
+import 'package:guide_wizard/data/network/constants/endpoints.dart';
+import 'package:guide_wizard/widgets/load_image_with_cache.dart';
 import 'package:smooth_page_indicator/smooth_page_indicator.dart';
 
 class ImageSlide extends StatefulWidget {

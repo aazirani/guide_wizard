@@ -1,5 +1,4 @@
-import 'package:boilerplate/models/answer/answer.dart';
-import 'package:boilerplate/models/technical_name/technical_name.dart';
+import 'package:guide_wizard/models/answer/answer.dart';
 
 class Question {
   //Server Values

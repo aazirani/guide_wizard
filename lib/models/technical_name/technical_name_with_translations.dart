@@ -1,4 +1,4 @@
-import 'package:boilerplate/models/translation/translation.dart';
+import 'package:guide_wizard/models/translation/translation.dart';
 
 class TechnicalNameWithTranslations {
   int id;

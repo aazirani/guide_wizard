@@ -1,6 +1,6 @@
-import 'package:boilerplate/data/local/constants/db_constants.dart';
-import 'package:boilerplate/models/sub_task/sub_task_list.dart';
-import 'package:boilerplate/models/sub_task/sub_task.dart';
+import 'package:guide_wizard/data/local/constants/db_constants.dart';
+import 'package:guide_wizard/models/sub_task/sub_task.dart';
+import 'package:guide_wizard/models/sub_task/sub_task_list.dart';
 import 'package:sembast/sembast.dart';
 
 class SubTaskDataSource {

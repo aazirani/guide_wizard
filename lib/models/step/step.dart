@@ -1,5 +1,5 @@
-import 'package:boilerplate/models/question/question.dart';
-import 'package:boilerplate/models/task/task.dart';
+import 'package:guide_wizard/models/question/question.dart';
+import 'package:guide_wizard/models/task/task.dart';
 
 class Step {
   int id;

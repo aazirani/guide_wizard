@@ -1,5 +1,5 @@
-import 'package:boilerplate/data/local/constants/db_constants.dart';
-import 'package:boilerplate/models/updated_at_times/updated_at_times.dart';
+import 'package:guide_wizard/data/local/constants/db_constants.dart';
+import 'package:guide_wizard/models/updated_at_times/updated_at_times.dart';
 import 'package:sembast/sembast.dart';
 
 class UpdatedAtTimesDataSource {

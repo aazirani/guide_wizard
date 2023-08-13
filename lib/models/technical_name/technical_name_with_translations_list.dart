@@ -1,4 +1,4 @@
-import 'package:boilerplate/models/technical_name/technical_name_with_translations.dart';
+import 'package:guide_wizard/models/technical_name/technical_name_with_translations.dart';
 
 class TechnicalNameWithTranslationsList {
   List<TechnicalNameWithTranslations> technicalNameWithTranslations;

@@ -1,10 +1,10 @@
 import 'dart:async';
 import 'dart:convert';
-import 'package:boilerplate/data/data_laod_handler.dart';
-import 'package:boilerplate/data/network/constants/endpoints.dart';
-import 'package:boilerplate/data/network/dio_client.dart';
-import 'package:boilerplate/data/network/rest_client.dart';
-import 'package:boilerplate/models/updated_at_times/updated_at_times.dart';
+
+import 'package:guide_wizard/data/network/constants/endpoints.dart';
+import 'package:guide_wizard/data/network/dio_client.dart';
+import 'package:guide_wizard/data/network/rest_client.dart';
+import 'package:guide_wizard/models/updated_at_times/updated_at_times.dart';
 
 class UpdatedAtTimesApi{
   // dio instance

@@ -1,6 +1,6 @@
-import 'package:boilerplate/data/local/constants/db_constants.dart';
-import 'package:boilerplate/models/step/step.dart';
-import 'package:boilerplate/models/step/step_list.dart';
+import 'package:guide_wizard/data/local/constants/db_constants.dart';
+import 'package:guide_wizard/models/step/step.dart';
+import 'package:guide_wizard/models/step/step_list.dart';
 import 'package:sembast/sembast.dart';
 
 class StepDataSource {

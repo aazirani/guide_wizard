@@ -1,17 +1,16 @@
-import 'dart:math' as math;
-import 'package:boilerplate/constants/colors.dart';
-import 'package:boilerplate/constants/dimens.dart';
-import 'package:boilerplate/data/data_laod_handler.dart';
-import 'package:boilerplate/providers/question_widget_state/question_widget_state.dart';
-import 'package:boilerplate/stores/app_settings/app_settings_store.dart';
-import 'package:boilerplate/stores/technical_name/technical_name_with_translations_store.dart';
-import 'package:boilerplate/widgets/next_stage_button.dart';
-import 'package:boilerplate/widgets/question_widget.dart';
-import 'package:boilerplate/widgets/questions_list_page_appBar.dart';
 import 'package:flutter/material.dart';
+import 'package:guide_wizard/constants/colors.dart';
+import 'package:guide_wizard/constants/dimens.dart';
+import 'package:guide_wizard/data/data_laod_handler.dart';
+import 'package:guide_wizard/providers/question_widget_state/question_widget_state.dart';
+import 'package:guide_wizard/stores/app_settings/app_settings_store.dart';
+import 'package:guide_wizard/stores/data/data_store.dart';
+import 'package:guide_wizard/stores/technical_name/technical_name_with_translations_store.dart';
+import 'package:guide_wizard/widgets/next_stage_button.dart';
+import 'package:guide_wizard/widgets/question_widget.dart';
+import 'package:guide_wizard/widgets/questions_list_page_appBar.dart';
 import 'package:provider/provider.dart';
 import 'package:scrollable_positioned_list/scrollable_positioned_list.dart';
-import 'package:boilerplate/stores/data/data_store.dart';
 
 class QuestionsListPage extends StatefulWidget {
   int stepNumber;
