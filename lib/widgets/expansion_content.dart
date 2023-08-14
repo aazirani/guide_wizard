@@ -13,11 +13,13 @@ import 'package:url_launcher/url_launcher.dart';
 
 class ExpansionContent extends StatefulWidget {
   String markdown;
+  String? deadline;
 
   ExpansionContent({
     Key? key,
     required this.renderManager,
     required this.markdown,
+    this.deadline,
   }) : super(key: key);
 
   final RenderParametersManager renderManager;
@@ -56,11 +58,35 @@ class _ExpansionContentState extends State<ExpansionContent> {
                     widgetHeight = size.height;
                   });
                 },
-                child: _buildMarkdownContent()),
+                child: Column(
+                    children: [
+                      if (widget.deadline != null) _buildDeadlineContainer(),
+                      _buildMarkdownContent()
+                    ])),
           ),
         ),
       ],
     );
+  }
+
+  Widget _buildDeadlineContainer() {
+    return Padding(
+        padding: Dimens.deadlineContainerPadding,
+        child: Align(
+            alignment: Alignment.topLeft,
+            child: Container(
+              decoration: BoxDecoration(
+                  color: AppColors.red[250]!.withOpacity(Dimens.deadlineContainerColorOpacity),
+                  border: Border(
+                      left: BorderSide(width: Dimens.deadlineContainerBorderWidth, color: AppColors.red[150]!))),
+              child: Padding(
+                padding: Dimens.deadlineContentPadding,
+                child: Text("${widget.deadline}",
+                    style: TextStyle(
+                        color: AppColors.red[200],
+                        fontWeight: FontWeight.w800)),
+              ),
+            )));
   }
 
   Widget _buildMarkdownContent() {
@@ -73,7 +99,7 @@ class _ExpansionContentState extends State<ExpansionContent> {
         data: fixedJsonMarkdown(widget.markdown));
   }
 
-  String fixedJsonMarkdown(String json_markdown){
+  String fixedJsonMarkdown(String json_markdown) {
     return json_markdown.replaceAllMapped(RegExp(r'(?<!\\)\\n'), (match) {
       return '\n';
     });

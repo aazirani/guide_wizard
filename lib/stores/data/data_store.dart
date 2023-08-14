@@ -365,4 +365,6 @@ abstract class _DataStore with Store {
       print("Caught exception in constructor: $e");
     }
   }
+
+  int getDeadlineId(taskId, index) => getTaskById(taskId).sub_tasks[index].deadline;
 }
