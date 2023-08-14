@@ -1,5 +1,7 @@
+import 'package:boilerplate/constants/colors.dart';
 import 'package:boilerplate/constants/dimens.dart';
 import 'package:boilerplate/url_handler.dart';
+import 'package:boilerplate/widgets/measure_size.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:flutter_markdown/flutter_markdown.dart';
@@ -25,6 +27,7 @@ class ExpansionContent extends StatefulWidget {
 }
 
 class _ExpansionContentState extends State<ExpansionContent> {
+  double widgetHeight = 0;
   @override
   Widget build(BuildContext context) {
     return Row(
