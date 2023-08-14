@@ -54,7 +54,7 @@ class Dimens {
   static const stepAvatar = EdgeInsets.only(right: 15);
 
   // task page appbar widget
-  static const doneButtonPadding = const EdgeInsets.only(right: 20, left: 10, top: 10);
+  static const doneButtonPadding = const EdgeInsets.only(right: 20, left: 20, top: 10);
 
   // step slider widget
   static const double numOfTasksFont = 15;
