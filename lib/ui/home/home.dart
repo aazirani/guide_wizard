@@ -158,7 +158,7 @@ class _HomeScreenState extends State<HomeScreen> {
             stepNo: _appSettingsStore.stepsCount,
           ),
         ),
-        _stepStore.isQuestionStep() ? _buildQuestionDescription() : _buildInProgressCompressedTaskList(),
+        Observer(builder: (_) => _stepStore.isQuestionStep() ? _buildQuestionDescription() : _buildInProgressCompressedTaskList()),
       ],
     );
   }
