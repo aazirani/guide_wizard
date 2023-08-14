@@ -23,6 +23,10 @@ class Dimens {
   // Subtask: ------------------------------------------------------------
   static const double subtaskTitleFontSize = 19;
   static const listTilePadding = EdgeInsets.symmetric(horizontal: 10, vertical: 5);
+  static const deadlineContainerPadding = EdgeInsets.only(left: 10, top: 10, right: 15);
+  static const deadlineContainerColorOpacity = 0.05;
+  static const deadlineContentPadding = EdgeInsets.all(10);
+  static const deadlineContainerBorderWidth = 2.0;
 
   // for Home Screen - step timeline
   static const stepTimelineContainerBorderRadius = BorderRadius.all(Radius.circular(30));
@@ -153,7 +157,12 @@ class Dimens {
   // Next Stage Button
   static const nextStageButtonRadius = 5.0;
   static const nextStageButtonPadding = EdgeInsets.all(8.0);
+  
+  //task page (text)
+  static const taskDescriptionFont = 18.0;
+
   static double nextStageSurroundingContainerHeight = nextStageDistanceFromBottom + nextStageDefaultHeight + 10 ;
   static double nextStageDistanceFromBottom = 10.0;
   static const nextStageDefaultHeight = 53.0;
+
 }

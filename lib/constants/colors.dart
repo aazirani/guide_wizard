@@ -19,6 +19,9 @@ class AppColors {
   static const Map<int, Color> red = const <int, Color>{
     50: Color.fromARGB(255, 187, 100, 94),
     100: Color.fromARGB(255, 169, 25, 12),
+    150: Color.fromARGB(255, 198, 117, 111),
+    200: Color.fromARGB(255, 166, 36, 36),
+    250: Color.fromARGB(255, 160, 6, 6),
   };
 
   static const Map<int, Color> green = const <int, Color>{

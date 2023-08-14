@@ -15,11 +15,13 @@ class SubTaskWidget extends StatefulWidget {
   int index;
   List<SubTask> subTasks;
   RenderParametersManager renderManager;
+  String? deadline;
   SubTaskWidget({
     Key? key,
     required this.index,
     required this.subTasks,
     required this.renderManager,
+    this.deadline,
   }) : super(key: key);
 
   @override
@@ -47,16 +49,17 @@ class SubTaskWidgetState extends State<SubTaskWidget>
       widget.subTasks[widget.index].toggleExpanded();
     });
   }
-    
 
-    Widget _buildExpansionContent() {
-    
+  Widget _buildExpansionContent() {
     var markdown_id = widget.subTasks[widget.index].markdown;
-      return ExpansionContent(renderManager: widget.renderManager, markdown: _technicalNameWithTranslationsStore
-            .getTranslation(markdown_id),);
-    }
+    return ExpansionContent(
+            renderManager: widget.renderManager,
+            markdown: _technicalNameWithTranslationsStore.getTranslation(markdown_id)!,
+            deadline: widget.deadline);
+  }
 
-    Widget _buildAppExpansionTileWidget() {
+
+  Widget _buildAppExpansionTileWidget() {
     var sub_task_title_id = widget.subTasks[widget.index].title;
       return AppExpansionTile(
         onExpansionChanged: ((isNewState) {
@@ -82,7 +85,6 @@ class SubTaskWidgetState extends State<SubTaskWidget>
     return ListTileTheme(
       shape: RoundedRectangleBorder(
         borderRadius: Dimens.expansionTileBorderRadius,
-        // side: BorderSide(color: AppColors.main_color, width: 2),
       ),
       tileColor: AppColors.button_background_color,
       textColor: AppColors.main_color,
