@@ -81,9 +81,9 @@ class _TaskPageTextOnlyState extends State<TaskPageTextOnly> {
       child: Observer(
         builder: (context) {
           return Text(
-            _technicalNameWithTranslationsStore
-                .getTranslation(descriptionId),
-            style: TextStyle(fontSize: 18, color: AppColors.main_color),
+            _technicalNameWithTranslationsStore.getTranslation(descriptionId),
+            style: TextStyle(fontSize: Dimens.taskDescriptionFont, color: AppColors.main_color),
+
           );
         },
       ),
@@ -91,15 +91,18 @@ class _TaskPageTextOnlyState extends State<TaskPageTextOnly> {
   }
 
   _buildSubTasksList() {
+    
     return ListView.builder(
       physics: ScrollPhysics(),
       shrinkWrap: true,
       itemCount: _dataStore.getTaskById(widget.taskId).sub_tasks.length,
       itemBuilder: (context, i) {
+        var deadlineId = _dataStore.getDeadlineId(widget.taskId, i);
         return SubTaskWidget(
           index: i,
           subTasks: _dataStore.getTaskById(widget.taskId).sub_tasks,
           renderManager: renderManager,
+          deadline: _technicalNameWithTranslationsStore.getTranslation(deadlineId),
         );
       },
     );

@@ -6,11 +6,13 @@ import 'package:render_metrics/render_metrics.dart';
 
 class ExpansionContent extends StatefulWidget {
   String markdown;
+  String? deadline;
 
   ExpansionContent({
     Key? key,
     required this.renderManager,
     required this.markdown,
+    this.deadline,
   }) : super(key: key);
 
   final RenderParametersManager renderManager;
@@ -22,6 +24,7 @@ class ExpansionContent extends StatefulWidget {
 }
 
 class _ExpansionContentState extends State<ExpansionContent> {
+  double widgetHeight = 0;
   @override
   Widget build(BuildContext context) {
     return Row(
@@ -30,11 +33,41 @@ class _ExpansionContentState extends State<ExpansionContent> {
         Flexible(
           child: Padding(
             padding: Dimens.expansionContentPadding,
-            child: _buildMarkdownContent(),
+            child: MeasureSize(
+                onChange: (Size size) {
+                  setState(() {
+                    widgetHeight = size.height;
+                  });
+                },
+                child: Column(
+                    children: [
+                      if (widget.deadline != null) _buildDeadlineContainer(),
+                      _buildMarkdownContent()
+                    ])),
           ),
         ),
       ],
     );
+  }
+
+  Widget _buildDeadlineContainer() {
+    return Padding(
+        padding: Dimens.deadlineContainerPadding,
+        child: Align(
+            alignment: Alignment.topLeft,
+            child: Container(
+              decoration: BoxDecoration(
+                  color: AppColors.red[250]!.withOpacity(Dimens.deadlineContainerColorOpacity),
+                  border: Border(
+                      left: BorderSide(width: Dimens.deadlineContainerBorderWidth, color: AppColors.red[150]!))),
+              child: Padding(
+                padding: Dimens.deadlineContentPadding,
+                child: Text("${widget.deadline}",
+                    style: TextStyle(
+                        color: AppColors.red[200],
+                        fontWeight: FontWeight.w800)),
+              ),
+            )));
   }
 
   Widget _buildMarkdownContent() {
@@ -47,7 +80,7 @@ class _ExpansionContentState extends State<ExpansionContent> {
       data: fixedJsonMarkdown(widget.markdown));
   }
 
-  String fixedJsonMarkdown(String json_markdown){
+  String fixedJsonMarkdown(String json_markdown) {
     return json_markdown.replaceAllMapped(RegExp(r'(?<!\\)\\n'), (match) {
       return '\n';
     });
