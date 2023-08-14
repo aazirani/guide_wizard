@@ -119,6 +119,7 @@ class _TaskPageWithImageState extends State<TaskPageWithImage> {
   }
 
   _buildDescription() {
+    if (_technicalNameWithTranslationsStore.getTranslation(widget.task.description) == "") return SizedBox(height: Dimens.taskPageTextOnlyListViewPadding.top,);
     return Padding(
       padding: Dimens.taskPageTextOnlyListViewPadding,
       child: Observer(
