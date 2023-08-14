@@ -1,16 +1,17 @@
 import 'package:boilerplate/constants/colors.dart';
 import 'package:boilerplate/constants/dimens.dart';
+import 'package:boilerplate/constants/lang_keys.dart';
 import 'package:boilerplate/stores/app_settings/app_settings_store.dart';
+import 'package:boilerplate/stores/data/data_store.dart';
 import 'package:boilerplate/stores/step/step_store.dart';
 import 'package:boilerplate/stores/technical_name/technical_name_with_translations_store.dart';
 import 'package:boilerplate/ui/tasklist/tasklist_timeline.dart';
+import 'package:boilerplate/utils/locale/app_localization.dart';
+import 'package:boilerplate/widgets/measure_size.dart';
 import 'package:boilerplate/widgets/scrolling_overflow_text.dart';
 import 'package:flutter/material.dart';
-import 'package:boilerplate/widgets/measure_size.dart';
-import 'package:boilerplate/utils/locale/app_localization.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:provider/provider.dart';
-import 'package:boilerplate/stores/data/data_store.dart';
 
 class TaskList extends StatefulWidget {
   int currentStepNo;
@@ -108,7 +109,7 @@ class _TaskListState extends State<TaskList> {
                 padding: Dimens.numberOfTasksPadding,
                 child: Observer(
                   builder: (_) => Text(
-                      "${_dataStore.getNumberOfTaskListTasks()} ${AppLocalizations.of(context).translate('tasks')}",
+                      "${_dataStore.getNumberOfTaskListTasks()} ${AppLocalizations.of(context).translate(LangKeys.tasks)}",
                       style: TextStyle(color: AppColors.white)),
                 )),
             SizedBox(height: 5),

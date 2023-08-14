@@ -1,20 +1,21 @@
 import 'package:boilerplate/constants/colors.dart';
 import 'package:boilerplate/constants/dimens.dart';
+import 'package:boilerplate/constants/lang_keys.dart';
+import 'package:boilerplate/constants/settings.dart';
 import 'package:boilerplate/data/network/constants/endpoints.dart';
+import 'package:boilerplate/models/step/step_list.dart';
 import 'package:boilerplate/stores/app_settings/app_settings_store.dart';
+import 'package:boilerplate/stores/data/data_store.dart';
 import 'package:boilerplate/stores/step/step_store.dart';
+import 'package:boilerplate/stores/technical_name/technical_name_with_translations_store.dart';
 import 'package:boilerplate/ui/questions/questions_list_page.dart';
+import 'package:boilerplate/ui/tasklist/tasklist.dart';
 import 'package:boilerplate/utils/locale/app_localization.dart';
 import 'package:boilerplate/widgets/load_image_with_cache.dart';
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:provider/provider.dart';
-import 'package:boilerplate/ui/tasklist/tasklist.dart';
-import 'package:boilerplate/stores/technical_name/technical_name_with_translations_store.dart';
-import 'package:boilerplate/models/step/step_list.dart';
-import 'package:boilerplate/stores/data/data_store.dart';
-import 'package:boilerplate/constants/settings.dart';
 
 class StepSliderWidget extends StatefulWidget {
   StepList stepList;
@@ -179,8 +180,8 @@ class _StepSliderWidgetState extends State<StepSliderWidget> {
     int noOfTasks = _dataStore.getNumberOfTasksFromAStep(currentStepNo);
     String str = "$noOfTasks ";
     switch (noOfTasks) {
-      case 1: str += AppLocalizations.of(context).translate('task'); break;
-      default: str += AppLocalizations.of(context).translate('tasks'); break;
+      case 1: str += AppLocalizations.of(context).translate(LangKeys.task); break;
+      default: str += AppLocalizations.of(context).translate(LangKeys.tasks); break;
     }
     return str;
   }
@@ -189,8 +190,8 @@ class _StepSliderWidgetState extends State<StepSliderWidget> {
     int noOfQuestions = _dataStore.getNumberOfQuestionsFromAStep(currentStepNo);
     String str = "$noOfQuestions ";
     switch (noOfQuestions) {
-      case 1: str += AppLocalizations.of(context).translate('question'); break;
-      default: str += AppLocalizations.of(context).translate('questions'); break;
+      case 1: str += AppLocalizations.of(context).translate(LangKeys.question); break;
+      default: str += AppLocalizations.of(context).translate(LangKeys.questions); break;
     }
     return str;
   }
@@ -215,7 +216,7 @@ class _StepSliderWidgetState extends State<StepSliderWidget> {
           }
         },
         child: Row(mainAxisAlignment: MainAxisAlignment.center, children: [
-          Text(AppLocalizations.of(context).translate("continue"),
+          Text(AppLocalizations.of(context).translate(LangKeys.continueKey),
               style: TextStyle(
                   fontSize: Dimens.continueFont, color: AppColors.main_color)),
           SizedBox(width: 1),

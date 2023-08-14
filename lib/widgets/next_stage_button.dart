@@ -1,7 +1,6 @@
-import 'dart:io';
-import 'dart:math' as math;
 import 'package:boilerplate/constants/colors.dart';
 import 'package:boilerplate/constants/dimens.dart';
+import 'package:boilerplate/constants/lang_keys.dart';
 import 'package:boilerplate/data/data_laod_handler.dart';
 import 'package:boilerplate/stores/app_settings/app_settings_store.dart';
 import 'package:boilerplate/stores/data/data_store.dart';
@@ -57,19 +56,19 @@ class _NextStageButtonState extends State<NextStageButton> {
       radius: Dimens.nextStageButtonRadius,
       stateWidgets: {
         ButtonState.idle: Text(
-          _appSettingsStore.isFirstStep() ?  AppLocalizations.of(context).translate("next_step_button_text") : AppLocalizations.of(context).translate("update_steps"),
+          _appSettingsStore.isFirstStep() ?  AppLocalizations.of(context).translate(LangKeys.next_step_button_text) : AppLocalizations.of(context).translate(LangKeys.update_steps),
           style: TextStyle(color: AppColors.white,),
         ),
         ButtonState.loading: Text(
-          AppLocalizations.of(context).translate("getting_updates"),
+          AppLocalizations.of(context).translate(LangKeys.getting_updates),
           style: TextStyle(color: AppColors.white,),
         ),
         ButtonState.fail: Text(
-          AppLocalizations.of(context).translate("next_stage_check_internet"),
+          AppLocalizations.of(context).translate(LangKeys.next_stage_check_internet),
           style: TextStyle(color: AppColors.white,),
         ),
         ButtonState.success: Text(
-          AppLocalizations.of(context).translate("update_finished"),
+          AppLocalizations.of(context).translate(LangKeys.update_finished),
           style: TextStyle(color: AppColors.white,),
         )
       },
@@ -132,7 +131,7 @@ class _NextStageButtonState extends State<NextStageButton> {
 //     style: _buildQuestionsButtonStyle(AppColors.nextStepColor),
 //     onPressed: onTapFunction,
 //     child: Text(
-//       AppLocalizations.of(context).translate('next_stage_button_text'),
+//       AppLocalizations.of(context).translate(LangKeys.next_stage_button_text),
 //       style: TextStyle(color: Colors.white, fontSize: 15),
 //     ),
 //   );

@@ -1,27 +1,9 @@
 {
-  "login_start": "Below are list of strings for login",
-  "login_et_user_email": "Enter user email",
-  "login_et_user_password": "Enter password",
-  "login_btn_forgot_password": "Forgot Password?",
-  "login_btn_sign_in": "Sign In",
-  "login_error_fill_fields": "Please fill in all fields",
-  "login_end": "------------------------------------------------------------------------------------",
-
-  "home_start": "Below are list of strings for home",
-  "home_tv_posts": "Posts",
-  "home_tv_error": "Error",
-  "home_tv_no_post_found": "No posts found",
-  "home_tv_choose_language": "Choose Language",
-  "home_end": "-------------------------------------------------------------------------------------",
-
   "next_question_button_text" : "Next question",
   "next_step_button_text" : "Next Step",
   "close" : "Close",
   "read_more" : "Read More",
   "questions_end": "-------------------------------------------------------------------------------------",
-
-  "done_button_text" : "Done",
-  "undone_button_text" : "Undone",
 
   "task": "Task",
   "tasks": "Tasks",
@@ -31,18 +13,11 @@
   "continue": "Continue",
   "tasks_end": "-------------------------------------------------------------------------------------",
 
-
   "no_internet_message": "No Internet Connection",
   "cant_reach_server": "Can't Reach The Server!",
   "no_internet_button_text": "Try Again",
   "update_is_necessary_message_text": "Steps require an update.\nPlease verify your internet connection.",
-
-
-  "unable_to_reach_server_title": "Can not connect to Server",
-  "unable_to_reach_server_content": "There was a problem connecting to the server. Please check your internet connection and try again.",
-  "unable_to_reach_server_button_text": "Try Again",
-  "loading_dialog_text": "Loading...",
-  "loading_dialog_end": "-------------------------------------------------------------------------------------",
+  "no_internet_dialog_end": "-------------------------------------------------------------------------------------",
 
   "steps_title": "Welcome Guide",
   "steps": "Steps",
@@ -54,10 +29,8 @@
   "url_dialog_message": "Do you want to open",
   "cancel": "Cancel",
   "open_link": "Open Link",
-  "steps_end": "------------------------------------------------------------------------------------",
 
   "could_not_load": "Couldn't load",
-
   "update_steps": "Update steps",
   "getting_updates": "Updating",
   "next_stage_check_internet": "Check your Internet Connection and Try Again",

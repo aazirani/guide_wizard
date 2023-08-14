@@ -1,0 +1,39 @@
+{
+  "next_question_button_text": "Nächste Frage",
+  "next_step_button_text": "Nächster Schritt",
+  "close": "Schließen",
+  "read_more": "Mehr lesen",
+  "questions_end": "-------------------------------------------------------------------------------------",
+
+  "task": "Aufgabe",
+  "tasks": "Aufgaben",
+  "question": "Frage",
+  "questions": "Fragen",
+  "deadline": "Frist",
+  "continue": "Fortsetzen",
+  "tasks_end": "-------------------------------------------------------------------------------------",
+
+  "no_internet_message": "Keine Internetverbindung",
+  "cant_reach_server": "Kann den Server nicht erreichen!",
+  "no_internet_button_text": "Erneut versuchen",
+  "update_is_necessary_message_text": "Schritte erfordern ein Update.\nBitte überprüfen Sie Ihre Internetverbindung.",
+  "no_internet_dialog_end": "-------------------------------------------------------------------------------------",
+
+  "steps_title": "Willkommensanleitung",
+  "steps": "Schritte",
+  "in_progress": "In Bearbeitung",
+  "description": "Beschreibung",
+  "steps_end": "------------------------------------------------------------------------------------",
+
+  "url_dialog_title": "URL öffnen",
+  "url_dialog_message": "Der folgende Link wird geöffnet",
+  "cancel": "Abbrechen",
+  "open_link": "Link öffnen",
+
+  "could_not_load": "Konnte nicht geladen werden",
+  "update_steps": "Schritte aktualisieren",
+  "getting_updates": "Aktualisierung",
+  "next_stage_check_internet": "Überprüfen Sie Ihre Internetverbindung und versuchen Sie es erneut",
+  "update_finished": "Aktualisierung abgeschlossen",
+  "next_stage_button_end": "------------------------------------------------------------------------------------"
+}

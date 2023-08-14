@@ -1,8 +1,7 @@
 import 'package:boilerplate/constants/colors.dart';
+import 'package:boilerplate/constants/lang_keys.dart';
 import 'package:boilerplate/utils/locale/app_localization.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:simple_fontellico_progress_dialog/simple_fontico_loading.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 class UrlHandler {
@@ -50,12 +49,12 @@ class UrlHandler {
     showDialog(
       context: context,
       builder: (context) => AlertDialog(
-        title: Text(AppLocalizations.of(context).translate('url_dialog_title'),),
+        title: Text(AppLocalizations.of(context).translate(LangKeys.url_dialog_title),),
         content: Column(
           mainAxisSize: MainAxisSize.min,
           children: [
             Text(
-              AppLocalizations.of(context).translate('url_dialog_message') + " $url?",
+              AppLocalizations.of(context).translate(LangKeys.url_dialog_message) + " $url?",
               textAlign: TextAlign.left,
             ),
           ],
@@ -65,7 +64,7 @@ class UrlHandler {
             onPressed: () {
               Navigator.of(context).pop();
             },
-            child: Text(AppLocalizations.of(context).translate('cancel'), style: TextStyle(color: AppColors.main_color),),
+            child: Text(AppLocalizations.of(context).translate(LangKeys.cancel), style: TextStyle(color: AppColors.main_color),),
             style: _textButtonStyle(),
           ),
           TextButton(
@@ -73,7 +72,7 @@ class UrlHandler {
                 _launchURL(url);
                 Navigator.of(context).pop();
               },
-              child: Text(AppLocalizations.of(context).translate('open_link'), style: TextStyle(color: AppColors.main_color),),
+              child: Text(AppLocalizations.of(context).translate(LangKeys.open_link), style: TextStyle(color: AppColors.main_color),),
               style: _textButtonStyle(),
           ),
         ],

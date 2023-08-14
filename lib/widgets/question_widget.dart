@@ -1,21 +1,22 @@
 import 'dart:math' as math;
+
 import 'package:boilerplate/constants/colors.dart';
 import 'package:boilerplate/constants/dimens.dart';
+import 'package:boilerplate/constants/lang_keys.dart';
 import 'package:boilerplate/data/network/constants/endpoints.dart';
 import 'package:boilerplate/models/answer/answer.dart';
 import 'package:boilerplate/models/question/question.dart';
+import 'package:boilerplate/providers/question_widget_state/question_widget_state.dart';
 import 'package:boilerplate/stores/app_settings/app_settings_store.dart';
+import 'package:boilerplate/stores/data/data_store.dart';
 import 'package:boilerplate/stores/technical_name/technical_name_with_translations_store.dart';
 import 'package:boilerplate/url_handler.dart';
 import 'package:boilerplate/utils/locale/app_localization.dart';
 import 'package:boilerplate/widgets/info_dialog.dart';
 import 'package:boilerplate/widgets/load_image_with_cache.dart';
-import 'package:boilerplate/widgets/measure_size.dart';
 import 'package:boilerplate/widgets/next_stage_button.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:boilerplate/providers/question_widget_state/question_widget_state.dart';
-import 'package:boilerplate/stores/data/data_store.dart';
 
 class QuestionWidget extends StatefulWidget {
   Question question;
@@ -144,7 +145,7 @@ class _QuestionWidgetState extends State<QuestionWidget> with AutomaticKeepAlive
             await builder.setActiveIndex(widget.index + 1),
           },
           child: Text(
-            AppLocalizations.of(context).translate('next_question_button_text'),
+            AppLocalizations.of(context).translate(LangKeys.next_question_button_text),
             style: TextStyle(color: Colors.white, fontSize: 15),
           ),
         ),
@@ -174,7 +175,7 @@ class _QuestionWidgetState extends State<QuestionWidget> with AutomaticKeepAlive
             Navigator.of(context).pop();
           },
           child: Text(
-              AppLocalizations.of(context).translate('close'),
+              AppLocalizations.of(context).translate(LangKeys.close),
             style: TextStyle(color: AppColors.close_button_color, fontSize: 15),
           ),
         ),
@@ -204,7 +205,7 @@ class _QuestionWidgetState extends State<QuestionWidget> with AutomaticKeepAlive
             UrlHandler.openUrl(context: context, url: _getInfoUrl());
           },
           child: Text(
-            AppLocalizations.of(context).translate('read_more'),
+            AppLocalizations.of(context).translate(LangKeys.read_more),
             style: TextStyle(color: AppColors.white, fontSize: 15),
           ),
         ),

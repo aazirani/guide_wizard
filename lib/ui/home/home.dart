@@ -1,23 +1,25 @@
 import 'dart:async';
+import 'dart:math' as math;
+
 import 'package:boilerplate/constants/colors.dart';
 import 'package:boilerplate/constants/dimens.dart';
+import 'package:boilerplate/constants/lang_keys.dart';
 import 'package:boilerplate/data/data_laod_handler.dart';
 import 'package:boilerplate/stores/app_settings/app_settings_store.dart';
+import 'package:boilerplate/stores/data/data_store.dart';
+import 'package:boilerplate/stores/language/language_store.dart';
 import 'package:boilerplate/stores/step/step_store.dart';
 import 'package:boilerplate/stores/technical_name/technical_name_with_translations_store.dart';
+import 'package:boilerplate/utils/locale/app_localization.dart';
 import 'package:boilerplate/widgets/compressed_tasklist_timeline/compressed_task_list_timeline.dart';
 import 'package:boilerplate/widgets/measure_size.dart';
 import 'package:boilerplate/widgets/step_slider/step_slider_widget.dart';
 import 'package:boilerplate/widgets/step_timeline/step_timeline.dart';
-import 'package:boilerplate/utils/locale/app_localization.dart';
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:provider/provider.dart';
-import 'package:boilerplate/stores/language/language_store.dart';
-import 'package:boilerplate/stores/data/data_store.dart';
 import 'package:shimmer/shimmer.dart';
-import 'dart:math' as math;
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({
@@ -96,7 +98,7 @@ class _HomeScreenState extends State<HomeScreen> {
       backgroundColor: AppColors.main_color,
       title: Padding(
           padding: EdgeInsets.only(left: 10),
-          child: Text(AppLocalizations.of(context).translate("steps_title"),
+          child: Text(AppLocalizations.of(context).translate(LangKeys.steps_title),
               style: TextStyle(color: AppColors.title_color, fontSize: 20))),
     );
   }
@@ -172,7 +174,7 @@ class _HomeScreenState extends State<HomeScreen> {
   }
 
   Widget _buildStepsText() {
-    return Text(AppLocalizations.of(context).translate("steps"),
+    return Text(AppLocalizations.of(context).translate(LangKeys.steps),
         style: TextStyle(
             color: AppColors.main_color,
             fontSize: Dimens.stepsTextFont,
@@ -196,7 +198,7 @@ class _HomeScreenState extends State<HomeScreen> {
             padding: Dimens.inProgressTextPadding,
             child: Align(
                 alignment: Alignment.centerLeft,
-                child: Text(AppLocalizations.of(context).translate("description"),
+                child: Text(AppLocalizations.of(context).translate(LangKeys.description),
                     style: TextStyle(
                         fontSize: Dimens.inProgressTextFont,
                         color: AppColors.main_color,
@@ -239,7 +241,7 @@ class _HomeScreenState extends State<HomeScreen> {
             padding: Dimens.inProgressTextPadding,
             child: Align(
                 alignment: Alignment.centerLeft,
-                child: Text(AppLocalizations.of(context).translate("in_progress"),
+                child: Text(AppLocalizations.of(context).translate(LangKeys.in_progress),
                     style: TextStyle(
                         fontSize: Dimens.inProgressTextFont,
                         color: AppColors.main_color,
