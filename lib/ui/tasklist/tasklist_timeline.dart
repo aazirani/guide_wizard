@@ -113,7 +113,7 @@ class _TaskListTimeLineState extends State<TaskListTimeLine> {
                         _buildContentTitle(taskNumber),
                         _buildContentDeadline(taskNumber),
                       ]
-                    : [Center(child: _buildContentTitle(taskNumber))],
+                    : [_buildContentTitle(taskNumber)],
               ),
             ),
           ],
