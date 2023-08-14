@@ -14,7 +14,7 @@ import 'package:provider/provider.dart';
 
 class NextStageButton extends StatefulWidget {
   double height;
-  NextStageButton({this.height = 53, Key? key}) : super(key: key);
+  NextStageButton({this.height = Dimens.nextStageDefaultHeight, Key? key}) : super(key: key);
 
   @override
   State<NextStageButton> createState() => _NextStageButtonState();
@@ -51,6 +51,8 @@ class _NextStageButtonState extends State<NextStageButton> {
 
   Widget newVersionButton() {
     return ProgressButton(
+      minWidth: _getScreenWidth() - 20,
+      maxWidth: _getScreenWidth() - 20,
       height: widget.height,
       radius: Dimens.nextStageButtonRadius,
       stateWidgets: {

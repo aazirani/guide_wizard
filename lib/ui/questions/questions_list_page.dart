@@ -101,34 +101,35 @@ class _QuestionsListPageState extends State<QuestionsListPage> {
   }
 
   Widget _buildDockedNextStageButton() {
-    return Container(
-      width: MediaQuery.of(context).size.width,
-      height: Dimens.nextStageSurroundingContainerHeight,
-      decoration: BoxDecoration(
-          gradient: LinearGradient(
-            begin: Alignment.topCenter,
-            end: Alignment.bottomCenter,
-            colors: [
-              Colors.white.withOpacity(0),
-              Colors.white,
-              Colors.white,
-            ],
-          )
-      ),
-      child: Stack(
-        alignment: AlignmentDirectional.bottomCenter,
-        children: [
-          Positioned(
-            bottom: Dimens.nextStageDistanceFromBottom,
-            child: NextStageButton(),
-          ),
-        ],
+    return SafeArea(
+      child: Container(
+        width: MediaQuery.of(context).size.width,
+        height: Dimens.nextStageSurroundingContainerHeight + MediaQuery.of(context).viewPadding.bottom,
+        decoration: BoxDecoration(
+            gradient: LinearGradient(
+              begin: Alignment.topCenter,
+              end: Alignment.bottomCenter,
+              colors: [
+                Colors.white,
+                Colors.white,
+              ],
+            ),
+        ),
+        child: Stack(
+          alignment: AlignmentDirectional.bottomCenter,
+          children: [
+            Positioned(
+              bottom: Dimens.nextStageDistanceFromBottom,
+              child: NextStageButton(),
+            ),
+          ],
+        ),
       ),
     );
   }
 
   String _appBarTitleString() {
     int titleId = _dataStore.stepList.steps[widget.stepNumber].name;
-    return _technicalNameWithTranslationsStore.getTranslation(titleId)!;
+    return _technicalNameWithTranslationsStore.getTranslation(titleId);
   }
 }

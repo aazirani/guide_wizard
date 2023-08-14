@@ -80,8 +80,8 @@ class _CompressedTasklistTimelineState
   Widget _buildIndicator() {
     return Container(
         color: AppColors.transparent,
-        width: 8,
-        height: 8,
+        width: Dimens.timelineIndicatorDimens,
+        height: Dimens.timelineIndicatorDimens,
         child: DiamondIndicator());
   }
 
@@ -94,47 +94,28 @@ class _CompressedTasklistTimelineState
   Widget _buildContents(index, stepStore) {
     return Container(
       width: _getScreenWidth() / 1.23,
-      height: 60,
-      // margin: EdgeInsets.only(left: 20),
+      height: _getScreenHeight() / 15,
       margin: Dimens.contentLeftMargin,
       decoration: BoxDecoration(
-          color: AppColors.timelineCompressedContainerColor,
-          borderRadius: BorderRadius.all(Radius.circular(Dimens.contentRadius)),
-          boxShadow: [
-            BoxShadow(
-              color: AppColors.timelineCompressedContainerShadowColor,
-              blurRadius: 2,
-              offset: Offset(1, 2),
-              spreadRadius: 1,
-            )
-          ]),
-      child: _buildContentElements(index, stepStore),
-    );
-  }
-
-  Widget _buildContentElements(index, stepStore) {
-    return Padding(
-      padding: Dimens.compressedTaskListContentPadding,
-      child: Row(
-        children: [
-          _buildContentTitle(index, stepStore),
-          Spacer(),
-          _buildContentMoreButton(),
-        ],
+        color: AppColors.timelineCompressedContainerColor,
+        borderRadius: BorderRadius.all(Radius.circular(Dimens.contentRadius)),
       ),
+      child: _buildContentTitle(index, stepStore),
     );
   }
 
   Widget _buildContentTitle(index, stepStore) {
     var stepTitleId = _dataStore.getTaskTitleId(stepStore.currentStep - 1, index);
-    return Align(
-      alignment: Alignment.centerLeft,
-      child: Text(
-          "${_technicalNameWithTranslationsStore.getTranslation(stepTitleId)}",
-          style: TextStyle(
-            color: AppColors.main_color,
-            fontSize: 16,
-          )),
+    return Flexible(
+      child: Align(
+        alignment: Alignment.centerLeft,
+        child: Text(
+            "${_technicalNameWithTranslationsStore.getTranslation(stepTitleId)}",
+            style: TextStyle(
+              color: AppColors.main_color,
+              fontSize: Dimens.taskListTimeLineContentTitle,
+            )),
+      ),
     );
   }
 

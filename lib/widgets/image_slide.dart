@@ -31,14 +31,15 @@ class _ImageSlideState extends State<ImageSlide> {
 
     double screenHeight = MediaQuery.of(context).size.height;
 
-    return Column(
+    return Stack(
         children: [
           Flexible(
             child: CarouselSlider(
               options: CarouselOptions(
-                height: screenHeight / 3,
+                height: screenHeight / 2.7,
                 viewportFraction: 1,
                 autoPlay: true,
+                autoPlayInterval: Duration(milliseconds: 6000),
                 enlargeCenterPage: true,
                 enableInfiniteScroll: false,
                 onPageChanged: (index, reason) =>
@@ -47,43 +48,29 @@ class _ImageSlideState extends State<ImageSlide> {
               items: _imagesList,
             ),
           ),
-          SizedBox(height: 15,),
-          Stack(
-            children: [
-              Align(
-                alignment: AlignmentDirectional.centerStart,
-                child: Padding(
-                  padding: const EdgeInsets.only(left: 35,),
-                  child: Text(
-                    widget.description,
-                    style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold, fontSize: 25),
-                  ),
+          Positioned.fill(
+            bottom: 35,
+            child: Align(
+              alignment: Alignment.bottomCenter,
+              child: AnimatedSmoothIndicator(
+                activeIndex: _slideIndex,
+                count: _imagesList.length,
+                textDirection: TextDirection.ltr,
+                effect: ScrollingDotsEffect(
+                  activeDotColor: AppColors.bright_foreground_color,
+                  dotColor: AppColors.bright_foreground_color.withOpacity(0.7),
+                  activeStrokeWidth: 2.6,
+                  activeDotScale: 1.3,
+                  maxVisibleDots: 5,
+                  radius: 8,
+                  spacing: 10,
+                  dotHeight: 12,
+                  dotWidth: 12,
                 ),
               ),
-              Padding(
-                padding: const EdgeInsets.only(top: 10),
-                child: Center(
-                  child: AnimatedSmoothIndicator(
-                    activeIndex: _slideIndex,
-                    count: _imagesList.length,
-                    textDirection: TextDirection.ltr,
-                    effect: ScrollingDotsEffect(
-                      activeDotColor: AppColors.bright_foreground_color,
-                      dotColor: AppColors.bright_foreground_color.withOpacity(0.7),
-                      activeStrokeWidth: 2.6,
-                      activeDotScale: 1.3,
-                      maxVisibleDots: 5,
-                      radius: 8,
-                      spacing: 10,
-                      dotHeight: 12,
-                      dotWidth: 12,
-                    ),
-                  ),
-                ),
-              ),
-            ],
+            ),
           ),
-        ]
+        ],
     );
   }
 }

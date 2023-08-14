@@ -10,6 +10,7 @@ import 'package:boilerplate/url_handler.dart';
 import 'package:boilerplate/utils/locale/app_localization.dart';
 import 'package:boilerplate/widgets/info_dialog.dart';
 import 'package:boilerplate/widgets/load_image_with_cache.dart';
+import 'package:boilerplate/widgets/measure_size.dart';
 import 'package:boilerplate/widgets/next_stage_button.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -53,6 +54,7 @@ class _QuestionWidgetState extends State<QuestionWidget> with AutomaticKeepAlive
   @override
   bool get wantKeepAlive => false;
   double _getScreenWidth() => MediaQuery.of(context).size.width;
+  double _getScreenHeight() => MediaQuery.of(context).size.height;
 
   @override
   Widget build(BuildContext context) {
@@ -89,7 +91,7 @@ class _QuestionWidgetState extends State<QuestionWidget> with AutomaticKeepAlive
         children: [
           Flexible(
             child: Text(
-              _technicalNameWithTranslationsStore.getTranslation(titleId)!,
+              _technicalNameWithTranslationsStore.getTranslation(titleId),
               style: TextStyle(fontSize: 20, fontWeight: FontWeight.w500),
             ),
           ),
@@ -153,10 +155,11 @@ class _QuestionWidgetState extends State<QuestionWidget> with AutomaticKeepAlive
   ButtonStyle _buildInfoCloseButtonStyle({required double scaleBy}) {
     return ButtonStyle(
       minimumSize: MaterialStateProperty.all(sizeOfButton(scaleBy: scaleBy)),
+      overlayColor: MaterialStateColor.resolveWith((states) => AppColors.close_button_color.withOpacity(0.1)),
       shape: MaterialStateProperty.all<RoundedRectangleBorder>(
         RoundedRectangleBorder(
           borderRadius: Dimens.infoInsideDialogButtonsRadius,
-          side: BorderSide(color: AppColors.close_button_color, width: 2),
+          side: BorderSide(color:  AppColors.close_button_color, width: 2),
         ),
       ),
     );
@@ -182,6 +185,7 @@ class _QuestionWidgetState extends State<QuestionWidget> with AutomaticKeepAlive
   ButtonStyle _buildInfoOpenUrlButtonStyle({required double scaleBy, Color color = AppColors.main_color}) {
     return ButtonStyle(
       minimumSize: MaterialStateProperty.all(sizeOfButton(scaleBy: scaleBy)),
+      overlayColor: MaterialStateColor.resolveWith((states) => AppColors.white.withOpacity(0.13)),
       backgroundColor: MaterialStateProperty.all<Color>(color),
       shape: MaterialStateProperty.all<RoundedRectangleBorder>(
         RoundedRectangleBorder(
@@ -247,7 +251,7 @@ class _QuestionWidgetState extends State<QuestionWidget> with AutomaticKeepAlive
   }
 
   String _getInfoDescription() {
-    return _technicalNameWithTranslationsStore.getTranslation(widget.question.info_description)!;
+    return _technicalNameWithTranslationsStore.getTranslation(widget.question.info_description);
   }
 
   String _getInfoUrl() {
@@ -413,7 +417,7 @@ class _QuestionWidgetState extends State<QuestionWidget> with AutomaticKeepAlive
             ),
             Flexible(
               child: Text(
-                _technicalNameWithTranslationsStore.getTranslation(answerTitleId)!,
+                _technicalNameWithTranslationsStore.getTranslation(answerTitleId),
                 style: TextStyle(
                   fontSize: 15,
                 ),
@@ -474,7 +478,7 @@ class _QuestionWidgetState extends State<QuestionWidget> with AutomaticKeepAlive
             });
           },
           title: Text(
-            _technicalNameWithTranslationsStore.getTranslation(option.getAnswerTitleID())!,
+            _technicalNameWithTranslationsStore.getTranslation(option.getAnswerTitleID()),
           ),
           controlAffinity: ListTileControlAffinity.leading,
           tileColor: AppColors.white,

@@ -77,7 +77,6 @@ class _TaskListTimeLineState extends State<TaskListTimeLine> {
           borderRadius: Dimens.contentContainerBorderRadius,
           child: Container(
             width: _getScreenWidth() / 1.23,
-            height: 100,
             padding: Dimens.contentPadding,
             decoration: BoxDecoration(
               color: AppColors.contentColor,
@@ -104,18 +103,18 @@ class _TaskListTimeLineState extends State<TaskListTimeLine> {
       child: Container(
         child: Row(
           children: [
-            Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: (_deadLineAvailable(taskNumber))
-                  ? [
-                      _buildContentTitle(taskNumber),
-                      _buildContentDeadline(taskNumber),
-                    ]
-                  : [Center(child: _buildContentTitle(taskNumber))],
+            Flexible(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: (_deadLineAvailable(taskNumber))
+                    ? [
+                        _buildContentTitle(taskNumber),
+                        _buildContentDeadline(taskNumber),
+                      ]
+                    : [Center(child: _buildContentTitle(taskNumber))],
+              ),
             ),
-            Spacer(),
-            _buildContentMoreIcon(),
           ],
         ),
       ),
@@ -125,14 +124,17 @@ class _TaskListTimeLineState extends State<TaskListTimeLine> {
   Widget _buildContentTitle(taskNumber) {
     //text id of the task we want to find the title of
     var title_id = _dataStore.getTaskTitleIdByIndex(taskNumber);
-    return Align(
-      alignment: Alignment.centerLeft,
-      child: Text(
+    return Flexible(
+      child: Align(
+        alignment: Alignment.centerLeft,
+        child: Text(
           "${_technicalNameWithTranslationsStore.getTranslation(title_id)} ",
           style: TextStyle(
             color: AppColors.main_color,
-            fontSize: 16,
-          )),
+            fontSize: Dimens.taskListTimeLineContentTitle,
+          ),
+        ),
+      ),
     );
   }
 
@@ -165,19 +167,13 @@ class _TaskListTimeLineState extends State<TaskListTimeLine> {
                         : AppColors.deadlineTextUnDoneColor)))));
   }
 
-  Widget _buildContentMoreIcon() {
-    return Align(
-        alignment: Alignment.centerRight,
-        child: Icon(Icons.more_vert, color: AppColors.main_color));
-  }
-
   //general methods ............................................................
   double _getScreenWidth() => MediaQuery.of(context).size.width;
 
   bool _deadLineAvailable(taskNumber) {
     bool status = _dataStore.taskList.tasks[taskNumber].sub_tasks.any(
         (sub_task) => _technicalNameWithTranslationsStore
-            .getTranslation(sub_task.deadline)!
+            .getTranslation(sub_task.deadline)
             .isNotEmpty);
     switch (status) {
       case false:

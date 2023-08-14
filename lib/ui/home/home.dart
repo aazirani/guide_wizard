@@ -6,6 +6,7 @@ import 'package:boilerplate/stores/app_settings/app_settings_store.dart';
 import 'package:boilerplate/stores/step/step_store.dart';
 import 'package:boilerplate/stores/technical_name/technical_name_with_translations_store.dart';
 import 'package:boilerplate/widgets/compressed_tasklist_timeline/compressed_task_list_timeline.dart';
+import 'package:boilerplate/widgets/measure_size.dart';
 import 'package:boilerplate/widgets/step_slider/step_slider_widget.dart';
 import 'package:boilerplate/widgets/step_timeline/step_timeline.dart';
 import 'package:boilerplate/utils/locale/app_localization.dart';
@@ -16,6 +17,7 @@ import 'package:provider/provider.dart';
 import 'package:boilerplate/stores/language/language_store.dart';
 import 'package:boilerplate/stores/data/data_store.dart';
 import 'package:shimmer/shimmer.dart';
+import 'dart:math' as math;
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({
@@ -77,7 +79,7 @@ class _HomeScreenState extends State<HomeScreen> {
         child: SingleChildScrollView(
           physics: AlwaysScrollableScrollPhysics(),
           child: Container(
-            height: MediaQuery.of(context).size.height - _buildAppBar().preferredSize.height - MediaQuery.of(context).padding.top,
+            height: MediaQuery.of(context).size.height -_buildAppBar().preferredSize.height - MediaQuery.of(context).padding.top,
             child: _buildBody(context),
           ),
         ),
@@ -144,6 +146,7 @@ class _HomeScreenState extends State<HomeScreen> {
 
   Widget _buildScreenElements(int current, values) {
     return Column(
+      crossAxisAlignment: CrossAxisAlignment.center,
       children: [
         _buildCurrentStepIndicator(),
         Observer(
@@ -153,12 +156,7 @@ class _HomeScreenState extends State<HomeScreen> {
             stepNo: _appSettingsStore.stepsCount,
           ),
         ),
-        SizedBox(height: 25),
-        _buildInProgressText(),
-        SizedBox(height: 10),
-        Observer(
-            builder: (_) =>
-                CompressedTasklistTimeline(stepList: _dataStore.stepList)),
+        _stepStore.isQuestionStep() ? _buildQuestionDescription() : _buildInProgressCompressedTaskList(),
       ],
     );
   }
@@ -188,16 +186,67 @@ class _HomeScreenState extends State<HomeScreen> {
             style: TextStyle(color: AppColors.main_color)));
   }
 
-  Widget _buildInProgressText() {
-    return Padding(
-        padding: Dimens.inProgressTextPadding,
-        child: Align(
-            alignment: Alignment.centerLeft,
-            child: Text(AppLocalizations.of(context).translate("in_progress"),
+  double descriptionWidgetHeight = 0;
+  Widget _buildQuestionDescription() {
+    int questionDescId = _dataStore.stepList.steps[0].description;
+    return Column(
+      mainAxisAlignment: MainAxisAlignment.start,
+      children: [
+        Padding(
+            padding: Dimens.inProgressTextPadding,
+            child: Align(
+                alignment: Alignment.centerLeft,
+                child: Text(AppLocalizations.of(context).translate("description"),
+                    style: TextStyle(
+                        fontSize: Dimens.inProgressTextFont,
+                        color: AppColors.main_color,
+                        fontWeight: FontWeight.bold)))),
+
+        Container(
+          height: math.min(descriptionWidgetHeight, MediaQuery.of(context).size.height / 3),
+          // width: _getScreenWidth() / 1.23,
+          margin: Dimens.questionsStepDescMargin,
+          padding: Dimens.questionsStepDescPadding,
+          decoration: BoxDecoration(
+            color: AppColors.timelineCompressedContainerColor,
+            borderRadius: BorderRadius.all(Radius.circular(Dimens.contentRadius)),
+          ),
+          child: SingleChildScrollView(
+            child: MeasureSize(
+              onChange: (Size size) {
+                setState(() {
+                  descriptionWidgetHeight = size.height;
+                });
+              },
+              child: Text(
+                _technicalNameWithTranslationsStore.getTranslation(questionDescId),
                 style: TextStyle(
-                    fontSize: Dimens.inProgressTextFont,
-                    color: AppColors.main_color,
-                    fontWeight: FontWeight.bold))));
+                  color: AppColors.main_color,
+                  fontSize: Dimens.questionsStepDescFontSize,
+                ),
+              ),
+            ),
+          ),
+        ),
+      ],
+    );
+  }
+
+  Widget _buildInProgressCompressedTaskList() {
+    return Column(
+      children: [
+        Padding(
+            padding: Dimens.inProgressTextPadding,
+            child: Align(
+                alignment: Alignment.centerLeft,
+                child: Text(AppLocalizations.of(context).translate("in_progress"),
+                    style: TextStyle(
+                        fontSize: Dimens.inProgressTextFont,
+                        color: AppColors.main_color,
+                        fontWeight: FontWeight.bold)))),
+        Observer(builder: (_) => CompressedTasklistTimeline(stepList: _dataStore.stepList)),
+      ],
+    );
   }
 
   _buildPlaceholderScreenElements() {
@@ -207,7 +256,7 @@ class _HomeScreenState extends State<HomeScreen> {
         _buildPlaceholderCarouselSliderContainer(),
         StepTimeLine(stepNo: 0),
         SizedBox(height: Dimens.StepTimelineProgressBarDistance),
-        _buildInProgressText(),
+        // _buildInProgressCompressedTaskList(),
         SizedBox(height: Dimens.progressBarCompressedTaskListDistance),
         _buildPlaceholderCompressedTasklistTimeline(),
       ],
@@ -263,7 +312,9 @@ class _HomeScreenState extends State<HomeScreen> {
     return Padding(
       padding: Dimens.stepTimelineContainerPadding,
       child: Container(
-        color: Colors.grey,
+        decoration: BoxDecoration(
+            color: Colors.grey,
+            borderRadius: BorderRadius.all(Radius.circular(Dimens.compressedTaskListBorderRadius))),
         padding: Dimens.timelineContainerPadding,
         height: _getScreenHeight() /
             Dimens.placeHolderCompressedTaskListHeightRatio,

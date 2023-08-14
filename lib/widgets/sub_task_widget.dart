@@ -52,38 +52,34 @@ class SubTaskWidgetState extends State<SubTaskWidget>
 
   Widget _buildExpansionContent() {
     var markdown_id = widget.subTasks[widget.index].markdown;
-    return Column(
-        children: [
-          ExpansionContent(
-              renderManager: widget.renderManager,
-              markdown: _technicalNameWithTranslationsStore
-                  .getTranslation(markdown_id)!,
-              deadline: widget.deadline),
-        ]);
+    return ExpansionContent(
+            renderManager: widget.renderManager,
+            markdown: _technicalNameWithTranslationsStore.getTranslation(markdown_id)!,
+            deadline: widget.deadline);
   }
+
 
   Widget _buildAppExpansionTileWidget() {
     var sub_task_title_id = widget.subTasks[widget.index].title;
-    return AppExpansionTile(
-      onExpansionChanged: ((isNewState) {
-        if (isNewState) {
-          _runAtExpanding();
-        }
-      }),
-      maintainState: true,
-      textColor: AppColors.main_color,
-      iconColor: AppColors.main_color,
-      title: ScrollingOverflowText(
-        text: _technicalNameWithTranslationsStore
-            .getTranslation(sub_task_title_id)!,
-        textStyle: TextStyle(fontSize: Dimens.subtaskTitleFontSize),
-      ),
-      key: widget.subTasks[widget.index].globalKey,
-      children: <Widget>[
-        _buildExpansionContent(),
-      ],
-    );
-  }
+      return AppExpansionTile(
+        onExpansionChanged: ((isNewState) {
+          if (isNewState) {
+            _runAtExpanding();
+          }
+        }),
+        maintainState: true,
+        textColor: AppColors.main_color,
+        iconColor: AppColors.main_color,
+        title: Text(
+          _technicalNameWithTranslationsStore.getTranslation(sub_task_title_id)!,
+          style: TextStyle(fontSize: Dimens.subtaskTitleFontSize),
+        ),
+        key: widget.subTasks[widget.index].globalKey,
+        children: <Widget>[
+          _buildExpansionContent(),
+        ],
+      );
+    }
 
   Widget _buildAppExpansionTileWidgetWithCustomTheme() {
     return ListTileTheme(

@@ -5,10 +5,10 @@ import 'package:marquee/marquee.dart';
 
 class ScrollingOverflowText extends StatefulWidget {
   String text;
-  TextStyle? textStyle;
+  TextStyle? style;
   double height, overflowRatio;
   double? width;
-  ScrollingOverflowText({Key? key, required this.text, this.textStyle, this.height = ScrollingOverflowTextConstants.defaultHeight, this.width, this.overflowRatio = ScrollingOverflowTextConstants.defaultOverflowRatio}) : super(key: key);
+  ScrollingOverflowText(this.text, {Key? key, this.style, this.height = ScrollingOverflowTextConstants.defaultHeight, this.width, this.overflowRatio = ScrollingOverflowTextConstants.defaultOverflowRatio}) : super(key: key);
 
   @override
   State<ScrollingOverflowText> createState() => _ScrollingOverflowTextState();
@@ -23,7 +23,7 @@ class _ScrollingOverflowTextState extends State<ScrollingOverflowText> {
       builder: (context, constraints) {
         final span = TextSpan(
           text: widget.text,
-          style: widget.textStyle,
+          style: widget.style,
         );
         final painter = TextPainter(
           text: span,
@@ -33,7 +33,7 @@ class _ScrollingOverflowTextState extends State<ScrollingOverflowText> {
         );
         painter.layout();
         final overflow = painter.size.width > constraints.maxWidth || painter.size.width > _getScreenWidth() * widget.overflowRatio;
-        return overflow ? getScrollingText() : Text(widget.text, style: widget.textStyle,);
+        return overflow ? getScrollingText() : Text(widget.text, style: widget.style,);
       },
     );
   }
@@ -44,7 +44,7 @@ class _ScrollingOverflowTextState extends State<ScrollingOverflowText> {
       width: widget.width ?? _getScreenWidth() * widget.overflowRatio,
       child: Marquee(
         text: widget.text,
-        style: widget.textStyle,
+        style: widget.style,
         showFadingOnlyWhenScrolling: ScrollingOverflowTextConstants.showFadingOnlyWhenScrolling,
         startAfter: ScrollingOverflowTextConstants.startAfter,
         pauseAfterRound: ScrollingOverflowTextConstants.pauseAfterRound,

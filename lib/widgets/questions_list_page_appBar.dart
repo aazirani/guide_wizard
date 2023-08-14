@@ -2,6 +2,7 @@ import 'package:boilerplate/constants/colors.dart';
 import 'package:boilerplate/constants/dimens.dart';
 import 'package:boilerplate/data/data_laod_handler.dart';
 import 'package:boilerplate/utils/locale/app_localization.dart';
+import 'package:boilerplate/widgets/scrolling_overflow_text.dart';
 import 'package:flutter/material.dart';
 
 class QuestionsListAppBar extends StatefulWidget implements PreferredSizeWidget {
@@ -13,7 +14,7 @@ class QuestionsListAppBar extends StatefulWidget implements PreferredSizeWidget 
       {Key? key,
         this.appBarSize = Dimens.questionListPageAppBarHeight,
         this.fontSize = Dimens.questionListPageAppBarFontSize,
-        required this.title,
+        this.title = "",
       })
       : super(key: key);
 
@@ -45,9 +46,10 @@ class _QuestionsListAppBarState extends State<QuestionsListAppBar> {
           color: AppColors.bright_foreground_color,
         ),
       ),
-      title: Text(
+      title: ScrollingOverflowText(
         widget.title,
         style: TextStyle(color: AppColors.white, fontSize: 20),
+        overflowRatio: 0.75,
       ),
     );
   }
