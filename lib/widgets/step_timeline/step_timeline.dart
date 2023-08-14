@@ -1,11 +1,11 @@
-import 'package:boilerplate/constants/colors.dart';
-import 'package:boilerplate/stores/app_settings/app_settings_store.dart';
 import 'package:flutter/material.dart';
-import 'package:timelines/timelines.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
+import 'package:guide_wizard/constants/colors.dart';
+import 'package:guide_wizard/constants/dimens.dart';
+import 'package:guide_wizard/stores/app_settings/app_settings_store.dart';
+import 'package:guide_wizard/stores/step/step_store.dart';
 import 'package:provider/provider.dart';
-import 'package:boilerplate/stores/step/step_store.dart';
-import 'package:boilerplate/constants/dimens.dart';
+import 'package:timelines/timelines.dart';
 
 class StepTimeLine extends StatefulWidget {
   final int stepNo;

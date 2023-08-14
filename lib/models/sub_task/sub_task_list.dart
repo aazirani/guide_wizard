@@ -1,4 +1,4 @@
-import 'package:boilerplate/models/sub_task/sub_task.dart';
+import 'package:guide_wizard/models/sub_task/sub_task.dart';
 
 class SubTaskList {
   List<SubTask> subTasks;

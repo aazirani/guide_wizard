@@ -1,16 +1,13 @@
-import 'package:boilerplate/constants/colors.dart';
-import 'package:boilerplate/constants/dimens.dart';
-import 'package:boilerplate/models/task/task.dart';
-import 'package:boilerplate/stores/technical_name/technical_name_with_translations_store.dart';
-import 'package:boilerplate/widgets/questions_list_page_appBar.dart';
-import 'package:boilerplate/widgets/sub_task_widget.dart';
-import 'package:boilerplate/widgets/task_page_appbar_widget.dart';
-import 'package:boilerplate/widgets/image_slide.dart';
-import 'package:boilerplate/widgets/measure_size.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/rendering.dart';
-import 'package:flutter/services.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
+import 'package:guide_wizard/constants/colors.dart';
+import 'package:guide_wizard/constants/dimens.dart';
+import 'package:guide_wizard/models/task/task.dart';
+import 'package:guide_wizard/stores/technical_name/technical_name_with_translations_store.dart';
+import 'package:guide_wizard/widgets/image_slide.dart';
+import 'package:guide_wizard/widgets/measure_size.dart';
+import 'package:guide_wizard/widgets/questions_list_page_appBar.dart';
+import 'package:guide_wizard/widgets/sub_task_widget.dart';
 import 'package:provider/provider.dart';
 import 'package:render_metrics/render_metrics.dart';
 

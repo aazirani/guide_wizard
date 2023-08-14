@@ -1,10 +1,10 @@
 import 'dart:async';
 
-import 'package:boilerplate/data/data_laod_handler.dart';
-import 'package:boilerplate/data/network/constants/endpoints.dart';
-import 'package:boilerplate/data/network/dio_client.dart';
-import 'package:boilerplate/data/network/rest_client.dart';
-import 'package:boilerplate/models/technical_name/technical_name_with_translations_list.dart';
+import 'package:guide_wizard/data/data_laod_handler.dart';
+import 'package:guide_wizard/data/network/constants/endpoints.dart';
+import 'package:guide_wizard/data/network/dio_client.dart';
+import 'package:guide_wizard/data/network/rest_client.dart';
+import 'package:guide_wizard/models/technical_name/technical_name_with_translations_list.dart';
 
 class TechnicalNameApi {
   // dio instance

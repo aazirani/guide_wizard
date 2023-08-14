@@ -1,4 +1,4 @@
-import 'package:boilerplate/models/task/task.dart';
+import 'package:guide_wizard/models/task/task.dart';
 
 class TaskList {
   final List<Task> tasks;

@@ -1,6 +1,6 @@
-import 'package:boilerplate/data/repository.dart';
-import 'package:boilerplate/stores/error/error_store.dart';
-import 'package:boilerplate/stores/form/form_store.dart';
+import 'package:guide_wizard/data/repository.dart';
+import 'package:guide_wizard/stores/error/error_store.dart';
+import 'package:guide_wizard/stores/form/form_store.dart';
 import 'package:mobx/mobx.dart';
 
 part 'app_settings_store.g.dart';

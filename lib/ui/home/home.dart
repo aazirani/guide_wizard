@@ -1,23 +1,23 @@
 import 'dart:async';
 import 'dart:math' as math;
 
-import 'package:boilerplate/constants/colors.dart';
-import 'package:boilerplate/constants/dimens.dart';
-import 'package:boilerplate/constants/lang_keys.dart';
-import 'package:boilerplate/data/data_laod_handler.dart';
-import 'package:boilerplate/stores/app_settings/app_settings_store.dart';
-import 'package:boilerplate/stores/data/data_store.dart';
-import 'package:boilerplate/stores/language/language_store.dart';
-import 'package:boilerplate/stores/step/step_store.dart';
-import 'package:boilerplate/stores/technical_name/technical_name_with_translations_store.dart';
-import 'package:boilerplate/utils/locale/app_localization.dart';
-import 'package:boilerplate/widgets/compressed_tasklist_timeline/compressed_task_list_timeline.dart';
-import 'package:boilerplate/widgets/measure_size.dart';
-import 'package:boilerplate/widgets/step_slider/step_slider_widget.dart';
-import 'package:boilerplate/widgets/step_timeline/step_timeline.dart';
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
+import 'package:guide_wizard/constants/colors.dart';
+import 'package:guide_wizard/constants/dimens.dart';
+import 'package:guide_wizard/constants/lang_keys.dart';
+import 'package:guide_wizard/data/data_laod_handler.dart';
+import 'package:guide_wizard/stores/app_settings/app_settings_store.dart';
+import 'package:guide_wizard/stores/data/data_store.dart';
+import 'package:guide_wizard/stores/language/language_store.dart';
+import 'package:guide_wizard/stores/step/step_store.dart';
+import 'package:guide_wizard/stores/technical_name/technical_name_with_translations_store.dart';
+import 'package:guide_wizard/utils/locale/app_localization.dart';
+import 'package:guide_wizard/widgets/compressed_tasklist_timeline/compressed_task_list_timeline.dart';
+import 'package:guide_wizard/widgets/measure_size.dart';
+import 'package:guide_wizard/widgets/step_slider/step_slider_widget.dart';
+import 'package:guide_wizard/widgets/step_timeline/step_timeline.dart';
 import 'package:provider/provider.dart';
 import 'package:shimmer/shimmer.dart';
 

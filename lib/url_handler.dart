@@ -1,7 +1,7 @@
-import 'package:boilerplate/constants/colors.dart';
-import 'package:boilerplate/constants/lang_keys.dart';
-import 'package:boilerplate/utils/locale/app_localization.dart';
 import 'package:flutter/material.dart';
+import 'package:guide_wizard/constants/colors.dart';
+import 'package:guide_wizard/constants/lang_keys.dart';
+import 'package:guide_wizard/utils/locale/app_localization.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 class UrlHandler {

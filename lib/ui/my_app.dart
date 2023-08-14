@@ -1,23 +1,23 @@
-import 'package:boilerplate/constants/app_theme.dart';
-import 'package:boilerplate/constants/strings.dart';
-import 'package:boilerplate/data/repository.dart';
-import 'package:boilerplate/di/components/service_locator.dart';
-import 'package:boilerplate/providers/internet_connection_state.dart';
-import 'package:boilerplate/providers/question_widget_state/question_widget_state.dart';
-import 'package:boilerplate/stores/app_settings/app_settings_store.dart';
-import 'package:boilerplate/stores/language/language_store.dart';
-import 'package:boilerplate/stores/step/step_store.dart';
-import 'package:boilerplate/stores/technical_name/technical_name_with_translations_store.dart';
-import 'package:boilerplate/stores/theme/theme_store.dart';
-import 'package:boilerplate/stores/updated_at_times/updated_at_times_store.dart';
-import 'package:boilerplate/ui/home/home.dart';
-import 'package:boilerplate/utils/locale/app_localization.dart';
-import 'package:boilerplate/utils/routes/routes.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
+import 'package:guide_wizard/constants/app_theme.dart';
+import 'package:guide_wizard/constants/strings.dart';
+import 'package:guide_wizard/data/repository.dart';
+import 'package:guide_wizard/di/components/service_locator.dart';
+import 'package:guide_wizard/providers/internet_connection_state.dart';
+import 'package:guide_wizard/providers/question_widget_state/question_widget_state.dart';
+import 'package:guide_wizard/stores/app_settings/app_settings_store.dart';
+import 'package:guide_wizard/stores/data/data_store.dart';
+import 'package:guide_wizard/stores/language/language_store.dart';
+import 'package:guide_wizard/stores/step/step_store.dart';
+import 'package:guide_wizard/stores/technical_name/technical_name_with_translations_store.dart';
+import 'package:guide_wizard/stores/theme/theme_store.dart';
+import 'package:guide_wizard/stores/updated_at_times/updated_at_times_store.dart';
+import 'package:guide_wizard/ui/home/home.dart';
+import 'package:guide_wizard/utils/locale/app_localization.dart';
+import 'package:guide_wizard/utils/routes/routes.dart';
 import 'package:provider/provider.dart';
-import 'package:boilerplate/stores/data/data_store.dart';
 
 class MyApp extends StatelessWidget {
   // This widget is the root of your application.

@@ -1,4 +1,4 @@
-import 'package:boilerplate/models/language/language.dart' as L;
+import 'package:guide_wizard/models/language/language.dart' as L;
 
 class Translation {
   int id;

@@ -1,9 +1,8 @@
-import 'package:boilerplate/constants/colors.dart';
-import 'package:boilerplate/constants/dimens.dart';
-import 'package:boilerplate/data/data_laod_handler.dart';
-import 'package:boilerplate/utils/locale/app_localization.dart';
-import 'package:boilerplate/widgets/scrolling_overflow_text.dart';
 import 'package:flutter/material.dart';
+import 'package:guide_wizard/constants/colors.dart';
+import 'package:guide_wizard/constants/dimens.dart';
+import 'package:guide_wizard/data/data_laod_handler.dart';
+import 'package:guide_wizard/widgets/scrolling_overflow_text.dart';
 
 class QuestionsListAppBar extends StatefulWidget implements PreferredSizeWidget {
   double appBarSize;

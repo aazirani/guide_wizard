@@ -1,6 +1,6 @@
-import 'package:boilerplate/data/local/constants/db_constants.dart';
-import 'package:boilerplate/models/question/question.dart';
-import 'package:boilerplate/models/question/question_list.dart';
+import 'package:guide_wizard/data/local/constants/db_constants.dart';
+import 'package:guide_wizard/models/question/question.dart';
+import 'package:guide_wizard/models/question/question_list.dart';
 import 'package:sembast/sembast.dart';
 
 class QuestionDataSource {

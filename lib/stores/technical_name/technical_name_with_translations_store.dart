@@ -1,7 +1,7 @@
-import 'package:boilerplate/data/repository.dart';
-import 'package:boilerplate/models/technical_name/technical_name_with_translations.dart';
-import 'package:boilerplate/models/technical_name/technical_name_with_translations_list.dart';
 import 'package:get/get.dart';
+import 'package:guide_wizard/data/repository.dart';
+import 'package:guide_wizard/models/technical_name/technical_name_with_translations.dart';
+import 'package:guide_wizard/models/technical_name/technical_name_with_translations_list.dart';
 import 'package:mobx/mobx.dart';
 
 // // Include generated file

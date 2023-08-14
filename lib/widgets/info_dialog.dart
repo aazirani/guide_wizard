@@ -1,9 +1,10 @@
-import 'package:boilerplate/constants/colors.dart';
-import 'package:boilerplate/constants/dimens.dart';
-import 'package:boilerplate/widgets/measure_size.dart';
-import 'package:flutter/material.dart';
-import 'package:boilerplate/widgets/questions_list_page_appBar.dart';
 import 'dart:math' as math;
+
+import 'package:flutter/material.dart';
+import 'package:guide_wizard/constants/colors.dart';
+import 'package:guide_wizard/constants/dimens.dart';
+import 'package:guide_wizard/widgets/measure_size.dart';
+import 'package:guide_wizard/widgets/questions_list_page_appBar.dart';
 
 class InfoDialog extends StatefulWidget {
 

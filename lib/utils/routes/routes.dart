@@ -1,5 +1,5 @@
-import 'package:boilerplate/ui/home/home.dart';
 import 'package:flutter/material.dart';
+import 'package:guide_wizard/ui/home/home.dart';
 
 class Routes {
   Routes._();

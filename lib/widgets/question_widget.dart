@@ -1,21 +1,21 @@
 import 'dart:math' as math;
 
-import 'package:boilerplate/constants/colors.dart';
-import 'package:boilerplate/constants/dimens.dart';
-import 'package:boilerplate/constants/lang_keys.dart';
-import 'package:boilerplate/data/network/constants/endpoints.dart';
-import 'package:boilerplate/models/answer/answer.dart';
-import 'package:boilerplate/models/question/question.dart';
-import 'package:boilerplate/providers/question_widget_state/question_widget_state.dart';
-import 'package:boilerplate/stores/app_settings/app_settings_store.dart';
-import 'package:boilerplate/stores/data/data_store.dart';
-import 'package:boilerplate/stores/technical_name/technical_name_with_translations_store.dart';
-import 'package:boilerplate/url_handler.dart';
-import 'package:boilerplate/utils/locale/app_localization.dart';
-import 'package:boilerplate/widgets/info_dialog.dart';
-import 'package:boilerplate/widgets/load_image_with_cache.dart';
-import 'package:boilerplate/widgets/next_stage_button.dart';
 import 'package:flutter/material.dart';
+import 'package:guide_wizard/constants/colors.dart';
+import 'package:guide_wizard/constants/dimens.dart';
+import 'package:guide_wizard/constants/lang_keys.dart';
+import 'package:guide_wizard/data/network/constants/endpoints.dart';
+import 'package:guide_wizard/models/answer/answer.dart';
+import 'package:guide_wizard/models/question/question.dart';
+import 'package:guide_wizard/providers/question_widget_state/question_widget_state.dart';
+import 'package:guide_wizard/stores/app_settings/app_settings_store.dart';
+import 'package:guide_wizard/stores/data/data_store.dart';
+import 'package:guide_wizard/stores/technical_name/technical_name_with_translations_store.dart';
+import 'package:guide_wizard/url_handler.dart';
+import 'package:guide_wizard/utils/locale/app_localization.dart';
+import 'package:guide_wizard/widgets/info_dialog.dart';
+import 'package:guide_wizard/widgets/load_image_with_cache.dart';
+import 'package:guide_wizard/widgets/next_stage_button.dart';
 import 'package:provider/provider.dart';
 
 class QuestionWidget extends StatefulWidget {

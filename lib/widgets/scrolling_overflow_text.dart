@@ -1,6 +1,5 @@
-import 'package:boilerplate/constants/widgets_constants/scrolling_overflow_text_constants.dart';
 import 'package:flutter/material.dart';
-import 'package:get/get.dart';
+import 'package:guide_wizard/constants/widgets_constants/scrolling_overflow_text_constants.dart';
 import 'package:marquee/marquee.dart';
 
 class ScrollingOverflowText extends StatefulWidget {

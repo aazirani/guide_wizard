@@ -1,8 +1,8 @@
-import 'package:boilerplate/constants/dimens.dart';
-import 'package:boilerplate/constants/lang_keys.dart';
-import 'package:boilerplate/utils/locale/app_localization.dart';
 import 'package:fast_cached_network_image/fast_cached_network_image.dart';
 import 'package:flutter/material.dart';
+import 'package:guide_wizard/constants/dimens.dart';
+import 'package:guide_wizard/constants/lang_keys.dart';
+import 'package:guide_wizard/utils/locale/app_localization.dart';
 
 class LoadImageWithCache extends StatefulWidget {
   String imageUrl;
