@@ -79,7 +79,7 @@ class _HomeScreenState extends State<HomeScreen> {
         child: SingleChildScrollView(
           physics: AlwaysScrollableScrollPhysics(),
           child: Container(
-            height: MediaQuery.of(context).size.height - _buildAppBar().preferredSize.height - MediaQuery.of(context).padding.top,
+            height: MediaQuery.of(context).size.height -_buildAppBar().preferredSize.height - MediaQuery.of(context).padding.top,
             child: _buildBody(context),
           ),
         ),
@@ -312,7 +312,9 @@ class _HomeScreenState extends State<HomeScreen> {
     return Padding(
       padding: Dimens.stepTimelineContainerPadding,
       child: Container(
-        color: Colors.grey,
+        decoration: BoxDecoration(
+            color: Colors.grey,
+            borderRadius: BorderRadius.all(Radius.circular(Dimens.compressedTaskListBorderRadius))),
         padding: Dimens.timelineContainerPadding,
         height: _getScreenHeight() /
             Dimens.placeHolderCompressedTaskListHeightRatio,
