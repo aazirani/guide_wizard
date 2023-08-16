@@ -97,6 +97,7 @@ dependencies:
   fast_cached_network_image: ^1.1.1
   simple_circular_progress_bar: ^1.0.2
   progress_state_button: ^1.0.4
+  material_dialogs: ^1.1.4
 
 dev_dependencies:
   flutter_test:

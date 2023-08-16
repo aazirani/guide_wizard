@@ -57,9 +57,6 @@ class MyApp extends StatelessWidget {
                 : AppThemeData.lightThemeData,
             routes: Routes.routes,
             locale: Locale(_languageStore.locale),
-            supportedLocales: _languageStore.supportedLanguages
-                .map((language) => Locale(language.locale!, language.code))
-                .toList(),
             localizationsDelegates: [
               // A class which loads the translations from JSON files
               AppLocalizations.delegate,

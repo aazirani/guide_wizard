@@ -13,7 +13,6 @@ import 'package:guide_wizard/stores/step/step_store.dart';
 import 'package:guide_wizard/stores/technical_name/technical_name_with_translations_store.dart';
 import 'package:guide_wizard/ui/questions/questions_list_page.dart';
 import 'package:guide_wizard/ui/tasklist/tasklist.dart';
-import 'package:guide_wizard/utils/locale/app_localization.dart';
 import 'package:guide_wizard/widgets/load_image_with_cache.dart';
 import 'package:provider/provider.dart';
 
@@ -180,8 +179,8 @@ class _StepSliderWidgetState extends State<StepSliderWidget> {
     int noOfTasks = _dataStore.getNumberOfTasksFromAStep(currentStepNo);
     String str = "$noOfTasks ";
     switch (noOfTasks) {
-      case 1: str += AppLocalizations.of(context).translate(LangKeys.task); break;
-      default: str += AppLocalizations.of(context).translate(LangKeys.tasks); break;
+      case 1: str += _technicalNameWithTranslationsStore.getTranslationByTechnicalName(LangKeys.task); break;
+      default: str += _technicalNameWithTranslationsStore.getTranslationByTechnicalName(LangKeys.tasks); break;
     }
     return str;
   }
@@ -190,8 +189,8 @@ class _StepSliderWidgetState extends State<StepSliderWidget> {
     int noOfQuestions = _dataStore.getNumberOfQuestionsFromAStep(currentStepNo);
     String str = "$noOfQuestions ";
     switch (noOfQuestions) {
-      case 1: str += AppLocalizations.of(context).translate(LangKeys.question); break;
-      default: str += AppLocalizations.of(context).translate(LangKeys.questions); break;
+      case 1: str += _technicalNameWithTranslationsStore.getTranslationByTechnicalName(LangKeys.question); break;
+      default: str += _technicalNameWithTranslationsStore.getTranslationByTechnicalName(LangKeys.questions); break;
     }
     return str;
   }
@@ -223,7 +222,7 @@ class _StepSliderWidgetState extends State<StepSliderWidget> {
               mainAxisAlignment: MainAxisAlignment.center,
               mainAxisSize: MainAxisSize.min,
               children: [
-                Text(AppLocalizations.of(context).translate(LangKeys.continueKey),
+                Text(_technicalNameWithTranslationsStore.getTranslationByTechnicalName(LangKeys.continueKey),
                     style: TextStyle(
                         fontSize: Dimens.continueFont, color: AppColors.main_color)),
                 SizedBox(width: 1),
