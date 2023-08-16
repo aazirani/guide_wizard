@@ -66,9 +66,11 @@ class _QuestionsListPageState extends State<QuestionsListPage> {
                   topRight: Radius.circular(30),
                 ),
               ),
-              child: ScrollablePositionedList.builder(
-                itemCount: _questionsCount + 1,
-                itemBuilder: (context, index) => _buildScrollablePositionedListItem(index),
+              child: RawScrollbar(
+                child: ScrollablePositionedList.builder(
+                  itemCount: _questionsCount + 1,
+                  itemBuilder: (context, index) => _buildScrollablePositionedListItem(index),
+                ),
               ),
             ),
           ),

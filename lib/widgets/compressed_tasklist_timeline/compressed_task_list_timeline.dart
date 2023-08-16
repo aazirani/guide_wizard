@@ -96,6 +96,7 @@ class _CompressedTasklistTimelineState
       width: _getScreenWidth() / 1.23,
       height: _getScreenHeight() / 15,
       margin: Dimens.contentLeftMargin,
+      padding: Dimens.compressedTaskListContentPadding,
       decoration: BoxDecoration(
         color: AppColors.timelineCompressedContainerColor,
         borderRadius: BorderRadius.all(Radius.circular(Dimens.contentRadius)),

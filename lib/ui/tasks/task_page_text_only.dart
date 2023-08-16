@@ -66,11 +66,13 @@ class _TaskPageTextOnlyState extends State<TaskPageTextOnly> {
   }
 
   _buildPageContent() {
-    return ListView(
-      children: [
-        _buildDescription(),
-        _buildSubTasksList(),
-      ],
+    return RawScrollbar(
+      child: ListView(
+        children: [
+          _buildDescription(),
+          _buildSubTasksList(),
+        ],
+      ),
     );
   }
 

@@ -96,12 +96,14 @@ class _TaskPageWithImageState extends State<TaskPageWithImage> {
                 topRight: Radius.circular(25),
               ),
             color: AppColors.bright_foreground_color),
-            child: ListView.builder(
-              scrollDirection: Axis.vertical,
-              shrinkWrap: true,
-              controller: scrollController,
-              itemCount: 1 + widget.task.subTaskCount,
-              itemBuilder: _buildDraggableSheetItems,
+            child: RawScrollbar(
+              child: ListView.builder(
+                scrollDirection: Axis.vertical,
+                shrinkWrap: true,
+                controller: scrollController,
+                itemCount: 1 + widget.task.subTaskCount,
+                itemBuilder: _buildDraggableSheetItems,
+              ),
             ),
           );
         },
