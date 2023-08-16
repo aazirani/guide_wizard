@@ -60,7 +60,7 @@ class Dimens {
   static const double numOfTasksFont = 15;
   static const double continueFont = 12;
   static const double stepTitleFont = 17;
-  static const stepSliderprogressBarPadding = EdgeInsets.only(right: 10, top: 10);
+  static const stepSliderprogressBarPadding = EdgeInsets.only(left:10, right: 10, top: 10);
   static const double pendingSliderBorder = 4;
   static const double doneSliderBorder = 1;
   static const double notStartedSliderBorder = 2;
@@ -68,6 +68,7 @@ class Dimens {
   static const double progressBarRadius = 10;
   static const sliderContainerContentPadding = EdgeInsets.only(top: 30, left: 10);
   static const progressBarHeight = 20.0;
+  static const stepSliderImagePadding = EdgeInsets.all(10);
   // compressed tasklist.........................................................
   static const compressedTaskListContentPadding = const EdgeInsets.only(left: 10);
   static const double contentRadius = 10;
