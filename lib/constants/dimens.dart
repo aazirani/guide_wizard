@@ -69,6 +69,7 @@ class Dimens {
   static const sliderContainerContentPadding = EdgeInsets.only(top: 30, left: 10);
   static const progressBarHeight = 20.0;
   static const stepSliderImagePadding = EdgeInsets.all(10);
+  static const stepSliderProgressBarPadding = EdgeInsets.only(bottom: 15);
   // compressed tasklist.........................................................
   static const compressedTaskListContentPadding = const EdgeInsets.only(left: 10);
   static const double contentRadius = 10;

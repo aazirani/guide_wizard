@@ -260,7 +260,7 @@ class _StepSliderWidgetState extends State<StepSliderWidget> {
   Widget _buildProgressBar(currentStepNo) {
     return Container(
       height: Dimens.progressBarHeight,
-      margin: EdgeInsets.only(bottom: 10),
+      margin: Dimens.stepSliderProgressBarPadding,
       child: Observer(
         builder: (_) => Padding(
             padding: Dimens.stepSliderprogressBarPadding,
