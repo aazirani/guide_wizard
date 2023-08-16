@@ -15,7 +15,6 @@ import 'package:guide_wizard/stores/technical_name/technical_name_with_translati
 import 'package:guide_wizard/stores/theme/theme_store.dart';
 import 'package:guide_wizard/stores/updated_at_times/updated_at_times_store.dart';
 import 'package:guide_wizard/ui/home/home.dart';
-import 'package:guide_wizard/utils/locale/app_localization.dart';
 import 'package:guide_wizard/utils/routes/routes.dart';
 import 'package:provider/provider.dart';
 
@@ -58,8 +57,6 @@ class MyApp extends StatelessWidget {
             routes: Routes.routes,
             locale: Locale(_languageStore.locale),
             localizationsDelegates: [
-              // A class which loads the translations from JSON files
-              AppLocalizations.delegate,
               // Built-in localization of basic text for Material widgets
               GlobalMaterialLocalizations.delegate,
               // Built-in localization for text direction LTR/RTL
