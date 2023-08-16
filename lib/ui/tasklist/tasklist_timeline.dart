@@ -79,7 +79,7 @@ class _TaskListTimeLineState extends State<TaskListTimeLine> {
           child: Container(
             padding: Dimens.contentPadding,
             constraints: BoxConstraints(
-              minHeight: 100,
+              minHeight: Dimens.taskListTimeLineContainerMinHeight,
             ),
             decoration: BoxDecoration(
               color: AppColors.contentColor,

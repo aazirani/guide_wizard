@@ -19,6 +19,7 @@ class Dimens {
   static const contentDeadlineTopPadding = EdgeInsets.only(top: 20);
   static const contentDeadlineBorderRadius = BorderRadius.all(Radius.circular(20));
   static const descriptionFontSize = 18.0;
+  static const double taskListTimeLineContainerMinHeight = 100;
 
   // Subtask: ------------------------------------------------------------
   static const double subtaskTitleFontSize = 19;
