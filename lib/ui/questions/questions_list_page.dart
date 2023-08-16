@@ -67,9 +67,17 @@ class _QuestionsListPageState extends State<QuestionsListPage> {
                   topRight: Radius.circular(30),
                 ),
               ),
-              child: ScrollablePositionedList.builder(
-                itemCount: _questionsCount + 1,
-                itemBuilder: (context, index) => _buildScrollablePositionedListItem(index),
+              child: Column(
+                children: [
+                  Flexible(
+                    child: ListView.builder(
+                      shrinkWrap: true,
+                      itemCount: _questionsCount,
+                      itemBuilder: (context, index) => _buildQuestionWidget(index),
+                    ),
+                  ),
+                  SizedBox(height: floatingActionButtonSize.height,),
+                ],
               ),
             ),
           ),
@@ -82,10 +90,6 @@ class _QuestionsListPageState extends State<QuestionsListPage> {
         );
       }),
     );
-  }
-
-  Widget _buildScrollablePositionedListItem(int index) {
-    return _isItemAfterQuestions(index) ? SizedBox(height: floatingActionButtonSize.height,) : _buildQuestionWidget(index);
   }
 
   bool _isItemAfterQuestions(index) => index == _questionsCount;
@@ -108,35 +112,9 @@ class _QuestionsListPageState extends State<QuestionsListPage> {
         });
       },
       child: SafeArea(
-        child: Container(
-          width: MediaQuery.of(context).size.width,
-          height: Dimens.nextStageSurroundingContainerHeight + MediaQuery.of(context).viewPadding.bottom,
-          decoration: BoxDecoration(
-              gradient: LinearGradient(
-                begin: Alignment.topCenter,
-                end: Alignment.bottomCenter,
-                colors: [
-                  Colors.white,
-                  Colors.white,
-                ],
-              ),
-          ),
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.end,
-            children: [
-              Flexible(
-                child: Container(
-                  color: Colors.white,
-                ),
-              ),
-              NextStageButton(),
-              Flexible(
-                child: Container(
-                  color: Colors.white,
-                ),
-              )
-            ],
-          ),
+        child: Padding(
+          padding: const EdgeInsets.only(bottom: 10),
+          child: NextStageButton(),
         ),
       ),
     );

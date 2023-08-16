@@ -158,7 +158,7 @@ class _HomeScreenState extends State<HomeScreen> {
             stepNo: _appSettingsStore.stepsCount,
           ),
         ),
-        Observer(builder: (_) => _stepStore.isQuestionStep() ? _buildQuestionDescription() : _buildInProgressCompressedTaskList()),
+        _stepStore.isQuestionStep() ? _buildQuestionDescription() : _buildInProgressCompressedTaskList(),
       ],
     );
   }
@@ -246,7 +246,7 @@ class _HomeScreenState extends State<HomeScreen> {
                         fontSize: Dimens.inProgressTextFont,
                         color: AppColors.main_color,
                         fontWeight: FontWeight.bold)))),
-        Observer(builder: (_) => CompressedTasklistTimeline(stepList: _dataStore.stepList)),
+        CompressedTasklistTimeline(stepList: _dataStore.stepList),
       ],
     );
   }
