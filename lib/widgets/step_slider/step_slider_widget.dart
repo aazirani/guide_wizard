@@ -93,11 +93,19 @@ class _StepSliderWidgetState extends State<StepSliderWidget> {
           border: _buildSliderBorder(index),
           borderRadius: BorderRadius.all(Radius.circular(20)),
         ),
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
           children: [
-            _buildContent(index),
-            _buildAvatar(index),
+            Flexible(
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  _buildContent(index),
+                  _buildAvatar(index),
+                ],
+              ),
+            ),
+            (_dataStore.getStepOrder(index) != SettingsConstants.infoStepOrder) ? _buildProgressBar(index) : SizedBox(),
           ],
         ));
   }
@@ -121,6 +129,7 @@ class _StepSliderWidgetState extends State<StepSliderWidget> {
     if (_dataStore.getStepImage(index) == null) return SizedBox();
     return Flexible(
       child: Container(
+        margin: Dimens.stepSliderImagePadding,
         child: Padding(
           padding: Dimens.stepAvatar,
           child: LoadImageWithCache(imageUrl: Endpoints.stepsImageBaseUrl +
@@ -146,9 +155,6 @@ class _StepSliderWidgetState extends State<StepSliderWidget> {
               _buildStepNoOfTasksOrQuestions(currentStepNo),
               SizedBox(height: 20),
               _buildContinueButton(currentStepNo),
-              SizedBox(height: 10),
-              (_dataStore.getStepOrder(currentStepNo) != SettingsConstants.infoStepOrder) ? _buildProgressBar(currentStepNo) : Container(),
-              SizedBox(height: 10),
             ]),
       ),
     );
@@ -253,6 +259,7 @@ class _StepSliderWidgetState extends State<StepSliderWidget> {
   Widget _buildProgressBar(currentStepNo) {
     return Container(
       height: Dimens.progressBarHeight,
+      margin: Dimens.stepSliderProgressBarPadding,
       child: Observer(
         builder: (_) => Padding(
             padding: Dimens.stepSliderprogressBarPadding,

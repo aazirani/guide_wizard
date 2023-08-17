@@ -226,7 +226,7 @@ class _HomeScreenState extends State<HomeScreen> {
             stepNo: _appSettingsStore.stepsCount,
           ),
         ),
-        _stepStore.isQuestionStep() ? _buildQuestionDescription() : _buildInProgressCompressedTaskList(),
+         Observer(builder: (_) => _stepStore.currentStep == 1 ? _buildQuestionDescription() : _buildInProgressCompressedTaskList()),
       ],
     );
   }
@@ -256,49 +256,54 @@ class _HomeScreenState extends State<HomeScreen> {
             style: TextStyle(color: AppColors.main_color)));
   }
 
-  double descriptionWidgetHeight = 0;
   Widget _buildQuestionDescription() {
     int questionDescId = _dataStore.stepList.steps[0].description;
-    return Column(
-      mainAxisAlignment: MainAxisAlignment.start,
-      children: [
-        Padding(
-            padding: Dimens.inProgressTextPadding,
-            child: Align(
-                alignment: Alignment.centerLeft,
-                child: Text(_technicalNameWithTranslationsStore.getTranslationByTechnicalName(LangKeys.description),
-                    style: TextStyle(
-                        fontSize: Dimens.inProgressTextFont,
-                        color: AppColors.main_color,
-                        fontWeight: FontWeight.bold)))),
+    return Observer(
+      builder: (_) => Column(
+        mainAxisAlignment: MainAxisAlignment.start,
+        children: [
+          Padding(
+              padding: Dimens.inProgressTextPadding,
+              child: Align(
+                  alignment: Alignment.centerLeft,
+                  child: Text(_technicalNameWithTranslationsStore.getTranslationByTechnicalName(LangKeys.description),
+                      style: TextStyle(
+                          fontSize: Dimens.inProgressTextFont,
+                          color: AppColors.main_color,
+                          fontWeight: FontWeight.bold)))),
 
-        Container(
-          height: math.min(descriptionWidgetHeight, MediaQuery.of(context).size.height / 3),
-          // width: _getScreenWidth() / 1.23,
-          margin: Dimens.questionsStepDescMargin,
-          padding: Dimens.questionsStepDescPadding,
-          decoration: BoxDecoration(
-            color: AppColors.timelineCompressedContainerColor,
-            borderRadius: BorderRadius.all(Radius.circular(Dimens.contentRadius)),
-          ),
-          child: SingleChildScrollView(
-            child: MeasureSize(
-              onChange: (Size size) {
-                setState(() {
-                  descriptionWidgetHeight = size.height;
-                });
-              },
-              child: Text(
-                _technicalNameWithTranslationsStore.getTranslation(questionDescId),
-                style: TextStyle(
-                  color: AppColors.main_color,
-                  fontSize: Dimens.questionsStepDescFontSize,
+          Container(
+            width: _getScreenWidth() / 1.23,
+            margin: Dimens.questionsStepDescMargin,
+            padding: Dimens.questionsStepDescPadding,
+            constraints: BoxConstraints(
+              maxHeight: MediaQuery.of(context).size.height / 4,
+            ),
+            decoration: BoxDecoration(
+              color: AppColors.timelineCompressedContainerColor,
+              borderRadius: BorderRadius.all(Radius.circular(Dimens.contentRadius)),
+            ),
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                Flexible(
+                  child: RawScrollbar(
+                    child: SingleChildScrollView(
+                      child: Text(
+                        _technicalNameWithTranslationsStore.getTranslation(questionDescId),
+                        style: TextStyle(
+                          color: AppColors.main_color,
+                          fontSize: Dimens.questionsStepDescFontSize,
+                        ),
+                      ),
+                    ),
+                  ),
                 ),
-              ),
+              ],
             ),
           ),
-        ),
-      ],
+        ],
+      ),
     );
   }
 
@@ -314,7 +319,7 @@ class _HomeScreenState extends State<HomeScreen> {
                         fontSize: Dimens.inProgressTextFont,
                         color: AppColors.main_color,
                         fontWeight: FontWeight.bold)))),
-        Observer(builder: (_) => CompressedTasklistTimeline(stepList: _dataStore.stepList)),
+        CompressedTasklistTimeline(stepList: _dataStore.stepList),
       ],
     );
   }
