@@ -1,5 +1,4 @@
 import 'dart:async';
-import 'dart:math' as math;
 
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
@@ -14,7 +13,6 @@ import 'package:guide_wizard/stores/language/language_store.dart';
 import 'package:guide_wizard/stores/step/step_store.dart';
 import 'package:guide_wizard/stores/technical_name/technical_name_with_translations_store.dart';
 import 'package:guide_wizard/widgets/compressed_tasklist_timeline/compressed_task_list_timeline.dart';
-import 'package:guide_wizard/widgets/measure_size.dart';
 import 'package:guide_wizard/widgets/step_slider/step_slider_widget.dart';
 import 'package:guide_wizard/widgets/step_timeline/step_timeline.dart';
 import 'package:material_dialog/material_dialog.dart';

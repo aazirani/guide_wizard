@@ -139,7 +139,6 @@ flutter:
   - assets/test/
   - assets/images/
   - assets/icons/
-  - assets/lang/
   - assets/
 
   # An image asset can refer to one or more resolution-specific "variants", see
