@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:guide_wizard/constants/colors.dart';
 import 'package:guide_wizard/constants/lang_keys.dart';
-import 'package:guide_wizard/utils/locale/app_localization.dart';
+import 'package:guide_wizard/stores/technical_name/technical_name_with_translations_store.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 class UrlHandler {
@@ -34,7 +34,7 @@ class UrlHandler {
     }
   }
 
-  static openUrl({required BuildContext context, required String url}) {
+  static openUrl({required BuildContext context, required String url, required TechnicalNameWithTranslationsStore technicalNameWithTranslationsStore}) {
     ButtonStyle _textButtonStyle() {
       return ButtonStyle(
         overlayColor: MaterialStateColor.resolveWith((states) => AppColors.main_color.withOpacity(0.13)),
@@ -49,12 +49,12 @@ class UrlHandler {
     showDialog(
       context: context,
       builder: (context) => AlertDialog(
-        title: Text(AppLocalizations.of(context).translate(LangKeys.url_dialog_title),),
+        title: Text(technicalNameWithTranslationsStore.getTranslationByTechnicalName(LangKeys.url_dialog_title),),
         content: Column(
           mainAxisSize: MainAxisSize.min,
           children: [
             Text(
-              AppLocalizations.of(context).translate(LangKeys.url_dialog_message) + " $url?",
+              technicalNameWithTranslationsStore.getTranslationByTechnicalName(LangKeys.url_dialog_message) + " $url?",
               textAlign: TextAlign.left,
             ),
           ],
@@ -64,7 +64,7 @@ class UrlHandler {
             onPressed: () {
               Navigator.of(context).pop();
             },
-            child: Text(AppLocalizations.of(context).translate(LangKeys.cancel), style: TextStyle(color: AppColors.main_color),),
+            child: Text(technicalNameWithTranslationsStore.getTranslationByTechnicalName(LangKeys.cancel), style: TextStyle(color: AppColors.main_color),),
             style: _textButtonStyle(),
           ),
           TextButton(
@@ -72,7 +72,7 @@ class UrlHandler {
                 _launchURL(url);
                 Navigator.of(context).pop();
               },
-              child: Text(AppLocalizations.of(context).translate(LangKeys.open_link), style: TextStyle(color: AppColors.main_color),),
+              child: Text(technicalNameWithTranslationsStore.getTranslationByTechnicalName(LangKeys.open_link), style: TextStyle(color: AppColors.main_color),),
               style: _textButtonStyle(),
           ),
         ],

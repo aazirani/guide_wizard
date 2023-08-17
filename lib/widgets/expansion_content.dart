@@ -2,8 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter_markdown/flutter_markdown.dart';
 import 'package:guide_wizard/constants/colors.dart';
 import 'package:guide_wizard/constants/dimens.dart';
+import 'package:guide_wizard/stores/technical_name/technical_name_with_translations_store.dart';
 import 'package:guide_wizard/url_handler.dart';
 import 'package:guide_wizard/widgets/measure_size.dart';
+import 'package:provider/provider.dart';
 import 'package:render_metrics/render_metrics.dart';
 
 class ExpansionContent extends StatefulWidget {
@@ -27,6 +29,16 @@ class ExpansionContent extends StatefulWidget {
 
 class _ExpansionContentState extends State<ExpansionContent> {
   double widgetHeight = 0;
+  // stores:--------------------------------------------------------------------
+  late TechnicalNameWithTranslationsStore _technicalNameWithTranslationsStore;
+
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    // initializing stores
+    _technicalNameWithTranslationsStore = Provider.of<TechnicalNameWithTranslationsStore>(context);
+  }
+
   @override
   Widget build(BuildContext context) {
     return Row(
@@ -75,7 +87,7 @@ class _ExpansionContentState extends State<ExpansionContent> {
   Widget _buildMarkdownContent() {
     return Markdown(
       onTapLink: (text, url, title) {
-        UrlHandler.openUrl(context: context, url: url!);
+        UrlHandler.openUrl(context: context, url: url!, technicalNameWithTranslationsStore: _technicalNameWithTranslationsStore);
       },
       shrinkWrap: true,
       physics: NeverScrollableScrollPhysics(),

@@ -6,8 +6,8 @@ import 'package:guide_wizard/data/data_laod_handler.dart';
 import 'package:guide_wizard/stores/app_settings/app_settings_store.dart';
 import 'package:guide_wizard/stores/data/data_store.dart';
 import 'package:guide_wizard/stores/step/step_store.dart';
+import 'package:guide_wizard/stores/technical_name/technical_name_with_translations_store.dart';
 import 'package:guide_wizard/ui/home/home.dart';
-import 'package:guide_wizard/utils/locale/app_localization.dart';
 import 'package:progress_state_button/progress_button.dart';
 import 'package:provider/provider.dart';
 
@@ -26,6 +26,7 @@ class _NextStageButtonState extends State<NextStageButton> {
   late DataStore _dataStore;
   late StepStore _stepStore;
   late AppSettingsStore _appSettingsStore;
+  late TechnicalNameWithTranslationsStore _technicalNameWithTranslationsStore;
 
   @override
   void initState() {
@@ -39,6 +40,7 @@ class _NextStageButtonState extends State<NextStageButton> {
     _dataStore = Provider.of<DataStore>(context);
     _stepStore = Provider.of<StepStore>(context);
     _appSettingsStore = Provider.of<AppSettingsStore>(context);
+    _technicalNameWithTranslationsStore = Provider.of<TechnicalNameWithTranslationsStore>(context);
   }
 
 
@@ -56,19 +58,19 @@ class _NextStageButtonState extends State<NextStageButton> {
       radius: Dimens.nextStageButtonRadius,
       stateWidgets: {
         ButtonState.idle: Text(
-          _appSettingsStore.isFirstStep() ?  AppLocalizations.of(context).translate(LangKeys.next_step_button_text) : AppLocalizations.of(context).translate(LangKeys.update_steps),
+          _appSettingsStore.isFirstStep() ?  _technicalNameWithTranslationsStore.getTranslationByTechnicalName(LangKeys.next_step_button_text) : _technicalNameWithTranslationsStore.getTranslationByTechnicalName(LangKeys.update_steps),
           style: TextStyle(color: AppColors.white,),
         ),
         ButtonState.loading: Text(
-          AppLocalizations.of(context).translate(LangKeys.getting_updates),
+          _technicalNameWithTranslationsStore.getTranslationByTechnicalName(LangKeys.getting_updates),
           style: TextStyle(color: AppColors.white,),
         ),
         ButtonState.fail: Text(
-          AppLocalizations.of(context).translate(LangKeys.next_stage_check_internet),
+          _technicalNameWithTranslationsStore.getTranslationByTechnicalName(LangKeys.next_stage_check_internet),
           style: TextStyle(color: AppColors.white,),
         ),
         ButtonState.success: Text(
-          AppLocalizations.of(context).translate(LangKeys.update_finished),
+          _technicalNameWithTranslationsStore.getTranslationByTechnicalName(LangKeys.update_finished),
           style: TextStyle(color: AppColors.white,),
         )
       },
@@ -131,7 +133,7 @@ class _NextStageButtonState extends State<NextStageButton> {
 //     style: _buildQuestionsButtonStyle(AppColors.nextStepColor),
 //     onPressed: onTapFunction,
 //     child: Text(
-//       AppLocalizations.of(context).translate(LangKeys.next_stage_button_text),
+//       _technicalNameWithTranslationsStore.getTranslationByTechnicalName(LangKeys.next_stage_button_text),
 //       style: TextStyle(color: Colors.white, fontSize: 15),
 //     ),
 //   );

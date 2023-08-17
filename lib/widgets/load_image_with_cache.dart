@@ -2,7 +2,8 @@ import 'package:fast_cached_network_image/fast_cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:guide_wizard/constants/dimens.dart';
 import 'package:guide_wizard/constants/lang_keys.dart';
-import 'package:guide_wizard/utils/locale/app_localization.dart';
+import 'package:guide_wizard/stores/technical_name/technical_name_with_translations_store.dart';
+import 'package:provider/provider.dart';
 
 class LoadImageWithCache extends StatefulWidget {
   String imageUrl;
@@ -14,6 +15,15 @@ class LoadImageWithCache extends StatefulWidget {
 }
 
 class _LoadImageWithCacheState extends State<LoadImageWithCache> with SingleTickerProviderStateMixin{
+  // stores:--------------------------------------------------------------------
+  late TechnicalNameWithTranslationsStore _technicalNameWithTranslationsStore;
+
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    // initializing stores
+    _technicalNameWithTranslationsStore = Provider.of<TechnicalNameWithTranslationsStore>(context);
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -28,7 +38,7 @@ class _LoadImageWithCacheState extends State<LoadImageWithCache> with SingleTick
             Icon(Icons.sentiment_dissatisfied_outlined, size: 80, color: widget.color),
             SizedBox(height: 5,),
             Text(
-              AppLocalizations.of(context).translate(LangKeys.could_not_load),
+              _technicalNameWithTranslationsStore.getTranslationByTechnicalName(LangKeys.could_not_load),
               style: TextStyle(fontSize: Dimens.imageCouldntLoadFontSize, color: widget.color),)
           ],
         );
