@@ -65,6 +65,9 @@ class DataLoadHandler { // This class is SINGLETON
     else{
       await checkForUpdate();
     }
+    if(_dataStore.allTasks.tasks.isEmpty){
+      await _dataStore.getAllTasks();
+    }
   }
 
   Future<bool> hasInternet() async => await InternetConnectionChecker().hasConnection;

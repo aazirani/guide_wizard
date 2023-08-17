@@ -57,8 +57,6 @@ class _HomeScreenState extends State<HomeScreen> {
       await _dataLoadHandler.loadDataAndCheckForUpdate();
       _languageStore.init();
       _technicalNameWithTranslationsStore.setCurrentLocale(_languageStore.locale);
-      print(_languageStore.locale);
-
     });
   }
 
