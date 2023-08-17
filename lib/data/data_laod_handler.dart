@@ -1,7 +1,9 @@
 import 'dart:async';
 
 import 'package:flutter/material.dart';
+import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:guide_wizard/constants/lang_keys.dart';
+import 'package:guide_wizard/constants/necessary_strings.dart';
 import 'package:guide_wizard/constants/settings.dart';
 import 'package:guide_wizard/stores/app_settings/app_settings_store.dart';
 import 'package:guide_wizard/stores/data/data_store.dart';
@@ -26,16 +28,16 @@ class DataLoadHandler { // This class is SINGLETON
   late UpdatedAtTimesStore _updatedAtTimesStore = Provider.of<UpdatedAtTimesStore>(context, listen: false);
   late AppSettingsStore _appSettingsStore = Provider.of<AppSettingsStore>(context, listen: false);
 
-  void showErrorMessage({required String message, String? buttonLabel, required var onPressedButton, Duration? duration}) {
+  void showErrorMessage({required Widget messageWidgetObserver, String? buttonLabel, required var onPressedButton, Duration? duration}) {
     ScaffoldMessenger.of(context).clearSnackBars();
     buttonLabel ??= _technicalNameWithTranslationsStore.getTranslationByTechnicalName(LangKeys.no_internet_button_text);
     duration ??= SettingsConstants.errorSnackBarDuration;
     final snackBar = SnackBar(
       duration: duration,
       dismissDirection: DismissDirection.none,
-      content: Text(message),
+      content: messageWidgetObserver,
       action: SnackBarAction(
-          label: buttonLabel,
+          label: buttonLabel.isNotEmpty ? buttonLabel : NecessaryStrings.no_internet_button_text,
           onPressed: onPressedButton,
       ),
     );
@@ -78,7 +80,10 @@ class DataLoadHandler { // This class is SINGLETON
 
   void showServerErrorMessage() {
     showErrorMessage(
-        message: _technicalNameWithTranslationsStore.getTranslationByTechnicalName(LangKeys.cant_reach_server),
+        messageWidgetObserver: Observer(builder: (_) {
+          String text = _technicalNameWithTranslationsStore.getTranslationByTechnicalName(LangKeys.cant_reach_server);
+          return Text(text.isNotEmpty ? text : NecessaryStrings.cant_reach_server);
+        }),
         onPressedButton: () {
           loadDataAndCheckForUpdate(processId: ++criticalId);
         }
@@ -87,7 +92,10 @@ class DataLoadHandler { // This class is SINGLETON
 
   void showNoInternetError() {
     showErrorMessage(
-        message: _technicalNameWithTranslationsStore.getTranslationByTechnicalName(LangKeys.no_internet_message),
+        messageWidgetObserver: Observer(builder: (_) {
+          String text = _technicalNameWithTranslationsStore.getTranslationByTechnicalName(LangKeys.no_internet_message);
+          return Text(text.isNotEmpty ? text : NecessaryStrings.no_internet_message);
+        }),
         onPressedButton: () {
           loadDataAndCheckForUpdate(processId: ++criticalId);
         }
@@ -126,7 +134,10 @@ class DataLoadHandler { // This class is SINGLETON
       if(!hasInternetConnection){
         DataLoadHandler().showErrorMessage(
             duration: Duration(milliseconds: 5000),
-            message: _technicalNameWithTranslationsStore.getTranslationByTechnicalName(LangKeys.update_is_necessary_message_text),
+            messageWidgetObserver: Observer(builder: (_) {
+              String text = _technicalNameWithTranslationsStore.getTranslationByTechnicalName(LangKeys.update_is_necessary_message_text);
+              return Text(text.isNotEmpty ? text : NecessaryStrings.update_is_necessary_message_text);
+            }),
             onPressedButton: () {
               checkIfUpdateIsNecessary();
             }
