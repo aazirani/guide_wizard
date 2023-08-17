@@ -77,8 +77,10 @@ class _TaskListTimeLineState extends State<TaskListTimeLine> {
         child: ClipRRect(
           borderRadius: Dimens.contentContainerBorderRadius,
           child: Container(
-            width: _getScreenWidth() / 1.23,
             padding: Dimens.contentPadding,
+            constraints: BoxConstraints(
+              minHeight: Dimens.taskListTimeLineContainerMinHeight,
+            ),
             decoration: BoxDecoration(
               color: AppColors.contentColor,
               border: Border(
