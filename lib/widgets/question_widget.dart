@@ -12,7 +12,6 @@ import 'package:guide_wizard/stores/app_settings/app_settings_store.dart';
 import 'package:guide_wizard/stores/data/data_store.dart';
 import 'package:guide_wizard/stores/technical_name/technical_name_with_translations_store.dart';
 import 'package:guide_wizard/url_handler.dart';
-import 'package:guide_wizard/utils/locale/app_localization.dart';
 import 'package:guide_wizard/widgets/info_dialog.dart';
 import 'package:guide_wizard/widgets/load_image_with_cache.dart';
 import 'package:guide_wizard/widgets/next_stage_button.dart';
@@ -145,7 +144,7 @@ class _QuestionWidgetState extends State<QuestionWidget> with AutomaticKeepAlive
             await builder.setActiveIndex(widget.index + 1),
           },
           child: Text(
-            AppLocalizations.of(context).translate(LangKeys.next_question_button_text),
+            _technicalNameWithTranslationsStore.getTranslationByTechnicalName(LangKeys.next_question_button_text),
             style: TextStyle(color: Colors.white, fontSize: 15),
           ),
         ),
@@ -175,7 +174,7 @@ class _QuestionWidgetState extends State<QuestionWidget> with AutomaticKeepAlive
             Navigator.of(context).pop();
           },
           child: Text(
-              AppLocalizations.of(context).translate(LangKeys.close),
+              _technicalNameWithTranslationsStore.getTranslationByTechnicalName(LangKeys.close),
             style: TextStyle(color: AppColors.close_button_color, fontSize: 15),
           ),
         ),
@@ -202,10 +201,10 @@ class _QuestionWidgetState extends State<QuestionWidget> with AutomaticKeepAlive
         child: TextButton(
           style: _buildInfoOpenUrlButtonStyle(scaleBy: scaleBy),
           onPressed: () {
-            UrlHandler.openUrl(context: context, url: _getInfoUrl());
+            UrlHandler.openUrl(context: context, url: _getInfoUrl(), technicalNameWithTranslationsStore: _technicalNameWithTranslationsStore);
           },
           child: Text(
-            AppLocalizations.of(context).translate(LangKeys.read_more),
+            _technicalNameWithTranslationsStore.getTranslationByTechnicalName(LangKeys.read_more),
             style: TextStyle(color: AppColors.white, fontSize: 15),
           ),
         ),
@@ -283,7 +282,7 @@ class _QuestionWidgetState extends State<QuestionWidget> with AutomaticKeepAlive
       );
     }
     else if (!hasDescription && hasUrl) {
-      UrlHandler.openUrl(context: context, url: _getInfoUrl());
+      UrlHandler.openUrl(context: context, url: _getInfoUrl(), technicalNameWithTranslationsStore: _technicalNameWithTranslationsStore);
     }
 
   }

@@ -48,7 +48,9 @@ class _ImageSlideState extends State<ImageSlide> {
               items: _imagesList,
             ),
           ),
-          Positioned.fill(
+          widget.images.length <= 1
+          ? SizedBox()
+          : Positioned.fill(
             bottom: 35,
             child: Align(
               alignment: Alignment.bottomCenter,

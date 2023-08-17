@@ -1,16 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:guide_wizard/constants/colors.dart';
-import 'package:guide_wizard/constants/dimens.dart';
 import 'package:guide_wizard/data/data_laod_handler.dart';
 import 'package:guide_wizard/providers/question_widget_state/question_widget_state.dart';
 import 'package:guide_wizard/stores/app_settings/app_settings_store.dart';
 import 'package:guide_wizard/stores/data/data_store.dart';
 import 'package:guide_wizard/stores/technical_name/technical_name_with_translations_store.dart';
+import 'package:guide_wizard/widgets/measure_size.dart';
 import 'package:guide_wizard/widgets/next_stage_button.dart';
 import 'package:guide_wizard/widgets/question_widget.dart';
 import 'package:guide_wizard/widgets/questions_list_page_appBar.dart';
 import 'package:provider/provider.dart';
-import 'package:scrollable_positioned_list/scrollable_positioned_list.dart';
 
 class QuestionsListPage extends StatefulWidget {
   int stepNumber;
@@ -22,7 +21,7 @@ class QuestionsListPage extends StatefulWidget {
 
 class _QuestionsListPageState extends State<QuestionsListPage> {
   get _questionsCount => _dataStore.questionList.length;
-
+  Size floatingActionButtonSize = Size(0, 0);
   // stores:--------------------------------------------------------------------
   late DataStore _dataStore;
   late AppSettingsStore _appSettingsStore;
@@ -66,9 +65,19 @@ class _QuestionsListPageState extends State<QuestionsListPage> {
                   topRight: Radius.circular(30),
                 ),
               ),
-              child: ScrollablePositionedList.builder(
-                itemCount: _questionsCount + 1,
-                itemBuilder: (context, index) => _buildScrollablePositionedListItem(index),
+              child: Column(
+                children: [
+                  Flexible(
+                    child: RawScrollbar(
+                      child: ListView.builder(
+                        shrinkWrap: true,
+                        itemCount: _questionsCount,
+                        itemBuilder: (context, index) => _buildQuestionWidget(index),
+                      ),
+                    ),
+                  ),
+                  SizedBox(height: floatingActionButtonSize.height,),
+                ],
               ),
             ),
           ),
@@ -83,12 +92,6 @@ class _QuestionsListPageState extends State<QuestionsListPage> {
     );
   }
 
-  Widget _buildScrollablePositionedListItem(int index) {
-    return _isItemAfterQuestions(index) ? SizedBox(height: Dimens.nextStageSurroundingContainerHeight - (Dimens.nextStageSurroundingContainerHeight - NextStageButton().height) / 2 - Dimens.questionWidgetListTilePadding.bottom,) : _buildQuestionWidget(index);
-  }
-
-  bool _isItemAfterQuestions(index) => index == _questionsCount;
-
   Widget _buildQuestionWidget(int index) {
     return Card(
       child: QuestionWidget(
@@ -100,28 +103,16 @@ class _QuestionsListPageState extends State<QuestionsListPage> {
   }
 
   Widget _buildDockedNextStageButton() {
-    return SafeArea(
-      child: Container(
-        width: MediaQuery.of(context).size.width,
-        height: Dimens.nextStageSurroundingContainerHeight + MediaQuery.of(context).viewPadding.bottom,
-        decoration: BoxDecoration(
-            gradient: LinearGradient(
-              begin: Alignment.topCenter,
-              end: Alignment.bottomCenter,
-              colors: [
-                Colors.white,
-                Colors.white,
-              ],
-            ),
-        ),
-        child: Stack(
-          alignment: AlignmentDirectional.bottomCenter,
-          children: [
-            Positioned(
-              bottom: Dimens.nextStageDistanceFromBottom,
-              child: NextStageButton(),
-            ),
-          ],
+    return MeasureSize(
+      onChange: (Size size) {
+        setState(() {
+          floatingActionButtonSize = size;
+        });
+      },
+      child: SafeArea(
+        child: Padding(
+          padding: const EdgeInsets.only(bottom: 10),
+          child: NextStageButton(),
         ),
       ),
     );

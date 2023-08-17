@@ -6,7 +6,6 @@ import 'package:guide_wizard/stores/data/data_store.dart';
 import 'package:guide_wizard/stores/technical_name/technical_name_with_translations_store.dart';
 import 'package:guide_wizard/ui/tasks/task_page_text_only.dart';
 import 'package:guide_wizard/ui/tasks/task_page_with_image.dart';
-import 'package:guide_wizard/utils/locale/app_localization.dart';
 import 'package:guide_wizard/widgets/diamond_indicator.dart';
 import 'package:provider/provider.dart';
 import 'package:timelines/timelines.dart';
@@ -77,8 +76,10 @@ class _TaskListTimeLineState extends State<TaskListTimeLine> {
         child: ClipRRect(
           borderRadius: Dimens.contentContainerBorderRadius,
           child: Container(
-            width: _getScreenWidth() / 1.23,
             padding: Dimens.contentPadding,
+            constraints: BoxConstraints(
+              minHeight: Dimens.taskListTimeLineContainerMinHeight,
+            ),
             decoration: BoxDecoration(
               color: AppColors.contentColor,
               border: Border(
@@ -160,7 +161,7 @@ class _TaskListTimeLineState extends State<TaskListTimeLine> {
                     ? AppColors.deadlineDoneBorderColor
                     : AppColors.deadlineUnDoneBorderColor)),
         child: Center(
-            child: Text("${AppLocalizations.of(context).translate(LangKeys.deadline)}",
+            child: Text("${_technicalNameWithTranslationsStore.getTranslationByTechnicalName(LangKeys.deadline)}",
                 style: TextStyle(
                     fontSize: 13,
                     color: (_taskDone(taskNumber)

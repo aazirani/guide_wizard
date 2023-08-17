@@ -1,37 +1,37 @@
 class LangKeys {
   LangKeys._();
 
-  static String next_question_button_text = "next_question_button_text";
-  static String next_step_button_text = "next_step_button_text";
-  static String close = "close";
-  static String read_more = "read_more";
+  static String next_question_button_text = "textSetting_next_question_button_text";
+  static String next_step_button_text = "textSetting_next_step_button_text";
+  static String close = "textSetting_close";
+  static String read_more = "textSetting_read_more";
 
-  static String task = "task";
-  static String tasks = "tasks";
-  static String question = "question";
-  static String questions = "questions";
-  static String deadline = "deadline";
-  static String continueKey = "continue";
+  static String task = "textSetting_task";
+  static String tasks = "textSetting_tasks";
+  static String question = "textSetting_question";
+  static String questions = "textSetting_questions";
+  static String deadline = "textSetting_deadline";
+  static String continueKey = "textSetting_continue";
 
-  static String no_internet_message = "no_internet_message";
-  static String cant_reach_server = "cant_reach_server";
-  static String no_internet_button_text = "no_internet_button_text";
-  static String update_is_necessary_message_text = "update_is_necessary_message_text";
+  static String no_internet_message = "textSetting_no_internet_message";
+  static String cant_reach_server = "textSetting_cant_reach_server";
+  static String no_internet_button_text = "textSetting_no_internet_button_text";
+  static String update_is_necessary_message_text = "textSetting_update_is_necessary_message_text";
 
-  static String steps_title = "steps_title";
-  static String steps = "steps";
-  static String in_progress = "in_progress";
-  static String description = "description";
+  static String steps_title = "textSetting_steps_title";
+  static String steps = "textSetting_steps";
+  static String in_progress = "textSetting_in_progress";
+  static String description = "textSetting_description";
 
-  static String url_dialog_title = "url_dialog_title";
-  static String url_dialog_message = "url_dialog_message";
-  static String cancel = "cancel";
-  static String open_link = "open_link";
+  static String url_dialog_title = "textSetting_url_dialog_title";
+  static String url_dialog_message = "textSetting_url_dialog_message";
+  static String cancel = "textSetting_cancel";
+  static String open_link = "textSetting_open_link";
 
-  static String could_not_load = "could_not_load";
-  static String update_steps = "update_steps";
-  static String getting_updates = "getting_updates";
-  static String next_stage_check_internet = "next_stage_check_internet";
-  static String update_finished = "update_finished";
+  static String could_not_load = "textSetting_could_not_load";
+  static String update_steps = "textSetting_update_steps";
+  static String getting_updates = "textSetting_getting_updates";
+  static String next_stage_check_internet = "textSetting_next_stage_check_internet";
+  static String update_finished = "textSetting_update_finished";
 
 }
