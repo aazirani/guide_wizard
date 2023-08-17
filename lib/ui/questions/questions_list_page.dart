@@ -70,10 +70,12 @@ class _QuestionsListPageState extends State<QuestionsListPage> {
               child: Column(
                 children: [
                   Flexible(
-                    child: ListView.builder(
-                      shrinkWrap: true,
-                      itemCount: _questionsCount,
-                      itemBuilder: (context, index) => _buildQuestionWidget(index),
+                    child: RawScrollbar(
+                      child: ListView.builder(
+                        shrinkWrap: true,
+                        itemCount: _questionsCount,
+                        itemBuilder: (context, index) => _buildQuestionWidget(index),
+                      ),
                     ),
                   ),
                   SizedBox(height: floatingActionButtonSize.height,),
