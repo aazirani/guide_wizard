@@ -68,7 +68,7 @@ class _TaskPageTextOnlyState extends State<TaskPageTextOnly> {
   _buildPageContent() {
     return ListView(
       children: [
-        _buildDescription(),
+        _technicalNameWithTranslationsStore.getTranslation(_dataStore.getTaskById(widget.taskId).description) == "" ? SizedBox(height: Dimens.taskPageTextOnlyListViewPadding.top,) : _buildDescription(),
         _buildSubTasksList(),
       ],
     );

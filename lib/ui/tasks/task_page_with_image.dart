@@ -8,8 +8,10 @@ import 'package:guide_wizard/widgets/image_slide.dart';
 import 'package:guide_wizard/widgets/measure_size.dart';
 import 'package:guide_wizard/widgets/questions_list_page_appBar.dart';
 import 'package:guide_wizard/widgets/sub_task_widget.dart';
+import 'package:guide_wizard/widgets/task_page_appbar_widget.dart';
 import 'package:provider/provider.dart';
 import 'package:render_metrics/render_metrics.dart';
+import 'dart:math' as math;
 
 class TaskPageWithImage extends StatefulWidget {
   Task task;
@@ -38,7 +40,8 @@ class _TaskPageWithImageState extends State<TaskPageWithImage> {
 
   double _getHeightOfDraggableScrollableSheet() {
     double screenHeight = MediaQuery.of(context).size.height;
-    return (screenHeight - (QuestionsListAppBar().appBarSize + imageSlideSize.height) + 35) / (screenHeight);
+    double widgetSize = (screenHeight - (Dimens.blocksAppBarWidgetHeight + imageSlideSize.height) + MediaQuery.of(context).padding.top + 25) / (screenHeight);
+    return math.min(widgetSize, 1);
   }
 
   double _getMaxHeightOfDraggableScrollableSheet() {
@@ -50,8 +53,9 @@ class _TaskPageWithImageState extends State<TaskPageWithImage> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: AppColors.main_color,
-      appBar: QuestionsListAppBar(
-        title: _technicalNameWithTranslationsStore.getTranslation(widget.task.text)!,
+      appBar: BlocksAppBarWidget(
+        taskId: widget.task.id,
+        title: _technicalNameWithTranslationsStore.getTranslation(widget.task.text),
       ),
       body: _buildScaffoldBody(),
     );
@@ -77,7 +81,7 @@ class _TaskPageWithImageState extends State<TaskPageWithImage> {
     List<String?> imagesList = [widget.task.image_1, widget.task.image_2];
     return ImageSlide(
         images: imagesList..removeWhere((element) => element == null),
-        description: _technicalNameWithTranslationsStore.getTranslation(widget.task.description)!
+        description: _technicalNameWithTranslationsStore.getTranslation(widget.task.description)
     );
   }
 
@@ -87,14 +91,11 @@ class _TaskPageWithImageState extends State<TaskPageWithImage> {
         snap: true,
         initialChildSize: _getHeightOfDraggableScrollableSheet(),
         minChildSize: _getHeightOfDraggableScrollableSheet(),
-        maxChildSize: _getMaxHeightOfDraggableScrollableSheet(),
+        maxChildSize: math.max(_getMaxHeightOfDraggableScrollableSheet(), _getHeightOfDraggableScrollableSheet()),
         builder: (BuildContext context, ScrollController scrollController) {
           return Container(
             decoration: BoxDecoration(
-              borderRadius: BorderRadius.only(
-                topLeft: Radius.circular(25),
-                topRight: Radius.circular(25),
-              ),
+              borderRadius: Dimens.taskPageTextOnlyScaffoldBorder,
             color: AppColors.bright_foreground_color),
             child: ListView.builder(
               scrollDirection: Axis.vertical,
@@ -119,12 +120,13 @@ class _TaskPageWithImageState extends State<TaskPageWithImage> {
   }
 
   _buildDescription() {
+    if (_technicalNameWithTranslationsStore.getTranslation(widget.task.description) == "") return SizedBox(height: Dimens.taskPageTextOnlyListViewPadding.top,);
     return Padding(
       padding: Dimens.taskPageTextOnlyListViewPadding,
       child: Observer(
         builder: (context) {
           return Text(
-            _technicalNameWithTranslationsStore.getTranslation(widget.task.description)!,
+            _technicalNameWithTranslationsStore.getTranslation(widget.task.description),
             style: TextStyle(fontSize: Dimens.descriptionFontSize, color: AppColors.main_color),
           );
         },

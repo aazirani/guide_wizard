@@ -120,10 +120,7 @@ class _BlocksAppBarWidgetState extends State<BlocksAppBarWidget> {
               color: AppColors.bright_foreground_color,
               fontSize: Dimens.taskTitleFont,
             ),
-            overflowRatio: _showDoneButtonFlag() ? 0.7 : 0.77,
-          ),
-          SizedBox(
-            width: 10,
+            overflowRatio: 0.65,
           ),
           Padding(
             padding: Dimens.doneButtonPadding,
