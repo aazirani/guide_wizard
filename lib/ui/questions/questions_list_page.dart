@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:guide_wizard/constants/colors.dart';
-import 'package:guide_wizard/constants/dimens.dart';
 import 'package:guide_wizard/data/data_laod_handler.dart';
 import 'package:guide_wizard/providers/question_widget_state/question_widget_state.dart';
 import 'package:guide_wizard/stores/app_settings/app_settings_store.dart';
@@ -11,7 +10,6 @@ import 'package:guide_wizard/widgets/next_stage_button.dart';
 import 'package:guide_wizard/widgets/question_widget.dart';
 import 'package:guide_wizard/widgets/questions_list_page_appBar.dart';
 import 'package:provider/provider.dart';
-import 'package:scrollable_positioned_list/scrollable_positioned_list.dart';
 
 class QuestionsListPage extends StatefulWidget {
   int stepNumber;
@@ -93,8 +91,6 @@ class _QuestionsListPageState extends State<QuestionsListPage> {
       }),
     );
   }
-
-  bool _isItemAfterQuestions(index) => index == _questionsCount;
 
   Widget _buildQuestionWidget(int index) {
     return Card(
