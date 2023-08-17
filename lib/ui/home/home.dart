@@ -95,9 +95,14 @@ class _HomeScreenState extends State<HomeScreen> {
       backgroundColor: AppColors.main_color,
       actions: _buildActions(context),
       title: Padding(
-          padding: EdgeInsets.only(left: 10),
-          child: Text(_technicalNameWithTranslationsStore.getTranslationByTechnicalName(LangKeys.steps_title),
-              style: TextStyle(color: AppColors.title_color, fontSize: 20))),
+        padding: EdgeInsets.only(left: 10),
+        child: Observer(
+          builder: (_) => Text(
+              _technicalNameWithTranslationsStore.getTranslationByTechnicalName(LangKeys.steps_title),
+              style: TextStyle(color: AppColors.title_color, fontSize: 20)
+          ),
+        ),
+      ),
     );
   }
 
