@@ -58,7 +58,6 @@ class _HomeScreenState extends State<HomeScreen> {
     Future.delayed(Duration(milliseconds: 000), () async {
       _languageStore.init();
       _technicalNameWithTranslationsStore.getCurrentLan(_languageStore.language_id!);
-      print(_languageStore.locale);
       await _dataLoadHandler.loadDataAndCheckForUpdate();
     });
   }
