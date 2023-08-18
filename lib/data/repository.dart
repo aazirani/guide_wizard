@@ -405,21 +405,12 @@ class Repository {
 
   String? get currentLanguage => _sharedPrefsHelper.currentLanguage;
 
-  Future<String?> _getDefaultLocale() async {
-    try {
-      final defaultLocale = await Devicelocale.defaultLocale;
-      print((defaultLocale != null)
-          ? defaultLocale
-          : "Unable to get defaultLocale");
-      return defaultLocale;
-    } on PlatformException {
-      print("Error obtaining default locale");
-    }
-    return null;
-  }
-
   Future<String?> getCurrentLocale() async {
-    return await Devicelocale.currentLocale;
+    if(currentLanguage != null){
+      return currentLanguage;
+    } else {
+      return await Devicelocale.currentLocale;
+    }
   }
 
   Future<dynamic> _getPreferredLanguages() async {

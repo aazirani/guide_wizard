@@ -1,5 +1,4 @@
 import 'dart:async';
-import 'dart:math' as math;
 
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
@@ -13,11 +12,10 @@ import 'package:guide_wizard/stores/data/data_store.dart';
 import 'package:guide_wizard/stores/language/language_store.dart';
 import 'package:guide_wizard/stores/step/step_store.dart';
 import 'package:guide_wizard/stores/technical_name/technical_name_with_translations_store.dart';
-import 'package:guide_wizard/utils/locale/app_localization.dart';
 import 'package:guide_wizard/widgets/compressed_tasklist_timeline/compressed_task_list_timeline.dart';
-import 'package:guide_wizard/widgets/measure_size.dart';
 import 'package:guide_wizard/widgets/step_slider/step_slider_widget.dart';
 import 'package:guide_wizard/widgets/step_timeline/step_timeline.dart';
+import 'package:material_dialog/material_dialog.dart';
 import 'package:provider/provider.dart';
 import 'package:shimmer/shimmer.dart';
 
@@ -56,10 +54,9 @@ class _HomeScreenState extends State<HomeScreen> {
   void initState() {
     super.initState();
     Future.delayed(Duration(milliseconds: 000), () async {
-      _languageStore.init();
-      _technicalNameWithTranslationsStore.getCurrentLan(_languageStore.language_id!);
-      print(_languageStore.locale);
       await _dataLoadHandler.loadDataAndCheckForUpdate();
+      _languageStore.init();
+      _technicalNameWithTranslationsStore.setCurrentLocale(_languageStore.locale);
     });
   }
 
@@ -96,11 +93,81 @@ class _HomeScreenState extends State<HomeScreen> {
       toolbarHeight: Dimens.appBar["toolbarHeight"],
       titleSpacing: Dimens.appBar["titleSpacing"],
       backgroundColor: AppColors.main_color,
+      actions: _buildActions(context),
       title: Padding(
-          padding: EdgeInsets.only(left: 10),
-          child: Text(AppLocalizations.of(context).translate(LangKeys.steps_title),
-              style: TextStyle(color: AppColors.title_color, fontSize: 20))),
+        padding: EdgeInsets.only(left: 10),
+        child: Observer(
+          builder: (_) => Text(
+              _technicalNameWithTranslationsStore.getTranslationByTechnicalName(LangKeys.steps_title),
+              style: TextStyle(color: AppColors.title_color, fontSize: 20)
+          ),
+        ),
+      ),
     );
+  }
+
+  List<Widget> _buildActions(BuildContext context) {
+    return <Widget>[
+      _buildLanguageButton(),
+    ];
+  }
+  Widget _buildLanguageButton() {
+    return IconButton(
+      onPressed: () {
+        _buildLanguageDialog();
+      },
+      icon: Icon(
+        Icons.language,
+      ),
+      color: Colors.white,
+    );
+  }
+
+  _buildLanguageDialog() {
+    _showDialog<String>(
+      context: context,
+      child: MaterialDialog(
+        borderRadius: Dimens.buttonRadius,
+        enableFullWidth: true,
+        headerColor: Theme.of(context).primaryColor,
+        backgroundColor: Theme.of(context).scaffoldBackgroundColor,
+        closeButtonColor: Colors.white,
+        enableCloseButton: true,
+        enableBackButton: false,
+        onCloseButtonClicked: () {
+          Navigator.of(context).pop();
+        },
+        children: _technicalNameWithTranslationsStore.getSupportedLanguages()
+            .map(
+              (object) => ListTile(
+            dense: true,
+            contentPadding: EdgeInsets.all(0.0),
+            title: Text(
+              object.language_name,
+              style: TextStyle(
+                color: Colors.black
+              ),
+            ),
+            onTap: () {
+              Navigator.of(context).pop();
+              // change user language based on selected locale
+              _languageStore.changeLanguage(object.language_code);
+              _technicalNameWithTranslationsStore.setCurrentLocale(object.language_code);
+            },
+          ),
+        )
+            .toList(),
+      ),
+    );
+  }
+
+  _showDialog<T>({required BuildContext context, required Widget child}) {
+    showDialog<T>(
+      context: context,
+      builder: (BuildContext context) => child,
+    ).then<void>((T? value) {
+      // The value passed to Navigator.pop() or null.
+    });
   }
 
 //body build methods ...........................................................
@@ -147,6 +214,8 @@ class _HomeScreenState extends State<HomeScreen> {
   }
 
   Widget _buildScreenElements(int current, values) {
+    _languageStore.changeLanguage(_languageStore.locale);
+    _technicalNameWithTranslationsStore.setCurrentLocale(_languageStore.locale);
     return Column(
       crossAxisAlignment: CrossAxisAlignment.center,
       children: [
@@ -158,7 +227,7 @@ class _HomeScreenState extends State<HomeScreen> {
             stepNo: _appSettingsStore.stepsCount,
           ),
         ),
-        _stepStore.isQuestionStep() ? _buildQuestionDescription() : _buildInProgressCompressedTaskList(),
+         Observer(builder: (_) => _stepStore.currentStep == 1 ? _buildQuestionDescription() : _buildInProgressCompressedTaskList()),
       ],
     );
   }
@@ -174,7 +243,7 @@ class _HomeScreenState extends State<HomeScreen> {
   }
 
   Widget _buildStepsText() {
-    return Text(AppLocalizations.of(context).translate(LangKeys.steps),
+    return Text(_technicalNameWithTranslationsStore.getTranslationByTechnicalName(LangKeys.steps),
         style: TextStyle(
             color: AppColors.main_color,
             fontSize: Dimens.stepsTextFont,
@@ -188,49 +257,54 @@ class _HomeScreenState extends State<HomeScreen> {
             style: TextStyle(color: AppColors.main_color)));
   }
 
-  double descriptionWidgetHeight = 0;
   Widget _buildQuestionDescription() {
     int questionDescId = _dataStore.stepList.steps[0].description;
-    return Column(
-      mainAxisAlignment: MainAxisAlignment.start,
-      children: [
-        Padding(
-            padding: Dimens.inProgressTextPadding,
-            child: Align(
-                alignment: Alignment.centerLeft,
-                child: Text(AppLocalizations.of(context).translate(LangKeys.description),
-                    style: TextStyle(
-                        fontSize: Dimens.inProgressTextFont,
-                        color: AppColors.main_color,
-                        fontWeight: FontWeight.bold)))),
+    return Observer(
+      builder: (_) => Column(
+        mainAxisAlignment: MainAxisAlignment.start,
+        children: [
+          Padding(
+              padding: Dimens.inProgressTextPadding,
+              child: Align(
+                  alignment: Alignment.centerLeft,
+                  child: Text(_technicalNameWithTranslationsStore.getTranslationByTechnicalName(LangKeys.description),
+                      style: TextStyle(
+                          fontSize: Dimens.inProgressTextFont,
+                          color: AppColors.main_color,
+                          fontWeight: FontWeight.bold)))),
 
-        Container(
-          height: math.min(descriptionWidgetHeight, MediaQuery.of(context).size.height / 3),
-          // width: _getScreenWidth() / 1.23,
-          margin: Dimens.questionsStepDescMargin,
-          padding: Dimens.questionsStepDescPadding,
-          decoration: BoxDecoration(
-            color: AppColors.timelineCompressedContainerColor,
-            borderRadius: BorderRadius.all(Radius.circular(Dimens.contentRadius)),
-          ),
-          child: SingleChildScrollView(
-            child: MeasureSize(
-              onChange: (Size size) {
-                setState(() {
-                  descriptionWidgetHeight = size.height;
-                });
-              },
-              child: Text(
-                _technicalNameWithTranslationsStore.getTranslation(questionDescId),
-                style: TextStyle(
-                  color: AppColors.main_color,
-                  fontSize: Dimens.questionsStepDescFontSize,
+          Container(
+            width: _getScreenWidth() / 1.23,
+            margin: Dimens.questionsStepDescMargin,
+            padding: Dimens.questionsStepDescPadding,
+            constraints: BoxConstraints(
+              maxHeight: MediaQuery.of(context).size.height / 4,
+            ),
+            decoration: BoxDecoration(
+              color: AppColors.timelineCompressedContainerColor,
+              borderRadius: BorderRadius.all(Radius.circular(Dimens.contentRadius)),
+            ),
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                Flexible(
+                  child: RawScrollbar(
+                    child: SingleChildScrollView(
+                      child: Text(
+                        _technicalNameWithTranslationsStore.getTranslation(questionDescId),
+                        style: TextStyle(
+                          color: AppColors.main_color,
+                          fontSize: Dimens.questionsStepDescFontSize,
+                        ),
+                      ),
+                    ),
+                  ),
                 ),
-              ),
+              ],
             ),
           ),
-        ),
-      ],
+        ],
+      ),
     );
   }
 
@@ -241,12 +315,12 @@ class _HomeScreenState extends State<HomeScreen> {
             padding: Dimens.inProgressTextPadding,
             child: Align(
                 alignment: Alignment.centerLeft,
-                child: Text(AppLocalizations.of(context).translate(LangKeys.in_progress),
+                child: Text(_technicalNameWithTranslationsStore.getTranslationByTechnicalName(LangKeys.in_progress),
                     style: TextStyle(
                         fontSize: Dimens.inProgressTextFont,
                         color: AppColors.main_color,
                         fontWeight: FontWeight.bold)))),
-        Observer(builder: (_) => CompressedTasklistTimeline(stepList: _dataStore.stepList)),
+        CompressedTasklistTimeline(stepList: _dataStore.stepList),
       ],
     );
   }

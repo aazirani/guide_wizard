@@ -1,5 +1,6 @@
 import 'package:get/get.dart';
 import 'package:guide_wizard/data/repository.dart';
+import 'package:guide_wizard/models/language/Language.dart';
 import 'package:guide_wizard/models/technical_name/technical_name_with_translations.dart';
 import 'package:guide_wizard/models/technical_name/technical_name_with_translations_list.dart';
 import 'package:mobx/mobx.dart';
@@ -23,7 +24,7 @@ abstract class _TechnicalNameWithTranslationsStore with Store {
           emptyTechnicalNameWithTranslationsResponse);
 
   @observable
-  int? language_id; 
+  int? language_id;
 
   @observable
   TechnicalNameWithTranslationsList technicalNameWithTranslationsList =
@@ -46,9 +47,15 @@ abstract class _TechnicalNameWithTranslationsStore with Store {
     });
   }
 
-  @action 
-  void getCurrentLan(int language_id) {
-    this.language_id = language_id;
+  @action
+  void setCurrentLocale(String languageCode) {
+    this.language_id = getSupportedLanguages().firstWhere(
+            (element) => element.language_code == languageCode,
+        orElse: () => getSupportedLanguages().firstWhere(
+                (element) => element.is_main_language,
+            orElse: () => getSupportedLanguages().first
+        )
+    ).id;
   }
 
   @action
@@ -59,8 +66,26 @@ abstract class _TechnicalNameWithTranslationsStore with Store {
   // methods: ..................................................................
   String getTranslation(int id) {
     if (isTranslationsEmpty(id)) return "";
-    if(getTechnicalName(id)!.translations.length <= this.language_id!) return "";
-    return getTechnicalName(id)!.translations[this.language_id!].translated_text;
+    try {
+      return getTechnicalName(id)!
+          .translations
+          .firstWhere((element) => element.language_id == this.language_id)
+          .translated_text;
+    } catch (e) {
+      return '';
+    }
+  }
+
+  String getTranslationByTechnicalName(String technicalName) {
+    try {
+      return technicalNameWithTranslationsList.technicalNameWithTranslations
+          .firstWhere((e) => e.technical_name == technicalName)
+          .translations
+          .firstWhere((element) => element.language_id == this.language_id)
+          .translated_text;
+    } catch (e) {
+      return '';
+    }
   }
 
   TechnicalNameWithTranslations? getTechnicalName(int id) {
@@ -78,5 +103,16 @@ abstract class _TechnicalNameWithTranslationsStore with Store {
 
   bool isTranslationsNotEmpty(int id) {
     return !isTranslationsEmpty(id);
+  }
+
+  List<Language> getSupportedLanguages(){
+    Set<String> seenLanguageCodes = {};
+
+    List<Language> uniqueLanguages = technicalNameWithTranslationsList.technicalNameWithTranslations
+        .expand((text) => text.translations)
+        .map((translation) => translation.language)
+        .where((lang) => seenLanguageCodes.add(lang.language_code))
+        .toList();
+    return uniqueLanguages;
   }
 }

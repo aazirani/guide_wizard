@@ -3,10 +3,10 @@ import 'package:guide_wizard/constants/colors.dart';
 import 'package:guide_wizard/constants/dimens.dart';
 import 'package:guide_wizard/constants/lang_keys.dart';
 import 'package:guide_wizard/stores/data/data_store.dart';
+import 'package:guide_wizard/stores/step/step_store.dart';
 import 'package:guide_wizard/stores/technical_name/technical_name_with_translations_store.dart';
 import 'package:guide_wizard/ui/tasks/task_page_text_only.dart';
 import 'package:guide_wizard/ui/tasks/task_page_with_image.dart';
-import 'package:guide_wizard/utils/locale/app_localization.dart';
 import 'package:guide_wizard/widgets/diamond_indicator.dart';
 import 'package:provider/provider.dart';
 import 'package:timelines/timelines.dart';
@@ -14,7 +14,8 @@ import 'package:timelines/timelines.dart';
 class TaskListTimeLine extends StatefulWidget {
   // final TaskList taskList;
   final int taskNumber;
-  TaskListTimeLine({Key? key, required this.taskNumber}) : super(key: key);
+  final StepStore stepStore;
+  TaskListTimeLine({Key? key, required this.taskNumber, required this.stepStore}) : super(key: key);
 
   @override
   State<TaskListTimeLine> createState() => _TaskListTimeLineState();
@@ -47,8 +48,12 @@ class _TaskListTimeLineState extends State<TaskListTimeLine> {
       contents: _buildContents(taskNumber),
       node: TimelineNode(
         indicator: _buildIndicator(taskNumber),
-        startConnector: _buildConnector(),
-        endConnector: _buildConnector(),
+        startConnector: taskNumber == 0 && (widget.stepStore.currentStep) - 1 == 1
+            ? Container()
+            : _buildConnector(),
+        endConnector: (widget.stepStore.currentStep)  == _dataStore.getNumberOfSteps()
+            ? Container()
+            : _buildConnector(),
       ),
     );
   }
@@ -77,8 +82,10 @@ class _TaskListTimeLineState extends State<TaskListTimeLine> {
         child: ClipRRect(
           borderRadius: Dimens.contentContainerBorderRadius,
           child: Container(
-            width: _getScreenWidth() / 1.23,
             padding: Dimens.contentPadding,
+            constraints: BoxConstraints(
+              minHeight: Dimens.taskListTimeLineContainerMinHeight,
+            ),
             decoration: BoxDecoration(
               color: AppColors.contentColor,
               border: Border(
@@ -160,7 +167,7 @@ class _TaskListTimeLineState extends State<TaskListTimeLine> {
                     ? AppColors.deadlineDoneBorderColor
                     : AppColors.deadlineUnDoneBorderColor)),
         child: Center(
-            child: Text("${AppLocalizations.of(context).translate(LangKeys.deadline)}",
+            child: Text("${_technicalNameWithTranslationsStore.getTranslationByTechnicalName(LangKeys.deadline)}",
                 style: TextStyle(
                     fontSize: 13,
                     color: (_taskDone(taskNumber)

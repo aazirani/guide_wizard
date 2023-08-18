@@ -8,7 +8,6 @@ import 'package:guide_wizard/stores/data/data_store.dart';
 import 'package:guide_wizard/stores/step/step_store.dart';
 import 'package:guide_wizard/stores/technical_name/technical_name_with_translations_store.dart';
 import 'package:guide_wizard/ui/tasklist/tasklist_timeline.dart';
-import 'package:guide_wizard/utils/locale/app_localization.dart';
 import 'package:guide_wizard/widgets/measure_size.dart';
 import 'package:guide_wizard/widgets/scrolling_overflow_text.dart';
 import 'package:provider/provider.dart';
@@ -109,7 +108,7 @@ class _TaskListState extends State<TaskList> {
                 padding: Dimens.numberOfTasksPadding,
                 child: Observer(
                   builder: (_) => Text(
-                      "${_dataStore.getNumberOfTaskListTasks()} ${AppLocalizations.of(context).translate(LangKeys.tasks)}",
+                      "${_dataStore.getNumberOfTaskListTasks()} ${_technicalNameWithTranslationsStore.getTranslationByTechnicalName(LangKeys.tasks)}",
                       style: TextStyle(color: AppColors.white)),
                 )),
             SizedBox(height: 5),
@@ -145,7 +144,7 @@ class _TaskListState extends State<TaskList> {
                   controller: scrollController,
                   itemCount: _dataStore.getNumberOfTaskListTasks(),
                   itemBuilder: (context, i) {
-                    return TaskListTimeLine(taskNumber: i);
+                    return TaskListTimeLine(taskNumber: i, stepStore: _stepStore);
                   },
                 ),
               ),

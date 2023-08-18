@@ -1,5 +1,4 @@
 import 'package:guide_wizard/data/repository.dart';
-import 'package:guide_wizard/models/language/supported_language.dart';
 import 'package:guide_wizard/stores/error/error_store.dart';
 import 'package:mobx/mobx.dart';
 
@@ -16,13 +15,6 @@ abstract class _LanguageStore with Store {
   // store for handling errors
   final ErrorStore errorStore = ErrorStore();
 
-  // supported languages
-  List<SupportedLanguage> supportedLanguages = [
-    SupportedLanguage(code: 'US', locale: 'en', language: 'English'),
-    SupportedLanguage(code: 'DE', locale: 'de', language: 'German'),
-    SupportedLanguage(code: 'FR', locale: 'fr', language: 'French'),
-  ];
-
   // constructor:---------------------------------------------------------------
   _LanguageStore(Repository repository) : this._repository = repository {
     init();
@@ -31,9 +23,6 @@ abstract class _LanguageStore with Store {
   // store variables:-----------------------------------------------------------
   @observable
   String _locale = "en";
-
-  @observable
-  int? language_id = 0;
 
   @computed
   String get locale => _locale;
@@ -47,42 +36,10 @@ abstract class _LanguageStore with Store {
     });
   }
 
-  @action
-  String getCode() {
-    var code;
-
-    if (_locale == 'en') {
-      code = "US";
-    } else if (_locale == 'de') {
-      code = "DE";
-    } else if (_locale == 'fr') {
-      code = "FR";
-    }
-
-    return code;
-  }
-
-  @action
-  String? getLanguage() {
-    return supportedLanguages[supportedLanguages
-            .indexWhere((language) => language.locale == _locale)]
-        .language;
-  }
-
   // general:-------------------------------------------------------------------
   @action
   Future init() async {
-    final future = _repository.getCurrentLocale();
-    future.then((currentLocale) {
-      if (currentLocale != null) {
-        var locale = currentLocale.split("-")[0];
-        for (var i = 0; i < supportedLanguages.length; i++) {
-          if ("${supportedLanguages[i].locale!}" == locale) {
-            this._locale = locale;
-            this.language_id = i;
-          }
-        }
-      }
-    });
+    String? currentLocale = await _repository.getCurrentLocale();
+    changeLanguage(currentLocale!);
   }
 }

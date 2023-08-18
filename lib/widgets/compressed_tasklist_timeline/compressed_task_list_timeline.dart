@@ -69,20 +69,29 @@ class _CompressedTasklistTimelineState
               itemExtent: 70,
               contentsBuilder: (context, index) =>
                   _buildContents(index, _stepStore),
-              indicatorBuilder: (context, index) => _buildIndicator(),
-              startConnectorBuilder: (context, index) => _buildConnector(),
-              endConnectorBuilder: (context, index) => _buildConnector(),
+              indicatorBuilder: (context, index) => _buildIndicator(index, _stepStore.currentStep),
+              startConnectorBuilder: (context, index) => index == 0 && (_stepStore.currentStep) - 1 == 1
+                  ? Container()
+                  : _buildConnector(),
+              endConnectorBuilder: (context, index) => (_stepStore.currentStep)  == _dataStore.getNumberOfSteps()
+                  ? Container()
+                  : _buildConnector(),
             )),
       ),
     );
   }
 
-  Widget _buildIndicator() {
+  bool isTaskDone(taskIndex, currentStepIndex){
+    return _dataStore.allTasks
+        .tasks.where((element) => element.step_id == _dataStore.stepList.steps[currentStepIndex - 1].id).toList()[taskIndex].isDone;
+  }
+
+  Widget _buildIndicator(taskIndex, currentStepIndex) {
     return Container(
         color: AppColors.transparent,
         width: Dimens.timelineIndicatorDimens,
         height: Dimens.timelineIndicatorDimens,
-        child: DiamondIndicator());
+        child: DiamondIndicator(fill: isTaskDone(taskIndex, currentStepIndex),));
   }
 
   Widget _buildConnector() {
@@ -96,6 +105,7 @@ class _CompressedTasklistTimelineState
       width: _getScreenWidth() / 1.23,
       height: _getScreenHeight() / 15,
       margin: Dimens.contentLeftMargin,
+      padding: Dimens.compressedTaskListContentPadding,
       decoration: BoxDecoration(
         color: AppColors.timelineCompressedContainerColor,
         borderRadius: BorderRadius.all(Radius.circular(Dimens.contentRadius)),
