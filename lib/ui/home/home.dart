@@ -72,7 +72,7 @@ class _HomeScreenState extends State<HomeScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: AppColors.white,
+      backgroundColor: AppColors.main_color,
       appBar: _buildAppBar(),
       body: RefreshIndicator(
         color: AppColors.main_color,
@@ -177,10 +177,26 @@ class _HomeScreenState extends State<HomeScreen> {
 //body build methods ...........................................................
   Widget _buildBody(BuildContext context) {
     return Observer(
-      builder: (_) => _dataStore.dataLoad
-          ? _buildScreenElements(
+      builder: (_) => ClipRRect(
+        borderRadius: BorderRadius.only(
+            topLeft: Radius.circular(Dimens.homeBodyBorderRadius),
+            topRight: Radius.circular(Dimens.homeBodyBorderRadius)),
+        child: Container(
+          height: MediaQuery.of(context).size.height,
+          width: MediaQuery.of(context).size.width,
+          decoration: BoxDecoration(
+            color: AppColors.homeBodyColor,
+            borderRadius: BorderRadius.only(
+              topLeft: Radius.circular(Dimens.homeBodyBorderRadius),
+              topRight: Radius.circular(Dimens.homeBodyBorderRadius),
+            ),
+          ),
+          child: _dataStore.dataLoad
+              ? _buildScreenElements(
               _appSettingsStore.currentStepNumber, _dataStore.values!)
-          : _shimmerAll(),
+              : _shimmerAll(),
+        ),
+      ),
     );
   }
 
