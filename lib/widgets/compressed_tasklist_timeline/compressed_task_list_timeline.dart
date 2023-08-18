@@ -50,7 +50,6 @@ class _CompressedTasklistTimelineState
       builder: (_) => RawScrollbar(
         child: Timeline.tileBuilder(
           shrinkWrap: true,
-          // physics: AlwaysScrollableScrollPhysics(),
           theme: TimelineThemeData(
             direction: Axis.vertical,
             nodePosition: Dimens.timelineNodePosition,
