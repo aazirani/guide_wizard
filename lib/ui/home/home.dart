@@ -74,7 +74,19 @@ class _HomeScreenState extends State<HomeScreen> {
     return Scaffold(
       backgroundColor: AppColors.white,
       appBar: _buildAppBar(),
-      body: _buildBody(context),
+      body: RefreshIndicator(
+        color: AppColors.main_color,
+        onRefresh: () async {
+          DataLoadHandler(context: context).checkTimeAndForceUpdate();
+        },
+        child: SingleChildScrollView(
+          physics: AlwaysScrollableScrollPhysics(),
+          child: Container(
+            height: MediaQuery.of(context).size.height -_buildAppBar().preferredSize.height - MediaQuery.of(context).padding.top,
+            child: _buildBody(context),
+          ),
+        ),
+      ),
     );
   }
 
