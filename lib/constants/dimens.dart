@@ -64,11 +64,12 @@ class Dimens {
   static const double pendingSliderBorder = 4;
   static const double doneSliderBorder = 1;
   static const double notStartedSliderBorder = 2;
-  static const double buttonRadius = 18;
+  static const double buttonRadius = 30;
   static const double progressBarRadius = 10;
-  static const double minFontSizeForTextOverFlow = 11;
+  static const double minFontSizeForTextOverFlow = 16;
   static const stepSliderImagePadding = EdgeInsets.all(10);
   static const stepSliderProgressBarPadding = EdgeInsets.only(bottom: 15);
+  static const progressBarHeight = 20.0;
   // compressed tasklist.........................................................
   static const compressedTaskListContentPadding = const EdgeInsets.only(left: 10);
   static const double contentRadius = 10;
