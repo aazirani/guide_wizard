@@ -63,7 +63,7 @@ class Dimens {
   static const double stepTitleFont = 17;
   static const stepSliderprogressBarPadding = EdgeInsets.only(left:10, right: 10, top: 10);
   static const double pendingSliderBorder = 4;
-  static const double doneSliderBorder = 1;
+  static const double doneSliderBorder = 2;
   static const double notStartedSliderBorder = 2;
   static const double buttonRadius = 18;
   static const double progressBarRadius = 10;
