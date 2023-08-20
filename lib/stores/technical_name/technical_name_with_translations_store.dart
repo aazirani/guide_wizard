@@ -49,13 +49,17 @@ abstract class _TechnicalNameWithTranslationsStore with Store {
 
   @action
   void setCurrentLocale(String languageCode) {
-    this.language_id = getSupportedLanguages().firstWhere(
-            (element) => element.language_code == languageCode,
-        orElse: () => getSupportedLanguages().firstWhere(
-                (element) => element.is_main_language,
-            orElse: () => getSupportedLanguages().first
-        )
-    ).id;
+    try{
+      this.language_id = getSupportedLanguages().firstWhere(
+              (element) => element.language_code == languageCode,
+          orElse: () => getSupportedLanguages().firstWhere(
+                  (element) => element.is_main_language,
+              orElse: () => getSupportedLanguages().first
+          )
+      ).id;
+    } catch (e){
+      this.language_id = 1;
+    }
   }
 
   @action

@@ -67,7 +67,7 @@ class DataLoadHandler { // This class is SINGLETON
     else{
       await checkForUpdate();
     }
-    if(_dataStore.allTasks.tasks.isEmpty){
+    if(_dataStore.getAllTasks().isEmpty){
       await _dataStore.getAllTasks();
     }
   }
@@ -111,15 +111,11 @@ class DataLoadHandler { // This class is SINGLETON
     _dataStore.dataNotLoaded();
     if (!_dataStore.stepLoading) {
       await _technicalNameWithTranslationsStore.getTechnicalNameWithTranslations();
-      await _dataStore.getSteps();
-      await _appSettingsStore.setStepsCount(_dataStore.stepList.steps.length);
-      // keep this comment for now:
-      // await _dataStore.getAllTasks();
-      await _dataStore.getQuestions();
-      await _dataStore.initializeValues();
+      await _dataStore.getStepsFromApi();
     }
-    if (_dataStore.stepSuccess) {
+    if (_dataStore.stepSuccess && !_dataStore.stepLoading) {
       _dataStore.dataLoaded();
+      await _appSettingsStore.setCurrentStepId(_dataStore.getAllSteps().first.id);
     }
   }
 

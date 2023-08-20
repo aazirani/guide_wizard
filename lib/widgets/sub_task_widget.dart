@@ -12,13 +12,11 @@ class SubTaskWidget extends StatefulWidget {
   int index;
   List<SubTask> subTasks;
   RenderParametersManager renderManager;
-  String? deadline;
   SubTaskWidget({
     Key? key,
     required this.index,
     required this.subTasks,
     required this.renderManager,
-    this.deadline,
   }) : super(key: key);
 
   @override
@@ -52,7 +50,7 @@ class SubTaskWidgetState extends State<SubTaskWidget>
     return ExpansionContent(
             renderManager: widget.renderManager,
             markdown: _technicalNameWithTranslationsStore.getTranslation(markdown_id)!,
-            deadline: widget.deadline);
+            deadline: _technicalNameWithTranslationsStore.getTranslation(widget.subTasks[widget.index].deadline));
   }
 
 

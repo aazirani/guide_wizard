@@ -1,17 +1,16 @@
+import 'dart:math' as math;
+
 import 'package:flutter/material.dart';
-import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:guide_wizard/constants/colors.dart';
 import 'package:guide_wizard/constants/dimens.dart';
 import 'package:guide_wizard/models/task/task.dart';
 import 'package:guide_wizard/stores/technical_name/technical_name_with_translations_store.dart';
 import 'package:guide_wizard/widgets/image_slide.dart';
 import 'package:guide_wizard/widgets/measure_size.dart';
-import 'package:guide_wizard/widgets/questions_list_page_appBar.dart';
 import 'package:guide_wizard/widgets/sub_task_widget.dart';
 import 'package:guide_wizard/widgets/task_page_appbar_widget.dart';
 import 'package:provider/provider.dart';
 import 'package:render_metrics/render_metrics.dart';
-import 'dart:math' as math;
 
 class TaskPageWithImage extends StatefulWidget {
   Task task;
@@ -54,7 +53,7 @@ class _TaskPageWithImageState extends State<TaskPageWithImage> {
     return Scaffold(
       backgroundColor: AppColors.main_color,
       appBar: BlocksAppBarWidget(
-        taskId: widget.task.id,
+        task: widget.task,
         title: _technicalNameWithTranslationsStore.getTranslation(widget.task.text),
       ),
       body: _buildScaffoldBody(),
@@ -125,13 +124,9 @@ class _TaskPageWithImageState extends State<TaskPageWithImage> {
     if (_technicalNameWithTranslationsStore.getTranslation(widget.task.description) == "") return SizedBox(height: Dimens.taskPageTextOnlyListViewPadding.top,);
     return Padding(
       padding: Dimens.taskPageTextOnlyListViewPadding,
-      child: Observer(
-        builder: (context) {
-          return Text(
-            _technicalNameWithTranslationsStore.getTranslation(widget.task.description),
-            style: TextStyle(fontSize: Dimens.descriptionFontSize, color: AppColors.main_color),
-          );
-        },
+      child: Text(
+        _technicalNameWithTranslationsStore.getTranslation(widget.task.description),
+        style: TextStyle(fontSize: Dimens.descriptionFontSize, color: AppColors.main_color),
       ),
     );
   }

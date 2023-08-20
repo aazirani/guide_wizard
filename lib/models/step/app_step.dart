@@ -1,7 +1,7 @@
 import 'package:guide_wizard/models/question/question.dart';
 import 'package:guide_wizard/models/task/task.dart';
 
-class Step {
+class AppStep {
   int id;
   int name;
   int description;
@@ -13,7 +13,7 @@ class Step {
   List<Question> questions;
   List<Task> tasks;
 
-  Step(
+  AppStep(
       {required this.id,
       required this.name,
       required this.description,
@@ -25,8 +25,8 @@ class Step {
       required this.questions,
       required this.tasks});
 
-  factory Step.fromMap(Map<String, dynamic> json) {
-    return Step(
+  factory AppStep.fromMap(Map<String, dynamic> json) {
+    return AppStep(
       id: json["id"],
       name: json["name"],
       description: json["description"],
@@ -53,7 +53,4 @@ class Step {
       "tasks": tasks.map((task) => task.toMap()).toList(),
   };
 
-  int get numTasks {
-    return tasks.length;
-  }
 }
