@@ -54,7 +54,7 @@ class _ExpansionContentState extends State<ExpansionContent> {
                   });
                 },
                 child: Column(children: [
-                  (widget.deadline!.isNotEmpty)
+                  widget.deadline != null && (widget.deadline!.isNotEmpty)
                       ? _buildDeadlineContainer()
                       : Container(),
                   _buildMarkdownContent()

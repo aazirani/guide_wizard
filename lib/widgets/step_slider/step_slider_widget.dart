@@ -1,3 +1,4 @@
+import 'package:auto_size_text/auto_size_text.dart';
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
@@ -15,7 +16,6 @@ import 'package:guide_wizard/ui/questions/questions_list_page.dart';
 import 'package:guide_wizard/ui/tasklist/tasklist.dart';
 import 'package:guide_wizard/widgets/load_image_with_cache.dart';
 import 'package:provider/provider.dart';
-import 'package:auto_size_text/auto_size_text.dart';
 
 class StepSliderWidget extends StatefulWidget {
   StepList stepList;
@@ -175,7 +175,7 @@ class _StepSliderWidgetState extends State<StepSliderWidget> {
     var step_title_id = _dataStore.stepList.steps[currentStepNo].name;
     return AutoSizeText(
       "${_technicalNameWithTranslationsStore.getTranslation(step_title_id)}",
-      style: Theme.of(context).textTheme.titleMedium;
+      style: Theme.of(context).textTheme.titleMedium);
   }
 
   Widget _buildStepNoOfTasksOrQuestions(currentStepNo) {

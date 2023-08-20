@@ -51,7 +51,7 @@ class SubTaskWidgetState extends State<SubTaskWidget>
     var markdown_id = widget.subTasks[widget.index].markdown;
     return ExpansionContent(
             renderManager: widget.renderManager,
-            markdown: _technicalNameWithTranslationsStore.getTranslation(markdown_id)!,
+            markdown: _technicalNameWithTranslationsStore.getTranslation(markdown_id),
             deadline: widget.deadline);
   }
 
