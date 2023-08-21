@@ -92,14 +92,13 @@ class AppColors {
 
   static const Color title_color = Colors.white;
   static const Color main_color = const Color.fromRGBO(0, 81, 158, 1);
+  static const Color text_color = Color(0xFF004484);
   static const Color grey = const Color.fromRGBO(231, 231, 231, 1);
   static const Color transparent = Colors.transparent;
   static const Color white = Colors.white;
   static const Color button_background_color = const Color.fromRGBO(217, 217, 217, 0.15);
   static const Color bright_foreground_color = Colors.white;
-  // static const Color dotted_line_color = Colors.green;
   static Color dotted_line_color = green[300]!;
-  // static const Color white= const Colors.white.withOpacity(0.5);
   static Color close_button_color = Colors.grey[800]!;
 
 }

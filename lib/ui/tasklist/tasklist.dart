@@ -8,9 +8,11 @@ import 'package:guide_wizard/stores/data/data_store.dart';
 import 'package:guide_wizard/stores/step/step_store.dart';
 import 'package:guide_wizard/stores/technical_name/technical_name_with_translations_store.dart';
 import 'package:guide_wizard/ui/tasklist/tasklist_timeline.dart';
+import 'package:guide_wizard/widgets/info_dialog.dart';
 import 'package:guide_wizard/widgets/measure_size.dart';
 import 'package:guide_wizard/widgets/scrolling_overflow_text.dart';
 import 'package:provider/provider.dart';
+import 'dart:math' as math;
 
 class TaskList extends StatefulWidget {
   int currentStepNo;
@@ -71,7 +73,6 @@ class _TaskListState extends State<TaskList> {
           child: IconButton(
               icon: Icon(Icons.arrow_back),
               onPressed: () {
-                Navigator.pop(context);
                 _changeStepAndNavigateHome();
               },
               color: AppColors.white),
@@ -144,7 +145,8 @@ class _TaskListState extends State<TaskList> {
                   controller: scrollController,
                   itemCount: _dataStore.getNumberOfTaskListTasks(),
                   itemBuilder: (context, i) {
-                    return TaskListTimeLine(taskNumber: i, stepStore: _stepStore);
+                    return TaskListTimeLine(
+                        taskNumber: i, stepStore: _stepStore);
                   },
                 ),
               ),
@@ -183,9 +185,93 @@ class _TaskListState extends State<TaskList> {
   // general methods ...........................................................
   _changeStepAndNavigateHome() {
     if (_dataStore.values![_appSettingsStore.currentStepNumber] == 1) {
-      _appSettingsStore.currentStepNumber += 1;
+      return showModalBottomSheet(
+          context: context,
+          isScrollControlled: true,
+          backgroundColor: Colors.transparent,
+          builder: (BuildContext context) {
+            return LayoutBuilder(
+                builder: (BuildContext context, BoxConstraints constraints) {
+              return InfoDialog(
+                content: Padding(
+                  padding: Dimens.infoBottomSheetPadding,
+                  child: _buildConfirmationDialogText(),
+                ),
+                bottomRow: _buttonContainer(),
+              );
+            });
+          });
+    } else {
+      Navigator.pop(context);
     }
     return true;
+  }
+
+  Widget _buildConfirmationDialogText() {
+    return Text(
+        "Are you sure?\nYou won't be able to edit this step after navigating to home page",
+        style: TextStyle(
+            fontSize: 17,
+            fontWeight: FontWeight.w200,
+            color: AppColors.text_color));
+  }
+
+  Widget _buttonContainer() {
+    return Padding(
+      padding: Dimens.infoButtonsPadding,
+      child: Row(children: [
+        Expanded(flex: 9, child: _buildButtons("Cancel")),
+        Expanded(flex: 1, child: SizedBox()),
+        Expanded(flex: 9, child: _buildButtons("Confirm")),
+      ]),
+    );
+  }
+
+  Widget _buildButtons(buttonKind) {
+    return TextButton(
+        style: _buildButtonStyle(2, buttonKind),
+        onPressed: () {
+          if (buttonKind == "Confirm") {
+            Navigator.of(context).popUntil((route) => route.isFirst);
+            _appSettingsStore.incrementStepNumber();
+          } else {
+            Navigator.of(context).popUntil((route) => route.isFirst);
+          }
+        },
+        child: Text(buttonKind,
+            style: TextStyle(
+                fontSize: 16,
+                color: buttonKind == "Cancel"
+                    ? AppColors.main_color
+                    : AppColors.white)));
+  }
+
+  ButtonStyle _buildButtonStyle(scaleBy, buttonKind) {
+    return ButtonStyle(
+      backgroundColor: MaterialStateProperty.resolveWith((states) {
+        return buttonKind == "Confirm" ? AppColors.main_color : AppColors.white;
+      }),
+      minimumSize: MaterialStateProperty.all(sizeOfButton(scaleBy: scaleBy)),
+      overlayColor: MaterialStateColor.resolveWith(
+          (states) => AppColors.close_button_color.withOpacity(0.1)),
+      shape: MaterialStateProperty.all<RoundedRectangleBorder>(
+        RoundedRectangleBorder(
+          borderRadius: Dimens.infoInsideDialogButtonsRadius,
+          side: BorderSide(color: AppColors.main_color, width: 2),
+        ),
+      ),
+    );
+  }
+
+  Size sizeOfButton({scaleBy = 1}) {
+    return Size(
+        math.max(
+            _getScreenWidth() -
+                (Dimens.buildQuestionsButtonStyle[
+                        "pixels_smaller_than_screen_width"]!) /
+                    scaleBy,
+            0),
+        Dimens.buildQuestionsButtonStyle["height"]!);
   }
 
   double _getProgressBarHeight() {
