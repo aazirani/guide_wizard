@@ -114,24 +114,25 @@ class _NextStageButtonState extends State<NextStageButton> {
 
     await updateIfAnswersHasChanged();
 
-    await _appSettingsStore.setCurrentStepId(_dataStore
-        .getAllSteps()
-        .reduce((curr, next) => curr.order < next.order ? curr : next)
-        .id);
+    await _appSettingsStore.setCurrentStepId(
+        _dataStore.getAllSteps().reduce((curr, next) => curr.order < next.order ? curr : next).id
+    );
 
     setButtonState(ButtonState.success);
 
     Future.delayed(Duration(milliseconds: 1500), () {
       Navigator.of(context).pushAndRemoveUntil(
           MaterialPageRoute(builder: (context) => HomeScreen()),
-          (Route<dynamic> route) => false);
+              (Route<dynamic> route) => false
+      );
     });
   }
+
 
   Future<void> updateIfAnswersHasChanged() async {
     bool answerWasUpdated = await _appSettingsStore.getAnswerWasUpdated() ?? false;
     if (answerWasUpdated) {
-      await DataLoadHandler().loadDataAndCheckForUpdate;
+      await DataLoadHandler().loadDataAndCheckForUpdate();
     }
   }
 

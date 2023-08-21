@@ -137,7 +137,12 @@ class _TaskListState extends State<TaskList> {
                 controller: scrollController,
                 itemCount: tasks.length,
                 itemBuilder: (context, index) {
-                  return TaskListTimeLine(task: _dataStore.getStepById(widget.stepId).tasks[index], index: index);
+                  return TaskListTimeLine(task: _dataStore.getStepById(widget.stepId).tasks[index], index: index,
+                      onTaskStatusChanged: (changedTask) {
+                        setState(() {
+                          _dataStore.getStepsFromDb();
+                        });
+                      });
                 },
               ),
             ),

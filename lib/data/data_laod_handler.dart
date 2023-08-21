@@ -108,58 +108,6 @@ class DataLoadHandler { // This class is SINGLETON
     });
   }
 
-/*
-  Future checkForUpdate({forceUpdate = false}) async {
-    await updateContentIfNeeded(forceUpdate: forceUpdate); // Checks whether there is an update and will insert it in database
-    await loadData(); // Loads the new data from datasource if update was occurred
-  }
-
-
-
-  Future loadData() async {
-    _dataStore.dataNotLoaded();
-    if (!_dataStore.stepLoading) {
-      await _technicalNameWithTranslationsStore.getTechnicalNameWithTranslationsFromApi();
-      await _dataStore.getStepsFromApi();
-    }
-    if (_dataStore.stepSuccess && !_dataStore.stepLoading) {
-      _dataStore.dataLoaded();
-      await _appSettingsStore.setCurrentStepId(_dataStore.getAllSteps().first.id);
-    }
-  }
-
-
-
-  Future updateContentIfNeeded({forceUpdate = false}) async {
-    await _updatedAtTimesStore.updateContentIfNeeded(forceUpdate: forceUpdate);
-  }
-
-   */
-/*
-  Future<void> checkIfUpdateIsNecessary() async {
-    bool mustUpdate = await answerWasUpdated();
-    bool hasInternetConnection = await hasInternet();
-    if(mustUpdate) {
-      if(!hasInternetConnection){
-        DataLoadHandler().showErrorMessage(
-            duration: Duration(milliseconds: 5000),
-            messageWidgetObserver: Observer(builder: (_) {
-              String text = _technicalNameWithTranslationsStore.getTranslationByTechnicalName(LangKeys.update_is_necessary_message_text);
-              return Text(text.isNotEmpty ? text : NecessaryStrings.update_is_necessary_message_text);
-            }),
-            onPressedButton: () {
-              checkIfUpdateIsNecessary();
-            }
-        );
-      }
-      else {
-        forceUpdate();
-      }
-    }
-  }
-
- */
-
   loadData(bool technicalNamesShouldBeUpdated, bool contentsShouldBeUpdated) async {
     if(technicalNamesShouldBeUpdated && !_technicalNameWithTranslationsStore.technicalNameLoading){
       await _technicalNameWithTranslationsStore.getTechnicalNameWithTranslationsFromApi();

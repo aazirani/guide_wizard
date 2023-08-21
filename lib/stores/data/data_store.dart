@@ -85,6 +85,7 @@ abstract class _DataStore with Store {
     return this.stepList;
   }
 
+  @computed
   AppStep getStepById(int stepId) {
     return this.getAllSteps().firstWhere((step) => step.id == stepId);
   }

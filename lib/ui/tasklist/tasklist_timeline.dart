@@ -13,9 +13,10 @@ import 'package:timelines/timelines.dart';
 
 class TaskListTimeLine extends StatefulWidget {
   // final TaskList taskList;
-  final Task task;
+  Task task;
   final int index;
-  TaskListTimeLine({Key? key, required this.task, required this.index}) : super(key: key);
+  final Function(Task) onTaskStatusChanged;
+  TaskListTimeLine({Key? key, required this.task, required this.index, required this.onTaskStatusChanged}) : super(key: key);
 
   @override
   State<TaskListTimeLine> createState() => _TaskListTimeLineState();
@@ -185,10 +186,26 @@ class _TaskListTimeLineState extends State<TaskListTimeLine> {
   void _navigateToTaskPage() {
     Widget taskPage = Container();
     if(widget.task.isTypeOfText){
-      taskPage = TaskPageTextOnly(task: widget.task);
+      taskPage = TaskPageTextOnly(
+        task: widget.task,
+        onTaskStatusChanged: (changedTask) {
+          setState(() {
+            widget.task = changedTask;
+          });
+          widget.onTaskStatusChanged(changedTask);
+        },
+      );
     }
     if(widget.task.isTypeOfImage){
-      taskPage = TaskPageWithImage(task: widget.task);
+      taskPage = TaskPageWithImage(
+        task: widget.task,
+        onTaskStatusChanged: (changedTask) {
+          setState(() {
+            widget.task = changedTask;
+          });
+          widget.onTaskStatusChanged(changedTask);
+        },
+      );
     }
 
     Navigator.push(

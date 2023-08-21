@@ -200,7 +200,7 @@ class _StepTimeLineState extends State<StepTimeLine> {
   }
 
   Widget? _buildStartConnector(index) {
-    if (index == 0) {
+    if(_isFirstStep(index)){
       return null;
     }
     if (_isPendingStep(index)) {
@@ -213,7 +213,7 @@ class _StepTimeLineState extends State<StepTimeLine> {
   }
 
   Widget? _buildEndConnector(int index) {
-    if (index == _dataStore.getIndexOfStep(_appSettingsStore.currentStepId) - 1) {
+    if(_isLastStep(index)){
       return null;
     }
     if (_isPendingStep(index)) {
@@ -231,19 +231,27 @@ class _StepTimeLineState extends State<StepTimeLine> {
   //logic methods : ..............................................................
   double _getScreenWidth() => MediaQuery.of(context).size.width;
 
+  _isLastStep(index) {
+    return index == _dataStore.getAllSteps().length - 1;
+  }
+
+  _isFirstStep(index) {
+    return _dataStore.isFirstStep(_dataStore.getStepByIndex(index).id);
+  }
+
   _isCurrentStep(index) {
     return index == _dataStore.getIndexOfStep(_appSettingsStore.currentStepId);
   }
 
   _isPendingStep(index) {
-    return _dataStore.stepIsPending(_appSettingsStore.currentStepId);
+    return _dataStore.stepIsPending(_dataStore.getStepByIndex(index).id);
   }
 
   _isDoneStep(index) {
-    return _dataStore.stepIsDone(_appSettingsStore.currentStepId);
+    return _dataStore.stepIsDone(_dataStore.getStepByIndex(index).id);
   }
 
   _isNotStartedStep(index) {
-    return _dataStore.stepIsNotStarted(_appSettingsStore.currentStepId);
+    return _dataStore.stepIsNotStarted(_dataStore.getStepByIndex(index).id);
   }
 }

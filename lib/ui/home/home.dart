@@ -238,7 +238,7 @@ class _HomeScreenState extends State<HomeScreen> {
 
   Widget _buildCurrentStepText() {
     return Text(
-        "${_dataStore.getAllSteps().indexWhere((step) => step.id == _appSettingsStore.currentStepId)}/${_dataStore.getAllSteps().length}",
+        "${_dataStore.getAllSteps().indexWhere((step) => step.id == _appSettingsStore.currentStepId) + 1}/${_dataStore.getAllSteps().length}",
         style: TextStyle(color: AppColors.main_color));
   }
 

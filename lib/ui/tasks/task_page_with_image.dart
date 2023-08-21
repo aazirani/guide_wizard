@@ -14,7 +14,8 @@ import 'package:render_metrics/render_metrics.dart';
 
 class TaskPageWithImage extends StatefulWidget {
   Task task;
-  TaskPageWithImage({Key? key, required this.task}) : super(key: key);
+  final Function(Task) onTaskStatusChanged;
+  TaskPageWithImage({Key? key, required this.task, required this.onTaskStatusChanged}) : super(key: key);
 
   @override
   State<TaskPageWithImage> createState() => _TaskPageWithImageState();
@@ -55,6 +56,12 @@ class _TaskPageWithImageState extends State<TaskPageWithImage> {
       appBar: BlocksAppBarWidget(
         task: widget.task,
         title: _technicalNameWithTranslationsStore.getTranslation(widget.task.text),
+        onTaskStatusChanged: (changedTask) {
+          setState(() {
+            widget.task = changedTask;
+          });
+          widget.onTaskStatusChanged(changedTask);
+        },
       ),
       body: _buildScaffoldBody(),
     );

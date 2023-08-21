@@ -11,8 +11,8 @@ import 'package:render_metrics/render_metrics.dart';
 
 class TaskPageTextOnly extends StatefulWidget {
   Task task;
-
-  TaskPageTextOnly({Key? key, required this.task}) : super(key: key);
+  final Function(Task) onTaskStatusChanged;
+  TaskPageTextOnly({Key? key, required this.task, required this.onTaskStatusChanged}) : super(key: key);
 
   @override
   State<TaskPageTextOnly> createState() => _TaskPageTextOnlyState();
@@ -43,8 +43,14 @@ class _TaskPageTextOnlyState extends State<TaskPageTextOnly> {
     return Scaffold(
       backgroundColor: AppColors.main_color,
       appBar: BlocksAppBarWidget(
-          task: widget.task,
-          title: _technicalNameWithTranslationsStore.getTranslation(widget.task.text),
+        task: widget.task,
+        title: _technicalNameWithTranslationsStore.getTranslation(widget.task.text),
+        onTaskStatusChanged: (changedTask) {
+          setState(() {
+            widget.onTaskStatusChanged(changedTask);
+            widget.task = changedTask;
+          });
+        },
       ),
       body: _buildScaffoldBody(),
     );

@@ -10,11 +10,13 @@ class BlocksAppBarWidget extends StatefulWidget implements PreferredSizeWidget {
   Task task;
   double appBarSize;
   String title;
+  final Function(Task) onTaskStatusChanged;
   BlocksAppBarWidget(
       {Key? key,
-      required this.task,
-      this.appBarSize = Dimens.blocksAppBarWidgetHeight,
-      required this.title})
+        required this.task,
+        this.appBarSize = Dimens.blocksAppBarWidgetHeight,
+        required this.title,
+        required this.onTaskStatusChanged})
       : super(key: key);
 
   @override
@@ -52,12 +54,12 @@ class _BlocksAppBarWidgetState extends State<BlocksAppBarWidget> {
 
   Widget _buildButton({required ButtonStyle? buttonStyle, IconData? icon}) {
     return ElevatedButton(
-        onPressed: () {
+        onPressed: () async {
           if(!_dataStore.stepLoading){
-            setState(() async {
-              widget.task.isDone = !widget.task.isDone;
-              await _dataStore.updateTask(widget.task);
-            });
+            widget.task.isDone = !widget.task.isDone;
+            await _dataStore.updateTask(widget.task);
+            setState(() {});
+            widget.onTaskStatusChanged(widget.task);
           }
         },
         style: buttonStyle,
