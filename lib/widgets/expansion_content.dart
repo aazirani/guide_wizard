@@ -77,9 +77,8 @@ class _ExpansionContentState extends State<ExpansionContent> {
               child: Padding(
                 padding: Dimens.deadlineContentPadding,
                 child: Text("${widget.deadline}",
-                    style: TextStyle(
-                        color: AppColors.red[200],
-                        fontWeight: FontWeight.w800)),
+                    style: Theme.of(context).textTheme.bodyMedium,
+                        ),
               ),
             )));
   }

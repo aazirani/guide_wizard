@@ -164,17 +164,14 @@ class _StepSliderWidgetState extends State<StepSliderWidget> {
     var step_title_id = _dataStore.stepList.steps[currentStepNo].name;
     return Text(
       "${_technicalNameWithTranslationsStore.getTranslation(step_title_id)}",
-      style: TextStyle(
-          fontSize: Dimens.stepTitleFont, color: AppColors.main_color),
+      style: Theme.of(context).textTheme.titleMedium,
     );
   }
 
   Widget _buildStepNoOfTasksOrQuestions(currentStepNo) {
     return Text(
         isQuestionsStep(currentStepNo) ? noOfQuestionsString(currentStepNo) : noOfTasksString(currentStepNo),
-        style: TextStyle(
-          fontSize: Dimens.numOfTasksFont, color: AppColors.main_color,
-        )
+        style: Theme.of(context).textTheme.bodySmall
     );
   }
 
@@ -229,8 +226,8 @@ class _StepSliderWidgetState extends State<StepSliderWidget> {
               mainAxisSize: MainAxisSize.min,
               children: [
                 Text(_technicalNameWithTranslationsStore.getTranslationByTechnicalName(LangKeys.continueKey),
-                    style: TextStyle(
-                        fontSize: Dimens.continueFont, color: AppColors.main_color)),
+                    style: Theme.of(context).textTheme.bodySmall,
+                        ),
                 SizedBox(width: 1),
                 Icon(
                   Icons.arrow_forward_ios_rounded,

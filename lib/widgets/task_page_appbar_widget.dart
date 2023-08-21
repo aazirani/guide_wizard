@@ -116,10 +116,7 @@ class _BlocksAppBarWidgetState extends State<BlocksAppBarWidget> {
         children: [
           ScrollingOverflowText(
             widget.title,
-            style: TextStyle(
-              color: AppColors.bright_foreground_color,
-              fontSize: Dimens.taskTitleFont,
-            ),
+            style: Theme.of(context).textTheme.titleLarge!.copyWith(color: AppColors.bright_foreground_color),
             overflowRatio: 0.65,
           ),
           Padding(

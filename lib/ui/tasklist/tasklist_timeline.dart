@@ -15,7 +15,9 @@ class TaskListTimeLine extends StatefulWidget {
   // final TaskList taskList;
   final int taskNumber;
   final StepStore stepStore;
-  TaskListTimeLine({Key? key, required this.taskNumber, required this.stepStore}) : super(key: key);
+  TaskListTimeLine(
+      {Key? key, required this.taskNumber, required this.stepStore})
+      : super(key: key);
 
   @override
   State<TaskListTimeLine> createState() => _TaskListTimeLineState();
@@ -48,12 +50,14 @@ class _TaskListTimeLineState extends State<TaskListTimeLine> {
       contents: _buildContents(taskNumber),
       node: TimelineNode(
         indicator: _buildIndicator(taskNumber),
-        startConnector: taskNumber == 0 && (widget.stepStore.currentStep) - 1 == 1
-            ? Container()
-            : _buildConnector(),
-        endConnector: (widget.stepStore.currentStep)  == _dataStore.getNumberOfSteps()
-            ? Container()
-            : _buildConnector(),
+        startConnector:
+            taskNumber == 0 && (widget.stepStore.currentStep) - 1 == 1
+                ? Container()
+                : _buildConnector(),
+        endConnector:
+            (widget.stepStore.currentStep) == _dataStore.getNumberOfSteps()
+                ? Container()
+                : _buildConnector(),
       ),
     );
   }
@@ -137,10 +141,10 @@ class _TaskListTimeLineState extends State<TaskListTimeLine> {
         alignment: Alignment.centerLeft,
         child: Text(
           "${_technicalNameWithTranslationsStore.getTranslation(title_id)} ",
-          style: TextStyle(
-            color: AppColors.main_color,
-            fontSize: Dimens.taskListTimeLineContentTitle,
-          ),
+          style: Theme.of(context)
+              .textTheme
+              .titleSmall!
+              .copyWith(fontWeight: FontWeight.normal),
         ),
       ),
     );
@@ -167,9 +171,10 @@ class _TaskListTimeLineState extends State<TaskListTimeLine> {
                     ? AppColors.deadlineDoneBorderColor
                     : AppColors.deadlineUnDoneBorderColor)),
         child: Center(
-            child: Text("${_technicalNameWithTranslationsStore.getTranslationByTechnicalName(LangKeys.deadline)}",
-                style: TextStyle(
-                    fontSize: 13,
+            child: Text(
+                "${_technicalNameWithTranslationsStore.getTranslationByTechnicalName(LangKeys.deadline)}",
+                style: Theme.of(context).textTheme.bodySmall!.copyWith(
+                    fontSize: 14,
                     color: (_taskDone(taskNumber)
                         ? AppColors.deadlineTextDoneColor
                         : AppColors.deadlineTextUnDoneColor)))));

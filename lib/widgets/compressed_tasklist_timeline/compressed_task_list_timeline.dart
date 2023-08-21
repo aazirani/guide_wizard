@@ -125,10 +125,8 @@ class _CompressedTasklistTimelineState
         alignment: Alignment.centerLeft,
         child: Text(
             "${_technicalNameWithTranslationsStore.getTranslation(stepTitleId)}",
-            style: TextStyle(
-              color: AppColors.main_color,
-              fontSize: Dimens.taskListTimeLineContentTitle,
-            )),
+            style: Theme.of(context).textTheme.bodyMedium
+            ),
       ),
     );
   }

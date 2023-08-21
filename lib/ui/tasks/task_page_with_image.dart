@@ -129,7 +129,7 @@ class _TaskPageWithImageState extends State<TaskPageWithImage> {
         builder: (context) {
           return Text(
             _technicalNameWithTranslationsStore.getTranslation(widget.task.description),
-            style: TextStyle(fontSize: Dimens.descriptionFontSize, color: AppColors.main_color),
+            style: Theme.of(context).textTheme.bodyLarge
           );
         },
       ),

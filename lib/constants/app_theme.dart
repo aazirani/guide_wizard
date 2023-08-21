@@ -71,7 +71,7 @@ class AppThemeData {
     onError: _lightFillColor,
     onPrimary: _lightFillColor,
     onSecondary: Color(0xFF322942),
-    onSurface: Color(0xFF241E30),
+    onSurface: Color.fromRGBO(0, 81, 158, 1),
     brightness: Brightness.light,
   );
 
@@ -97,16 +97,24 @@ class AppThemeData {
   static const _semiBold = FontWeight.w600;
   static const _bold = FontWeight.w700;
 
+
   static final TextTheme _textTheme = TextTheme(
-    headline4: GoogleFonts.montserrat(fontWeight: _bold, fontSize: 20.0),
-    caption: GoogleFonts.oswald(fontWeight: _semiBold, fontSize: 16.0),
-    headline5: GoogleFonts.oswald(fontWeight: _medium, fontSize: 16.0),
-    subtitle1: GoogleFonts.montserrat(fontWeight: _medium, fontSize: 16.0),
-    overline: GoogleFonts.montserrat(fontWeight: _medium, fontSize: 12.0),
-    bodyText1: GoogleFonts.montserrat(fontWeight: _regular, fontSize: 14.0),
-    subtitle2: GoogleFonts.montserrat(fontWeight: _medium, fontSize: 14.0),
-    bodyText2: GoogleFonts.montserrat(fontWeight: _regular, fontSize: 16.0),
-    headline6: GoogleFonts.montserrat(fontWeight: _bold, fontSize: 16.0),
-    button: GoogleFonts.montserrat(fontWeight: _semiBold, fontSize: 14.0),
+    //app bar titles
+    titleLarge: TextStyle(fontSize: 20, fontWeight: _bold),
+    // step slider titles, task titles , sub task title 
+    titleMedium: TextStyle(fontSize: 19, fontWeight: _medium),
+    // "steps" / "Description" / "In Progress" in home / task title in task list with less font weight
+    titleSmall: TextStyle(fontSize: 18, fontWeight: _semiBold), 
+    // description in task page
+    bodyLarge: TextStyle(fontSize:18, fontWeight: _regular),
+    //description in home, in progress tasks in home, deadline in task page, modal bottom sheet dialog
+    bodyMedium: TextStyle(fontSize: 17),
+    // no of tasks in step slider and tasklist / button text
+    bodySmall: TextStyle(fontSize: 16,),
+    labelMedium: TextStyle(fontSize: 17),
+    labelSmall: TextStyle(fontSize: 14),
+  ).apply(
+    displayColor:  lightColorScheme.onSurface, 
+    bodyColor: lightColorScheme.onSurface, 
   );
 }
