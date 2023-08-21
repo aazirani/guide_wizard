@@ -42,7 +42,7 @@ class _QuestionsListPageState extends State<QuestionsListPage> {
   Widget build(BuildContext context) {
     return WillPopScope(
       onWillPop: () async {
-        await DataLoadHandler(context: context).checkIfUpdateIsNecessary();
+        await DataLoadHandler(context: context).loadDataAndCheckForUpdate();
         return true;
       },
       child: Consumer<QuestionsWidgetState>(builder: (context, builder, child) {

@@ -17,23 +17,10 @@ abstract class _DataStore with Store {
 
   _DataStore(Repository repo) : this._repository = repo;
 
-  @observable
-  bool dataLoad = false;
-
-  @action
-  void dataLoaded() {
-    this.dataLoad = true;
-  }
-
-  @action
-  void dataNotLoaded() {
-    this.dataLoad = false;
-  }
-
   // store for handling errors
   final ErrorStore errorStore = ErrorStore();
 
-  //steplist observables
+  // observables
   static ObservableFuture<List<AppStep>> emptyStepsResponse = ObservableFuture.value(List.empty());
 
   @observable
@@ -42,80 +29,105 @@ abstract class _DataStore with Store {
   @observable
   List<AppStep> stepList = List.empty();
 
+  @observable
+  bool _loadingDataFromDbOrServer = false;
+
   @computed
   bool get stepSuccess => fetchStepsFuture.status == FutureStatus.fulfilled;
 
   @computed
   bool get stepLoading => fetchStepsFuture.status == FutureStatus.pending;
 
+  @computed
+  bool get isLoading => _loadingDataFromDbOrServer;
+
   //Actions......................................................................
   @action
-  Future getStepsFromDb() async {
-    final future = _repository.getStepsFromDb();
-    fetchStepsFuture = ObservableFuture(future);
-    await fetchStepsFuture.then((steps) {
-      steps.sort((a, b) => a.order.compareTo(b.order));
-      this.stepList = steps;
-    });
+  void loadingStarted(){
+    this._loadingDataFromDbOrServer = true;
   }
 
   @action
-  Future getStepsFromApi() async {
-    await _repository.getStepFromApiAndInsert();
-    await getStepsFromDb();
+  void loadingFinished(){
+    this._loadingDataFromDbOrServer = false;
   }
 
   @action
+  Future<List<AppStep>> getStepsFromDb() async {
+    try {
+      fetchStepsFuture = ObservableFuture(_repository.getStepsFromDb());
+      List<AppStep> steps = await fetchStepsFuture;
+      _setStepList(steps);
+      return steps;
+    } catch (e) {
+      return List.empty();
+    }
+  }
+
+  @action
+  Future<List<AppStep>> getStepsFromApi() async {
+    try {
+      fetchStepsFuture = ObservableFuture(_repository.getStepFromApiAndInsert());
+      List<AppStep> steps = await fetchStepsFuture;
+      _setStepList(steps);
+      return steps;
+    } catch (e) {
+      return List.empty();
+    }
+  }
+
+  void _setStepList(List<AppStep> steps) {
+    steps.sort((a, b) => a.order.compareTo(b.order));
+    this.stepList = steps;
+  }
+
   List<AppStep> getAllSteps() {
     return this.stepList;
   }
 
-  @action
   AppStep getStepById(int stepId) {
     return this.getAllSteps().firstWhere((step) => step.id == stepId);
   }
 
-  @action
   bool isFirstStep(int stepId) {
-    return this.getAllSteps().reduce((curr, next) => curr.order < next.order ? curr : next)
+    var steps = this.getAllSteps();
+    if(steps.isEmpty) {
+      // Handle the empty list case. Return false or throw an exception.
+      return false;
+    }
+    return steps.reduce((curr, next) => curr.order < next.order ? curr : next)
         .id == stepId;
   }
 
-  @action
   int getIndexOfStep(int stepId){
     return this.getAllSteps().indexWhere((step) => step.id == stepId);
   }
 
-  @action
   AppStep getStepByIndex(int index){
     return this.getAllSteps().elementAt(index);
   }
 
-  @action
-  Future stepDataSourceCount() => _repository.stepDatasourceCount();
+  Future<bool> isDataSourceEmpty() async {
+    return getAllSteps().isEmpty;
+  }
 
   @action
-  Future isDataSourceEmpty() async =>  (await _repository.stepDatasourceCount()) == 0;
-
-  @action
-  Future truncateSteps() async {
+  Future<void> truncateSteps() async {
     await _repository.truncateStep();
   }
 
   //Tasks Actions: .............................................................
-  @action
   List<Task> getAllTasks() {
     return this.getAllSteps().expand((step) => step.tasks).toList();
   }
 
-  @action
- Task getTaskById(int id) {
+  Task getTaskById(int id) {
     return getAllTasks().firstWhere((task) => task.id == id);
   }
 
   @action
-  Future updateTask(Task task) async {
-    AppStep step = this.getAllSteps().firstWhere((step) => step.id == task.step_id);
+  Future<void> updateTask(Task task) async {
+    AppStep step = getAllSteps().firstWhere((step) => step.id == task.step_id);
     int indexOfTask = step.tasks.indexWhere((t) => t.id == task.id);
     if (indexOfTask != -1) {
       step.tasks[indexOfTask] = task;
@@ -124,14 +136,13 @@ abstract class _DataStore with Store {
   }
 
   //Questions Actions: .........................................................
-  @action
   List<Question> getAllQuestions() {
     return this.getAllSteps().expand((step) => step.questions).toList();
   }
 
   @action
-  Future updateQuestion(Question question) async {
-    AppStep step = this.getAllSteps().firstWhere((step) => step.id == question.step_id);
+  Future<void> updateQuestion(Question question) async {
+    AppStep step = getAllSteps().firstWhere((step) => step.id == question.step_id);
     int indexOfQuestion = step.questions.indexWhere((q) => q.id == question.id);
 
     if (indexOfQuestion != -1) {
@@ -140,13 +151,11 @@ abstract class _DataStore with Store {
     await _repository.updateStep(step);
   }
 
-  @action
   Question getQuestionById(int questionId) {
     return getAllQuestions().firstWhere((question) => question.id == questionId);
   }
 
   //Other: .....................................................................
-
   List<Task> getDoneTasks(int stepId) {
     return getAllTasks().where((task) => task.step_id == stepId && task.isDone).toList();
   }

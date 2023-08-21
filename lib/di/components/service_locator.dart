@@ -12,14 +12,9 @@ import 'package:guide_wizard/data/repository.dart';
 import 'package:guide_wizard/data/sharedpref/shared_preference_helper.dart';
 import 'package:guide_wizard/di/module/local_module.dart';
 import 'package:guide_wizard/di/module/network_module.dart';
-import 'package:guide_wizard/stores/app_settings/app_settings_store.dart';
-import 'package:guide_wizard/stores/data/data_store.dart';
 import 'package:guide_wizard/stores/error/error_store.dart';
 import 'package:guide_wizard/stores/form/form_store.dart';
-import 'package:guide_wizard/stores/language/language_store.dart';
-import 'package:guide_wizard/stores/technical_name/technical_name_with_translations_store.dart';
 import 'package:guide_wizard/stores/theme/theme_store.dart';
-import 'package:guide_wizard/stores/updated_at_times/updated_at_times_store.dart';
 import 'package:sembast/sembast.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -66,10 +61,5 @@ Future<void> setupLocator() async {
   ));
 
   // stores:--------------------------------------------------------------------
-  getIt.registerSingleton(LanguageStore(getIt<Repository>()));
   getIt.registerSingleton(ThemeStore(getIt<Repository>()));
-  getIt.registerSingleton(UpdatedAtTimesStore(getIt<Repository>()));
-  getIt.registerSingleton(AppSettingsStore(getIt<Repository>()));
-  getIt.registerSingleton(DataStore(getIt<Repository>()));
-  getIt.registerSingleton(TechnicalNameWithTranslationsStore(getIt<Repository>()));
 }

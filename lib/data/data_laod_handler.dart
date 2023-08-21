@@ -1,12 +1,13 @@
 import 'dart:async';
 
 import 'package:flutter/material.dart';
-import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:guide_wizard/constants/lang_keys.dart';
 import 'package:guide_wizard/constants/necessary_strings.dart';
 import 'package:guide_wizard/constants/settings.dart';
+import 'package:guide_wizard/models/updated_at_times/updated_at_times.dart';
 import 'package:guide_wizard/stores/app_settings/app_settings_store.dart';
 import 'package:guide_wizard/stores/data/data_store.dart';
+import 'package:guide_wizard/stores/language/language_store.dart';
 import 'package:guide_wizard/stores/technical_name/technical_name_with_translations_store.dart';
 import 'package:guide_wizard/stores/updated_at_times/updated_at_times_store.dart';
 import 'package:internet_connection_checker/internet_connection_checker.dart';
@@ -27,6 +28,12 @@ class DataLoadHandler { // This class is SINGLETON
   late TechnicalNameWithTranslationsStore _technicalNameWithTranslationsStore =Provider.of<TechnicalNameWithTranslationsStore>(context, listen: false);
   late UpdatedAtTimesStore _updatedAtTimesStore = Provider.of<UpdatedAtTimesStore>(context, listen: false);
   late AppSettingsStore _appSettingsStore = Provider.of<AppSettingsStore>(context, listen: false);
+  late LanguageStore _languageStore = Provider.of<LanguageStore>(context, listen: false);
+
+  Future<bool> hasInternet() async => await InternetConnectionChecker().hasConnection;
+  Future<bool> hasNoLocalData() async => await _dataStore.isDataSourceEmpty() || await _technicalNameWithTranslationsStore.isDataSourceEmpty();
+  Future<bool> answerWasUpdated() async => await _appSettingsStore.getAnswerWasUpdated() ?? false;
+
 
   void showErrorMessage({required Widget messageWidgetObserver, String? buttonLabel, required var onPressedButton, Duration? duration}) {
     ScaffoldMessenger.of(context).clearSnackBars();
@@ -44,73 +51,75 @@ class DataLoadHandler { // This class is SINGLETON
     ScaffoldMessenger.of(context).showSnackBar(snackBar);
   }
 
+  Future<Map<String, bool>> updatedAtWasChanged() async {
+    UpdatedAtTimes oldUpdatedAtTimes = await _updatedAtTimesStore.getUpdatedAtTimesFromDb();
+    UpdatedAtTimes newUpdatedAtTimes = await _updatedAtTimesStore.getUpdatedAtTimesFromApi();
+
+    return {
+      UpdatedAtTimes.LAST_UPDATED_AT_CONTENT : DateTime.parse(oldUpdatedAtTimes.last_updated_at_content).isBefore(DateTime.parse(newUpdatedAtTimes.last_updated_at_content)),
+      UpdatedAtTimes.LAST_UPDATED_AT_TECHNICAL_NAMES : DateTime.parse(oldUpdatedAtTimes.last_updated_at_technical_names).isBefore(DateTime.parse(newUpdatedAtTimes.last_updated_at_technical_names))
+    };
+  }
+
   Future loadDataAndCheckForUpdate({int processId = 0}) async {
+    _dataStore.loadingStarted();
+    bool isAnswerWasUpdated = await answerWasUpdated();
     bool hasInternetConnection = await hasInternet();
-    bool thereIsNoLocalData = await hasNoLocalData();
-    bool mustUpdate = await isUpdateNecessary();
-    if (!hasInternetConnection && thereIsNoLocalData && processId == criticalId && !mustUpdate) {
-      showNoInternetError();
-      Future.delayed(SettingsConstants.internetCheckingPeriod, () {
-        loadDataAndCheckForUpdate(processId: processId);
-      });
-    }
-    else if (thereIsNoLocalData || !hasInternetConnection) {
-      ScaffoldMessenger.of(context).clearSnackBars();
-      await loadData();
-      if(mustUpdate) {
-        await checkIfUpdateIsNecessary();
+    bool isHasNoLocalData = await hasNoLocalData();
+    if(isHasNoLocalData || await isAnswerWasUpdated){
+      if(!hasInternetConnection){
+        showNoInternetMessage(_technicalNameWithTranslationsStore.getTranslationByTechnicalName(LangKeys.update_is_necessary_message_text), NecessaryStrings.update_is_necessary_message_text, null, processId);
+        _dataStore.loadingFinished();
+        return;
       }
+      await loadData(true, true);
+      _dataStore.loadingFinished();
+      return;
     }
-    else if(mustUpdate) {
-      await checkIfUpdateIsNecessary();
+    if(!hasInternetConnection){
+      showNoInternetMessage(_technicalNameWithTranslationsStore.getTranslationByTechnicalName(LangKeys.update_is_necessary_message_text), NecessaryStrings.update_is_necessary_message_text, null, processId);
+      _dataStore.loadingFinished();
+      return;
     }
-    else{
-      await checkForUpdate();
-    }
-    if(_dataStore.getAllTasks().isEmpty){
-      await _dataStore.getAllTasks();
-    }
+    await updatedAtWasChanged().then((updatedAtTimesUpdatedMap) async => {
+      if (updatedAtTimesUpdatedMap.length > 0 &&
+          updatedAtTimesUpdatedMap.values.firstWhere(
+                  (value) => value,
+              orElse: () => false) // Provide a default value
+      ) {
+        await loadData(updatedAtTimesUpdatedMap[UpdatedAtTimes.LAST_UPDATED_AT_TECHNICAL_NAMES]!, updatedAtTimesUpdatedMap[UpdatedAtTimes.LAST_UPDATED_AT_CONTENT]!)
+      }
+    });
+    _dataStore.loadingFinished();
   }
 
-  Future<bool> hasInternet() async => await InternetConnectionChecker().hasConnection;
-
-  Future<bool> hasNoLocalData() async => await _dataStore.isDataSourceEmpty();
-
-  Future<bool> isUpdateNecessary() async => await _appSettingsStore.getMustUpdate() ?? false;
-
-  void showServerErrorMessage() {
+  void showNoInternetMessage(String ?text, String backupText, int ?durationInMilliseconds, int processId) {
+    ScaffoldMessenger.of(context).clearSnackBars();
+    String text = _technicalNameWithTranslationsStore.getTranslationByTechnicalName(LangKeys.no_internet_message);
     showErrorMessage(
-        messageWidgetObserver: Observer(builder: (_) {
-          String text = _technicalNameWithTranslationsStore.getTranslationByTechnicalName(LangKeys.cant_reach_server);
-          return Text(text.isNotEmpty ? text : NecessaryStrings.cant_reach_server);
-        }),
+        duration: durationInMilliseconds != null ? Duration(milliseconds: durationInMilliseconds) : null,
+        messageWidgetObserver: Text(text.isNotEmpty ? text : backupText),
         onPressedButton: () {
-          loadDataAndCheckForUpdate(processId: ++criticalId);
+          loadDataAndCheckForUpdate(processId: criticalId);
         }
     );
+    Future.delayed(SettingsConstants.internetCheckingPeriod, () {
+      loadDataAndCheckForUpdate(processId: processId);
+    });
   }
 
-  void showNoInternetError() {
-    showErrorMessage(
-        messageWidgetObserver: Observer(builder: (_) {
-          String text = _technicalNameWithTranslationsStore.getTranslationByTechnicalName(LangKeys.no_internet_message);
-          return Text(text.isNotEmpty ? text : NecessaryStrings.no_internet_message);
-        }),
-        onPressedButton: () {
-          loadDataAndCheckForUpdate(processId: ++criticalId);
-        }
-    );
-  }
-
+/*
   Future checkForUpdate({forceUpdate = false}) async {
     await updateContentIfNeeded(forceUpdate: forceUpdate); // Checks whether there is an update and will insert it in database
     await loadData(); // Loads the new data from datasource if update was occurred
   }
 
+
+
   Future loadData() async {
     _dataStore.dataNotLoaded();
     if (!_dataStore.stepLoading) {
-      await _technicalNameWithTranslationsStore.getTechnicalNameWithTranslations();
+      await _technicalNameWithTranslationsStore.getTechnicalNameWithTranslationsFromApi();
       await _dataStore.getStepsFromApi();
     }
     if (_dataStore.stepSuccess && !_dataStore.stepLoading) {
@@ -119,12 +128,16 @@ class DataLoadHandler { // This class is SINGLETON
     }
   }
 
+
+
   Future updateContentIfNeeded({forceUpdate = false}) async {
     await _updatedAtTimesStore.updateContentIfNeeded(forceUpdate: forceUpdate);
   }
 
+   */
+/*
   Future<void> checkIfUpdateIsNecessary() async {
-    bool mustUpdate = await isUpdateNecessary();
+    bool mustUpdate = await answerWasUpdated();
     bool hasInternetConnection = await hasInternet();
     if(mustUpdate) {
       if(!hasInternetConnection){
@@ -145,13 +158,22 @@ class DataLoadHandler { // This class is SINGLETON
     }
   }
 
-  void forceUpdate() async {
-    await checkForUpdate(forceUpdate: true);
-    await _appSettingsStore.setMustUpdate(false);
-  }
+ */
 
-  Future<void> checkTimeAndForceUpdate() async {
-    await updateContentIfNeeded(forceUpdate: await isUpdateNecessary()); // Checks whether there is an update and will insert it in database
-    await loadData(); // Loads the new data from datasource if update was occurred
+  loadData(bool technicalNamesShouldBeUpdated, bool contentsShouldBeUpdated) async {
+    if(technicalNamesShouldBeUpdated && !_technicalNameWithTranslationsStore.technicalNameLoading){
+      await _technicalNameWithTranslationsStore.getTechnicalNameWithTranslationsFromApi();
+    }
+    if(contentsShouldBeUpdated && !_dataStore.stepLoading){
+      await _dataStore.getStepsFromApi().then((steps) async => {
+        if(steps.isNotEmpty){
+          await _appSettingsStore.setCurrentStepId(steps.first.id)
+        }
+      });
+    }
+
+    if(_technicalNameWithTranslationsStore.technicalNameSuccess && _dataStore.stepSuccess){
+      await _appSettingsStore.setAnswerWasUpdated(false);
+    }
   }
 }

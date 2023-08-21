@@ -43,15 +43,22 @@ class Repository {
   );
 
   // Step: ---------------------------------------------------------------------
+
   Future<List<AppStep>> getStepsFromDb() async {
-    return await _stepDataSource.getStepsFromDb().then((appStepList) => appStepList.steps);
+    if (await _stepDataSource.count() > 0) {
+      return _stepDataSource.getStepsFromDb().then((appStepList) => appStepList.steps);
+    } else {
+      // Return an empty list or handle this case differently, without making an API call
+      return List.empty();
+    }
   }
 
   Future<List<AppStep>> getStepFromApiAndInsert() async {
-
     AppStepList stepList = await _stepApi.getSteps(await getUrlParameters());
-    return await updateContent((await getStepsFromDb()), stepList.steps);
+    List<AppStep> existingSteps = await getStepsFromDb(); // This should not loop now
+    return updateContent(existingSteps, stepList.steps);
   }
+
 
   Future<List<AppStep>> updateContent(List<AppStep> stepsBeforeUpdate, List<AppStep> stepsAfterUpdate) async {
     await this.truncateContent();
@@ -81,6 +88,10 @@ class Repository {
     return await _stepDataSource.count().catchError((error) => throw error);
   }
 
+  Future technicalNameWithTranslationsDatasourceCount() async {
+    return await _technicalNameWithTranslationsDataSource.count().catchError((error) => throw error);
+  }
+
   Future truncateStep() =>
       _stepDataSource.deleteAll().catchError((error) => throw error);
 
@@ -100,21 +111,19 @@ class Repository {
       .catchError((error) => throw error);
 
   // TranslationsWithTechnicalName: ---------------------------------------------------------------------
-  Future<TechnicalNameWithTranslationsList>
-      getTechnicalNameWithTranslations() async {
-    return await _technicalNameWithTranslationsDataSource.count() > 0
+  Future<TechnicalNameWithTranslationsList> getTechnicalNameWithTranslationsFromDb() async {
+    return await technicalNameWithTranslationsDatasourceCount() > 0
         ? _technicalNameWithTranslationsDataSource.getTranslationsFromDb()
-        : _technicalNameApi
-            .getTechnicalNamesWithTranslations(await getUrlParameters())
-            .then((t) {
-            t.technicalNameWithTranslations
-                .forEach((technicalNameWithTranslations) async {
-              _technicalNameWithTranslationsDataSource
-                  .insert(technicalNameWithTranslations);
-            });
+        : getTechnicalNameWithTranslationsFromApiAndInsert();
+  }
 
-            return t;
-          }).catchError((error) => throw error);
+  Future<TechnicalNameWithTranslationsList> getTechnicalNameWithTranslationsFromApiAndInsert() async {
+    TechnicalNameWithTranslationsList technicalNameWithTranslationsList = await _technicalNameApi.getTechnicalNamesWithTranslations(await getUrlParameters());
+    technicalNameWithTranslationsList.technicalNameWithTranslations.forEach((technicalNameWithTranslations) async {
+      _technicalNameWithTranslationsDataSource
+          .insert(technicalNameWithTranslations);
+    });
+    return technicalNameWithTranslationsList;
   }
 
   Future<List<TechnicalNameWithTranslations>> findTechnicalNameWithTranslations(
@@ -166,7 +175,7 @@ class Repository {
   bool get isDarkMode => _sharedPrefsHelper.isDarkMode;
 
   // Language: -----------------------------------------------------------------
-  Future<void> changeLanguage(String value) =>
+  Future<String> changeLanguage(String value) =>
       _sharedPrefsHelper.changeLanguage(value);
 
   String? get currentLanguage => _sharedPrefsHelper.currentLanguage;
@@ -184,19 +193,10 @@ class Repository {
   }
 
   // UpdatedAtTimes: -----------------------------------------------------------------
-  Future<bool> isContentUpdated() async {
-    UpdatedAtTimes localUpdatedAt = await getTheLastUpdatedAtTimes();
-    UpdatedAtTimes originUpdatedAt = await getUpdatedAtTimesFromApi();
-    bool isContentUpdated = isUpdated(originUpdatedAt.last_updated_at_content,
-        localUpdatedAt.last_updated_at_content);
-    bool isTranslationUpdated = isUpdated(
-        originUpdatedAt.last_updated_at_technical_names,
-        localUpdatedAt.last_updated_at_technical_names);
-    return isContentUpdated || isTranslationUpdated;
-  }
-
+  /*
   Future updateContentIfNeeded({forceUpdate = false}) async {
     UpdatedAtTimes originUpdatedAt = await getUpdatedAtTimesFromApi();
+
     if (forceUpdate || await isContentUpdated()) {
       getStepFromApiAndInsert();
     }
@@ -209,48 +209,28 @@ class Repository {
         ? _updatedAtTimesDataSource.getUpdatedAtTimesFromDb()
         : getUpdatedAtTimesFromApi();
   }
+   */
 
   Future<UpdatedAtTimes> getUpdatedAtTimesFromDB() async {
+    if(await _updatedAtTimesDataSource.count() < 1){
+      return await getUpdatedAtTimesFromApiAndInsert();
+    }
     return await _updatedAtTimesDataSource.getUpdatedAtTimesFromDb();
   }
 
-  Future<UpdatedAtTimes> getUpdatedAtTimesFromApi() async {
+  Future<UpdatedAtTimes> getUpdatedAtTimesFromApiAndInsert() async {
     UpdatedAtTimes updatedAtTimes =
         await _updatedAtTimesApi.getUpdatedAtTimes(await getUrlParameters());
+
+    return await updateUpdatedAtTimes(updatedAtTimes);
+  }
+
+  Future<UpdatedAtTimes> updateUpdatedAtTimes(UpdatedAtTimes updatedAtTimes) async {
+    await this.truncateUpdatedAtTimes();
+    _updatedAtTimesDataSource.insert(updatedAtTimes);
+
     return updatedAtTimes;
   }
-
-  Future<List<UpdatedAtTimes>> findUpdatedAtTimesByID(int id) {
-    //creating filter
-    List<Filter> filters = [];
-
-    Filter dataLogTypeFilter = Filter.equals(DBConstants.FIELD_ID, id);
-    filters.add(dataLogTypeFilter);
-
-    //making db call
-    return _updatedAtTimesDataSource
-        .getAllSortedByFilter(filters: filters)
-        .then((updatedAtTimes) => updatedAtTimes)
-        .catchError((error) => throw error);
-  }
-
-  Future<int> insertUpdatedAtTimes(UpdatedAtTimes updatedAtTimes) =>
-      _updatedAtTimesDataSource
-          .insert(updatedAtTimes)
-          .then((id) => id)
-          .catchError((error) => throw error);
-
-  Future<int> updateUpdatedAtTimes(UpdatedAtTimes updatedAtTimes) =>
-      _updatedAtTimesDataSource
-          .update(updatedAtTimes)
-          .then((id) => id)
-          .catchError((error) => throw error);
-
-  Future<int> deleteUpdatedAtTimes(UpdatedAtTimes updatedAtTimes) =>
-      _updatedAtTimesDataSource
-          .delete(updatedAtTimes)
-          .then((id) => id)
-          .catchError((error) => throw error);
 
   Future truncateUpdatedAtTimes() =>
       _updatedAtTimesDataSource.deleteAll().catchError((error) => throw error);
@@ -261,27 +241,31 @@ class Repository {
   }
 
   // Current Step Number: -----------------------------------------------------------------
-  Future<void> setCurrentStepId(int stepId) =>
-      _sharedPrefsHelper.setCurrentStepId(stepId);
+  Future<int> setCurrentStepId(int stepId) async {
+    await _sharedPrefsHelper.setCurrentStepId(stepId);
+    return stepId;
+  }
 
   int? get currentStepId => _sharedPrefsHelper.currentStepId;
 
   //URL Parameters: ----------------------------------------------------------------------
   Future<String> getUrlParameters() async {
-    return this.getStepsFromDb().then((steps) {
-      return steps
-          .expand((step) => step.questions)
-          .expand((question) =>
-              question.answers.where((answer) => answer.isSelected))
-          .map((answer) => answer.id)
-          .toList()
-          .join(",");
-    });
+    List<AppStep> steps = await getStepsFromDb();
+    if(steps.isEmpty){
+      return "";
+    }
+    return steps
+        .expand((step) => step.questions)
+        .expand((question) =>
+        question.answers.where((answer) => answer.isSelected))
+        .map((answer) => answer.id)
+        .toList()
+        .join(",");
   }
 
   // Must Update Value: ------------------------------------------------------------------
-  bool? get getMustUpdate => _sharedPrefsHelper.mustUpdate;
+  bool? get getAnswerWasUpdated => _sharedPrefsHelper.answerWasUpdated;
 
-  Future<void> setMustUpdate(bool mustUpdate) =>
-      _sharedPrefsHelper.setMustUpdate(mustUpdate);
+  Future<void> setAnswerWasUpdated(bool answerWasUpdated) =>
+      _sharedPrefsHelper.setAnswerWasUpdated(answerWasUpdated);
 }

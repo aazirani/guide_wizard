@@ -19,9 +19,7 @@ abstract class _TechnicalNameWithTranslationsStore with Store {
 
   @observable
   ObservableFuture<TechnicalNameWithTranslationsList>
-      fetchTechnicalNameWithTranslationsFuture =
-      ObservableFuture<TechnicalNameWithTranslationsList>(
-          emptyTechnicalNameWithTranslationsResponse);
+      fetchTechnicalNameWithTranslationsFuture = ObservableFuture<TechnicalNameWithTranslationsList>(emptyTechnicalNameWithTranslationsResponse);
 
   @observable
   int? language_id;
@@ -30,21 +28,40 @@ abstract class _TechnicalNameWithTranslationsStore with Store {
   TechnicalNameWithTranslationsList technicalNameWithTranslationsList =
       TechnicalNameWithTranslationsList(technicalNameWithTranslations: []);
 
-  @observable
-  bool success = false;
+  @computed
+  bool get technicalNameSuccess => fetchTechnicalNameWithTranslationsFuture.status == FutureStatus.fulfilled;
 
   @computed
-  bool get loading =>
-      fetchTechnicalNameWithTranslationsFuture.status == FutureStatus.pending;
+  bool get technicalNameLoading => fetchTechnicalNameWithTranslationsFuture.status == FutureStatus.pending;
+
+  Future isDataSourceEmpty() async =>  (await this.technicalNameWithTranslationsList.technicalNameWithTranslations.length) == 0;
 
   @action
-  Future getTechnicalNameWithTranslations() async {
-    final future = _repository.getTechnicalNameWithTranslations();
-    fetchTechnicalNameWithTranslationsFuture = ObservableFuture(future);
-    await future.then((technicalNameWithTranslationsList) {
-      this.technicalNameWithTranslationsList =
-          technicalNameWithTranslationsList;
-    });
+  Future getTechnicalNameWithTranslationsFromDb() async {
+    try {
+      fetchTechnicalNameWithTranslationsFuture = ObservableFuture(_repository.getTechnicalNameWithTranslationsFromDb());
+      TechnicalNameWithTranslationsList? technicalNameWithTranslationsList = await fetchTechnicalNameWithTranslationsFuture;
+      this.technicalNameWithTranslationsList = technicalNameWithTranslationsList;
+      return technicalNameWithTranslationsList;
+    } catch (e) {
+      return TechnicalNameWithTranslationsList(
+          technicalNameWithTranslations: List.empty()
+      );
+    }
+  }
+
+  @action
+  Future getTechnicalNameWithTranslationsFromApi() async {
+    try {
+      fetchTechnicalNameWithTranslationsFuture = ObservableFuture(_repository.getTechnicalNameWithTranslationsFromApiAndInsert());
+      TechnicalNameWithTranslationsList? technicalNameWithTranslationsList = await fetchTechnicalNameWithTranslationsFuture;
+      this.technicalNameWithTranslationsList = technicalNameWithTranslationsList;
+      return technicalNameWithTranslationsList;
+    } catch (e) {
+      return TechnicalNameWithTranslationsList(
+          technicalNameWithTranslations: List.empty()
+      );
+    }
   }
 
   @action

@@ -10,43 +10,52 @@ abstract class _AppSettingsStore with Store {
 
   // current step number from 0 to steps_count-1
   @observable
-  int currentStepId;
+  int currentStepId = 0;
 
   // constructor:---------------------------------------------------------------
-  _AppSettingsStore(Repository repository, {this.currentStepId = 1}) : this._repository = repository {
-    // setting up disposers
-    _setupDisposers();
+  _AppSettingsStore(Repository repository) : this._repository = repository {
   }
+
+  // observables
+  static ObservableFuture<int?> emptyCurrentStepIdResponse = ObservableFuture.value(0);
+
+  @observable
+  ObservableFuture<int?> fetchCurrentStepIdFuture = ObservableFuture<int?>(emptyCurrentStepIdResponse);
+
+  static ObservableFuture<bool?> emptyAnswerWasUpdatedResponse = ObservableFuture.value(false);
+
+  @observable
+  ObservableFuture<bool?> fetchAnswerWasUpdatedFuture = ObservableFuture<bool?>(emptyAnswerWasUpdatedResponse);
 
   // disposers:-----------------------------------------------------------------
   late List<ReactionDisposer> _disposers;
 
-  void _setupDisposers() {
-    _disposers = [
-      reaction((_) => success, (_) => success = false, delay: 200),
-    ];
-  }
-
   // store variables:-----------------------------------------------------------
-  @observable
-  bool success = false;
+  @computed
+  bool get currentStepIdSuccess => fetchCurrentStepIdFuture.status == FutureStatus.fulfilled;
+
+  @computed
+  bool get currentStepIdLoading => fetchCurrentStepIdFuture.status == FutureStatus.pending;
+
 
   // step number methods:-------------------------------------------------------------------
   @action
   Future setCurrentStepId(int stepId) async {
-    currentStepId = stepId;
-    await _repository.setCurrentStepId(stepId);
+    fetchCurrentStepIdFuture = ObservableFuture(_repository.setCurrentStepId(stepId));
+    await fetchCurrentStepIdFuture.then((steps) async {
+      currentStepId = stepId;
+    });
   }
 
   // must update methods:-----------------------------------------------------------
   @action
-  Future<bool?> getMustUpdate() async {
-    return _repository.getMustUpdate;
+  bool? getAnswerWasUpdated() {
+    return _repository.getAnswerWasUpdated;
   }
 
   @action
-  Future setMustUpdate(bool mustUpdate) async {
-    _repository.setMustUpdate(mustUpdate);
+  Future setAnswerWasUpdated(bool answersWasUpdated) async {
+    return _repository.setAnswerWasUpdated(answersWasUpdated);
   }
 
   // general methods:-----------------------------------------------------------

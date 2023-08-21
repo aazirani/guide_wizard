@@ -9,6 +9,7 @@ import 'package:guide_wizard/stores/app_settings/app_settings_store.dart';
 import 'package:guide_wizard/stores/data/data_store.dart';
 import 'package:guide_wizard/stores/language/language_store.dart';
 import 'package:guide_wizard/stores/technical_name/technical_name_with_translations_store.dart';
+import 'package:guide_wizard/stores/updated_at_times/updated_at_times_store.dart';
 import 'package:guide_wizard/widgets/compressed_tasklist_timeline/compressed_task_list_timeline.dart';
 import 'package:guide_wizard/widgets/step_slider/step_slider_widget.dart';
 import 'package:guide_wizard/widgets/step_timeline/step_timeline.dart';
@@ -30,6 +31,7 @@ class _HomeScreenState extends State<HomeScreen> {
   late DataStore _dataStore;
   late TechnicalNameWithTranslationsStore _technicalNameWithTranslationsStore;
   late LanguageStore _languageStore;
+  late UpdatedAtTimesStore _updatedAtTimesStore;
   late AppSettingsStore _appSettingsStore;
   late DataLoadHandler _dataLoadHandler = DataLoadHandler(context: context);
 
@@ -41,6 +43,7 @@ class _HomeScreenState extends State<HomeScreen> {
     _technicalNameWithTranslationsStore =
         Provider.of<TechnicalNameWithTranslationsStore>(context);
     _languageStore = Provider.of<LanguageStore>(context);
+    _updatedAtTimesStore = Provider.of<UpdatedAtTimesStore>(context);
     _appSettingsStore = Provider.of<AppSettingsStore>(context);
   }
 
@@ -51,9 +54,7 @@ class _HomeScreenState extends State<HomeScreen> {
   }
 
   void _initializeData() async {
-    await _dataLoadHandler.loadDataAndCheckForUpdate();
-    _languageStore.init();
-    _technicalNameWithTranslationsStore.setCurrentLocale(_languageStore.locale);
+    _dataLoadHandler.loadDataAndCheckForUpdate();
   }
 
   @override
@@ -64,7 +65,7 @@ class _HomeScreenState extends State<HomeScreen> {
       body: RefreshIndicator(
         color: AppColors.main_color,
         onRefresh: () async {
-          DataLoadHandler(context: context).checkTimeAndForceUpdate();
+          DataLoadHandler(context: context).loadDataAndCheckForUpdate();
         },
         child: SingleChildScrollView(
           physics: AlwaysScrollableScrollPhysics(),
@@ -115,37 +116,39 @@ class _HomeScreenState extends State<HomeScreen> {
   _buildLanguageDialog() {
     _showDialog<String>(
       context: context,
-      child: MaterialDialog(
-        borderRadius: Dimens.buttonRadius,
-        enableFullWidth: true,
-        headerColor: Theme.of(context).primaryColor,
-        backgroundColor: Theme.of(context).scaffoldBackgroundColor,
-        closeButtonColor: Colors.white,
-        enableCloseButton: true,
-        enableBackButton: false,
-        onCloseButtonClicked: () {
-          Navigator.of(context).pop();
-        },
-        children: _technicalNameWithTranslationsStore.getSupportedLanguages()
-            .map(
-              (object) => ListTile(
-            dense: true,
-            contentPadding: EdgeInsets.all(0.0),
-            title: Text(
-              object.language_name,
-              style: TextStyle(
-                color: Colors.black
+      child: Observer(
+        builder: (_) => MaterialDialog(
+          borderRadius: Dimens.buttonRadius,
+          enableFullWidth: true,
+          headerColor: Theme.of(context).primaryColor,
+          backgroundColor: Theme.of(context).scaffoldBackgroundColor,
+          closeButtonColor: Colors.white,
+          enableCloseButton: true,
+          enableBackButton: false,
+          onCloseButtonClicked: () {
+            Navigator.of(context).pop();
+          },
+          children: _technicalNameWithTranslationsStore.getSupportedLanguages()
+              .map(
+                (object) => ListTile(
+              dense: true,
+              contentPadding: EdgeInsets.all(0.0),
+              title: Text(
+                object.language_name,
+                style: TextStyle(
+                  color: Colors.black
+                ),
               ),
+              onTap: () {
+                Navigator.of(context).pop();
+                // change user language based on selected locale
+                _languageStore.changeLanguage(object.language_code);
+                _technicalNameWithTranslationsStore.setCurrentLocale(object.language_code);
+              },
             ),
-            onTap: () {
-              Navigator.of(context).pop();
-              // change user language based on selected locale
-              _languageStore.changeLanguage(object.language_code);
-              _technicalNameWithTranslationsStore.setCurrentLocale(object.language_code);
-            },
-          ),
-        )
-            .toList(),
+          )
+              .toList(),
+        ),
       ),
     );
   }
@@ -176,7 +179,7 @@ class _HomeScreenState extends State<HomeScreen> {
               topRight: Radius.circular(Dimens.homeBodyBorderRadius),
             ),
           ),
-          child: _dataStore.dataLoad
+          child: !_dataStore.isLoading && _dataStore.stepSuccess && _technicalNameWithTranslationsStore.technicalNameSuccess && _updatedAtTimesStore.updatedAtTimesSuccess && _appSettingsStore.currentStepIdSuccess
               ? _buildScreenElements()
               : _shimmerAll(),
         ),

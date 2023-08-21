@@ -38,8 +38,8 @@ class SharedPreferenceHelper {
     return _sharedPreference.getString(Preferences.current_language);
   }
 
-  Future<void> changeLanguage(String language) {
-    return _sharedPreference.setString(Preferences.current_language, language);
+  Future<String> changeLanguage(String language) {
+    return _sharedPreference.setString(Preferences.current_language, language).then((_) => language);
   }
 
   // Loading dialog:---------------------------------------------------------------------
@@ -58,11 +58,11 @@ class SharedPreferenceHelper {
   }
 
   // current step:---------------------------------------------------
-  bool? get mustUpdate {
-    return _sharedPreference.getBool(Preferences.must_update);
+  bool? get answerWasUpdated {
+    return _sharedPreference.getBool(Preferences.answer_was_updated);
   }
 
-  Future<void> setMustUpdate(bool mustUpdate) {
-    return _sharedPreference.setBool(Preferences.must_update, mustUpdate);
+  Future<void> setAnswerWasUpdated(bool mustUpdate) {
+    return _sharedPreference.setBool(Preferences.answer_was_updated, mustUpdate);
   }
 }

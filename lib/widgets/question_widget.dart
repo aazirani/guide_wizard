@@ -481,6 +481,6 @@ class _QuestionWidgetState extends State<QuestionWidget> with AutomaticKeepAlive
     }
     widget.question.answers.firstWhere((answer) => answer.id == option.id).selected = value ?? false;
     await _dataStore.updateQuestion(widget.question);
-    await _appSettingsStore.setMustUpdate(true);
+    await _appSettingsStore.setAnswerWasUpdated(true);
   }
 }

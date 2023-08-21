@@ -3,6 +3,9 @@ class UpdatedAtTimes {
   String last_updated_at_content;
   String last_updated_at_technical_names;
 
+  static String LAST_UPDATED_AT_CONTENT = "last_updated_at_content";
+  static String LAST_UPDATED_AT_TECHNICAL_NAMES = "last_updated_at_technical_names";
+
   UpdatedAtTimes({
     required this.last_updated_at_content,
     required this.last_updated_at_technical_names,
@@ -10,15 +13,15 @@ class UpdatedAtTimes {
 
   factory UpdatedAtTimes.fromMap(Map<String, dynamic> json) {
     return UpdatedAtTimes(
-      last_updated_at_content: json["last_updated_at_content"],
-      last_updated_at_technical_names: json["last_updated_at_technical_names"],
+      last_updated_at_content: json[LAST_UPDATED_AT_CONTENT],
+      last_updated_at_technical_names: json[LAST_UPDATED_AT_TECHNICAL_NAMES],
     );
   }
 
   Map<String, dynamic> toMap() {
     return {
-      "last_updated_at_content": last_updated_at_content,
-      "last_updated_at_technical_names": last_updated_at_technical_names,
+      LAST_UPDATED_AT_CONTENT: last_updated_at_content,
+      LAST_UPDATED_AT_TECHNICAL_NAMES: last_updated_at_technical_names,
     };
   }
 

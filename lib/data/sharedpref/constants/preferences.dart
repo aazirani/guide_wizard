@@ -6,5 +6,5 @@ class Preferences {
   static const String current_language = "current_language";
   static const String is_data_loaded = "isDataLoaded";
   static const String current_step_id = "currentStepId";
-  static const String must_update = "mustUpdate";
+  static const String answer_was_updated = "answerWasUpdated";
 }
