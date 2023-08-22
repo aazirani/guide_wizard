@@ -62,20 +62,12 @@ class Repository {
 
   Future<List<AppStep>> updateContent(List<AppStep> stepsBeforeUpdate, List<AppStep> stepsAfterUpdate) async {
     await this.truncateContent();
-    // Extract IDs of selected answers from stepsBeforeUpdate
-    var selectedAnswerIds = stepsBeforeUpdate
-        .expand((step) => step.questions)
-        .expand((question) => question.answers)
-        .where((answer) => answer.isSelected)
-        .map((answer) => answer.id)
-        .toSet(); // Using a set to make lookups faster
 
-    // Set isSelected to true for answers in stepsAfterUpdate with matching IDs
-    stepsAfterUpdate
-        .expand((step) => step.questions)
-        .expand((question) => question.answers)
-        .where((answer) => selectedAnswerIds.contains(answer.id))
-        .forEach((answer) => answer.setSelected(true));
+    // Update selected answers
+    updateSelectedAnswers(stepsBeforeUpdate, stepsAfterUpdate);
+
+    // Update done tasks
+    updateDoneTasks(stepsBeforeUpdate, stepsAfterUpdate);
 
     for (AppStep step in stepsAfterUpdate) {
       await _stepDataSource.insert(step);
@@ -83,6 +75,33 @@ class Repository {
     return stepsAfterUpdate;
   }
 
+  void updateSelectedAnswers(List<AppStep> stepsBeforeUpdate, List<AppStep> stepsAfterUpdate) {
+    var selectedAnswerIds = stepsBeforeUpdate
+        .expand((step) => step.questions)
+        .expand((question) => question.answers)
+        .where((answer) => answer.isSelected)
+        .map((answer) => answer.id)
+        .toSet(); // Using a set to make lookups faster
+
+    stepsAfterUpdate
+        .expand((step) => step.questions)
+        .expand((question) => question.answers)
+        .where((answer) => selectedAnswerIds.contains(answer.id))
+        .forEach((answer) => answer.setSelected(true));
+  }
+
+  void updateDoneTasks(List<AppStep> stepsBeforeUpdate, List<AppStep> stepsAfterUpdate) {
+    var doneTaskIds = stepsBeforeUpdate
+        .expand((step) => step.tasks)
+        .where((task) => task.isDone)
+        .map((task) => task.id)
+        .toSet(); // Using a set to make lookups faster
+
+    stepsAfterUpdate
+        .expand((step) => step.tasks)
+        .where((task) => doneTaskIds.contains(task.id))
+        .forEach((task) => task.setDone(true));
+  }
 
   Future stepDatasourceCount() async {
     return await _stepDataSource.count().catchError((error) => throw error);

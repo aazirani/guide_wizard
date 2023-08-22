@@ -85,7 +85,6 @@ abstract class _DataStore with Store {
     return this.stepList;
   }
 
-  @computed
   AppStep getStepById(int stepId) {
     return this.getAllSteps().firstWhere((step) => step.id == stepId);
   }
@@ -133,7 +132,7 @@ abstract class _DataStore with Store {
     if (indexOfTask != -1) {
       step.tasks[indexOfTask] = task;
     }
-    await _repository.updateStep(step);
+    _repository.updateStep(step).then((_) => getStepsFromDb());
   }
 
   //Questions Actions: .........................................................
@@ -149,7 +148,7 @@ abstract class _DataStore with Store {
     if (indexOfQuestion != -1) {
       step.questions[indexOfQuestion] = question;
     }
-    await _repository.updateStep(step);
+    _repository.updateStep(step).then((_) => getStepsFromDb());
   }
 
   Question getQuestionById(int questionId) {
@@ -187,5 +186,4 @@ abstract class _DataStore with Store {
     return this.getStepById(stepId).questions.expand((question) => question.answers.where((answer) => answer.isSelected)).isEmpty && this.getStepById(stepId).tasks.isEmpty
     || this.getStepById(stepId).tasks.where((task) => task.isDone).isEmpty && this.getStepById(stepId).questions.isEmpty;
   }
-
 }

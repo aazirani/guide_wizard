@@ -33,20 +33,18 @@ class _ImageSlideState extends State<ImageSlide> {
 
     return Stack(
         children: [
-          Flexible(
-            child: CarouselSlider(
-              options: CarouselOptions(
-                height: screenHeight / 2.7,
-                viewportFraction: 1,
-                autoPlay: true,
-                autoPlayInterval: Duration(milliseconds: 6000),
-                enlargeCenterPage: true,
-                enableInfiniteScroll: false,
-                onPageChanged: (index, reason) =>
-                    setState(() => _slideIndex = index),
-              ),
-              items: _imagesList,
+          CarouselSlider(
+            options: CarouselOptions(
+              height: screenHeight / 2.7,
+              viewportFraction: 1,
+              autoPlay: true,
+              autoPlayInterval: Duration(milliseconds: 6000),
+              enlargeCenterPage: true,
+              enableInfiniteScroll: false,
+              onPageChanged: (index, reason) =>
+                  setState(() => _slideIndex = index),
             ),
+            items: _imagesList,
           ),
           widget.images.length <= 1
           ? SizedBox()

@@ -1,22 +1,22 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:guide_wizard/constants/colors.dart';
 import 'package:guide_wizard/constants/dimens.dart';
-import 'package:guide_wizard/models/task/task.dart';
 import 'package:guide_wizard/stores/data/data_store.dart';
 import 'package:guide_wizard/widgets/scrolling_overflow_text.dart';
 import 'package:provider/provider.dart';
 
 class BlocksAppBarWidget extends StatefulWidget implements PreferredSizeWidget {
-  Task task;
+  final int taskId;
+  final int stepId;
   double appBarSize;
   String title;
-  final Function(Task) onTaskStatusChanged;
   BlocksAppBarWidget(
       {Key? key,
-        required this.task,
+        required this.taskId,
         this.appBarSize = Dimens.blocksAppBarWidgetHeight,
         required this.title,
-        required this.onTaskStatusChanged})
+        required this.stepId})
       : super(key: key);
 
   @override
@@ -29,9 +29,10 @@ class BlocksAppBarWidget extends StatefulWidget implements PreferredSizeWidget {
 }
 
 class _BlocksAppBarWidgetState extends State<BlocksAppBarWidget> {
+  get task => _dataStore.getStepById(widget.stepId).tasks.firstWhere((task) => task.id == widget.taskId);
   late DataStore _dataStore;
 
-  bool _showDoneButtonFlag() => !_dataStore.isAllTasksOfStepDone(widget.task.step_id);
+  bool _showDoneButtonFlag() => !_dataStore.isAllTasksOfStepDone(task.step_id);
 
 
   @override
@@ -43,7 +44,7 @@ class _BlocksAppBarWidgetState extends State<BlocksAppBarWidget> {
   _buildDoneUndoneButtonStyle() {
     return ElevatedButton.styleFrom(
         padding: EdgeInsets.all(0),
-        backgroundColor: widget.task.isDone ? AppColors.white : AppColors.main_color,
+        backgroundColor: task.isDone ? AppColors.white : AppColors.main_color,
         foregroundColor: AppColors.bright_foreground_color.withOpacity(0.1),
         shape: RoundedRectangleBorder(
           borderRadius:
@@ -56,10 +57,8 @@ class _BlocksAppBarWidgetState extends State<BlocksAppBarWidget> {
     return ElevatedButton(
         onPressed: () async {
           if(!_dataStore.stepLoading){
-            widget.task.isDone = !widget.task.isDone;
-            await _dataStore.updateTask(widget.task);
-            setState(() {});
-            widget.onTaskStatusChanged(widget.task);
+            task.toggleDone();
+            await _dataStore.updateTask(task);
           }
         },
         style: buttonStyle,
@@ -72,7 +71,7 @@ class _BlocksAppBarWidgetState extends State<BlocksAppBarWidget> {
   Widget _buildDoneUnDoneButton() {
     return _buildButton(
       buttonStyle: _buildDoneUndoneButtonStyle(),
-      icon: widget.task.isDone ? Icons.done_rounded : null,
+      icon: task.isDone ? Icons.done_rounded : null,
     );
   }
 
@@ -85,37 +84,39 @@ class _BlocksAppBarWidgetState extends State<BlocksAppBarWidget> {
 
   @override
   Widget build(BuildContext context) {
-    return AppBar(
-      backgroundColor: AppColors.main_color,
-      toolbarHeight: Dimens.appBar["toolbarHeight"],
-      titleSpacing: 0,
-      leading: IconButton(
-        onPressed: () {
-          Navigator.pop(context);
-        },
-        icon: Icon(
-          Icons.arrow_back_rounded,
-          color: AppColors.bright_foreground_color,
+    return Observer(
+      builder: (_) => AppBar(
+        backgroundColor: AppColors.main_color,
+        toolbarHeight: Dimens.appBar["toolbarHeight"],
+        titleSpacing: 0,
+        leading: IconButton(
+          onPressed: () {
+            Navigator.pop(context);
+          },
+          icon: Icon(
+            Icons.arrow_back_rounded,
+            color: AppColors.bright_foreground_color,
+          ),
         ),
-      ),
-      title: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        children: [
-          ScrollingOverflowText(
-            widget.title,
-            style: TextStyle(
-              color: AppColors.bright_foreground_color,
-              fontSize: Dimens.taskTitleFont,
+        title: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            ScrollingOverflowText(
+              widget.title,
+              style: TextStyle(
+                color: AppColors.bright_foreground_color,
+                fontSize: Dimens.taskTitleFont,
+              ),
+              overflowRatio: 0.65,
             ),
-            overflowRatio: 0.65,
-          ),
-          Padding(
-            padding: Dimens.doneButtonPadding,
-            child: _showDoneButtonFlag()
-                ? _buildDoneUndoneButtonContainer()
-                : null,
-          ),
-        ],
+            Padding(
+              padding: Dimens.doneButtonPadding,
+              child: _showDoneButtonFlag()
+                  ? _buildDoneUndoneButtonContainer()
+                  : null,
+            ),
+          ],
+        ),
       ),
     );
   }

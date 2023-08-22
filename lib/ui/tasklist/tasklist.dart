@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:guide_wizard/constants/colors.dart';
 import 'package:guide_wizard/constants/dimens.dart';
 import 'package:guide_wizard/constants/lang_keys.dart';
@@ -39,13 +40,10 @@ class _TaskListState extends State<TaskList> {
 
   @override
   Widget build(BuildContext context) {
-    return WillPopScope(
-      onWillPop: () async => _changeStepAndNavigateHome(),
-      child: Scaffold(
-          backgroundColor: AppColors.main_color,
-          appBar: _buildAppBar(),
-          body: _buildBody()),
-    );
+    return Scaffold(
+        backgroundColor: AppColors.main_color,
+        appBar: _buildAppBar(),
+        body: _buildBody());
   }
 
   //appBar methods .............................................................
@@ -68,7 +66,6 @@ class _TaskListState extends State<TaskList> {
               icon: Icon(Icons.arrow_back),
               onPressed: () {
                 Navigator.pop(context);
-                _changeStepAndNavigateHome();
               },
               color: AppColors.white),
         ));
@@ -137,12 +134,7 @@ class _TaskListState extends State<TaskList> {
                 controller: scrollController,
                 itemCount: tasks.length,
                 itemBuilder: (context, index) {
-                  return TaskListTimeLine(task: _dataStore.getStepById(widget.stepId).tasks[index], index: index,
-                      onTaskStatusChanged: (changedTask) {
-                        setState(() {
-                          _dataStore.getStepsFromDb();
-                        });
-                      });
+                  return TaskListTimeLine(stepId: widget.stepId, index: index);
                 },
               ),
             ),
@@ -153,7 +145,6 @@ class _TaskListState extends State<TaskList> {
   }
 
   Widget _buildProgressBar() {
-    double percentage = calculateDoneRatio();
     return Container(
       height: 20,
       width: _getScreenWidth() / 1.19,
@@ -162,11 +153,13 @@ class _TaskListState extends State<TaskList> {
           child: ClipRRect(
             borderRadius: BorderRadius.all(
                 Radius.circular(Dimens.taskListProgressBarRadius)),
-            child: LinearProgressIndicator(
-                value: percentage,
-                backgroundColor: AppColors.white,
-                valueColor:
-                    AlwaysStoppedAnimation(AppColors.progressBarValueColor)),
+            child: Observer(
+              builder: (_) => LinearProgressIndicator(
+                  value: calculateDoneRatio(),
+                  backgroundColor: AppColors.white,
+                  valueColor:
+                      AlwaysStoppedAnimation(AppColors.progressBarValueColor)),
+            ),
           )),
     );
   }
@@ -180,16 +173,6 @@ class _TaskListState extends State<TaskList> {
   }
 
   // general methods ...........................................................
-  _changeStepAndNavigateHome() {
-    if (calculateDoneRatio() == 1) {
-      int indexOfStep = _dataStore.getIndexOfStep(widget.stepId);
-      if(indexOfStep < _dataStore.getAllSteps().length - 1){
-        _appSettingsStore.setCurrentStepId(_dataStore.getAllSteps().elementAt(indexOfStep + 1).id);
-      }
-    }
-    return true;
-  }
-
   double _getProgressBarHeight() {
     return (_getScreenHeight() -
             (progressBarSize.height + _getStatusBarHeight())) /

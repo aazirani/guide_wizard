@@ -60,6 +60,7 @@ class Task {
   bool get isTypeOfText => image_1 == null && image_2 == null;
   bool get isTypeOfImage => !isTypeOfText;
   int get subTaskCount => sub_tasks.length;
+  List<SubTask> get subTasks => sub_tasks;
 
   void setDone(bool value) {
     isDone = value;

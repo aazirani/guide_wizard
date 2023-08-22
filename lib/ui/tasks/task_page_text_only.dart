@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:guide_wizard/constants/colors.dart';
 import 'package:guide_wizard/constants/dimens.dart';
-import 'package:guide_wizard/models/task/task.dart';
 import 'package:guide_wizard/stores/data/data_store.dart';
 import 'package:guide_wizard/stores/technical_name/technical_name_with_translations_store.dart';
 import 'package:guide_wizard/widgets/sub_task_widget.dart';
@@ -10,15 +10,16 @@ import 'package:provider/provider.dart';
 import 'package:render_metrics/render_metrics.dart';
 
 class TaskPageTextOnly extends StatefulWidget {
-  Task task;
-  final Function(Task) onTaskStatusChanged;
-  TaskPageTextOnly({Key? key, required this.task, required this.onTaskStatusChanged}) : super(key: key);
+  final int taskId;
+  final int stepId;
+  TaskPageTextOnly({Key? key, required this.taskId, required this.stepId}) : super(key: key);
 
   @override
   State<TaskPageTextOnly> createState() => _TaskPageTextOnlyState();
 }
 
 class _TaskPageTextOnlyState extends State<TaskPageTextOnly> {
+  get task => _dataStore.getStepById(widget.stepId).tasks.firstWhere((task) => task.id == widget.taskId);
   RenderParametersManager renderManager = RenderParametersManager<dynamic>();
   // stores:--------------------------------------------------------------------
   late DataStore _dataStore;
@@ -31,6 +32,9 @@ class _TaskPageTextOnlyState extends State<TaskPageTextOnly> {
     _dataStore = Provider.of<DataStore>(context);
     _technicalNameWithTranslationsStore =
         Provider.of<TechnicalNameWithTranslationsStore>(context);
+    setState(() {
+
+    });
   }
 
   @override
@@ -43,14 +47,9 @@ class _TaskPageTextOnlyState extends State<TaskPageTextOnly> {
     return Scaffold(
       backgroundColor: AppColors.main_color,
       appBar: BlocksAppBarWidget(
-        task: widget.task,
-        title: _technicalNameWithTranslationsStore.getTranslation(widget.task.text),
-        onTaskStatusChanged: (changedTask) {
-          setState(() {
-            widget.onTaskStatusChanged(changedTask);
-            widget.task = changedTask;
-          });
-        },
+        taskId: task.id,
+        stepId: widget.stepId,
+        title: _technicalNameWithTranslationsStore.getTranslation(task.text),
       ),
       body: _buildScaffoldBody(),
     );
@@ -74,7 +73,7 @@ class _TaskPageTextOnlyState extends State<TaskPageTextOnly> {
     return RawScrollbar(
       child: ListView(
         children: [
-          _technicalNameWithTranslationsStore.getTranslation(widget.task.description) == "" ? SizedBox(height: Dimens.taskPageTextOnlyListViewPadding.top,) : _buildDescription(),
+          _technicalNameWithTranslationsStore.getTranslation(task.description) == "" ? SizedBox(height: Dimens.taskPageTextOnlyListViewPadding.top,) : _buildDescription(),
           _buildSubTasksList(),
         ],
       ),
@@ -85,9 +84,8 @@ class _TaskPageTextOnlyState extends State<TaskPageTextOnly> {
     return Padding(
       padding: Dimens.taskPageTextOnlyListViewPadding,
       child: Text(
-        _technicalNameWithTranslationsStore.getTranslation(widget.task.description),
+        _technicalNameWithTranslationsStore.getTranslation(task.description),
         style: TextStyle(fontSize: Dimens.taskDescriptionFont, color: AppColors.main_color),
-
       ),
     );
   }
@@ -97,12 +95,15 @@ class _TaskPageTextOnlyState extends State<TaskPageTextOnly> {
     return ListView.builder(
       physics: ScrollPhysics(),
       shrinkWrap: true,
-      itemCount: widget.task.sub_tasks.length,
+      itemCount: task.sub_tasks.length,
       itemBuilder: (context, i) {
-        return SubTaskWidget(
-          index: i,
-          subTasks: widget.task.sub_tasks,
-          renderManager: renderManager,
+        return Observer(
+          builder: (_) => SubTaskWidget(
+            index: i,
+            taskId: task.id,
+            stepId: widget.stepId,
+            renderManager: renderManager,
+          ),
         );
       },
     );
