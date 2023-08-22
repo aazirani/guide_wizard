@@ -88,9 +88,11 @@ class _HomeScreenState extends State<HomeScreen> {
       actions: _buildActions(context),
       title: Padding(
         padding: EdgeInsets.only(left: 10),
-        child: Text(
-            _technicalNameWithTranslationsStore.getTranslationByTechnicalName(LangKeys.steps_title),
-            style: TextStyle(color: AppColors.title_color, fontSize: 20)
+        child: Observer(
+          builder: (_) => Text(
+              _technicalNameWithTranslationsStore.getTranslationByTechnicalName(LangKeys.steps_title),
+              style: TextStyle(color: AppColors.title_color, fontSize: 20)
+          ),
         ),
       ),
     );
