@@ -59,19 +59,19 @@ class _NextStageButtonState extends State<NextStageButton> {
       stateWidgets: {
         ButtonState.idle: Text(
           _appSettingsStore.isFirstStep() ?  _technicalNameWithTranslationsStore.getTranslationByTechnicalName(LangKeys.next_step_button_text) : _technicalNameWithTranslationsStore.getTranslationByTechnicalName(LangKeys.update_steps),
-          style: TextStyle(color: AppColors.white,),
+          style: Theme.of(context).textTheme.bodyLarge!.copyWith(color: AppColors.white, fontWeight: FontWeight.w500),
         ),
         ButtonState.loading: Text(
           _technicalNameWithTranslationsStore.getTranslationByTechnicalName(LangKeys.getting_updates),
-          style: TextStyle(color: AppColors.white,),
+          style: Theme.of(context).textTheme.bodyLarge!.copyWith(color: AppColors.white, fontWeight: FontWeight.w500),
         ),
         ButtonState.fail: Text(
           _technicalNameWithTranslationsStore.getTranslationByTechnicalName(LangKeys.next_stage_check_internet),
-          style: TextStyle(color: AppColors.white,),
+          style: Theme.of(context).textTheme.bodyLarge!.copyWith(color: AppColors.white, fontWeight: FontWeight.w500),
         ),
         ButtonState.success: Text(
           _technicalNameWithTranslationsStore.getTranslationByTechnicalName(LangKeys.update_finished),
-          style: TextStyle(color: AppColors.white,),
+          style: Theme.of(context).textTheme.bodyLarge!.copyWith(color: AppColors.white, fontWeight: FontWeight.w500),
         )
       },
       stateColors: {

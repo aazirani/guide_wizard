@@ -69,7 +69,7 @@ class SubTaskWidgetState extends State<SubTaskWidget>
         iconColor: AppColors.main_color,
         title: Text(
           _technicalNameWithTranslationsStore.getTranslation(sub_task_title_id)!,
-          style: TextStyle(fontSize: Dimens.subtaskTitleFontSize),
+          style: Theme.of(context).textTheme.titleMedium
         ),
         key: widget.subTasks[widget.index].globalKey,
         children: <Widget>[

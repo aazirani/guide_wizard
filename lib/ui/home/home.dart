@@ -103,7 +103,7 @@ class _HomeScreenState extends State<HomeScreen> {
         child: Observer(
           builder: (_) => Text(
               _technicalNameWithTranslationsStore.getTranslationByTechnicalName(LangKeys.steps_title),
-              style: TextStyle(color: AppColors.title_color, fontSize: 20)
+              style: Theme.of(context).textTheme.titleLarge!.copyWith(color: AppColors.white),
           ),
         ),
       ),
@@ -148,9 +148,7 @@ class _HomeScreenState extends State<HomeScreen> {
             contentPadding: EdgeInsets.all(0.0),
             title: Text(
               object.language_name,
-              style: TextStyle(
-                color: Colors.black
-              ),
+              style: Theme.of(context).textTheme.bodySmall
             ),
             onTap: () {
               Navigator.of(context).pop();
@@ -252,17 +250,17 @@ class _HomeScreenState extends State<HomeScreen> {
 
   Widget _buildStepsText() {
     return Text(_technicalNameWithTranslationsStore.getTranslationByTechnicalName(LangKeys.steps),
-        style: TextStyle(
-            color: AppColors.main_color,
-            fontSize: Dimens.stepsTextFont,
-            fontWeight: FontWeight.bold));
+        style: Theme.of(context).textTheme.titleSmall,
+            );
   }
 
   Widget _buildCurrentStepText(stepStore) {
     return Observer(
         builder: (_) => Text(
             "${stepStore.currentStep}/${_appSettingsStore.stepsCount}",
-            style: TextStyle(color: AppColors.main_color)));
+            style: Theme.of(context).textTheme.titleSmall
+            )
+            );
   }
 
   Widget _buildQuestionDescription() {
@@ -277,10 +275,7 @@ class _HomeScreenState extends State<HomeScreen> {
                 child: Align(
                     alignment: Alignment.centerLeft,
                     child: Text(_technicalNameWithTranslationsStore.getTranslationByTechnicalName(LangKeys.description),
-                        style: TextStyle(
-                            fontSize: Dimens.inProgressTextFont,
-                            color: AppColors.main_color,
-                            fontWeight: FontWeight.bold)))),
+                        style: Theme.of(context).textTheme.titleSmall))),
             Flexible(
               child: Container(
                 margin: Dimens.questionsStepDescMargin,
@@ -297,10 +292,7 @@ class _HomeScreenState extends State<HomeScreen> {
                         Flexible(
                           child: Text(
                             _technicalNameWithTranslationsStore.getTranslation(questionDescId),
-                            style: TextStyle(
-                              color: AppColors.main_color,
-                              fontSize: Dimens.questionsStepDescFontSize,
-                            ),
+                            style: Theme.of(context).textTheme.titleSmall,
                           ),
                         ),
                       ],
@@ -325,11 +317,7 @@ class _HomeScreenState extends State<HomeScreen> {
               alignment: Alignment.centerLeft,
               child: Text(
                 _technicalNameWithTranslationsStore.getTranslationByTechnicalName(LangKeys.in_progress),
-                style: TextStyle(
-                    fontSize: Dimens.inProgressTextFont,
-                    color: AppColors.main_color,
-                    fontWeight: FontWeight.bold
-                ),
+                style: Theme.of(context).textTheme.titleSmall,
               ),
             ),
           ),

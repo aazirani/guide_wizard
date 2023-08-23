@@ -175,13 +175,7 @@ class _StepSliderWidgetState extends State<StepSliderWidget> {
     var step_title_id = _dataStore.stepList.steps[currentStepNo].name;
     return AutoSizeText(
       "${_technicalNameWithTranslationsStore.getTranslation(step_title_id)}",
-      style: TextStyle(
-          fontSize: Dimens.stepTitleFont, color: AppColors.main_color),
-      maxLines: 3,
-      softWrap: true,
-      wrapWords: true,
-      minFontSize: Dimens.minFontSizeForTextOverFlow,
-    );
+      style: Theme.of(context).textTheme.titleMedium;
   }
 
   Widget _buildStepNoOfTasksOrQuestions(currentStepNo) {
@@ -189,10 +183,7 @@ class _StepSliderWidgetState extends State<StepSliderWidget> {
         isQuestionsStep(currentStepNo)
             ? noOfQuestionsString(currentStepNo)
             : noOfTasksString(currentStepNo),
-        style: TextStyle(
-          fontSize: Dimens.numOfTasksFont,
-          color: AppColors.main_color,
-        ));
+        style: Theme.of(context).textTheme.bodySmall);
   }
 
   bool isQuestionsStep(currentStepNo) => isFirstStep(currentStepNo);
@@ -264,9 +255,7 @@ class _StepSliderWidgetState extends State<StepSliderWidget> {
                 Text(
                     _technicalNameWithTranslationsStore
                         .getTranslationByTechnicalName(LangKeys.continueKey),
-                    style: TextStyle(
-                        fontSize: Dimens.continueFont,
-                        color: AppColors.main_color)),
+                    style: Theme.of(context).textTheme.bodySmall),
                 SizedBox(width: 1),
                 Icon(
                   Icons.arrow_forward_ios_rounded,
