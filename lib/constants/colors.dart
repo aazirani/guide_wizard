@@ -4,22 +4,15 @@ class AppColors {
   AppColors._(); // this basically makes it so you can't instantiate this class
 
   static const Map<int, Color> orange = const <int, Color>{
-    50: const Color(0xFFFCF2E7),
-    100: const Color(0xFFF8DEC3),
-    200: const Color(0xFFF3C89C),
-    300: const Color(0xFFEEB274),
-    400: const Color(0xFFEAA256),
-    500: const Color(0xFFE69138),
-    600: const Color(0xFFE38932),
-    700: const Color(0xFFDF7E2B),
-    800: const Color(0xFFDB7424),
-    900: const Color(0xFFD56217)
+    50: Color.fromRGBO(255, 174, 97, 1),
+    100: Color.fromRGBO(244, 167, 95, 1),
+    200: Color.fromRGBO(86, 58, 32, 1),
   };
 
   static const Map<int, Color> red = const <int, Color>{
     50: Color.fromARGB(255, 187, 100, 94),
     100: Color.fromARGB(255, 169, 25, 12),
-    150: Color.fromARGB(255, 198, 117, 111),
+    // 150: Color.fromARGB(255, 198, 117, 111),
     200: Color.fromARGB(255, 166, 36, 36),
     250: Color.fromARGB(255, 160, 6, 6),
   };
@@ -29,6 +22,13 @@ class AppColors {
     100: Color.fromARGB(255, 115, 213, 172),
     200: Color.fromARGB(255, 124, 222, 194),
     300: Color(0xFF31EC92),
+  };
+
+  static const Map<int, Color> blue = const <int, Color>{
+    50: Color(0x4d85bb),
+    100: Color(0xFF001020),
+    150: Color(0xFF3374b1),
+    // 150:,
   };
 
   static const Map<int, Color> greys = const <int, Color>{
@@ -95,11 +95,11 @@ class AppColors {
   static const Color grey = const Color.fromRGBO(231, 231, 231, 1);
   static const Color transparent = Colors.transparent;
   static const Color white = Colors.white;
-  static const Color button_background_color = const Color.fromRGBO(217, 217, 217, 0.15);
+  static const Color button_background_color =
+      const Color.fromRGBO(217, 217, 217, 0.15);
   static const Color bright_foreground_color = Colors.white;
   // static const Color dotted_line_color = Colors.green;
   static Color dotted_line_color = green[300]!;
   // static const Color white= const Colors.white.withOpacity(0.5);
   static Color close_button_color = Colors.grey[800]!;
-
 }
