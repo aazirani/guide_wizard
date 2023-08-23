@@ -15,6 +15,7 @@ import 'package:guide_wizard/ui/questions/questions_list_page.dart';
 import 'package:guide_wizard/ui/tasklist/tasklist.dart';
 import 'package:guide_wizard/widgets/load_image_with_cache.dart';
 import 'package:provider/provider.dart';
+import 'package:auto_size_text/auto_size_text.dart';
 
 class StepSliderWidget extends StatefulWidget {
   StepList stepList;
@@ -54,7 +55,9 @@ class _StepSliderWidgetState extends State<StepSliderWidget> {
       child: _buildCarouselSlider(),
     );
   }
+
   final CarouselController _carouselController = CarouselController();
+
   _buildCarouselSlider() {
     return CarouselSlider(
       carouselController: _carouselController,
@@ -67,8 +70,8 @@ class _StepSliderWidgetState extends State<StepSliderWidget> {
           enlargeCenterPage: false,
           enableInfiniteScroll: false),
       items:
-      List<int>.generate(_dataStore.stepList.steps.length, (index) => index)
-          .map((index) {
+          List<int>.generate(_dataStore.stepList.steps.length, (index) => index)
+              .map((index) {
         return Builder(
           builder: (BuildContext context) {
             return GestureDetector(
@@ -84,7 +87,10 @@ class _StepSliderWidgetState extends State<StepSliderWidget> {
   }
 
   Widget _buildSliderContainer(index) {
-    return Container(
+    return LayoutBuilder(
+        builder: (BuildContext context, BoxConstraints constraints) {
+      var heightConstraint = constraints.maxHeight;
+      return Container(
         alignment: Alignment.topLeft,
         width: _getScreenWidth(),
         margin: Dimens.sliderContainerMargin,
@@ -93,21 +99,46 @@ class _StepSliderWidgetState extends State<StepSliderWidget> {
           border: _buildSliderBorder(index),
           borderRadius: BorderRadius.all(Radius.circular(20)),
         ),
-        child: Column(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            Flexible(
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  _buildContent(index),
-                  _buildAvatar(index),
-                ],
-              ),
-            ),
-            (_dataStore.getStepOrder(index) != SettingsConstants.infoStepOrder) ? _buildProgressBar(index) : SizedBox(),
-          ],
-        ));
+        child: Column(children: [
+          Flexible(
+            flex: 80,
+            child: Row(children: [
+              Expanded(
+                  flex: 2,
+                  child: Padding(
+                      padding: EdgeInsets.only(
+                          top: heightConstraint * 0.1,
+                          left: heightConstraint * 0.1,
+                          right: heightConstraint * 0.01,
+                          bottom: heightConstraint * 0.05),
+                      child: _buildContent(index, constraints))),
+              (_dataStore.getStepImage(index) != null)
+                  ? Expanded(flex: 1, child: _buildAvatar(index, constraints))
+                  : Container(width: heightConstraint * 0.1)
+            ]),
+          ),
+          (_dataStore.getStepOrder(index) != SettingsConstants.infoStepOrder)
+              ? Flexible(flex: 10, child: _buildProgressBar(index))
+              : Container(height: heightConstraint * 0.1),
+        ]),
+      );
+    });
+  }
+
+  Widget _buildContent(index, constraints) {
+    var heightConstraint = constraints.maxHeight;
+    return Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
+      Expanded(
+          flex: 5,
+          child:
+              Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
+            Flexible(flex: 4, child: _buildStepTitle(index)),
+            SizedBox(height: heightConstraint * 0.07),
+            Flexible(flex: 1, child: _buildStepNoOfTasksOrQuestions(index)),
+            SizedBox(height: heightConstraint * 0.03),
+          ])),
+      Expanded(flex: 2, child: _buildContinueButton(index)),
+    ]);
   }
 
   BoxBorder _buildSliderBorder(index) {
@@ -125,57 +156,43 @@ class _StepSliderWidgetState extends State<StepSliderWidget> {
     return AppColors.stepSliderUnavailableColor;
   }
 
-  Widget _buildAvatar(int index) {
-    if (_dataStore.getStepImage(index) == null) return SizedBox();
-    return Flexible(
-      child: Container(
-        margin: Dimens.stepSliderImagePadding,
-        child: Padding(
-          padding: Dimens.stepAvatar,
-          child: LoadImageWithCache(imageUrl: Endpoints.stepsImageBaseUrl +
-              _dataStore.getStepImage(index)!,
-            color: AppColors.main_color,),
-        ),
-      ),
-    );
-  }
-
-  Widget _buildContent(currentStepNo) {
-    return Flexible(
+  Widget _buildAvatar(int index, constraints) {
+    var heightConstraint = constraints.maxHeight;
+    if (_dataStore.getStepImage(index) == null) return Container();
+    return Container(
       child: Padding(
-        padding: Dimens.sliderContainerContentPadding,
-        child: Column(
-            mainAxisAlignment: MainAxisAlignment.start,
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Flexible(
-                child: SingleChildScrollView(child: _buildStepTitle(currentStepNo)),
-              ),
-              SizedBox(height: 10),
-              _buildStepNoOfTasksOrQuestions(currentStepNo),
-              SizedBox(height: 20),
-              _buildContinueButton(currentStepNo),
-            ]),
+        padding: EdgeInsets.only(right: heightConstraint * 0.05),
+        child: LoadImageWithCache(
+          imageUrl:
+              Endpoints.stepsImageBaseUrl + _dataStore.getStepImage(index)!,
+          color: AppColors.main_color,
+        ),
       ),
     );
   }
 
   Widget _buildStepTitle(currentStepNo) {
     var step_title_id = _dataStore.stepList.steps[currentStepNo].name;
-    return Text(
+    return AutoSizeText(
       "${_technicalNameWithTranslationsStore.getTranslation(step_title_id)}",
       style: TextStyle(
           fontSize: Dimens.stepTitleFont, color: AppColors.main_color),
+      maxLines: 3,
+      softWrap: true,
+      wrapWords: true,
+      minFontSize: Dimens.minFontSizeForTextOverFlow,
     );
   }
 
   Widget _buildStepNoOfTasksOrQuestions(currentStepNo) {
     return Text(
-        isQuestionsStep(currentStepNo) ? noOfQuestionsString(currentStepNo) : noOfTasksString(currentStepNo),
+        isQuestionsStep(currentStepNo)
+            ? noOfQuestionsString(currentStepNo)
+            : noOfTasksString(currentStepNo),
         style: TextStyle(
-          fontSize: Dimens.numOfTasksFont, color: AppColors.main_color,
-        )
-    );
+          fontSize: Dimens.numOfTasksFont,
+          color: AppColors.main_color,
+        ));
   }
 
   bool isQuestionsStep(currentStepNo) => isFirstStep(currentStepNo);
@@ -185,8 +202,14 @@ class _StepSliderWidgetState extends State<StepSliderWidget> {
     int noOfTasks = _dataStore.getNumberOfTasksFromAStep(currentStepNo);
     String str = "$noOfTasks ";
     switch (noOfTasks) {
-      case 1: str += _technicalNameWithTranslationsStore.getTranslationByTechnicalName(LangKeys.task); break;
-      default: str += _technicalNameWithTranslationsStore.getTranslationByTechnicalName(LangKeys.tasks); break;
+      case 1:
+        str += _technicalNameWithTranslationsStore
+            .getTranslationByTechnicalName(LangKeys.task);
+        break;
+      default:
+        str += _technicalNameWithTranslationsStore
+            .getTranslationByTechnicalName(LangKeys.tasks);
+        break;
     }
     return str;
   }
@@ -195,8 +218,14 @@ class _StepSliderWidgetState extends State<StepSliderWidget> {
     int noOfQuestions = _dataStore.getNumberOfQuestionsFromAStep(currentStepNo);
     String str = "$noOfQuestions ";
     switch (noOfQuestions) {
-      case 1: str += _technicalNameWithTranslationsStore.getTranslationByTechnicalName(LangKeys.question); break;
-      default: str += _technicalNameWithTranslationsStore.getTranslationByTechnicalName(LangKeys.questions); break;
+      case 1:
+        str += _technicalNameWithTranslationsStore
+            .getTranslationByTechnicalName(LangKeys.question);
+        break;
+      default:
+        str += _technicalNameWithTranslationsStore
+            .getTranslationByTechnicalName(LangKeys.questions);
+        break;
     }
     return str;
   }
@@ -211,8 +240,12 @@ class _StepSliderWidgetState extends State<StepSliderWidget> {
           style: _buildButtonStyle(),
           onPressed: () {
             if (currentStepNo == 0) {
-              Navigator.push(context,
-                  MaterialPageRoute(builder: (context) => QuestionsListPage(stepNumber: currentStepNo,)));
+              Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                      builder: (context) => QuestionsListPage(
+                            stepNumber: currentStepNo,
+                          )));
             } else {
               var stepId = _dataStore.getStepId(currentStepNo);
               _dataStore.getTasks(stepId);
@@ -220,17 +253,20 @@ class _StepSliderWidgetState extends State<StepSliderWidget> {
                   context,
                   MaterialPageRoute(
                       builder: (context) => TaskList(
-                        currentStepNo: currentStepNo,
-                      )));
+                            currentStepNo: currentStepNo,
+                          )));
             }
           },
           child: Row(
               mainAxisAlignment: MainAxisAlignment.center,
               mainAxisSize: MainAxisSize.min,
               children: [
-                Text(_technicalNameWithTranslationsStore.getTranslationByTechnicalName(LangKeys.continueKey),
+                Text(
+                    _technicalNameWithTranslationsStore
+                        .getTranslationByTechnicalName(LangKeys.continueKey),
                     style: TextStyle(
-                        fontSize: Dimens.continueFont, color: AppColors.main_color)),
+                        fontSize: Dimens.continueFont,
+                        color: AppColors.main_color)),
                 SizedBox(width: 1),
                 Icon(
                   Icons.arrow_forward_ios_rounded,
@@ -245,8 +281,10 @@ class _StepSliderWidgetState extends State<StepSliderWidget> {
 
   ButtonStyle _buildButtonStyle() {
     return ButtonStyle(
-      backgroundColor: MaterialStateProperty.all(AppColors.stepSliderContinueButton.withOpacity(0.5)),
-      overlayColor: MaterialStateColor.resolveWith((states) => AppColors.green[100]!.withOpacity(0.3)),
+      backgroundColor: MaterialStateProperty.all(
+          AppColors.stepSliderContinueButton.withOpacity(0.5)),
+      overlayColor: MaterialStateColor.resolveWith(
+          (states) => AppColors.green[100]!.withOpacity(0.3)),
       shape: MaterialStateProperty.all<RoundedRectangleBorder>(
         RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(Dimens.buttonRadius),
@@ -257,22 +295,21 @@ class _StepSliderWidgetState extends State<StepSliderWidget> {
   }
 
   Widget _buildProgressBar(currentStepNo) {
-    return Container(
-      height: Dimens.progressBarHeight,
-      margin: Dimens.stepSliderProgressBarPadding,
-      child: Observer(
-        builder: (_) => Padding(
-            padding: Dimens.stepSliderprogressBarPadding,
-            child: ClipRRect(
-              borderRadius:
-              BorderRadius.all(Radius.circular(Dimens.progressBarRadius)),
-              child: LinearProgressIndicator(
-                // minHeight: 4,
-                  value: _dataStore.values![currentStepNo],
-                  backgroundColor: AppColors.progressBarBackgroundColor,
-                  valueColor:
-                  AlwaysStoppedAnimation(AppColors.progressBarValueColor)),
-            )),
+    return FractionallySizedBox(
+      widthFactor: 0.95,
+      heightFactor: 0.3,
+      child: Container(
+        child: Observer(
+          builder: (_) => ClipRRect(
+            borderRadius:
+                BorderRadius.all(Radius.circular(Dimens.progressBarRadius)),
+            child: LinearProgressIndicator(
+                value: _dataStore.values![currentStepNo],
+                backgroundColor: AppColors.progressBarBackgroundColor,
+                valueColor:
+                    AlwaysStoppedAnimation(AppColors.progressBarValueColor)),
+          ),
+        ),
       ),
     );
   }
