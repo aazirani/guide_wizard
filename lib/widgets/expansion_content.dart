@@ -53,11 +53,12 @@ class _ExpansionContentState extends State<ExpansionContent> {
                     widgetHeight = size.height;
                   });
                 },
-                child: Column(
-                    children: [
-                      if (widget.deadline != null) _buildDeadlineContainer(),
-                      _buildMarkdownContent()
-                    ])),
+                child: Column(children: [
+                  (widget.deadline!.isNotEmpty)
+                      ? _buildDeadlineContainer()
+                      : Container(),
+                  _buildMarkdownContent()
+                ])),
           ),
         ),
       ],
@@ -71,15 +72,27 @@ class _ExpansionContentState extends State<ExpansionContent> {
             alignment: Alignment.topLeft,
             child: Container(
               decoration: BoxDecoration(
-                  color: AppColors.red[250]!.withOpacity(Dimens.deadlineContainerColorOpacity),
-                  border: Border(
-                      left: BorderSide(width: Dimens.deadlineContainerBorderWidth, color: AppColors.red[150]!))),
+                  color: AppColors.orange[50]!.withOpacity(0.1),
+                  ),
               child: Padding(
-                padding: Dimens.deadlineContentPadding,
-                child: Text("${widget.deadline}",
-                    style: Theme.of(context).textTheme.bodyMedium,
+                  padding: Dimens.deadlineContentPadding,
+                  child: Text.rich(
+                    TextSpan(
+                      children: [
+                        WidgetSpan(
+                          child: Padding(
+                              padding: EdgeInsets.only(right: 8),
+                              child: Icon(
+                                Icons.calendar_month,
+                                color: AppColors.orange[100],
+                              )),
                         ),
-              ),
+                        TextSpan(
+                            text: "${widget.deadline}",
+                            style: Theme.of(context).textTheme.bodyMedium),
+                      ],
+                    ),
+                  )),
             )));
   }
 
