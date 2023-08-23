@@ -1,6 +1,6 @@
-import 'package:boilerplate/data/network/constants/endpoints.dart';
-import 'package:boilerplate/data/sharedpref/shared_preference_helper.dart';
 import 'package:dio/dio.dart';
+import 'package:guide_wizard/data/network/constants/endpoints.dart';
+import 'package:guide_wizard/data/sharedpref/shared_preference_helper.dart';
 
 abstract class NetworkModule {
   /// A singleton dio provider.

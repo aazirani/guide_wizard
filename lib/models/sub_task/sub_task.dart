@@ -1,0 +1,72 @@
+import 'package:flutter/material.dart';
+import 'package:guide_wizard/widgets/app_expansiontile.dart';
+
+class SubTask {
+  int id;
+  int task_id;
+  int title;
+  int markdown;
+  int deadline;
+  int order;
+  int creator_id;
+  String created_at;
+  String updated_at;
+  late GlobalKey<AppExpansionTileState> globalKey;
+  bool expanded = false;
+  
+  SubTask({
+    required this.id,
+    required this.task_id,
+    required this.title,
+    required this.markdown,
+    required this.deadline,
+    required this.order,
+    required this.creator_id,
+    required this.created_at,
+    required this.updated_at,
+  }) {
+    _buildGlobalKey();
+  }
+
+  factory SubTask.fromMap(Map<String, dynamic> json) {
+    return SubTask(
+      id: json["id"],
+      task_id: json["task_id"],
+      title: json["title"],
+      markdown: json["markdown"],
+      deadline: json["deadline"],
+      order: json["order"],
+      creator_id: json["creator_id"],
+      created_at: json["created_at"],
+      updated_at: json["updated_at"],
+    );
+  }
+
+  Map<String, dynamic> toMap() => {
+        "id": id,
+        "task_id": task_id,
+        "title": title,
+        "markdown": markdown,
+        "deadline": deadline,
+        "order": order,
+        "creator_id": creator_id,
+        "created_at": created_at,
+        "updated_at": updated_at,
+      };
+
+  void _buildGlobalKey() {
+    globalKey = GlobalKey<AppExpansionTileState>();
+  }
+
+  void rebuildGlobalKey() {
+    _buildGlobalKey();
+  }
+
+  void setExpanded(bool value) {
+    expanded = value;
+  }
+
+  void toggleExpanded() {
+    expanded = !expanded;
+  }
+}

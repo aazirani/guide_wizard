@@ -1,0 +1,123 @@
+import 'package:flutter/material.dart';
+import 'package:guide_wizard/constants/colors.dart';
+import 'package:guide_wizard/constants/dimens.dart';
+import 'package:guide_wizard/models/sub_task/sub_task.dart';
+import 'package:guide_wizard/stores/technical_name/technical_name_with_translations_store.dart';
+import 'package:guide_wizard/widgets/app_expansiontile.dart';
+import 'package:guide_wizard/widgets/expansion_content.dart';
+import 'package:provider/provider.dart';
+import 'package:render_metrics/render_metrics.dart';
+
+class SubTaskWidget extends StatefulWidget {
+  int index;
+  List<SubTask> subTasks;
+  RenderParametersManager renderManager;
+  String? deadline;
+  SubTaskWidget({
+    Key? key,
+    required this.index,
+    required this.subTasks,
+    required this.renderManager,
+    this.deadline,
+  }) : super(key: key);
+
+  @override
+  State<SubTaskWidget> createState() => SubTaskWidgetState();
+}
+
+class SubTaskWidgetState extends State<SubTaskWidget>
+    with AutomaticKeepAliveClientMixin {
+  late TechnicalNameWithTranslationsStore _technicalNameWithTranslationsStore;
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    _technicalNameWithTranslationsStore =
+        Provider.of<TechnicalNameWithTranslationsStore>(context);
+  }
+
+  void _runAtExpanding() {
+    setState(() {
+      widget.subTasks.map((element) {
+        if (element.expanded) {
+          element.rebuildGlobalKey();
+          element.expanded = false;
+        }
+      });
+      widget.subTasks[widget.index].toggleExpanded();
+    });
+  }
+
+  Widget _buildExpansionContent() {
+    var markdown_id = widget.subTasks[widget.index].markdown;
+    return ExpansionContent(
+            renderManager: widget.renderManager,
+            markdown: _technicalNameWithTranslationsStore.getTranslation(markdown_id)!,
+            deadline: widget.deadline);
+  }
+
+
+  Widget _buildAppExpansionTileWidget() {
+    var sub_task_title_id = widget.subTasks[widget.index].title;
+      return AppExpansionTile(
+        onExpansionChanged: ((isNewState) {
+          if (isNewState) {
+            _runAtExpanding();
+          }
+        }),
+        maintainState: true,
+        textColor: AppColors.main_color,
+        iconColor: AppColors.main_color,
+        title: Text(
+          _technicalNameWithTranslationsStore.getTranslation(sub_task_title_id)!,
+          style: TextStyle(fontSize: Dimens.subtaskTitleFontSize),
+        ),
+        key: widget.subTasks[widget.index].globalKey,
+        children: <Widget>[
+          _buildExpansionContent(),
+        ],
+      );
+    }
+
+  Widget _buildAppExpansionTileWidgetWithCustomTheme() {
+    return ListTileTheme(
+      shape: RoundedRectangleBorder(
+        borderRadius: Dimens.expansionTileBorderRadius,
+      ),
+      tileColor: AppColors.button_background_color,
+      textColor: AppColors.main_color,
+      contentPadding: Dimens.listTilePadding,
+      dense: false,
+      horizontalTitleGap: 0.0,
+      minLeadingWidth: 0,
+      child: _buildAppExpansionTileWidget(),
+    );
+  }
+
+  Widget _buildRoundedExpansionTile() {
+    return ClipRRect(
+      borderRadius: Dimens.expansionTileBorderRadius,
+      child: Card(
+          elevation: 4,
+          shape: RoundedRectangleBorder(
+            borderRadius: Dimens.expansionTileBorderRadius,
+          ),
+          child: _buildAppExpansionTileWidgetWithCustomTheme()),
+    );
+  }
+
+  Widget _buildExpansionTile({required GlobalKey<AppExpansionTileState> key}) {
+    return Padding(
+      padding: Dimens.expansionPadding,
+      child: _buildRoundedExpansionTile(),
+    );
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    super.build(context);
+    return _buildExpansionTile(key: widget.subTasks[widget.index].globalKey);
+  }
+
+  @override
+  bool get wantKeepAlive => true;
+}
