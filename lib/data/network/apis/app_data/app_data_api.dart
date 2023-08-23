@@ -1,6 +1,5 @@
 import 'dart:async';
 
-import 'package:guide_wizard/data/data_laod_handler.dart';
 import 'package:guide_wizard/data/network/constants/endpoints.dart';
 import 'package:guide_wizard/data/network/dio_client.dart';
 import 'package:guide_wizard/data/network/rest_client.dart';
@@ -17,13 +16,13 @@ class StepApi {
   StepApi(this._dioClient, this._restClient);
 
   /// Returns list of post in response
-  Future<StepList> getSteps(String parameters) async {
+  Future<AppStepList> getSteps(String parameters) async {
     try {
       final res = await _dioClient.get(Endpoints.getAppData + parameters);
-      return StepList.fromJson(res["rows"]);
+      return AppStepList.fromJson(res["rows"]);
     } catch (e) {
       print(e.toString());
-      DataLoadHandler().showServerErrorMessage();
+      //DataLoadHandler().showServerErrorMessage();
       throw e;
     }
   }

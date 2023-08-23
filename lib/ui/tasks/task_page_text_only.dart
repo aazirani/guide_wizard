@@ -10,15 +10,16 @@ import 'package:provider/provider.dart';
 import 'package:render_metrics/render_metrics.dart';
 
 class TaskPageTextOnly extends StatefulWidget {
-  int taskId;
-
-  TaskPageTextOnly({Key? key, required this.taskId}) : super(key: key);
+  final int taskId;
+  final int stepId;
+  TaskPageTextOnly({Key? key, required this.taskId, required this.stepId}) : super(key: key);
 
   @override
   State<TaskPageTextOnly> createState() => _TaskPageTextOnlyState();
 }
 
 class _TaskPageTextOnlyState extends State<TaskPageTextOnly> {
+  get task => _dataStore.getStepById(widget.stepId).tasks.firstWhere((task) => task.id == widget.taskId);
   RenderParametersManager renderManager = RenderParametersManager<dynamic>();
   // stores:--------------------------------------------------------------------
   late DataStore _dataStore;
@@ -31,6 +32,9 @@ class _TaskPageTextOnlyState extends State<TaskPageTextOnly> {
     _dataStore = Provider.of<DataStore>(context);
     _technicalNameWithTranslationsStore =
         Provider.of<TechnicalNameWithTranslationsStore>(context);
+    setState(() {
+
+    });
   }
 
   @override
@@ -40,12 +44,12 @@ class _TaskPageTextOnlyState extends State<TaskPageTextOnly> {
 
   @override
   Widget build(BuildContext context) {
-    var titleId = _dataStore.getTaskById(widget.taskId).text;
     return Scaffold(
       backgroundColor: AppColors.main_color,
       appBar: BlocksAppBarWidget(
-          taskId: widget.taskId,
-          title: _technicalNameWithTranslationsStore.getTranslation(titleId),
+        taskId: task.id,
+        stepId: widget.stepId,
+        title: _technicalNameWithTranslationsStore.getTranslation(task.text),
       ),
       body: _buildScaffoldBody(),
     );
@@ -69,7 +73,7 @@ class _TaskPageTextOnlyState extends State<TaskPageTextOnly> {
     return RawScrollbar(
       child: ListView(
         children: [
-          _technicalNameWithTranslationsStore.getTranslation(_dataStore.getTaskById(widget.taskId).description) == "" ? SizedBox(height: Dimens.taskPageTextOnlyListViewPadding.top,) : _buildDescription(),
+          _technicalNameWithTranslationsStore.getTranslation(task.description) == "" ? SizedBox(height: Dimens.taskPageTextOnlyListViewPadding.top,) : _buildDescription(),
           _buildSubTasksList(),
         ],
       ),
@@ -77,17 +81,11 @@ class _TaskPageTextOnlyState extends State<TaskPageTextOnly> {
   }
 
   _buildDescription() {
-    var descriptionId = _dataStore.getTaskById(widget.taskId).description;
     return Padding(
       padding: Dimens.taskPageTextOnlyListViewPadding,
-      child: Observer(
-        builder: (context) {
-          return Text(
-            _technicalNameWithTranslationsStore.getTranslation(descriptionId),
-            style: TextStyle(fontSize: Dimens.taskDescriptionFont, color: AppColors.main_color),
-
-          );
-        },
+      child: Text(
+        _technicalNameWithTranslationsStore.getTranslation(task.description),
+        style: TextStyle(fontSize: Dimens.taskDescriptionFont, color: AppColors.main_color),
       ),
     );
   }
@@ -97,14 +95,15 @@ class _TaskPageTextOnlyState extends State<TaskPageTextOnly> {
     return ListView.builder(
       physics: ScrollPhysics(),
       shrinkWrap: true,
-      itemCount: _dataStore.getTaskById(widget.taskId).sub_tasks.length,
+      itemCount: task.sub_tasks.length,
       itemBuilder: (context, i) {
-        var deadlineId = _dataStore.getDeadlineId(widget.taskId, i);
-        return SubTaskWidget(
-          index: i,
-          subTasks: _dataStore.getTaskById(widget.taskId).sub_tasks,
-          renderManager: renderManager,
-          deadline: _technicalNameWithTranslationsStore.getTranslation(deadlineId),
+        return Observer(
+          builder: (_) => SubTaskWidget(
+            index: i,
+            taskId: task.id,
+            stepId: widget.stepId,
+            renderManager: renderManager,
+          ),
         );
       },
     );

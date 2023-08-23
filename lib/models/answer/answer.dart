@@ -73,7 +73,4 @@ class Answer {
         "selected": selected,
       };
 
-  int getAnswerTitleID() {
-    return title;
-  }
 }

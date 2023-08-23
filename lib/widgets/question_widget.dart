@@ -19,13 +19,12 @@ import 'package:provider/provider.dart';
 
 class QuestionWidget extends StatefulWidget {
   Question question;
-  int index, questionsCount;
+  int index;
 
   QuestionWidget({
     Key? key,
     required this.index,
     required this.question,
-    required this.questionsCount,
   }) : super(key: key);
 
   @override
@@ -54,7 +53,6 @@ class _QuestionWidgetState extends State<QuestionWidget> with AutomaticKeepAlive
   @override
   bool get wantKeepAlive => false;
   double _getScreenWidth() => MediaQuery.of(context).size.width;
-  double _getScreenHeight() => MediaQuery.of(context).size.height;
 
   @override
   Widget build(BuildContext context) {
@@ -67,19 +65,9 @@ class _QuestionWidgetState extends State<QuestionWidget> with AutomaticKeepAlive
         children: [
           _buildDescription(),
           _buildOptions(),
-          // _buildQuestionButton(),
         ],
       ),
     );
-  }
-
-  bool _isLastQuestion() {
-    return widget.index == widget.questionsCount - 1;
-  }
-
-  Widget _buildQuestionButton() {
-    // return _isLastQuestion() ? _buildNextStageButton() : _buildNextQuestionButton();
-    return _isLastQuestion() ? SizedBox() : _buildNextQuestionButton();
   }
 
   Widget _buildTitle() {
@@ -311,9 +299,9 @@ class _QuestionWidgetState extends State<QuestionWidget> with AutomaticKeepAlive
 
   Widget _buildSingleOption(int index) {
     if (widget.question.isImageQuestion) {
-      return _buildSingleImageOption(index);
+      return _buildSingleImageOption(widget.question.answers.elementAt(index));
     } else {
-      return _buildSingleTextOption(index);
+      return _buildSingleTextOption(widget.question.answers.elementAt(index));
     }
   }
 
@@ -343,7 +331,7 @@ class _QuestionWidgetState extends State<QuestionWidget> with AutomaticKeepAlive
     );
   }
 
-  Widget _buildSingleImageOption(int index) {
+  Widget _buildSingleImageOption(Answer answer) {
     return Flexible(
       child: Stack(
         alignment: AlignmentDirectional.topEnd,
@@ -359,13 +347,12 @@ class _QuestionWidgetState extends State<QuestionWidget> with AutomaticKeepAlive
                 contentPadding: EdgeInsets.zero,
                 onTap: () {
                   setState(() {
-                    Answer option = widget.question.getAnswerByIndex(index);
-                    answerOnTapFunction(option, !option.selected);
+                    answerOnTapFunction(answer, !answer.selected);
                   });
                 },
                 shape: RoundedRectangleBorder(
                   side: BorderSide(
-                      color: widget.question.getAnswerByIndex(index).isSelected
+                      color: answer.isSelected
                           ? AppColors.main_color
                           : Colors.transparent,
                       width: 2),
@@ -374,13 +361,13 @@ class _QuestionWidgetState extends State<QuestionWidget> with AutomaticKeepAlive
                 title: Column(
                   children: [
                     _buildImageLoader(
-                        Endpoints.answersImageBaseUrl + widget.question.getAnswerByIndex(index).getImage),
-                    _buildImageOptionSubtitle(index),
+                        Endpoints.answersImageBaseUrl + answer.getImage),
+                    _buildImageOptionSubtitle(answer),
                   ],
                 ),
                 tileColor: AppColors.greys[500]),
           ),
-          _buildImageCheckBox(index),
+          _buildImageCheckBox(answer),
         ],
       ),
     );
@@ -390,9 +377,9 @@ class _QuestionWidgetState extends State<QuestionWidget> with AutomaticKeepAlive
     return LoadImageWithCache(imageUrl: imageURL, color: AppColors.main_color,);
   }
 
-  Widget _buildImageOptionSubtitle(int index) {
-    if (answerHasTitle(widget.question)) {
-      var answerTitleId = widget.question.getAnswerByIndex(index).title;
+  Widget _buildImageOptionSubtitle(Answer answer) {
+    if (answerHasTitle(answer)) {
+      var answerTitleId = answer.title;
       return Padding(
         padding: const EdgeInsets.only(top: 5, bottom: 5),
         child: Row(
@@ -400,10 +387,10 @@ class _QuestionWidgetState extends State<QuestionWidget> with AutomaticKeepAlive
             Transform.scale(
               child: SizedBox(
                 child: Checkbox(
-                  value: widget.question.getAnswerByIndex(index).isSelected,
+                  value: answer.isSelected,
                   onChanged: (value) {
                     setState(() {
-                      answerOnTapFunction(widget.question.getAnswerByIndex(index), value);
+                      answerOnTapFunction(answer, value);
                     });
                   },
                   checkColor: Colors.white,
@@ -431,22 +418,19 @@ class _QuestionWidgetState extends State<QuestionWidget> with AutomaticKeepAlive
     }
   }
 
-  bool answerHasTitle(Question question) {
-    if(question.answers.length != 0) {
-      return _technicalNameWithTranslationsStore.getTranslation(question.answers.elementAt(0).title)!.isNotEmpty;
-    }
-    return false;
+  bool answerHasTitle(Answer answer) {
+    return !_technicalNameWithTranslationsStore.getTranslation(answer.title).isEmpty;
   }
 
-  Widget _buildImageCheckBox(int index) {
-    if (answerHasTitle(widget.question)) {
+  Widget _buildImageCheckBox(Answer answer) {
+    if (answerHasTitle(answer)) {
       return SizedBox();
     }
     return Checkbox(
-      value: widget.question.getAnswerByIndex(index).isSelected,
+      value: answer.isSelected,
       onChanged: (value) {
         setState(() {
-          answerOnTapFunction(widget.question.getAnswerByIndex(index), value);
+          answerOnTapFunction(answer, value);
         });
       },
       checkColor: AppColors.white,
@@ -456,29 +440,28 @@ class _QuestionWidgetState extends State<QuestionWidget> with AutomaticKeepAlive
     );
   }
 
-  Widget _buildSingleTextOption(int index) {
-    Answer option = widget.question.getAnswerByIndex(index);
+  Widget _buildSingleTextOption(Answer answer) {
     return Flexible(
       child: Container(
         margin: Dimens.singleTextOptionPadding,
         child: CheckboxListTile(
           shape: RoundedRectangleBorder(
             side: BorderSide(
-                color: option.isSelected
+                color: answer.isSelected
                     ? AppColors.main_color
                     : Colors.transparent,
                 width: 2),
             borderRadius: BorderRadius.circular(5),
           ),
           checkboxShape: CircleBorder(),
-          value: option.isSelected,
+          value: answer.isSelected,
           onChanged: (value) {
             setState(() {
-              answerOnTapFunction(option, value);
+              answerOnTapFunction(answer, value);
             });
           },
           title: Text(
-            _technicalNameWithTranslationsStore.getTranslation(option.getAnswerTitleID()),
+            _technicalNameWithTranslationsStore.getTranslation(answer.title),
           ),
           controlAffinity: ListTileControlAffinity.leading,
           tileColor: AppColors.white,
@@ -498,6 +481,6 @@ class _QuestionWidgetState extends State<QuestionWidget> with AutomaticKeepAlive
     }
     widget.question.answers.firstWhere((answer) => answer.id == option.id).selected = value ?? false;
     await _dataStore.updateQuestion(widget.question);
-    await _appSettingsStore.setMustUpdate(true);
+    await _appSettingsStore.setAnswerWasUpdated(true);
   }
 }

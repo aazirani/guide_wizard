@@ -1,29 +1,28 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:guide_wizard/constants/colors.dart';
 import 'package:guide_wizard/constants/dimens.dart';
 import 'package:guide_wizard/stores/app_settings/app_settings_store.dart';
-import 'package:guide_wizard/stores/step/step_store.dart';
+import 'package:guide_wizard/stores/data/data_store.dart';
 import 'package:provider/provider.dart';
 import 'package:timelines/timelines.dart';
 
 class StepTimeLine extends StatefulWidget {
-  final int stepNo;
-  StepTimeLine({Key? key, required this.stepNo}) : super(key: key);
+
+  StepTimeLine({Key? key}) : super(key: key);
 
   @override
   State<StepTimeLine> createState() => _StepTimeLineState();
 }
 
 class _StepTimeLineState extends State<StepTimeLine> {
-  late StepStore _stepStore;
+  late DataStore _dataStore;
   late AppSettingsStore _appSettingsStore;
 
   @override
   void didChangeDependencies() {
     super.didChangeDependencies();
     // initializing stores
-    _stepStore = Provider.of<StepStore>(context);
+    _dataStore = Provider.of<DataStore>(context);
     _appSettingsStore = Provider.of<AppSettingsStore>(context);
   }
 
@@ -56,10 +55,10 @@ class _StepTimeLineState extends State<StepTimeLine> {
     return FixedTimeline.tileBuilder(
       direction: Axis.horizontal,
       builder: TimelineTileBuilder(
-        itemCount: _appSettingsStore.stepsCount,
-        itemExtent: (_getScreenWidth() - 50) / _appSettingsStore.stepsCount,
+        itemCount: _dataStore.getAllSteps().length,
+        itemExtent: (_getScreenWidth() - 50) / _dataStore.getAllSteps().length,
         indicatorBuilder: (context, index) =>
-            Observer(builder: (_) => _buildIndicator(index)),
+            _buildIndicator(index),
         startConnectorBuilder: (context, index) => _buildStartConnector(index),
         endConnectorBuilder: (context, index) => _buildEndConnector(index),
       ),
@@ -201,7 +200,7 @@ class _StepTimeLineState extends State<StepTimeLine> {
   }
 
   Widget? _buildStartConnector(index) {
-    if (index == 0) {
+    if(_isFirstStep(index)){
       return null;
     }
     if (_isPendingStep(index)) {
@@ -214,13 +213,13 @@ class _StepTimeLineState extends State<StepTimeLine> {
   }
 
   Widget? _buildEndConnector(int index) {
-    if (index == widget.stepNo - 1) {
+    if(_isLastStep(index)){
       return null;
     }
     if (_isPendingStep(index)) {
       return _buildNotStartedEndConnector();
     }
-    if (index == _appSettingsStore.currentStepNumber - 1) {
+    if (index == _dataStore.getIndexOfStep(_appSettingsStore.currentStepId)) {
       return _buildPendingEndConnectorGradient();
     }
     if (_isNotStartedStep(index)) {
@@ -232,19 +231,27 @@ class _StepTimeLineState extends State<StepTimeLine> {
   //logic methods : ..............................................................
   double _getScreenWidth() => MediaQuery.of(context).size.width;
 
+  _isLastStep(index) {
+    return index == _dataStore.getAllSteps().length - 1;
+  }
+
+  _isFirstStep(index) {
+    return _dataStore.isFirstStep(_dataStore.getStepByIndex(index).id);
+  }
+
   _isCurrentStep(index) {
-    return index == _stepStore.currentStep - 1;
+    return index == _dataStore.getIndexOfStep(_appSettingsStore.currentStepId);
   }
 
   _isPendingStep(index) {
-    return index == _appSettingsStore.currentStepNumber;
+    return _dataStore.stepIsPending(_dataStore.getStepByIndex(index).id);
   }
 
   _isDoneStep(index) {
-    return index < _appSettingsStore.currentStepNumber;
+    return _dataStore.stepIsDone(_dataStore.getStepByIndex(index).id);
   }
 
   _isNotStartedStep(index) {
-    return index > _appSettingsStore.currentStepNumber;
+    return _dataStore.stepIsNotStarted(_dataStore.getStepByIndex(index).id);
   }
 }
