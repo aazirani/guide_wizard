@@ -249,48 +249,50 @@ class _HomeScreenState extends State<HomeScreen> {
   }
 
   Widget _buildQuestionDescription() {
-    return Column(
-      mainAxisAlignment: MainAxisAlignment.start,
-      children: [
-        Padding(
-            padding: Dimens.inProgressTextPadding,
-            child: Align(
-                alignment: Alignment.centerLeft,
-                child: Text(_technicalNameWithTranslationsStore.getTranslationByTechnicalName(LangKeys.description),
-                    style: TextStyle(
-                        fontSize: Dimens.inProgressTextFont,
-                        color: AppColors.main_color,
-                        fontWeight: FontWeight.bold)))),
-
-        Flexible(
-          child: Container(
-            margin: Dimens.questionsStepDescMargin,
-            padding: Dimens.questionsStepDescPadding,
-            decoration: BoxDecoration(
-              color: AppColors.timelineCompressedContainerColor,
-              borderRadius: BorderRadius.all(Radius.circular(Dimens.contentRadius)),
-            ),
-            child: RawScrollbar(
-              child: SingleChildScrollView(
-                child: Column(
-                  mainAxisSize: MainAxisSize.min,
-                  children: [
-                    Flexible(
-                      child: Text(
-                        _technicalNameWithTranslationsStore.getTranslation(_dataStore.getStepById(_appSettingsStore.currentStepId).description),
-                        style: TextStyle(
+    return Expanded(
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.start,
+        children: [
+          Padding(
+              padding: Dimens.inProgressTextPadding,
+              child: Align(
+                  alignment: Alignment.centerLeft,
+                  child: Text(_technicalNameWithTranslationsStore.getTranslationByTechnicalName(LangKeys.description),
+                      style: TextStyle(
+                          fontSize: Dimens.inProgressTextFont,
                           color: AppColors.main_color,
-                          fontSize: Dimens.questionsStepDescFontSize,
+                          fontWeight: FontWeight.bold)))),
+
+          Flexible(
+            child: Container(
+              margin: Dimens.questionsStepDescMargin,
+              padding: Dimens.questionsStepDescPadding,
+              decoration: BoxDecoration(
+                color: AppColors.timelineCompressedContainerColor,
+                borderRadius: BorderRadius.all(Radius.circular(Dimens.contentRadius)),
+              ),
+              child: RawScrollbar(
+                child: SingleChildScrollView(
+                  child: Column(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      Flexible(
+                        child: Text(
+                          _technicalNameWithTranslationsStore.getTranslation(_dataStore.getStepById(_appSettingsStore.currentStepId).description),
+                          style: TextStyle(
+                            color: AppColors.main_color,
+                            fontSize: Dimens.questionsStepDescFontSize,
+                          ),
                         ),
                       ),
-                    ),
-                  ],
+                    ],
+                  ),
                 ),
               ),
             ),
           ),
-        ),
-      ],
+        ],
+      ),
     );
   }
 
@@ -315,7 +317,7 @@ class _HomeScreenState extends State<HomeScreen> {
           Flexible(
             child: Padding(
               padding: Dimens.compressedTaskListPadding,
-              child: CompressedTasklistTimeline(),
+              child: CompressedTaskListTimeline(),
             ),
           ),
         ],
