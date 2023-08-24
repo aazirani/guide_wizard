@@ -27,13 +27,17 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _HomeScreenState extends State<HomeScreen> {
-  //stores:---------------------------------------------------------------------
+  // Stores :---------------------------------------------------------------------
   late DataStore _dataStore;
   late TechnicalNameWithTranslationsStore _technicalNameWithTranslationsStore;
   late LanguageStore _languageStore;
   late UpdatedAtTimesStore _updatedAtTimesStore;
   late AppSettingsStore _appSettingsStore;
   late DataLoadHandler _dataLoadHandler = DataLoadHandler(context: context);
+
+  // Getters :---------------------------------------------------------------------
+  get _getScreenHeight => MediaQuery.of(context).size.height;
+  get _getScreenWidth => MediaQuery.of(context).size.width;
 
   @override
   void didChangeDependencies() {
@@ -258,34 +262,32 @@ class _HomeScreenState extends State<HomeScreen> {
                         color: AppColors.main_color,
                         fontWeight: FontWeight.bold)))),
 
-        Container(
-          width: _getScreenWidth() / 1.23,
-          margin: Dimens.questionsStepDescMargin,
-          padding: Dimens.questionsStepDescPadding,
-          constraints: BoxConstraints(
-            maxHeight: MediaQuery.of(context).size.height / 4,
-          ),
-          decoration: BoxDecoration(
-            color: AppColors.timelineCompressedContainerColor,
-            borderRadius: BorderRadius.all(Radius.circular(Dimens.contentRadius)),
-          ),
-          child: Column(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              Flexible(
-                child: RawScrollbar(
-                  child: SingleChildScrollView(
-                    child: Text(
-                      _technicalNameWithTranslationsStore.getTranslation(_dataStore.getStepById(_appSettingsStore.currentStepId).description),
-                      style: TextStyle(
-                        color: AppColors.main_color,
-                        fontSize: Dimens.questionsStepDescFontSize,
+        Flexible(
+          child: Container(
+            margin: Dimens.questionsStepDescMargin,
+            padding: Dimens.questionsStepDescPadding,
+            decoration: BoxDecoration(
+              color: AppColors.timelineCompressedContainerColor,
+              borderRadius: BorderRadius.all(Radius.circular(Dimens.contentRadius)),
+            ),
+            child: RawScrollbar(
+              child: SingleChildScrollView(
+                child: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    Flexible(
+                      child: Text(
+                        _technicalNameWithTranslationsStore.getTranslation(_dataStore.getStepById(_appSettingsStore.currentStepId).description),
+                        style: TextStyle(
+                          color: AppColors.main_color,
+                          fontSize: Dimens.questionsStepDescFontSize,
+                        ),
                       ),
                     ),
-                  ),
+                  ],
                 ),
               ),
-            ],
+            ),
           ),
         ),
       ],
@@ -293,19 +295,31 @@ class _HomeScreenState extends State<HomeScreen> {
   }
 
   Widget _buildInProgressCompressedTaskList() {
-    return Column(
-      children: [
-        Padding(
+    return Flexible(
+      child: Column(
+        children: [
+          Padding(
             padding: Dimens.inProgressTextPadding,
             child: Align(
-                alignment: Alignment.centerLeft,
-                child: Text(_technicalNameWithTranslationsStore.getTranslationByTechnicalName(LangKeys.in_progress),
-                    style: TextStyle(
-                        fontSize: Dimens.inProgressTextFont,
-                        color: AppColors.main_color,
-                        fontWeight: FontWeight.bold)))),
-        CompressedTaskListTimeline(),
-      ],
+              alignment: Alignment.centerLeft,
+              child: Text(
+                _technicalNameWithTranslationsStore.getTranslationByTechnicalName(LangKeys.in_progress),
+                style: TextStyle(
+                    fontSize: Dimens.inProgressTextFont,
+                    color: AppColors.main_color,
+                    fontWeight: FontWeight.bold
+                ),
+              ),
+            ),
+          ),
+          Flexible(
+            child: Padding(
+              padding: Dimens.compressedTaskListPadding,
+              child: CompressedTasklistTimeline(),
+            ),
+          ),
+        ],
+      ),
     );
   }
 
@@ -346,7 +360,7 @@ class _HomeScreenState extends State<HomeScreen> {
       itemBuilder: (BuildContext context, int index, int realIndex) {
         return Container(
           alignment: Alignment.topLeft,
-          width: _getScreenWidth(),
+          width: _getScreenWidth,
           margin: Dimens.sliderContainerMargin,
           padding: Dimens.sliderContainerPadding,
           decoration: BoxDecoration(
@@ -357,7 +371,7 @@ class _HomeScreenState extends State<HomeScreen> {
         );
       },
       options: CarouselOptions(
-        height: _getScreenHeight() / Dimens.placeHolderCarouselHeightRatio,
+        height: _getScreenHeight / Dimens.placeHolderCarouselHeightRatio,
         initialPage: 0,
         enableInfiniteScroll: false,
         autoPlay: false,
@@ -375,7 +389,7 @@ class _HomeScreenState extends State<HomeScreen> {
             color: Colors.grey,
             borderRadius: BorderRadius.all(Radius.circular(Dimens.compressedTaskListBorderRadius))),
         padding: Dimens.timelineContainerPadding,
-        height: _getScreenHeight() /
+        height: _getScreenHeight /
             Dimens.placeHolderCompressedTaskListHeightRatio,
         width: double.infinity,
         child: Align(
@@ -384,7 +398,4 @@ class _HomeScreenState extends State<HomeScreen> {
       ),
     );
   }
-
-  double _getScreenHeight() => MediaQuery.of(context).size.height;
-  double _getScreenWidth() => MediaQuery.of(context).size.width;
 }
