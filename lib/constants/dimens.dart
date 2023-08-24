@@ -168,5 +168,6 @@ class Dimens {
   static double nextStageSurroundingContainerHeight = nextStageDistanceFromBottom + nextStageDefaultHeight + 10 ;
   static double nextStageDistanceFromBottom = 10.0;
   static const nextStageDefaultHeight = 53.0;
+  static const blockquoteCircularRadius = 5.0;
 
 }

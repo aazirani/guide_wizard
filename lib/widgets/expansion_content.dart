@@ -89,7 +89,7 @@ class _ExpansionContentState extends State<ExpansionContent> {
                         ),
                         TextSpan(
                             text: "${widget.deadline}",
-                            style: Theme.of(context).textTheme.bodyMedium),
+                            style: Theme.of(context).textTheme.bodyMedium!.copyWith(color: AppColors.orange[200])),
                       ],
                     ),
                   )),
@@ -101,6 +101,14 @@ class _ExpansionContentState extends State<ExpansionContent> {
       onTapLink: (text, url, title) {
         UrlHandler.openUrl(context: context, url: url!, technicalNameWithTranslationsStore: _technicalNameWithTranslationsStore);
       },
+      styleSheet: MarkdownStyleSheet(
+        p: Theme.of(context).textTheme.bodyLarge!.copyWith(color: AppColors.text_color),
+        blockquote: Theme.of(context).textTheme.bodyLarge!.copyWith(color: AppColors.text_color),
+        blockquoteDecoration: BoxDecoration(
+          color: AppColors.blockquoteColor.withOpacity(0.2),
+          borderRadius: BorderRadius.all(Radius.circular(Dimens.blockquoteCircularRadius))
+        )
+      ),
       shrinkWrap: true,
       physics: NeverScrollableScrollPhysics(),
       data: fixedJsonMarkdown(widget.markdown));

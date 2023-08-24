@@ -92,6 +92,8 @@ class AppColors {
 
   static const Color title_color = Colors.white;
   static const Color main_color = const Color.fromRGBO(0, 81, 158, 1);
+   static const Color text_color = const Color.fromARGB(255, 2, 25, 44);
+   static const Color blockquoteColor = Color.fromARGB(255, 118, 178, 227);
   static const Color grey = const Color.fromRGBO(231, 231, 231, 1);
   static const Color transparent = Colors.transparent;
   static const Color white = Colors.white;

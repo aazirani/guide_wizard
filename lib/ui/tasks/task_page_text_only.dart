@@ -84,7 +84,7 @@ class _TaskPageTextOnlyState extends State<TaskPageTextOnly> {
         builder: (context) {
           return Text(
             _technicalNameWithTranslationsStore.getTranslation(descriptionId),
-          style: Theme.of(context).textTheme.bodyLarge
+          style: Theme.of(context).textTheme.bodyLarge!.copyWith(color: AppColors.text_color)
 
           );
         },

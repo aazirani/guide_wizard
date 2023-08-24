@@ -292,7 +292,7 @@ class _HomeScreenState extends State<HomeScreen> {
                         Flexible(
                           child: Text(
                             _technicalNameWithTranslationsStore.getTranslation(questionDescId),
-                            style: Theme.of(context).textTheme.titleSmall,
+                            style: Theme.of(context).textTheme.bodyMedium,
                           ),
                         ),
                       ],
