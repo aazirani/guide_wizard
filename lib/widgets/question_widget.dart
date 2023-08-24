@@ -92,7 +92,7 @@ class _QuestionWidgetState extends State<QuestionWidget> with AutomaticKeepAlive
           Flexible(
             child: Text(
               _technicalNameWithTranslationsStore.getTranslation(titleId),
-              style: Theme.of(context).textTheme.bodyLarge!.copyWith(fontWeight: FontWeight.w500),
+              style: Theme.of(context).textTheme.bodyLarge!.copyWith(fontWeight: FontWeight.w600),
             ),
           ),
           Padding(
@@ -113,7 +113,7 @@ class _QuestionWidgetState extends State<QuestionWidget> with AutomaticKeepAlive
       margin: Dimens.questionDescriptionPadding,
       child: Text(
         _technicalNameWithTranslationsStore.getTranslation(questionSubtitleId)!,
-        style: Theme.of(context).textTheme.bodyLarge,
+        style: Theme.of(context).textTheme.bodyLarge!.copyWith(color: AppColors.text_color),
       ),
     );
   }
@@ -159,7 +159,7 @@ class _QuestionWidgetState extends State<QuestionWidget> with AutomaticKeepAlive
       shape: MaterialStateProperty.all<RoundedRectangleBorder>(
         RoundedRectangleBorder(
           borderRadius: Dimens.infoInsideDialogButtonsRadius,
-          side: BorderSide(color:  AppColors.close_button_color, width: 2),
+          side: BorderSide(color:  AppColors.main_color, width: 2),
         ),
       ),
     );
@@ -223,7 +223,7 @@ class _QuestionWidgetState extends State<QuestionWidget> with AutomaticKeepAlive
             padding: Dimens.infoBottomSheetPadding,
             child: Text(
               _getInfoDescription(),
-              style: Theme.of(context).textTheme.bodyMedium
+              style: Theme.of(context).textTheme.bodyMedium!.copyWith(color: AppColors.text_color)
             ),
           ),
           bottomRow: Container(
@@ -418,8 +418,7 @@ class _QuestionWidgetState extends State<QuestionWidget> with AutomaticKeepAlive
             Flexible(
               child: Text(
                 _technicalNameWithTranslationsStore.getTranslation(answerTitleId),
-                style: Theme.of(context).textTheme.bodySmall
-              ),
+                style: Theme.of(context).textTheme.bodySmall!.copyWith(color: AppColors.text_color),              ),
             ),
           ],
         ),
@@ -477,7 +476,7 @@ class _QuestionWidgetState extends State<QuestionWidget> with AutomaticKeepAlive
           },
           title: Text(
             _technicalNameWithTranslationsStore.getTranslation(option.getAnswerTitleID()),
-          ),
+          style: Theme.of(context).textTheme.bodyLarge!.copyWith(color: AppColors.text_color)),
           controlAffinity: ListTileControlAffinity.leading,
           tileColor: AppColors.white,
           activeColor: AppColors.main_color,

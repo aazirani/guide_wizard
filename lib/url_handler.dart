@@ -64,7 +64,7 @@ class UrlHandler {
             onPressed: () {
               Navigator.of(context).pop();
             },
-            child: Text(technicalNameWithTranslationsStore.getTranslationByTechnicalName(LangKeys.cancel), style: TextStyle(color: AppColors.main_color),),
+            child: Text(technicalNameWithTranslationsStore.getTranslationByTechnicalName(LangKeys.cancel), style: Theme.of(context).textTheme.bodySmall,),
             style: _textButtonStyle(),
           ),
           TextButton(
@@ -72,7 +72,7 @@ class UrlHandler {
                 _launchURL(url);
                 Navigator.of(context).pop();
               },
-              child: Text(technicalNameWithTranslationsStore.getTranslationByTechnicalName(LangKeys.open_link), style: TextStyle(color: AppColors.main_color),),
+              child: Text(technicalNameWithTranslationsStore.getTranslationByTechnicalName(LangKeys.open_link), style: Theme.of(context).textTheme.bodySmall,),
               style: _textButtonStyle(),
           ),
         ],

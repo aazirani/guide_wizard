@@ -242,17 +242,14 @@ class _HomeScreenState extends State<HomeScreen> {
 
   Widget _buildStepsText() {
     return Text(_technicalNameWithTranslationsStore.getTranslationByTechnicalName(LangKeys.steps),
-        style: Theme.of(context).textTheme.titleSmall,
-            );
+        style: Theme.of(context).textTheme.titleSmall);
   }
 
   Widget _buildCurrentStepText(stepStore) {
     return Observer(
         builder: (_) => Text(
             "${stepStore.currentStep}/${_appSettingsStore.stepsCount}",
-            style: Theme.of(context).textTheme.titleSmall
-            )
-            );
+            style: Theme.of(context).textTheme.titleSmall));
   }
 
   Widget _buildQuestionDescription() {
