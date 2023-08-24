@@ -49,6 +49,12 @@ class _TaskPageWithImageState extends State<TaskPageWithImage> {
     return math.min(widgetSize, 1);
   }
 
+  double _getMaxHeightOfDraggableScrollableSheet() {
+    double screenHeight = MediaQuery.of(context).size.height;
+    double widgetSize = (screenHeight - 20) / (screenHeight);
+    return math.min(widgetSize, 1);
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
