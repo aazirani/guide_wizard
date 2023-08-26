@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:guide_wizard/constants/colors.dart';
 import 'package:guide_wizard/constants/dimens.dart';
+import 'package:guide_wizard/models/step/app_step.dart';
+import 'package:guide_wizard/models/task/task.dart';
 import 'package:guide_wizard/stores/data/data_store.dart';
 import 'package:guide_wizard/stores/technical_name/technical_name_with_translations_store.dart';
 import 'package:guide_wizard/widgets/app_expansiontile.dart';
@@ -10,15 +12,15 @@ import 'package:render_metrics/render_metrics.dart';
 
 class SubTaskWidget extends StatefulWidget {
   final int index;
-  final int taskId;
-  final int stepId;
+  final Task task;
+  final AppStep step;
   RenderParametersManager renderManager;
   SubTaskWidget({
     Key? key,
     required this.index,
-    required this.taskId,
+    required this.task,
     required this.renderManager,
-    required this.stepId
+    required this.step
   }) : super(key: key);
 
   @override
@@ -26,8 +28,6 @@ class SubTaskWidget extends StatefulWidget {
 }
 
 class SubTaskWidgetState extends State<SubTaskWidget> with AutomaticKeepAliveClientMixin {
-  get task => _dataStore.getStepById(widget.stepId).tasks.firstWhere((task) => task.id == widget.taskId);
-
   // stores:--------------------------------------------------------------------
   late DataStore _dataStore;
   late TechnicalNameWithTranslationsStore _technicalNameWithTranslationsStore;
@@ -42,27 +42,27 @@ class SubTaskWidgetState extends State<SubTaskWidget> with AutomaticKeepAliveCli
 
   void _runAtExpanding() {
     setState(() {
-      task.subTasks.map((element) {
+      widget.task.subTasks.map((element) {
         if (element.expanded) {
           element.rebuildGlobalKey();
           element.expanded = false;
         }
       });
-      task.subTasks[widget.index].toggleExpanded();
+      widget.task.subTasks[widget.index].toggleExpanded();
     });
   }
 
   Widget _buildExpansionContent() {
-    var markdown_id = task.subTasks[widget.index].markdown;
+    var markdown_id = widget.task.subTasks[widget.index].markdown;
     return ExpansionContent(
             renderManager: widget.renderManager,
-            markdown: _technicalNameWithTranslationsStore.getTranslation(markdown_id)!,
-            deadline: _technicalNameWithTranslationsStore.getTranslation(task.subTasks[widget.index].deadline));
+            markdown: _technicalNameWithTranslationsStore.getTranslation(markdown_id),
+            deadline: _technicalNameWithTranslationsStore.getTranslation(widget.task.subTasks[widget.index].deadline));
   }
 
 
   Widget _buildAppExpansionTileWidget() {
-    var sub_task_title_id = task.subTasks[widget.index].title;
+    var sub_task_title_id = widget.task.subTasks[widget.index].title;
       return AppExpansionTile(
         onExpansionChanged: ((isNewState) {
           if (isNewState) {
@@ -76,7 +76,7 @@ class SubTaskWidgetState extends State<SubTaskWidget> with AutomaticKeepAliveCli
           _technicalNameWithTranslationsStore.getTranslation(sub_task_title_id)!,
           style: TextStyle(fontSize: Dimens.subtaskTitleFontSize),
         ),
-        key: task.subTasks[widget.index].globalKey,
+        key: widget.task.subTasks[widget.index].globalKey,
         children: <Widget>[
           _buildExpansionContent(),
         ],
@@ -120,7 +120,7 @@ class SubTaskWidgetState extends State<SubTaskWidget> with AutomaticKeepAliveCli
   @override
   Widget build(BuildContext context) {
     super.build(context);
-    return _buildExpansionTile(key: task.subTasks[widget.index].globalKey);
+    return _buildExpansionTile(key: widget.task.subTasks[widget.index].globalKey);
   }
 
   @override

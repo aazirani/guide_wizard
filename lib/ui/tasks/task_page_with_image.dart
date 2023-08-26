@@ -3,6 +3,8 @@ import 'dart:math' as math;
 import 'package:flutter/material.dart';
 import 'package:guide_wizard/constants/colors.dart';
 import 'package:guide_wizard/constants/dimens.dart';
+import 'package:guide_wizard/models/step/app_step.dart';
+import 'package:guide_wizard/models/task/task.dart';
 import 'package:guide_wizard/stores/data/data_store.dart';
 import 'package:guide_wizard/stores/technical_name/technical_name_with_translations_store.dart';
 import 'package:guide_wizard/widgets/image_slide.dart';
@@ -13,16 +15,15 @@ import 'package:provider/provider.dart';
 import 'package:render_metrics/render_metrics.dart';
 
 class TaskPageWithImage extends StatefulWidget {
-  final int taskId;
-  final int stepId;
-  TaskPageWithImage({Key? key, required this.taskId, required this.stepId}) : super(key: key);
+  final Task task;
+  final AppStep step;
+  TaskPageWithImage({Key? key, required this.task, required this.step}) : super(key: key);
 
   @override
   State<TaskPageWithImage> createState() => _TaskPageWithImageState();
 }
 
 class _TaskPageWithImageState extends State<TaskPageWithImage> {
-  get task => _dataStore.getStepById(widget.stepId).tasks.firstWhere((task) => task.id == widget.taskId);
   RenderParametersManager renderManager = RenderParametersManager<dynamic>();
   // stores:--------------------------------------------------------------------
   late DataStore _dataStore;
@@ -60,9 +61,9 @@ class _TaskPageWithImageState extends State<TaskPageWithImage> {
     return Scaffold(
       backgroundColor: AppColors.main_color,
       appBar: BlocksAppBarWidget(
-        taskId: task.id,
-        stepId: widget.stepId,
-        title: _technicalNameWithTranslationsStore.getTranslation(task.text),
+        task: widget.task,
+        step: widget.step,
+        title: _technicalNameWithTranslationsStore.getTranslation(widget.task.text),
       ),
       body: _buildScaffoldBody(),
     );
@@ -85,10 +86,10 @@ class _TaskPageWithImageState extends State<TaskPageWithImage> {
   }
 
   Widget _buildImageSlide() {
-    List<String?> imagesList = [task.image_1, task.image_2];
+    List<String?> imagesList = [widget.task.image_1, widget.task.image_2];
     return ImageSlide(
         images: imagesList..removeWhere((element) => element == null),
-        description: _technicalNameWithTranslationsStore.getTranslation(task.description)
+        description: _technicalNameWithTranslationsStore.getTranslation(widget.task.description)
     );
   }
 
@@ -108,7 +109,7 @@ class _TaskPageWithImageState extends State<TaskPageWithImage> {
                 scrollDirection: Axis.vertical,
                 shrinkWrap: true,
                 controller: scrollController,
-                itemCount: task.sub_tasks.length,
+                itemCount: widget.task.sub_tasks.length,
                 itemBuilder: _buildDraggableSheetItems,
               ),
             ),
@@ -122,18 +123,18 @@ class _TaskPageWithImageState extends State<TaskPageWithImage> {
     if(i == 0) return _buildDescription();
     return SubTaskWidget(
       index: i - 1,
-      taskId: task.id,
-      stepId: widget.stepId,
+      task: widget.task,
+      step: widget.step,
       renderManager: renderManager,
     );
   }
 
   _buildDescription() {
-    if (_technicalNameWithTranslationsStore.getTranslation(task.description) == "") return SizedBox(height: Dimens.taskPageTextOnlyListViewPadding.top,);
+    if (_technicalNameWithTranslationsStore.getTranslation(widget.task.description) == "") return SizedBox(height: Dimens.taskPageTextOnlyListViewPadding.top,);
     return Padding(
       padding: Dimens.taskPageTextOnlyListViewPadding,
       child: Text(
-        _technicalNameWithTranslationsStore.getTranslation(task.description),
+        _technicalNameWithTranslationsStore.getTranslation(widget.task.description),
         style: TextStyle(fontSize: Dimens.descriptionFontSize, color: AppColors.main_color),
       ),
     );

@@ -1,23 +1,22 @@
-import 'package:guide_wizard/models/step/app_step.dart' as s;
+import 'package:guide_wizard/models/step/app_step.dart';
+import 'package:mobx/mobx.dart';
 
 class AppStepList {
-  final List<s.AppStep> steps;
+  @observable
+  final ObservableList<AppStep> steps;
 
   AppStepList({
     required this.steps,
   });
 
+  @action
   factory AppStepList.fromJson(List<dynamic> json) {
-    List<s.AppStep> steps;
-    steps = json.map((step) => s.AppStep.fromMap(step)).toList();
+    List<AppStep> steps;
+    steps = ObservableList.of(json.map((step) => AppStepFactory().fromMap(step)).toList().cast<AppStep>());
 
     return AppStepList(
-      steps: steps,
+      steps: ObservableList.of(steps),
     );
-  }
-
-  List<s.AppStep> get listStep {
-    return steps;
   }
 
 }

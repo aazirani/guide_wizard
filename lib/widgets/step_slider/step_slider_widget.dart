@@ -1,5 +1,6 @@
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:guide_wizard/constants/colors.dart';
 import 'package:guide_wizard/constants/dimens.dart';
 import 'package:guide_wizard/constants/lang_keys.dart';
@@ -61,7 +62,7 @@ class _StepSliderWidgetState extends State<StepSliderWidget> {
           enlargeCenterPage: false,
           enableInfiniteScroll: false),
       items:
-      List<int>.generate(_dataStore.getAllSteps().length, (index) => index)
+      List<int>.generate(_dataStore.getAllSteps.length, (index) => index)
           .map((index) {
         return Builder(
           builder: (BuildContext context) {
@@ -210,7 +211,7 @@ class _StepSliderWidgetState extends State<StepSliderWidget> {
                   context,
                   MaterialPageRoute(
                       builder: (context) => TaskList(
-                        stepId: _dataStore.getStepByIndex(index).id,
+                        step: _dataStore.getStepByIndex(index),
                       )));
             }
           },
@@ -255,12 +256,14 @@ class _StepSliderWidgetState extends State<StepSliderWidget> {
           child: ClipRRect(
             borderRadius:
             BorderRadius.all(Radius.circular(Dimens.progressBarRadius)),
-            child: LinearProgressIndicator(
-              // minHeight: 4,
-                value: _dataStore.getDoneTasks(_dataStore.getStepByIndex(index).id).length / _dataStore.getStepByIndex(index).tasks.length,
-                backgroundColor: AppColors.progressBarBackgroundColor,
-                valueColor:
-                AlwaysStoppedAnimation(AppColors.progressBarValueColor)),
+            child: Observer(
+              builder: (_) => LinearProgressIndicator(
+                // minHeight: 4,
+                  value: _dataStore.getDoneTasks(_dataStore.getStepByIndex(index).id).length / _dataStore.getStepByIndex(index).tasks.length,
+                  backgroundColor: AppColors.progressBarBackgroundColor,
+                  valueColor:
+                  AlwaysStoppedAnimation(AppColors.progressBarValueColor)),
+            ),
           )),
     );
   }

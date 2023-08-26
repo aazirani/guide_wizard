@@ -115,7 +115,7 @@ class _NextStageButtonState extends State<NextStageButton> {
     await updateIfAnswersHasChanged();
 
     await _appSettingsStore.setCurrentStepId(
-        _dataStore.getAllSteps().reduce((curr, next) => curr.order < next.order ? curr : next).id
+        _dataStore.getAllSteps.reduce((curr, next) => curr.order < next.order ? curr : next).id
     );
 
     setButtonState(ButtonState.success);

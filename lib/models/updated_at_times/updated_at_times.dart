@@ -1,22 +1,25 @@
-class UpdatedAtTimes {
-  //Server Values
+import 'package:mobx/mobx.dart';
+
+// Include generated file
+part 'updated_at_times.g.dart';
+
+// This is the class used by rest of your codebase
+class UpdatedAtTimes = _UpdatedAtTimes with _$UpdatedAtTimes;
+
+abstract class _UpdatedAtTimes with Store {
+  @observable
   String last_updated_at_content;
+
+  @observable
   String last_updated_at_technical_names;
 
   static String LAST_UPDATED_AT_CONTENT = "last_updated_at_content";
   static String LAST_UPDATED_AT_TECHNICAL_NAMES = "last_updated_at_technical_names";
 
-  UpdatedAtTimes({
+  _UpdatedAtTimes({
     required this.last_updated_at_content,
     required this.last_updated_at_technical_names,
   });
-
-  factory UpdatedAtTimes.fromMap(Map<String, dynamic> json) {
-    return UpdatedAtTimes(
-      last_updated_at_content: json[LAST_UPDATED_AT_CONTENT],
-      last_updated_at_technical_names: json[LAST_UPDATED_AT_TECHNICAL_NAMES],
-    );
-  }
 
   Map<String, dynamic> toMap() {
     return {
@@ -24,12 +27,25 @@ class UpdatedAtTimes {
       LAST_UPDATED_AT_TECHNICAL_NAMES: last_updated_at_technical_names,
     };
   }
+}
 
-  factory UpdatedAtTimes.fromJson(List<dynamic> json) {
+class UpdatedAtTimesFactory {
+
+  static String LAST_UPDATED_AT_CONTENT = "last_updated_at_content";
+  static String LAST_UPDATED_AT_TECHNICAL_NAMES = "last_updated_at_technical_names";
+
+  UpdatedAtTimes fromMap(Map<String, dynamic> json) {
+    return UpdatedAtTimes(
+      last_updated_at_content: json[LAST_UPDATED_AT_CONTENT],
+      last_updated_at_technical_names: json[LAST_UPDATED_AT_TECHNICAL_NAMES],
+    );
+  }
+
+
+  UpdatedAtTimes fromJson(List<dynamic> json) {
     List<UpdatedAtTimes> updatedAtTimes;
-    updatedAtTimes = json.map((updatedAt) => UpdatedAtTimes.fromMap(updatedAt)).toList();
+    updatedAtTimes = json.map((updatedAt) => UpdatedAtTimesFactory().fromMap(updatedAt)).toList();
 
     return updatedAtTimes.first;
   }
-
 }

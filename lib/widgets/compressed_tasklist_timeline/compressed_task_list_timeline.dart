@@ -54,17 +54,17 @@ class _CompressedTaskListTimelineState
             nodePosition: Dimens.timelineNodePosition,
           ),
           builder: TimelineTileBuilder(
-            itemCount: _dataStore.getAllSteps().length == 0
+            itemCount: _dataStore.getAllSteps.length == 0
                 ? 0
                 : _dataStore.getStepById(_appSettingsStore.currentStepId).tasks.length,
             itemExtent: Dimens.compressedTaskListTimeLineItemExtend,
             contentsBuilder: (context, index) =>
                 _buildContents(index),
             indicatorBuilder: (context, index) => _buildIndicator(index),
-            startConnectorBuilder: (context, index) => index == 0 && _dataStore.getStepByIndex(index).id == _dataStore.getAllSteps().elementAt(1).id
+            startConnectorBuilder: (context, index) => index == 0 && _dataStore.getStepByIndex(index).id == _dataStore.getAllSteps.elementAt(1).id
                 ? Container()
                 : _buildConnector(),
-            endConnectorBuilder: (context, index) => _dataStore.getStepByIndex(index).id == _dataStore.getAllSteps().last.id
+            endConnectorBuilder: (context, index) => _dataStore.getStepByIndex(index).id == _dataStore.getAllSteps.last.id
                 ? Container()
                 : _buildConnector(),
           ),
@@ -74,15 +74,17 @@ class _CompressedTaskListTimelineState
   }
 
   bool isTaskDone(index){
-    return _dataStore.getAllTasks().elementAt(index).isDone;
+    return _dataStore.getStepById(_appSettingsStore.currentStepId).tasks.elementAt(index).isDone;
   }
 
   Widget _buildIndicator(taskIndex) {
-    return Container(
-        color: AppColors.transparent,
-        width: Dimens.timelineIndicatorDimens,
-        height: Dimens.timelineIndicatorDimens,
-        child: DiamondIndicator(fill: isTaskDone(taskIndex))
+    return Observer(
+      builder: (_) => Container(
+          color: AppColors.transparent,
+          width: Dimens.timelineIndicatorDimens,
+          height: Dimens.timelineIndicatorDimens,
+          child: DiamondIndicator(fill: isTaskDone(taskIndex))
+      ),
     );
   }
 

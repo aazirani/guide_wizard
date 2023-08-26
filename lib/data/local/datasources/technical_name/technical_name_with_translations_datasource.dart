@@ -1,6 +1,7 @@
 import 'package:guide_wizard/data/local/constants/db_constants.dart';
 import 'package:guide_wizard/models/technical_name/technical_name_with_translations.dart';
 import 'package:guide_wizard/models/technical_name/technical_name_with_translations_list.dart';
+import 'package:mobx/mobx.dart';
 import 'package:sembast/sembast.dart';
 
 class TechnicalNameWithTranslationsDataSource {
@@ -46,7 +47,7 @@ class TechnicalNameWithTranslationsDataSource {
     // Making a List<Post> out of List<RecordSnapshot>
     return recordSnapshots.map((snapshot) {
       final technicalNameWithTranslations =
-          TechnicalNameWithTranslations.fromMap(snapshot.value);
+          TechnicalNameWithTranslationsFactory().fromMap(snapshot.value);
       // An ID is a key of a record from the database.
       technicalNameWithTranslations.id = snapshot.key;
       return technicalNameWithTranslations;
@@ -67,13 +68,13 @@ class TechnicalNameWithTranslationsDataSource {
     // Making a List<Post> out of List<RecordSnapshot>
     if (recordSnapshots.length > 0) {
       translationsWithStepNameList = TechnicalNameWithTranslationsList(
-          technicalNameWithTranslations: recordSnapshots.map((snapshot) {
-        final translation =
-            TechnicalNameWithTranslations.fromMap(snapshot.value);
-        // An ID is a key of a record from the database.
-        translation.id = snapshot.key;
-        return translation;
-      }).toList());
+          technicalNameWithTranslations: ObservableList.of(recordSnapshots.map((snapshot) {
+            final translation =
+            TechnicalNameWithTranslationsFactory().fromMap(snapshot.value);
+            // An ID is a key of a record from the database.
+            translation.id = snapshot.key;
+            return translation;
+          })));
     }
 
     return translationsWithStepNameList;
