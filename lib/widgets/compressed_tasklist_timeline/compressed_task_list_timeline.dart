@@ -61,10 +61,10 @@ class _CompressedTaskListTimelineState
             contentsBuilder: (context, index) =>
                 _buildContents(index),
             indicatorBuilder: (context, index) => _buildIndicator(index),
-            startConnectorBuilder: (context, index) => index == 0 && _dataStore.getStepByIndex(index).id == _dataStore.getAllSteps.elementAt(1).id
+            startConnectorBuilder: (context, index) => index == 0
                 ? Container()
                 : _buildConnector(),
-            endConnectorBuilder: (context, index) => _dataStore.getStepByIndex(index).id == _dataStore.getAllSteps.last.id
+            endConnectorBuilder: (context, index) => index == _dataStore.getStepById(_appSettingsStore.currentStepId).tasks.length - 1
                 ? Container()
                 : _buildConnector(),
           ),

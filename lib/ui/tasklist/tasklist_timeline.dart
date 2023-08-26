@@ -51,10 +51,10 @@ class _TaskListTimeLineState extends State<TaskListTimeLine> {
         contents: _buildContents(),
         node: TimelineNode(
           indicator: _buildIndicator(),
-          startConnector: widget.index == 0 && _dataStore.isFirstStep(widget.task.step_id)
+          startConnector: widget.index == 0
               ? Container()
               : _buildConnector(),
-          endConnector: _dataStore.getAllSteps.last.id == widget.task.step_id
+          endConnector: widget.index == widget.step.tasks.length - 1
               ? Container()
               : _buildConnector(),
         ),
