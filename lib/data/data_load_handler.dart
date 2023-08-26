@@ -66,8 +66,6 @@ class DataLoadHandler { // This class is SINGLETON
     bool isAnswerWasUpdated = await answerWasUpdated();
 
     bool noLocalData = await hasNoLocalData();
-    bool step = await _dataStore.isDataSourceEmpty();
-    bool tec = await _technicalNameWithTranslationsStore.isDataSourceEmpty();
     if(initialLoading){
       if(!noLocalData){
         await loadDataFromDb();
