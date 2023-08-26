@@ -1,5 +1,3 @@
-import 'package:flutter/material.dart';
-import 'package:guide_wizard/widgets/app_expansiontile.dart';
 import 'package:mobx/mobx.dart';
 
 // Include generated file
@@ -37,9 +35,6 @@ abstract class _SubTask with Store {
   String updated_at;
 
   @observable
-  GlobalKey<AppExpansionTileState> globalKey;
-
-  @observable
   bool expanded = false;
   
   _SubTask({
@@ -52,10 +47,7 @@ abstract class _SubTask with Store {
     required this.creator_id,
     required this.created_at,
     required this.updated_at,
-    required this.globalKey,
-  }) {
-    _buildGlobalKey();
-  }
+  });
 
   Map<String, dynamic> toMap() => {
         "id": id,
@@ -68,16 +60,6 @@ abstract class _SubTask with Store {
         "created_at": created_at,
         "updated_at": updated_at,
       };
-
-  @action
-  void _buildGlobalKey() {
-    globalKey = GlobalKey<AppExpansionTileState>();
-  }
-
-  @action
-  void rebuildGlobalKey() {
-    _buildGlobalKey();
-  }
 
   @action
   void setExpanded(bool value) {
@@ -102,7 +84,6 @@ class SubTaskFactory {
       creator_id: json["creator_id"],
       created_at: json["created_at"],
       updated_at: json["updated_at"],
-      globalKey: GlobalKey<AppExpansionTileState>()
     );
   }
 }

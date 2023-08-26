@@ -44,7 +44,6 @@ class SubTaskWidgetState extends State<SubTaskWidget> with AutomaticKeepAliveCli
     setState(() {
       widget.task.subTasks.map((element) {
         if (element.expanded) {
-          element.rebuildGlobalKey();
           element.expanded = false;
         }
       });
@@ -76,7 +75,7 @@ class SubTaskWidgetState extends State<SubTaskWidget> with AutomaticKeepAliveCli
           _technicalNameWithTranslationsStore.getTranslation(sub_task_title_id)!,
           style: TextStyle(fontSize: Dimens.subtaskTitleFontSize),
         ),
-        key: widget.task.subTasks[widget.index].globalKey,
+        key: Key(widget.task.subTasks[widget.index].id.toString()),
         children: <Widget>[
           _buildExpansionContent(),
         ],
@@ -110,7 +109,7 @@ class SubTaskWidgetState extends State<SubTaskWidget> with AutomaticKeepAliveCli
     );
   }
 
-  Widget _buildExpansionTile({required GlobalKey<AppExpansionTileState> key}) {
+  Widget _buildExpansionTile() {
     return Padding(
       padding: Dimens.expansionPadding,
       child: _buildRoundedExpansionTile(),
@@ -120,7 +119,7 @@ class SubTaskWidgetState extends State<SubTaskWidget> with AutomaticKeepAliveCli
   @override
   Widget build(BuildContext context) {
     super.build(context);
-    return _buildExpansionTile(key: widget.task.subTasks[widget.index].globalKey);
+    return _buildExpansionTile();
   }
 
   @override
