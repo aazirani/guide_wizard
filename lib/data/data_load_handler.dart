@@ -61,7 +61,7 @@ class DataLoadHandler { // This class is SINGLETON
     };
   }
 
-  Future loadDataAndCheckForUpdate({int processId = 0}) async {
+  Future loadDataAndCheckForUpdate({int processId = 0, bool initialLoading = false}) async {
     _dataStore.loadingStarted();
     bool isAnswerWasUpdated = await answerWasUpdated();
     bool hasInternetConnection = await hasInternet();
@@ -81,15 +81,17 @@ class DataLoadHandler { // This class is SINGLETON
       _dataStore.loadingFinished();
       return;
     }
-    await updatedAtWasChanged().then((updatedAtTimesUpdatedMap) async => {
-      if (updatedAtTimesUpdatedMap.length > 0 &&
-          updatedAtTimesUpdatedMap.values.firstWhere(
-                  (value) => value,
-              orElse: () => false) // Provide a default value
-      ) {
-        await loadData(updatedAtTimesUpdatedMap[UpdatedAtTimesFactory.LAST_UPDATED_AT_TECHNICAL_NAMES]!, updatedAtTimesUpdatedMap[UpdatedAtTimesFactory.LAST_UPDATED_AT_CONTENT]!)
-      }
-    });
+    if(initialLoading){
+      await updatedAtWasChanged().then((updatedAtTimesUpdatedMap) async => {
+        if (updatedAtTimesUpdatedMap.length > 0 &&
+            updatedAtTimesUpdatedMap.values.firstWhere(
+                    (value) => value,
+                orElse: () => false) // Provide a default value
+        ) {
+          await loadData(updatedAtTimesUpdatedMap[UpdatedAtTimesFactory.LAST_UPDATED_AT_TECHNICAL_NAMES]!, updatedAtTimesUpdatedMap[UpdatedAtTimesFactory.LAST_UPDATED_AT_CONTENT]!)
+        }
+      });
+    }
     _dataStore.loadingFinished();
   }
 

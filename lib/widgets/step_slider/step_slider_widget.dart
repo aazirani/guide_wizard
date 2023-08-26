@@ -4,6 +4,7 @@ import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:guide_wizard/constants/colors.dart';
 import 'package:guide_wizard/constants/dimens.dart';
 import 'package:guide_wizard/constants/lang_keys.dart';
+import 'package:guide_wizard/data/data_load_handler.dart';
 import 'package:guide_wizard/data/network/constants/endpoints.dart';
 import 'package:guide_wizard/stores/app_settings/app_settings_store.dart';
 import 'package:guide_wizard/stores/data/data_store.dart';
@@ -202,10 +203,11 @@ class _StepSliderWidgetState extends State<StepSliderWidget> {
         ),
         child: TextButton(
           style: _buildButtonStyle(),
-          onPressed: () {
+          onPressed: () async {
             if (_dataStore.isFirstStep(_dataStore.getStepByIndex(index).id)) {
-              Navigator.push(context,
+              await Navigator.push(context,
                   MaterialPageRoute(builder: (context) => QuestionsListPage(stepId: _dataStore.getStepByIndex(index).id,)));
+              DataLoadHandler().loadDataAndCheckForUpdate();
             } else {
               Navigator.push(
                   context,

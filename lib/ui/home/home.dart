@@ -4,7 +4,7 @@ import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:guide_wizard/constants/colors.dart';
 import 'package:guide_wizard/constants/dimens.dart';
 import 'package:guide_wizard/constants/lang_keys.dart';
-import 'package:guide_wizard/data/data_laod_handler.dart';
+import 'package:guide_wizard/data/data_load_handler.dart';
 import 'package:guide_wizard/stores/app_settings/app_settings_store.dart';
 import 'package:guide_wizard/stores/data/data_store.dart';
 import 'package:guide_wizard/stores/language/language_store.dart';
@@ -58,7 +58,7 @@ class _HomeScreenState extends State<HomeScreen> {
   }
 
   void _initializeData() async {
-    _dataLoadHandler.loadDataAndCheckForUpdate();
+    _dataLoadHandler.loadDataAndCheckForUpdate(initialLoading: true);
   }
 
   @override
