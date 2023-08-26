@@ -106,7 +106,7 @@ abstract class _DataStore with Store {
   }
 
   Future<bool> isDataSourceEmpty() async {
-    return getAllSteps.isEmpty;
+    return (await _repository.stepDatasourceCount()) == 0;
   }
 
   @action

@@ -61,7 +61,7 @@ class Repository {
 
 
   Future<List<AppStep>> updateContent(List<AppStep> stepsBeforeUpdate, List<AppStep> stepsAfterUpdate) async {
-    await this.truncateContent();
+    await await truncateStep();
 
     // Update selected answers
     updateSelectedAnswers(stepsBeforeUpdate, stepsAfterUpdate);
@@ -138,10 +138,14 @@ class Repository {
 
   Future<TechnicalNameWithTranslationsList> getTechnicalNameWithTranslationsFromApiAndInsert() async {
     TechnicalNameWithTranslationsList technicalNameWithTranslationsList = await _technicalNameApi.getTechnicalNamesWithTranslations(await getUrlParameters());
+
+    await truncateTechnicalNameWithTranslations();
+
     technicalNameWithTranslationsList.technicalNameWithTranslations.forEach((technicalNameWithTranslations) async {
       _technicalNameWithTranslationsDataSource
           .insert(technicalNameWithTranslations);
     });
+
     return technicalNameWithTranslationsList;
   }
 
@@ -253,11 +257,6 @@ class Repository {
 
   Future truncateUpdatedAtTimes() =>
       _updatedAtTimesDataSource.deleteAll().catchError((error) => throw error);
-
-  Future truncateContent() async {
-    await truncateStep();
-    await truncateTechnicalNameWithTranslations();
-  }
 
   // Current Step Number: -----------------------------------------------------------------
   Future<int> setCurrentStepId(int stepId) async {

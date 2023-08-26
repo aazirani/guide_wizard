@@ -34,8 +34,6 @@ abstract class _TechnicalNameWithTranslationsStore with Store {
   @computed
   bool get technicalNameLoading => fetchTechnicalNameWithTranslationsFuture.status == FutureStatus.pending;
 
-  Future isDataSourceEmpty() async =>  (await this.technicalNameWithTranslationsList.technicalNameWithTranslations.length) == 0;
-
   @action
   Future getTechnicalNameWithTranslationsFromDb() async {
     try {
@@ -85,6 +83,11 @@ abstract class _TechnicalNameWithTranslationsStore with Store {
   }
 
   // methods: ..................................................................
+
+  Future<bool> isDataSourceEmpty() async {
+    return (await _repository.technicalNameWithTranslationsDatasourceCount()) == 0;
+  }
+
   String getTranslation(int id) {
     if (isTranslationsEmpty(id)) return "";
     try {

@@ -54,10 +54,6 @@ class _HomeScreenState extends State<HomeScreen> {
   @override
   void initState() {
     super.initState();
-    _initializeData();
-  }
-
-  void _initializeData() async {
     _dataLoadHandler.loadDataAndCheckForUpdate(initialLoading: true);
   }
 
