@@ -1,4 +1,4 @@
-import 'package:fast_cached_network_image/fast_cached_network_image.dart';
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:guide_wizard/constants/dimens.dart';
 import 'package:guide_wizard/constants/lang_keys.dart';
@@ -27,11 +27,10 @@ class _LoadImageWithCacheState extends State<LoadImageWithCache> with SingleTick
 
   @override
   Widget build(BuildContext context) {
-    return FastCachedImage(
-      url: widget.imageUrl,
+    return CachedNetworkImage(
+      imageUrl: widget.imageUrl,
       fit: BoxFit.cover,
-      fadeInDuration: const Duration(milliseconds: 500),
-      errorBuilder: (context, exception, stacktrace) {
+      errorWidget: (context, url, error) {
         return Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
@@ -43,7 +42,7 @@ class _LoadImageWithCacheState extends State<LoadImageWithCache> with SingleTick
           ],
         );
       },
-      loadingBuilder: (context, progress) {
+      progressIndicatorBuilder: (context, url, downloadProgress)  {
         return Center(
           child: Container(
             height: 120,
@@ -56,6 +55,7 @@ class _LoadImageWithCacheState extends State<LoadImageWithCache> with SingleTick
                   child: CircularProgressIndicator(
                     strokeWidth: 4.5,
                     color: widget.color,
+                    value: downloadProgress.progress,
                     // value: progress.progressPercentage.value // Can use it to show the actual process of downloading
                   ),
                 ),
