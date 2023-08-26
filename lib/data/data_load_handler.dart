@@ -53,12 +53,22 @@ class DataLoadHandler { // This class is SINGLETON
 
   Future<Map<String, bool>> updatedAtWasChanged() async {
     UpdatedAtTimes oldUpdatedAtTimes = await _updatedAtTimesStore.getUpdatedAtTimesFromDb();
-    UpdatedAtTimes newUpdatedAtTimes = await _updatedAtTimesStore.getUpdatedAtTimesFromApi();
 
-    return {
-      UpdatedAtTimesFactory.LAST_UPDATED_AT_CONTENT : DateTime.parse(oldUpdatedAtTimes.last_updated_at_content).isBefore(DateTime.parse(newUpdatedAtTimes.last_updated_at_content)),
-      UpdatedAtTimesFactory.LAST_UPDATED_AT_TECHNICAL_NAMES : DateTime.parse(oldUpdatedAtTimes.last_updated_at_technical_names).isBefore(DateTime.parse(newUpdatedAtTimes.last_updated_at_technical_names))
-    };
+    if(DateTime.parse(oldUpdatedAtTimes.last_apps_request_time).isBefore(DateTime.now().subtract(Duration(minutes: 5)))){
+      UpdatedAtTimes newUpdatedAtTimes = await _updatedAtTimesStore.getUpdatedAtTimesFromApi();
+
+      return {
+        UpdatedAtTimesFactory.LAST_UPDATED_AT_CONTENT : DateTime.parse(oldUpdatedAtTimes.last_updated_at_content).isBefore(DateTime.parse(newUpdatedAtTimes.last_updated_at_content)),
+        UpdatedAtTimesFactory.LAST_UPDATED_AT_TECHNICAL_NAMES : DateTime.parse(oldUpdatedAtTimes.last_updated_at_technical_names).isBefore(DateTime.parse(newUpdatedAtTimes.last_updated_at_technical_names))
+      };
+    } else {
+      return {
+        UpdatedAtTimesFactory.LAST_UPDATED_AT_CONTENT : false,
+        UpdatedAtTimesFactory.LAST_UPDATED_AT_TECHNICAL_NAMES : false,
+        UpdatedAtTimesFactory.LAST_APPS_REQUEST_TIME : false
+      };
+    }
+
   }
 
   Future loadDataAndCheckForUpdate({bool initialLoading = false}) async {

@@ -53,8 +53,8 @@ class _HomeScreenState extends State<HomeScreen> {
 
   @override
   void initState() {
-    super.initState();
     _dataLoadHandler.loadDataAndCheckForUpdate(initialLoading: true);
+    super.initState();
   }
 
   @override
@@ -181,7 +181,7 @@ class _HomeScreenState extends State<HomeScreen> {
               topRight: Radius.circular(Dimens.homeBodyBorderRadius),
             ),
           ),
-          child: !_dataStore.isLoading && _dataStore.stepSuccess && _technicalNameWithTranslationsStore.technicalNameSuccess && _updatedAtTimesStore.updatedAtTimesSuccess && _appSettingsStore.currentStepIdSuccess
+          child: !_dataStore.isLoading && !_technicalNameWithTranslationsStore.technicalNameLoading && !_updatedAtTimesStore.updatedAtTimesLoading && _dataStore.stepSuccess && _technicalNameWithTranslationsStore.technicalNameSuccess && _updatedAtTimesStore.updatedAtTimesSuccess && _appSettingsStore.currentStepIdSuccess
               ? _buildScreenElements()
               : _shimmerAll(),
         ),
@@ -215,7 +215,7 @@ class _HomeScreenState extends State<HomeScreen> {
         _buildCurrentStepIndicator(),
         StepSliderWidget(),
         StepTimeLine(),
-         _dataStore.isFirstStep(_appSettingsStore.currentStepId) ? _buildQuestionDescription() : _buildInProgressCompressedTaskList(),
+        _dataStore.isFirstStep(_appSettingsStore.currentStepId) ? _buildQuestionDescription() : _buildInProgressCompressedTaskList(),
       ],
     );
   }

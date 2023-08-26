@@ -39,12 +39,14 @@ abstract class _UpdatedAtTimesStore with Store {
       UpdatedAtTimes? updatedAtTimes = await fetchUpdatedAtTimesFuture;
       return updatedAtTimes ?? UpdatedAtTimes(
           last_updated_at_content: DateTime(1).toString(),
-          last_updated_at_technical_names: DateTime(1).toString()
+          last_updated_at_technical_names: DateTime(1).toString(),
+          last_apps_request_time: DateTime.now().toString()
       );
     } catch (e) {
       return UpdatedAtTimes(
           last_updated_at_content: DateTime(1).toString(),
-          last_updated_at_technical_names: DateTime(1).toString()
+          last_updated_at_technical_names: DateTime(1).toString(),
+          last_apps_request_time: DateTime.now().toString()
       );
     }
   }
@@ -56,12 +58,14 @@ abstract class _UpdatedAtTimesStore with Store {
       UpdatedAtTimes? updatedAtTimes = await fetchUpdatedAtTimesFuture;
       return updatedAtTimes ?? UpdatedAtTimes(
           last_updated_at_content: DateTime(1).toString(),
-          last_updated_at_technical_names: DateTime(1).toString()
+          last_updated_at_technical_names: DateTime(1).toString(),
+          last_apps_request_time: DateTime(1).toString()
       );
     } catch (e) {
       return UpdatedAtTimes(
           last_updated_at_content: DateTime(1).toString(),
-          last_updated_at_technical_names: DateTime(1).toString()
+          last_updated_at_technical_names: DateTime(1).toString(),
+          last_apps_request_time: DateTime(1).toString()
       );
     }
   }

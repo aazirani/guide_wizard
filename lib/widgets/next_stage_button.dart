@@ -102,6 +102,9 @@ class _NextStageButtonState extends State<NextStageButton> {
   }
 
   void onTapFunction() async {
+
+    setButtonState(ButtonState.loading);
+
     if (!await DataLoadHandler().hasInternet()) {
       setButtonState(ButtonState.fail);
       Future.delayed(Duration(milliseconds: 2000), () {
@@ -109,8 +112,6 @@ class _NextStageButtonState extends State<NextStageButton> {
       });
       return;
     }
-
-    setButtonState(ButtonState.loading);
 
     await updateIfAnswersHasChanged();
 
@@ -132,7 +133,7 @@ class _NextStageButtonState extends State<NextStageButton> {
   Future<void> updateIfAnswersHasChanged() async {
     bool answerWasUpdated = await _appSettingsStore.getAnswerWasUpdated() ?? false;
     if (answerWasUpdated) {
-      await DataLoadHandler().loadDataAndCheckForUpdate();
+      await DataLoadHandler().loadDataAndCheckForUpdate(initialLoading: true);
     }
   }
 

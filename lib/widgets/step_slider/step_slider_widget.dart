@@ -55,7 +55,7 @@ class _StepSliderWidgetState extends State<StepSliderWidget> {
     return CarouselSlider(
       carouselController: _carouselController,
       options: CarouselOptions(
-          initialPage: _dataStore.getIndexOfStep(_appSettingsStore.currentStepId),
+          initialPage: _dataStore.getIndexOfStep(_dataStore.getAllSteps.first.id),
           onPageChanged: (index, reason) {
             _appSettingsStore.setCurrentStepId(_dataStore.getStepByIndex(index).id);
           },
