@@ -138,16 +138,22 @@ class _TaskListState extends State<TaskList> {
                         Radius.circular(Dimens.draggableScrollableSheetRadius),
                   ),
                   color: AppColors.white),
-              child: Observer(
-                builder: (_) => ListView.builder(
-                  scrollDirection: Axis.vertical,
-                  controller: scrollController,
-                  itemCount: _dataStore.getNumberOfTaskListTasks(),
-                  itemBuilder: (context, i) {
-                    return TaskListTimeLine(taskNumber: i, stepStore: _stepStore);
-                  },
-                ),
-              ),
+              child: Observer(builder: (_) {
+                return Column(children: [
+                  SizedBox(height: Dimens.taskListDistanceFromAppBar),
+                  Flexible(
+                    child: ListView.builder(
+                      scrollDirection: Axis.vertical,
+                      controller: scrollController,
+                      itemCount: _dataStore.getNumberOfTaskListTasks(),
+                      itemBuilder: (context, i) {
+                        return TaskListTimeLine(
+                            taskNumber: i, stepStore: _stepStore);
+                      },
+                    ),
+                  )
+                ]);
+              }),
             ),
           );
         },

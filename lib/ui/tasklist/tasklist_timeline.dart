@@ -15,7 +15,9 @@ class TaskListTimeLine extends StatefulWidget {
   // final TaskList taskList;
   final int taskNumber;
   final StepStore stepStore;
-  TaskListTimeLine({Key? key, required this.taskNumber, required this.stepStore}) : super(key: key);
+  TaskListTimeLine(
+      {Key? key, required this.taskNumber, required this.stepStore})
+      : super(key: key);
 
   @override
   State<TaskListTimeLine> createState() => _TaskListTimeLineState();
@@ -48,12 +50,14 @@ class _TaskListTimeLineState extends State<TaskListTimeLine> {
       contents: _buildContents(taskNumber),
       node: TimelineNode(
         indicator: _buildIndicator(taskNumber),
-        startConnector: taskNumber == 0 && (widget.stepStore.currentStep) - 1 == 1
-            ? Container()
-            : _buildConnector(),
-        endConnector: (widget.stepStore.currentStep)  == _dataStore.getNumberOfSteps()
-            ? Container()
-            : _buildConnector(),
+        startConnector:
+            taskNumber == 0 && (widget.stepStore.currentStep) - 1 == 1
+                ? Container()
+                : _buildConnector(),
+        endConnector:
+            (widget.stepStore.currentStep) == _dataStore.getNumberOfSteps()
+                ? Container()
+                : _buildConnector(),
       ),
     );
   }
@@ -77,24 +81,28 @@ class _TaskListTimeLineState extends State<TaskListTimeLine> {
     return Padding(
       padding: Dimens.contentContainerPadding,
       child: Material(
-        elevation: 5,
+        elevation: _taskDone(taskNumber) ? 3 : 4,
         borderRadius: Dimens.contentContainerBorderRadius,
-        child: ClipRRect(
-          borderRadius: Dimens.contentContainerBorderRadius,
+        child: Container(
+          decoration: BoxDecoration(
+            color: AppColors.bright_foreground_color,
+            borderRadius: Dimens.contentContainerBorderRadius,
+          ),
           child: Container(
             padding: Dimens.contentPadding,
             constraints: BoxConstraints(
               minHeight: Dimens.taskListTimeLineContainerMinHeight,
+              maxHeight: Dimens.taskListTimeLineContainerMinHeight,
             ),
             decoration: BoxDecoration(
               color: AppColors.contentColor,
-              border: Border(
-                  left: BorderSide(
-                width: 25,
-                color: (_dataStore.getTaskIsDoneStatus(taskNumber) == true)
-                    ? AppColors.contentDoneBorderColor
-                    : AppColors.contentUnDoneBorderColor,
-              )),
+              borderRadius: Dimens.contentContainerBorderRadius,
+              border: Border.all(
+                width: _taskDone(taskNumber) ? 1 : 3,
+                color: _taskDone(taskNumber)
+                    ? AppColors.taskDoneBorder
+                    : AppColors.taskUnDoneBorder,
+              ),
             ),
             child: _buildInsideElements(taskNumber),
           ),
@@ -123,6 +131,7 @@ class _TaskListTimeLineState extends State<TaskListTimeLine> {
                     : [_buildContentTitle(taskNumber)],
               ),
             ),
+            _taskDone(taskNumber) ? _buildDoneBadge() : Container(),
           ],
         ),
       ),
@@ -146,6 +155,31 @@ class _TaskListTimeLineState extends State<TaskListTimeLine> {
     );
   }
 
+  Widget _buildDoneBadge() {
+    return Align(
+      alignment: Alignment.topRight,
+      child: Container(
+          height: 30,
+          width: 60,
+          decoration: BoxDecoration(
+              border: Border.all(color: AppColors.green[200]!),
+              color: AppColors.green[300]!.withOpacity(0.3),
+              borderRadius: BorderRadius.all(Radius.circular(5))),
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Flexible(
+                  flex: 3,
+                  child: Text("Done",
+                      style: TextStyle(
+                          color: AppColors.main_color,
+                          fontSize: Dimens.doneBadgeFontSize,
+                          fontWeight: FontWeight.w800))),
+            ],
+          )),
+    );
+  }
+
   Widget _buildContentDeadline(taskNumber) {
     return Container(
         padding: Dimens.contentDeadlineTopPadding,
@@ -160,6 +194,9 @@ class _TaskListTimeLineState extends State<TaskListTimeLine> {
     return Container(
         height: 10,
         decoration: BoxDecoration(
+            color: _taskDone(taskNumber)
+                ? AppColors.bright_foreground_color
+                : AppColors.deadlineUnDoneContainerColor.withOpacity(0.8),
             borderRadius: Dimens.contentDeadlineBorderRadius,
             border: Border.all(
                 width: 1,
@@ -167,7 +204,8 @@ class _TaskListTimeLineState extends State<TaskListTimeLine> {
                     ? AppColors.deadlineDoneBorderColor
                     : AppColors.deadlineUnDoneBorderColor)),
         child: Center(
-            child: Text("${_technicalNameWithTranslationsStore.getTranslationByTechnicalName(LangKeys.deadline)}",
+            child: Text(
+                "${_technicalNameWithTranslationsStore.getTranslationByTechnicalName(LangKeys.deadline)}",
                 style: TextStyle(
                     fontSize: 13,
                     color: (_taskDone(taskNumber)
