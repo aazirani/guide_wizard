@@ -80,30 +80,32 @@ class _StepSliderWidgetState extends State<StepSliderWidget> {
   }
 
   Widget _buildSliderContainer(index) {
-    return Container(
-        alignment: Alignment.topLeft,
-        width: _getScreenWidth(),
-        margin: Dimens.sliderContainerMargin,
-        decoration: BoxDecoration(
-          color: _buildSliderColor(index),
-          border: _buildSliderBorder(index),
-          borderRadius: BorderRadius.all(Radius.circular(20)),
-        ),
-        child: Column(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            Flexible(
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  _buildContent(index),
-                  _buildAvatar(index),
-                ],
+    return Observer(
+      builder: (_) => Container(
+          alignment: Alignment.topLeft,
+          width: _getScreenWidth(),
+          margin: Dimens.sliderContainerMargin,
+          decoration: BoxDecoration(
+            color: _buildSliderColor(index),
+            border: _buildSliderBorder(index),
+            borderRadius: BorderRadius.all(Radius.circular(20)),
+          ),
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              Flexible(
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    _buildContent(index),
+                    _buildAvatar(index),
+                  ],
+                ),
               ),
-            ),
-            (_dataStore.getStepByIndex(index).tasks.isNotEmpty) ? _buildProgressBar(index) : SizedBox(),
-          ],
-        ));
+              (_dataStore.getStepByIndex(index).tasks.isNotEmpty) ? _buildProgressBar(index) : SizedBox(),
+            ],
+          )),
+    );
   }
 
   BoxBorder _buildSliderBorder(index) {
