@@ -52,6 +52,14 @@ class Dimens {
   static const sliderContainerPadding = EdgeInsets.only(top: 10);
   static const avatarBoyPadding = EdgeInsets.only(left: 140, bottom: 70);
   static const avatarGirlPadding = EdgeInsets.only(left: 200, bottom: 40, top: 20);
+  static const contentHeightPaddingPercentage = 0.1;
+  static const contentLeftPaddingPercentage = 0.1;
+  static const contentRightPaddingPercentage = 0.01;
+  static const contentBottomPaddingPercentage = 0.05;
+  static const emptySpaceHeightPercentage = 0.1;
+  static const spaceBetweenTitleAndNoOfTasksPercentage = 0.07;
+  static const spaceBetweenNoOfTasksAndContinueButtonPercentage = 0.03;
+  static const avatarRightPaddingPercentage = 0.05;
 
   // task page appbar widget
   static const doneButtonPadding = const EdgeInsets.only(right: 20, left: 20, top: 10);

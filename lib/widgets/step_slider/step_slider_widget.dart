@@ -107,19 +107,19 @@ class _StepSliderWidgetState extends State<StepSliderWidget> {
                   flex: 2,
                   child: Padding(
                       padding: EdgeInsets.only(
-                          top: heightConstraint * 0.1,
-                          left: heightConstraint * 0.1,
-                          right: heightConstraint * 0.01,
-                          bottom: heightConstraint * 0.05),
+                          top: heightConstraint * Dimens.contentHeightPaddingPercentage,
+                          left: heightConstraint * Dimens.contentLeftPaddingPercentage,
+                          right: heightConstraint * Dimens.contentRightPaddingPercentage,
+                          bottom: heightConstraint * Dimens.contentBottomPaddingPercentage),
                       child: _buildContent(index, constraints))),
               (_dataStore.getStepImage(index) != null)
                   ? Expanded(flex: 1, child: _buildAvatar(index, constraints))
-                  : Container(width: heightConstraint * 0.1)
+                  : Container(width: heightConstraint * Dimens.emptySpaceHeightPercentage)
             ]),
           ),
           (_dataStore.getStepOrder(index) != SettingsConstants.infoStepOrder)
               ? Flexible(flex: 10, child: _buildProgressBar(index))
-              : Container(height: heightConstraint * 0.1),
+              : Container(height: heightConstraint * Dimens.emptySpaceHeightPercentage),
         ]),
       );
     });
@@ -133,9 +133,9 @@ class _StepSliderWidgetState extends State<StepSliderWidget> {
           child:
               Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
             Flexible(flex: 4, child: _buildStepTitle(index)),
-            SizedBox(height: heightConstraint * 0.07),
+            SizedBox(height: heightConstraint * Dimens.spaceBetweenTitleAndNoOfTasksPercentage),
             Flexible(flex: 1, child: _buildStepNoOfTasksOrQuestions(index)),
-            SizedBox(height: heightConstraint * 0.03),
+            SizedBox(height: heightConstraint * Dimens.spaceBetweenNoOfTasksAndContinueButtonPercentage),
           ])),
       Expanded(flex: 2, child: _buildContinueButton(index)),
     ]);
@@ -161,7 +161,7 @@ class _StepSliderWidgetState extends State<StepSliderWidget> {
     if (_dataStore.getStepImage(index) == null) return Container();
     return Container(
       child: Padding(
-        padding: EdgeInsets.only(right: heightConstraint * 0.05),
+        padding: EdgeInsets.only(right: heightConstraint * Dimens.avatarRightPaddingPercentage),
         child: LoadImageWithCache(
           imageUrl:
               Endpoints.stepsImageBaseUrl + _dataStore.getStepImage(index)!,
