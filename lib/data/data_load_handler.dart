@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:guide_wizard/constants/lang_keys.dart';
 import 'package:guide_wizard/constants/necessary_strings.dart';
 import 'package:guide_wizard/constants/settings.dart';
+import 'package:guide_wizard/models/step/app_step.dart';
 import 'package:guide_wizard/models/updated_at_times/updated_at_times.dart';
 import 'package:guide_wizard/stores/app_settings/app_settings_store.dart';
 import 'package:guide_wizard/stores/data/data_store.dart';
@@ -15,7 +16,6 @@ import 'package:provider/provider.dart';
 
 class DataLoadHandler { // This class is SINGLETON
   late BuildContext context;
-  int criticalId = 0; // for handling processes entering the loadDataAndCheckForUpdate function!
   static DataLoadHandler? _instance;
 
   DataLoadHandler._(this.context);
@@ -53,62 +53,81 @@ class DataLoadHandler { // This class is SINGLETON
 
   Future<Map<String, bool>> updatedAtWasChanged() async {
     UpdatedAtTimes oldUpdatedAtTimes = await _updatedAtTimesStore.getUpdatedAtTimesFromDb();
-    UpdatedAtTimes newUpdatedAtTimes = await _updatedAtTimesStore.getUpdatedAtTimesFromApi();
 
-    return {
-      UpdatedAtTimes.LAST_UPDATED_AT_CONTENT : DateTime.parse(oldUpdatedAtTimes.last_updated_at_content).isBefore(DateTime.parse(newUpdatedAtTimes.last_updated_at_content)),
-      UpdatedAtTimes.LAST_UPDATED_AT_TECHNICAL_NAMES : DateTime.parse(oldUpdatedAtTimes.last_updated_at_technical_names).isBefore(DateTime.parse(newUpdatedAtTimes.last_updated_at_technical_names))
-    };
+    if(DateTime.parse(oldUpdatedAtTimes.last_apps_request_time).isBefore(DateTime.now().subtract(SettingsConstants.updateRequestStop))){
+      UpdatedAtTimes newUpdatedAtTimes = await _updatedAtTimesStore.getUpdatedAtTimesFromApi();
+
+      return {
+        UpdatedAtTimesFactory.LAST_UPDATED_AT_CONTENT : DateTime.parse(oldUpdatedAtTimes.last_updated_at_content).isBefore(DateTime.parse(newUpdatedAtTimes.last_updated_at_content)),
+        UpdatedAtTimesFactory.LAST_UPDATED_AT_TECHNICAL_NAMES : DateTime.parse(oldUpdatedAtTimes.last_updated_at_technical_names).isBefore(DateTime.parse(newUpdatedAtTimes.last_updated_at_technical_names))
+      };
+    } else {
+      return {
+        UpdatedAtTimesFactory.LAST_UPDATED_AT_CONTENT : false,
+        UpdatedAtTimesFactory.LAST_UPDATED_AT_TECHNICAL_NAMES : false,
+        UpdatedAtTimesFactory.LAST_APPS_REQUEST_TIME : false
+      };
+    }
+
   }
 
-  Future loadDataAndCheckForUpdate({int processId = 0}) async {
+  Future loadDataAndCheckForUpdate({bool initialLoading = false}) async {
     _dataStore.loadingStarted();
     bool isAnswerWasUpdated = await answerWasUpdated();
-    bool hasInternetConnection = await hasInternet();
-    bool isHasNoLocalData = await hasNoLocalData();
-    if(isHasNoLocalData || await isAnswerWasUpdated){
-      if(!hasInternetConnection){
-        showNoInternetMessage(_technicalNameWithTranslationsStore.getTranslationByTechnicalName(LangKeys.update_is_necessary_message_text), NecessaryStrings.update_is_necessary_message_text, null, processId);
-        _dataStore.loadingFinished();
-        return;
+
+    bool noLocalData = await hasNoLocalData();
+    if(initialLoading){
+      if(!noLocalData){
+        await loadDataFromDb();
       }
-      await loadData(true, true);
+      if(await checkInternetConnectionAndShowMessage()){
+        await updatedAtWasChanged().then((updatedAtTimesUpdatedMap) async => {
+          if (updatedAtTimesUpdatedMap.length > 0 && updatedAtTimesUpdatedMap.values.any((updateAtChanged) => updateAtChanged)) {
+            await loadDataFromApi(updatedAtTimesUpdatedMap[UpdatedAtTimesFactory.LAST_UPDATED_AT_TECHNICAL_NAMES]!, updatedAtTimesUpdatedMap[UpdatedAtTimesFactory.LAST_UPDATED_AT_CONTENT]!)
+          }
+        });
+      }
+    }
+    if((noLocalData || isAnswerWasUpdated) && await checkInternetConnectionAndShowMessage()){
+      await loadDataFromApi(true, true);
       _dataStore.loadingFinished();
       return;
     }
-    if(!hasInternetConnection){
-      showNoInternetMessage(_technicalNameWithTranslationsStore.getTranslationByTechnicalName(LangKeys.update_is_necessary_message_text), NecessaryStrings.update_is_necessary_message_text, null, processId);
-      _dataStore.loadingFinished();
-      return;
-    }
-    await updatedAtWasChanged().then((updatedAtTimesUpdatedMap) async => {
-      if (updatedAtTimesUpdatedMap.length > 0 &&
-          updatedAtTimesUpdatedMap.values.firstWhere(
-                  (value) => value,
-              orElse: () => false) // Provide a default value
-      ) {
-        await loadData(updatedAtTimesUpdatedMap[UpdatedAtTimes.LAST_UPDATED_AT_TECHNICAL_NAMES]!, updatedAtTimesUpdatedMap[UpdatedAtTimes.LAST_UPDATED_AT_CONTENT]!)
-      }
-    });
     _dataStore.loadingFinished();
   }
 
-  void showNoInternetMessage(String ?text, String backupText, int ?durationInMilliseconds, int processId) {
+  Future<bool> checkInternetConnectionAndShowMessage() async {
+    bool hasInternetConnection = await hasInternet();
+    if(!hasInternetConnection){
+      showNoInternetMessage(_technicalNameWithTranslationsStore.getTranslationByTechnicalName(LangKeys.update_is_necessary_message_text), NecessaryStrings.update_is_necessary_message_text, null);
+    }
+    return hasInternetConnection;
+  }
+
+  void showNoInternetMessage(String ?text, String backupText, int ?durationInMilliseconds) {
     ScaffoldMessenger.of(context).clearSnackBars();
     String text = _technicalNameWithTranslationsStore.getTranslationByTechnicalName(LangKeys.no_internet_message);
     showErrorMessage(
         duration: durationInMilliseconds != null ? Duration(milliseconds: durationInMilliseconds) : null,
         messageWidgetObserver: Text(text.isNotEmpty ? text : backupText),
         onPressedButton: () {
-          loadDataAndCheckForUpdate(processId: criticalId);
+          loadDataAndCheckForUpdate();
         }
     );
     Future.delayed(SettingsConstants.internetCheckingPeriod, () {
-      loadDataAndCheckForUpdate(processId: processId);
+      loadDataAndCheckForUpdate();
     });
   }
 
-  loadData(bool technicalNamesShouldBeUpdated, bool contentsShouldBeUpdated) async {
+  loadDataFromDb() async {
+    await _technicalNameWithTranslationsStore.getTechnicalNameWithTranslationsFromDb();
+    List<AppStep> steps = await _dataStore.getStepsFromDb();
+    if(steps.isNotEmpty){
+      await _appSettingsStore.setCurrentStepId(steps.first.id);
+    }
+  }
+
+  loadDataFromApi(bool technicalNamesShouldBeUpdated, bool contentsShouldBeUpdated) async {
     if(technicalNamesShouldBeUpdated && !_technicalNameWithTranslationsStore.technicalNameLoading){
       await _technicalNameWithTranslationsStore.getTechnicalNameWithTranslationsFromApi();
     }

@@ -1,6 +1,7 @@
 import 'package:guide_wizard/data/local/constants/db_constants.dart';
 import 'package:guide_wizard/models/sub_task/sub_task.dart';
 import 'package:guide_wizard/models/sub_task/sub_task_list.dart';
+import 'package:mobx/mobx.dart';
 import 'package:sembast/sembast.dart';
 
 class SubTaskDataSource {
@@ -37,7 +38,7 @@ class SubTaskDataSource {
 
     // Making a List<Post> out of List<RecordSnapshot>
     return recordSnapshots.map((snapshot) {
-      final subTask = SubTask.fromMap(snapshot.value);
+      final subTask = SubTaskFactory().fromMap(snapshot.value);
       // An ID is a key of a record from the database.
       subTask.id = snapshot.key;
       return subTask;
@@ -58,11 +59,11 @@ class SubTaskDataSource {
     // Making a List<Post> out of List<RecordSnapshot>
     if (recordSnapshots.length > 0) {
       subTasksList = SubTaskList(
-          subTasks: recordSnapshots.map((snapshot) {
-        final subTask = SubTask.fromMap(snapshot.value);
-        // An ID is a key of a record from the database.
-        return subTask;
-      }).toList());
+          subTasks: ObservableList.of(recordSnapshots.map((snapshot) {
+            final subTask = SubTaskFactory().fromMap(snapshot.value);
+            // An ID is a key of a record from the database.
+            return subTask;
+          })));
     }
 
     return subTasksList;

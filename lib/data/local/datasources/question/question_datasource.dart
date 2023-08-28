@@ -1,6 +1,7 @@
 import 'package:guide_wizard/data/local/constants/db_constants.dart';
 import 'package:guide_wizard/models/question/question.dart';
 import 'package:guide_wizard/models/question/question_list.dart';
+import 'package:mobx/mobx.dart';
 import 'package:sembast/sembast.dart';
 
 class QuestionDataSource {
@@ -37,7 +38,7 @@ class QuestionDataSource {
 
     // Making a List<Post> out of List<RecordSnapshot>
     return recordSnapshots.map((snapshot) {
-      final question = Question.fromMap(snapshot.value);
+      final question = QuestionFactory().fromMap(snapshot.value);
       // An ID is a key of a record from the database.
       question.id = snapshot.key;
       return question;
@@ -57,15 +58,15 @@ class QuestionDataSource {
     // Making a List<Post> out of List<RecordSnapshot>
     if (recordSnapshots.length > 0) {
       questionsList = QuestionList(
-          questions: recordSnapshots.map((snapshot) {
-        final question = Question.fromMap(snapshot.value);
-        // An ID is a key of a record from the database.
-        question.id = snapshot.key;
-        return question;
-      }).toList());
+          questions: ObservableList.of(recordSnapshots.map((snapshot) {
+            final question = QuestionFactory().fromMap(snapshot.value);
+            // An ID is a key of a record from the database.
+            question.id = snapshot.key;
+            return question;
+          })));
     }
     else {
-      questionsList = QuestionList(questions: []);
+      questionsList = QuestionList(questions: ObservableList.of(List.empty()));
     }
 
     return questionsList;

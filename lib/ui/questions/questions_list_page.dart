@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:guide_wizard/constants/colors.dart';
-import 'package:guide_wizard/data/data_laod_handler.dart';
 import 'package:guide_wizard/providers/question_widget_state/question_widget_state.dart';
 import 'package:guide_wizard/stores/data/data_store.dart';
 import 'package:guide_wizard/stores/technical_name/technical_name_with_translations_store.dart';
@@ -40,53 +39,47 @@ class _QuestionsListPageState extends State<QuestionsListPage> {
 
   @override
   Widget build(BuildContext context) {
-    return WillPopScope(
-      onWillPop: () async {
-        await DataLoadHandler(context: context).loadDataAndCheckForUpdate();
-        return true;
-      },
-      child: Consumer<QuestionsWidgetState>(builder: (context, builder, child) {
-        return Scaffold(
-          appBar: QuestionsListAppBar(title: _appBarTitleString(),),
-          backgroundColor: AppColors.main_color,
-          body: ClipRRect(
-            borderRadius: BorderRadius.only(
-                topLeft: Radius.circular(30), topRight: Radius.circular(30)),
-            child: Container(
-              height: MediaQuery.of(context).size.height,
-              width: MediaQuery.of(context).size.width,
-              decoration: BoxDecoration(
-                color: AppColors.white,
-                borderRadius: BorderRadius.only(
-                  topLeft: Radius.circular(30),
-                  topRight: Radius.circular(30),
-                ),
-              ),
-              child: Column(
-                children: [
-                  Flexible(
-                    child: RawScrollbar(
-                      child: ListView.builder(
-                        shrinkWrap: true,
-                        itemCount: questions.length,
-                        itemBuilder: (context, index) => _buildQuestionWidget(index),
-                      ),
-                    ),
-                  ),
-                  SizedBox(height: floatingActionButtonSize.height,),
-                ],
+    return Consumer<QuestionsWidgetState>(builder: (context, builder, child) {
+      return Scaffold(
+        appBar: QuestionsListAppBar(title: _appBarTitleString(),),
+        backgroundColor: AppColors.main_color,
+        body: ClipRRect(
+          borderRadius: BorderRadius.only(
+              topLeft: Radius.circular(30), topRight: Radius.circular(30)),
+          child: Container(
+            height: MediaQuery.of(context).size.height,
+            width: MediaQuery.of(context).size.width,
+            decoration: BoxDecoration(
+              color: AppColors.white,
+              borderRadius: BorderRadius.only(
+                topLeft: Radius.circular(30),
+                topRight: Radius.circular(30),
               ),
             ),
+            child: Column(
+              children: [
+                Flexible(
+                  child: RawScrollbar(
+                    child: ListView.builder(
+                      shrinkWrap: true,
+                      itemCount: questions.length,
+                      itemBuilder: (context, index) => _buildQuestionWidget(index),
+                    ),
+                  ),
+                ),
+                SizedBox(height: floatingActionButtonSize.height,),
+              ],
+            ),
           ),
-          floatingActionButton: Visibility(
-            // visible: !builder.isLastQuestion(questionsCount: _questionsCount),
-            visible: true,
-            child: _buildDockedNextStageButton(),
-          ),
-          floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
-        );
-      }),
-    );
+        ),
+        floatingActionButton: Visibility(
+          // visible: !builder.isLastQuestion(questionsCount: _questionsCount),
+          visible: true,
+          child: _buildDockedNextStageButton(),
+        ),
+        floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
+      );
+    });
   }
 
   Widget _buildQuestionWidget(int index) {

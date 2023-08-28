@@ -3,6 +3,8 @@ import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:guide_wizard/constants/colors.dart';
 import 'package:guide_wizard/constants/dimens.dart';
 import 'package:guide_wizard/constants/lang_keys.dart';
+import 'package:guide_wizard/models/step/app_step.dart';
+import 'package:guide_wizard/models/task/task.dart';
 import 'package:guide_wizard/stores/data/data_store.dart';
 import 'package:guide_wizard/stores/technical_name/technical_name_with_translations_store.dart';
 import 'package:guide_wizard/ui/tasks/task_page_text_only.dart';
@@ -12,17 +14,16 @@ import 'package:provider/provider.dart';
 import 'package:timelines/timelines.dart';
 
 class TaskListTimeLine extends StatefulWidget {
-  // final TaskList taskList;
-  final int stepId;
+  final AppStep step;
+  final Task task;
   final int index;
-  TaskListTimeLine({Key? key, required this.stepId, required this.index}) : super(key: key);
+  TaskListTimeLine({Key? key, required this.step, required this.task, required this.index}) : super(key: key);
 
   @override
   State<TaskListTimeLine> createState() => _TaskListTimeLineState();
 }
 
 class _TaskListTimeLineState extends State<TaskListTimeLine> {
-  get task => _dataStore.getStepById(widget.stepId).tasks[widget.index];
   late DataStore _dataStore;
   late TechnicalNameWithTranslationsStore _technicalNameWithTranslationsStore;
   @override
@@ -50,10 +51,10 @@ class _TaskListTimeLineState extends State<TaskListTimeLine> {
         contents: _buildContents(),
         node: TimelineNode(
           indicator: _buildIndicator(),
-          startConnector: widget.index == 0 && _dataStore.isFirstStep(task.step_id)
+          startConnector: widget.index == 0 && _dataStore.isFirstStep(widget.task.step_id)
               ? Container()
               : _buildConnector(),
-          endConnector: _dataStore.getAllSteps().last.id == task.step_id
+          endConnector: _dataStore.getAllSteps.last.id == widget.task.step_id
               ? Container()
               : _buildConnector(),
         ),
@@ -66,7 +67,7 @@ class _TaskListTimeLineState extends State<TaskListTimeLine> {
         color: AppColors.transparent,
         width: 8,
         height: 8,
-        child: (task.isDone)
+        child: (widget.task.isDone)
             ? DiamondIndicator(fill: true)
             : DiamondIndicator());
   }
@@ -94,7 +95,7 @@ class _TaskListTimeLineState extends State<TaskListTimeLine> {
               border: Border(
                   left: BorderSide(
                 width: 25,
-                color: (task.isDone)
+                color: (widget.task.isDone)
                     ? AppColors.contentDoneBorderColor
                     : AppColors.contentUnDoneBorderColor,
               )),
@@ -137,7 +138,7 @@ class _TaskListTimeLineState extends State<TaskListTimeLine> {
       child: Align(
         alignment: Alignment.centerLeft,
         child: Text(
-          "${_technicalNameWithTranslationsStore.getTranslation(task.text)} ",
+          "${_technicalNameWithTranslationsStore.getTranslation(widget.task.text)} ",
           style: TextStyle(
             color: AppColors.main_color,
             fontSize: Dimens.taskListTimeLineContentTitle,
@@ -164,14 +165,14 @@ class _TaskListTimeLineState extends State<TaskListTimeLine> {
             borderRadius: Dimens.contentDeadlineBorderRadius,
             border: Border.all(
                 width: 1,
-                color: (task.isDone)
+                color: (widget.task.isDone)
                     ? AppColors.deadlineDoneBorderColor
                     : AppColors.deadlineUnDoneBorderColor)),
         child: Center(
             child: Text("${_technicalNameWithTranslationsStore.getTranslationByTechnicalName(LangKeys.deadline)}",
                 style: TextStyle(
                     fontSize: 13,
-                    color: (task.isDone)
+                    color: (widget.task.isDone)
                         ? AppColors.deadlineTextDoneColor
                         : AppColors.deadlineTextUnDoneColor))));
   }
@@ -179,7 +180,7 @@ class _TaskListTimeLineState extends State<TaskListTimeLine> {
   //general methods ............................................................
 
   bool _deadLineAvailable() {
-    return task.sub_tasks.any(
+    return widget.task.sub_tasks.any(
             (sub_task) => _technicalNameWithTranslationsStore
             .getTranslation(sub_task.deadline)
             .isNotEmpty);
@@ -187,16 +188,16 @@ class _TaskListTimeLineState extends State<TaskListTimeLine> {
 
   void _navigateToTaskPage() {
     Widget taskPage = Container();
-    if(task.isTypeOfText){
+    if(widget.task.isTypeOfText){
       taskPage = TaskPageTextOnly(
-        taskId: task.id,
-        stepId: widget.stepId,
+        task: widget.task,
+        step: widget.step,
       );
     }
-    if(task.isTypeOfImage){
+    if(widget.task.isTypeOfImage){
       taskPage = TaskPageWithImage(
-        taskId: task.id,
-        stepId: widget.stepId,
+        task: widget.task,
+        step: widget.step,
       );
     }
 

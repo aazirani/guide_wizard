@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:guide_wizard/constants/colors.dart';
 import 'package:guide_wizard/constants/dimens.dart';
-import 'package:guide_wizard/data/data_laod_handler.dart';
 import 'package:guide_wizard/widgets/scrolling_overflow_text.dart';
 
 class QuestionsListAppBar extends StatefulWidget implements PreferredSizeWidget {
@@ -37,7 +36,6 @@ class _QuestionsListAppBarState extends State<QuestionsListAppBar> {
       titleSpacing: Dimens.appBar["titleSpacing"],
       leading: IconButton(
         onPressed: () {
-          DataLoadHandler(context: context).loadDataAndCheckForUpdate();
           Navigator.pop(context);
         },
         icon: Icon(

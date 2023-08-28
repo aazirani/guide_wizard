@@ -1,6 +1,7 @@
 import 'package:guide_wizard/data/local/constants/db_constants.dart';
 import 'package:guide_wizard/models/technical_name/technical_name.dart';
 import 'package:guide_wizard/models/technical_name/technical_name_list.dart';
+import 'package:mobx/mobx.dart';
 import 'package:sembast/sembast.dart';
 
 
@@ -45,7 +46,7 @@ class TechnicalNameDataSource {
 
     // Making a List<Post> out of List<RecordSnapshot>
     return recordSnapshots.map((snapshot) {
-      final technicalName = TechnicalName.fromMap(snapshot.value);
+      final technicalName = TechnicalNameFactory().fromMap(snapshot.value);
       // An ID is a key of a record from the database.
       technicalName.id = snapshot.key;
       return technicalName;
@@ -66,12 +67,12 @@ class TechnicalNameDataSource {
     // Making a List<Post> out of List<RecordSnapshot>
     if (recordSnapshots.length > 0) {
       technicalNameList = TechnicalNameList(
-          technicalNames: recordSnapshots.map((snapshot) {
-        final technicalName = TechnicalName.fromMap(snapshot.value);
-        // An ID is a key of a record from the database.
-        technicalName.id = snapshot.key;
-        return technicalName;
-      }).toList());
+          technicalNames: ObservableList.of(recordSnapshots.map((snapshot) {
+            final technicalName = TechnicalNameFactory().fromMap(snapshot.value);
+            // An ID is a key of a record from the database.
+            technicalName.id = snapshot.key;
+            return technicalName;
+          })));
     }
 
     return technicalNameList;

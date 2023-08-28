@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:guide_wizard/constants/colors.dart';
 import 'package:guide_wizard/constants/dimens.dart';
 import 'package:guide_wizard/constants/lang_keys.dart';
-import 'package:guide_wizard/data/data_laod_handler.dart';
+import 'package:guide_wizard/data/data_load_handler.dart';
 import 'package:guide_wizard/stores/app_settings/app_settings_store.dart';
 import 'package:guide_wizard/stores/data/data_store.dart';
 import 'package:guide_wizard/stores/technical_name/technical_name_with_translations_store.dart';
@@ -102,6 +102,9 @@ class _NextStageButtonState extends State<NextStageButton> {
   }
 
   void onTapFunction() async {
+
+    setButtonState(ButtonState.loading);
+
     if (!await DataLoadHandler().hasInternet()) {
       setButtonState(ButtonState.fail);
       Future.delayed(Duration(milliseconds: 2000), () {
@@ -110,12 +113,10 @@ class _NextStageButtonState extends State<NextStageButton> {
       return;
     }
 
-    setButtonState(ButtonState.loading);
-
     await updateIfAnswersHasChanged();
 
     await _appSettingsStore.setCurrentStepId(
-        _dataStore.getAllSteps().reduce((curr, next) => curr.order < next.order ? curr : next).id
+        _dataStore.getAllSteps.reduce((curr, next) => curr.order < next.order ? curr : next).id
     );
 
     setButtonState(ButtonState.success);
@@ -132,7 +133,7 @@ class _NextStageButtonState extends State<NextStageButton> {
   Future<void> updateIfAnswersHasChanged() async {
     bool answerWasUpdated = await _appSettingsStore.getAnswerWasUpdated() ?? false;
     if (answerWasUpdated) {
-      await DataLoadHandler().loadDataAndCheckForUpdate();
+      await DataLoadHandler().loadDataAndCheckForUpdate(initialLoading: true);
     }
   }
 

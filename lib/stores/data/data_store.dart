@@ -26,8 +26,7 @@ abstract class _DataStore with Store {
   @observable
   ObservableFuture<List<AppStep>> fetchStepsFuture = ObservableFuture<List<AppStep>>(emptyStepsResponse);
 
-  @observable
-  List<AppStep> stepList = List.empty();
+  ObservableList<AppStep> stepList = ObservableList.of(List.empty());
 
   @observable
   bool _loadingDataFromDbOrServer = false;
@@ -40,6 +39,9 @@ abstract class _DataStore with Store {
 
   @computed
   bool get isLoading => _loadingDataFromDbOrServer;
+
+  @computed
+  List<AppStep> get getAllSteps => this.stepList;
 
   //Actions......................................................................
   @action
@@ -78,19 +80,15 @@ abstract class _DataStore with Store {
 
   void _setStepList(List<AppStep> steps) {
     steps.sort((a, b) => a.order.compareTo(b.order));
-    this.stepList = steps;
-  }
-
-  List<AppStep> getAllSteps() {
-    return this.stepList;
+    this.stepList = ObservableList.of(steps);
   }
 
   AppStep getStepById(int stepId) {
-    return this.getAllSteps().firstWhere((step) => step.id == stepId);
+    return this.getAllSteps.firstWhere((step) => step.id == stepId);
   }
 
   bool isFirstStep(int stepId) {
-    var steps = this.getAllSteps();
+    var steps = this.getAllSteps;
     if(steps.isEmpty) {
       // Handle the empty list case. Return false or throw an exception.
       return false;
@@ -100,15 +98,15 @@ abstract class _DataStore with Store {
   }
 
   int getIndexOfStep(int stepId){
-    return this.getAllSteps().indexWhere((step) => step.id == stepId);
+    return this.getAllSteps.indexWhere((step) => step.id == stepId);
   }
 
   AppStep getStepByIndex(int index){
-    return this.getAllSteps().elementAt(index);
+    return this.getAllSteps.elementAt(index);
   }
 
   Future<bool> isDataSourceEmpty() async {
-    return getAllSteps().isEmpty;
+    return (await _repository.stepDatasourceCount()) == 0;
   }
 
   @action
@@ -118,7 +116,7 @@ abstract class _DataStore with Store {
 
   //Tasks Actions: .............................................................
   List<Task> getAllTasks() {
-    return this.getAllSteps().expand((step) => step.tasks).toList();
+    return this.getAllSteps.expand((step) => step.tasks).toList();
   }
 
   Task getTaskById(int id) {
@@ -126,29 +124,37 @@ abstract class _DataStore with Store {
   }
 
   @action
+  Future<void> toggleTask(Task task) async {
+    task.toggleDone();
+    AppStep step = getAllSteps.firstWhere((step) => step.id == task.step_id);
+    _repository.updateStep(step);
+  }
+
+  @action
   Future<void> updateTask(Task task) async {
-    AppStep step = getAllSteps().firstWhere((step) => step.id == task.step_id);
+    AppStep step = getAllSteps.firstWhere((step) => step.id == task.step_id);
     int indexOfTask = step.tasks.indexWhere((t) => t.id == task.id);
     if (indexOfTask != -1) {
       step.tasks[indexOfTask] = task;
     }
-    _repository.updateStep(step).then((_) => getStepsFromDb());
+    _repository.updateStep(step);
+
   }
 
   //Questions Actions: .........................................................
   List<Question> getAllQuestions() {
-    return this.getAllSteps().expand((step) => step.questions).toList();
+    return this.getAllSteps.expand((step) => step.questions).toList();
   }
 
   @action
   Future<void> updateQuestion(Question question) async {
-    AppStep step = getAllSteps().firstWhere((step) => step.id == question.step_id);
+    AppStep step = getAllSteps.firstWhere((step) => step.id == question.step_id);
     int indexOfQuestion = step.questions.indexWhere((q) => q.id == question.id);
 
     if (indexOfQuestion != -1) {
       step.questions[indexOfQuestion] = question;
     }
-    _repository.updateStep(step).then((_) => getStepsFromDb());
+    _repository.updateStep(step);
   }
 
   Question getQuestionById(int questionId) {

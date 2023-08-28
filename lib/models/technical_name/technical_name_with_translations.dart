@@ -1,14 +1,32 @@
 import 'package:guide_wizard/models/translation/translation.dart';
+import 'package:mobx/mobx.dart';
 
-class TechnicalNameWithTranslations {
+// Include generated file
+part 'technical_name_with_translations.g.dart';
+
+// This is the class used by rest of your codebase
+class TechnicalNameWithTranslations = _TechnicalNameWithTranslations with _$TechnicalNameWithTranslations;
+
+abstract class _TechnicalNameWithTranslations with Store {
+  @observable
   int id;
-  String technical_name;
-  int creator_id;
-  String created_at;
-  String updated_at;
-  List<Translation> translations;
 
-  TechnicalNameWithTranslations({
+  @observable
+  String technical_name;
+
+  @observable
+  int creator_id;
+
+  @observable
+  String created_at;
+
+  @observable
+  String updated_at;
+
+  @observable
+  ObservableList<Translation> translations;
+
+  _TechnicalNameWithTranslations({
     required this.id,
     required this.technical_name,
     required this.creator_id,
@@ -16,20 +34,6 @@ class TechnicalNameWithTranslations {
     required this.updated_at,
     required this.translations,
   });
-
-  factory TechnicalNameWithTranslations.fromMap(Map<String, dynamic> json) {
-    return TechnicalNameWithTranslations(
-      id: json["id"],
-      technical_name: json["technical_name"],
-      creator_id: json["creator_id"],
-      created_at: json["created_at"],
-      updated_at: json["updated_at"],
-      translations: json["translations"]
-          .map((translation) => Translation.fromMap(translation))
-          .toList()
-          .cast<Translation>(),
-    );
-  }
 
   Map<String, dynamic> toMap() {
     return {
@@ -42,8 +46,20 @@ class TechnicalNameWithTranslations {
           translations.map((translation) => translation.toMap()).toList(),
     };
   }
+}
 
-  get technicalName {
-    return technical_name;
+class TechnicalNameWithTranslationsFactory  {
+  TechnicalNameWithTranslations fromMap(Map<String, dynamic> json) {
+    return TechnicalNameWithTranslations(
+      id: json["id"],
+      technical_name: json["technical_name"],
+      creator_id: json["creator_id"],
+      created_at: json["created_at"],
+      updated_at: json["updated_at"],
+      translations: ObservableList.of(json["translations"]
+          .map((translation) => TranslationFactory().fromMap(translation))
+          .toList()
+          .cast<Translation>()),
+    );
   }
 }

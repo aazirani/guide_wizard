@@ -3,6 +3,7 @@ import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:guide_wizard/constants/colors.dart';
 import 'package:guide_wizard/constants/dimens.dart';
 import 'package:guide_wizard/constants/lang_keys.dart';
+import 'package:guide_wizard/models/step/app_step.dart';
 import 'package:guide_wizard/stores/app_settings/app_settings_store.dart';
 import 'package:guide_wizard/stores/data/data_store.dart';
 import 'package:guide_wizard/stores/technical_name/technical_name_with_translations_store.dart';
@@ -12,15 +13,14 @@ import 'package:guide_wizard/widgets/scrolling_overflow_text.dart';
 import 'package:provider/provider.dart';
 
 class TaskList extends StatefulWidget {
-  int stepId;
-  TaskList({Key? key, required this.stepId}) : super(key: key);
+  AppStep step;
+  TaskList({Key? key, required this.step}) : super(key: key);
 
   @override
   State<TaskList> createState() => _TaskListState();
 }
 
 class _TaskListState extends State<TaskList> {
-  get tasks => _dataStore.getStepById(widget.stepId).tasks;
   // stores:--------------------------------------------------------------------
   late DataStore _dataStore;
   late TechnicalNameWithTranslationsStore _technicalNameWithTranslationsStore;
@@ -53,7 +53,7 @@ class _TaskListState extends State<TaskList> {
         toolbarHeight: Dimens.appBar["toolbarHeight"],
         titleSpacing: Dimens.appBar["titleSpacing"],
         title: ScrollingOverflowText(
-          _technicalNameWithTranslationsStore.getTranslation(_dataStore.getStepById(widget.stepId).name)!,
+          _technicalNameWithTranslationsStore.getTranslation(widget.step.name)!,
           style: TextStyle(
               color: AppColors.white,
               fontSize: Dimens.taskTitleFont,
@@ -100,7 +100,7 @@ class _TaskListState extends State<TaskList> {
             Padding(
                 padding: Dimens.numberOfTasksPadding,
                 child: Text(
-                    "${tasks.length} ${_technicalNameWithTranslationsStore.getTranslationByTechnicalName(LangKeys.tasks)}",
+                    "${widget.step.tasks.length} ${_technicalNameWithTranslationsStore.getTranslationByTechnicalName(LangKeys.tasks)}",
                     style: TextStyle(color: AppColors.white))),
             SizedBox(height: 5),
             _buildProgressBar(),
@@ -132,9 +132,9 @@ class _TaskListState extends State<TaskList> {
               child: ListView.builder(
                 scrollDirection: Axis.vertical,
                 controller: scrollController,
-                itemCount: tasks.length,
+                itemCount: widget.step.tasks.length,
                 itemBuilder: (context, index) {
-                  return TaskListTimeLine(stepId: widget.stepId, index: index);
+                  return TaskListTimeLine(step: widget.step, index: index, task: widget.step.tasks.elementAt(index));
                 },
               ),
             ),
@@ -165,8 +165,8 @@ class _TaskListState extends State<TaskList> {
   }
 
   double calculateDoneRatio() {
-    int noOfDoneTasksInThisStep = _dataStore.getDoneTasks(widget.stepId).length;
-    int noOfAllTasksInThisStep = _dataStore.getStepById(widget.stepId).tasks.length;
+    int noOfDoneTasksInThisStep = _dataStore.getDoneTasks(widget.step.id).length;
+    int noOfAllTasksInThisStep = widget.step.tasks.length;
     return noOfAllTasksInThisStep == 0
         ? 0.0
         : noOfDoneTasksInThisStep / noOfAllTasksInThisStep;

@@ -1,6 +1,6 @@
 import 'package:get/get.dart';
 import 'package:guide_wizard/data/repository.dart';
-import 'package:guide_wizard/models/language/Language.dart';
+import 'package:guide_wizard/models/language/language.dart';
 import 'package:guide_wizard/models/technical_name/technical_name_with_translations.dart';
 import 'package:guide_wizard/models/technical_name/technical_name_with_translations_list.dart';
 import 'package:mobx/mobx.dart';
@@ -15,7 +15,7 @@ abstract class _TechnicalNameWithTranslationsStore with Store {
   Repository _repository;
   _TechnicalNameWithTranslationsStore(Repository repo) : this._repository = repo;
 
-  static ObservableFuture<TechnicalNameWithTranslationsList>emptyTechnicalNameWithTranslationsResponse = ObservableFuture.value(TechnicalNameWithTranslationsList(technicalNameWithTranslations: []));
+  static ObservableFuture<TechnicalNameWithTranslationsList>emptyTechnicalNameWithTranslationsResponse = ObservableFuture.value(TechnicalNameWithTranslationsList(technicalNameWithTranslations: ObservableList.of(List.empty())));
 
   @observable
   ObservableFuture<TechnicalNameWithTranslationsList>
@@ -26,15 +26,13 @@ abstract class _TechnicalNameWithTranslationsStore with Store {
 
   @observable
   TechnicalNameWithTranslationsList technicalNameWithTranslationsList =
-      TechnicalNameWithTranslationsList(technicalNameWithTranslations: []);
+      TechnicalNameWithTranslationsList(technicalNameWithTranslations: ObservableList.of(List.empty()));
 
   @computed
   bool get technicalNameSuccess => fetchTechnicalNameWithTranslationsFuture.status == FutureStatus.fulfilled;
 
   @computed
   bool get technicalNameLoading => fetchTechnicalNameWithTranslationsFuture.status == FutureStatus.pending;
-
-  Future isDataSourceEmpty() async =>  (await this.technicalNameWithTranslationsList.technicalNameWithTranslations.length) == 0;
 
   @action
   Future getTechnicalNameWithTranslationsFromDb() async {
@@ -45,7 +43,7 @@ abstract class _TechnicalNameWithTranslationsStore with Store {
       return technicalNameWithTranslationsList;
     } catch (e) {
       return TechnicalNameWithTranslationsList(
-          technicalNameWithTranslations: List.empty()
+          technicalNameWithTranslations: ObservableList.of(List.empty())
       );
     }
   }
@@ -59,7 +57,7 @@ abstract class _TechnicalNameWithTranslationsStore with Store {
       return technicalNameWithTranslationsList;
     } catch (e) {
       return TechnicalNameWithTranslationsList(
-          technicalNameWithTranslations: List.empty()
+          technicalNameWithTranslations: ObservableList.of(List.empty())
       );
     }
   }
@@ -85,6 +83,11 @@ abstract class _TechnicalNameWithTranslationsStore with Store {
   }
 
   // methods: ..................................................................
+
+  Future<bool> isDataSourceEmpty() async {
+    return (await _repository.technicalNameWithTranslationsDatasourceCount()) == 0;
+  }
+
   String getTranslation(int id) {
     if (isTranslationsEmpty(id)) return "";
     try {

@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:guide_wizard/constants/colors.dart';
 import 'package:guide_wizard/constants/dimens.dart';
+import 'package:guide_wizard/models/step/app_step.dart';
+import 'package:guide_wizard/models/task/task.dart';
 import 'package:guide_wizard/stores/data/data_store.dart';
 import 'package:guide_wizard/stores/technical_name/technical_name_with_translations_store.dart';
 import 'package:guide_wizard/widgets/sub_task_widget.dart';
@@ -10,16 +12,16 @@ import 'package:provider/provider.dart';
 import 'package:render_metrics/render_metrics.dart';
 
 class TaskPageTextOnly extends StatefulWidget {
-  final int taskId;
-  final int stepId;
-  TaskPageTextOnly({Key? key, required this.taskId, required this.stepId}) : super(key: key);
+  final Task task;
+  final AppStep step;
+  TaskPageTextOnly({Key? key, required this.task, required this.step}) : super(key: key);
 
   @override
   State<TaskPageTextOnly> createState() => _TaskPageTextOnlyState();
 }
 
 class _TaskPageTextOnlyState extends State<TaskPageTextOnly> {
-  get task => _dataStore.getStepById(widget.stepId).tasks.firstWhere((task) => task.id == widget.taskId);
+
   RenderParametersManager renderManager = RenderParametersManager<dynamic>();
   // stores:--------------------------------------------------------------------
   late DataStore _dataStore;
@@ -44,14 +46,16 @@ class _TaskPageTextOnlyState extends State<TaskPageTextOnly> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      backgroundColor: AppColors.main_color,
-      appBar: BlocksAppBarWidget(
-        taskId: task.id,
-        stepId: widget.stepId,
-        title: _technicalNameWithTranslationsStore.getTranslation(task.text),
+    return Observer(
+      builder: (_) => Scaffold(
+        backgroundColor: AppColors.main_color,
+        appBar: BlocksAppBarWidget(
+          task: widget.task,
+          step: widget.step,
+          title: _technicalNameWithTranslationsStore.getTranslation(widget.task.text),
+        ),
+        body: _buildScaffoldBody(),
       ),
-      body: _buildScaffoldBody(),
     );
   }
 
@@ -73,7 +77,7 @@ class _TaskPageTextOnlyState extends State<TaskPageTextOnly> {
     return RawScrollbar(
       child: ListView(
         children: [
-          _technicalNameWithTranslationsStore.getTranslation(task.description) == "" ? SizedBox(height: Dimens.taskPageTextOnlyListViewPadding.top,) : _buildDescription(),
+          _technicalNameWithTranslationsStore.getTranslation(widget.task.description) == "" ? SizedBox(height: Dimens.taskPageTextOnlyListViewPadding.top,) : _buildDescription(),
           _buildSubTasksList(),
         ],
       ),
@@ -84,26 +88,23 @@ class _TaskPageTextOnlyState extends State<TaskPageTextOnly> {
     return Padding(
       padding: Dimens.taskPageTextOnlyListViewPadding,
       child: Text(
-        _technicalNameWithTranslationsStore.getTranslation(task.description),
+        _technicalNameWithTranslationsStore.getTranslation(widget.task.description),
         style: TextStyle(fontSize: Dimens.taskDescriptionFont, color: AppColors.main_color),
       ),
     );
   }
 
   _buildSubTasksList() {
-    
     return ListView.builder(
       physics: ScrollPhysics(),
       shrinkWrap: true,
-      itemCount: task.sub_tasks.length,
+      itemCount: widget.task.sub_tasks.length,
       itemBuilder: (context, i) {
-        return Observer(
-          builder: (_) => SubTaskWidget(
-            index: i,
-            taskId: task.id,
-            stepId: widget.stepId,
-            renderManager: renderManager,
-          ),
+        return SubTaskWidget(
+          index: i,
+          task: widget.task,
+          step: widget.step,
+          renderManager: renderManager,
         );
       },
     );

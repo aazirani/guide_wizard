@@ -4,7 +4,7 @@ import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:guide_wizard/constants/colors.dart';
 import 'package:guide_wizard/constants/dimens.dart';
 import 'package:guide_wizard/constants/lang_keys.dart';
-import 'package:guide_wizard/data/data_laod_handler.dart';
+import 'package:guide_wizard/data/data_load_handler.dart';
 import 'package:guide_wizard/stores/app_settings/app_settings_store.dart';
 import 'package:guide_wizard/stores/data/data_store.dart';
 import 'package:guide_wizard/stores/language/language_store.dart';
@@ -53,12 +53,8 @@ class _HomeScreenState extends State<HomeScreen> {
 
   @override
   void initState() {
+    _dataLoadHandler.loadDataAndCheckForUpdate(initialLoading: true);
     super.initState();
-    _initializeData();
-  }
-
-  void _initializeData() async {
-    _dataLoadHandler.loadDataAndCheckForUpdate();
   }
 
   @override
@@ -185,7 +181,7 @@ class _HomeScreenState extends State<HomeScreen> {
               topRight: Radius.circular(Dimens.homeBodyBorderRadius),
             ),
           ),
-          child: !_dataStore.isLoading && _dataStore.stepSuccess && _technicalNameWithTranslationsStore.technicalNameSuccess && _updatedAtTimesStore.updatedAtTimesSuccess && _appSettingsStore.currentStepIdSuccess
+          child: !_dataStore.isLoading && !_technicalNameWithTranslationsStore.technicalNameLoading && !_updatedAtTimesStore.updatedAtTimesLoading && _dataStore.stepSuccess && _technicalNameWithTranslationsStore.technicalNameSuccess && _updatedAtTimesStore.updatedAtTimesSuccess && _appSettingsStore.currentStepIdSuccess
               ? _buildScreenElements()
               : _shimmerAll(),
         ),
@@ -219,7 +215,7 @@ class _HomeScreenState extends State<HomeScreen> {
         _buildCurrentStepIndicator(),
         StepSliderWidget(),
         StepTimeLine(),
-         _dataStore.isFirstStep(_appSettingsStore.currentStepId) ? _buildQuestionDescription() : _buildInProgressCompressedTaskList(),
+        _dataStore.isFirstStep(_appSettingsStore.currentStepId) ? _buildQuestionDescription() : _buildInProgressCompressedTaskList(),
       ],
     );
   }
@@ -244,7 +240,7 @@ class _HomeScreenState extends State<HomeScreen> {
 
   Widget _buildCurrentStepText() {
     return Text(
-        "${_dataStore.getAllSteps().indexWhere((step) => step.id == _appSettingsStore.currentStepId) + 1}/${_dataStore.getAllSteps().length}",
+        "${_dataStore.getAllSteps.indexWhere((step) => step.id == _appSettingsStore.currentStepId) + 1}/${_dataStore.getAllSteps.length}",
         style: TextStyle(color: AppColors.main_color));
   }
 

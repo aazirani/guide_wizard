@@ -55,8 +55,8 @@ class _StepTimeLineState extends State<StepTimeLine> {
     return FixedTimeline.tileBuilder(
       direction: Axis.horizontal,
       builder: TimelineTileBuilder(
-        itemCount: _dataStore.getAllSteps().length,
-        itemExtent: (_getScreenWidth() - 50) / _dataStore.getAllSteps().length,
+        itemCount: _dataStore.getAllSteps.length,
+        itemExtent: (_getScreenWidth() - 50) / _dataStore.getAllSteps.length,
         indicatorBuilder: (context, index) =>
             _buildIndicator(index),
         startConnectorBuilder: (context, index) => _buildStartConnector(index),
@@ -232,7 +232,7 @@ class _StepTimeLineState extends State<StepTimeLine> {
   double _getScreenWidth() => MediaQuery.of(context).size.width;
 
   _isLastStep(index) {
-    return index == _dataStore.getAllSteps().length - 1;
+    return index == _dataStore.getAllSteps.length - 1;
   }
 
   _isFirstStep(index) {

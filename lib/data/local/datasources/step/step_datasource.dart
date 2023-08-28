@@ -1,6 +1,7 @@
 import 'package:guide_wizard/data/local/constants/db_constants.dart';
 import 'package:guide_wizard/models/step/app_step.dart';
 import 'package:guide_wizard/models/step/step_list.dart';
+import 'package:mobx/mobx.dart';
 import 'package:sembast/sembast.dart';
 
 class StepDataSource {
@@ -40,7 +41,7 @@ class StepDataSource {
 
     // Making a List<Post> out of List<RecordSnapshot>
     return recordSnapshots.map((snapshot) {
-      final step = AppStep.fromMap(snapshot.value);
+      final step = AppStepFactory().fromMap(snapshot.value);
       // An ID is a key of a record from the database.
       step.id = snapshot.key;
       return step;
@@ -61,13 +62,13 @@ class StepDataSource {
     // Making a List<Post> out of List<RecordSnapshot>
     if (recordSnapshots.length > 0) {
       stepsList = AppStepList(
-          steps: recordSnapshots.map((snapshot) {
-        final step = AppStep.fromMap(snapshot.value);
-        // An ID is a key of a record from the database.
-        return step;
-      }).toList());
+          steps: ObservableList.of(recordSnapshots.map((snapshot) {
+            final step = AppStepFactory().fromMap(snapshot.value);
+            // An ID is a key of a record from the database.
+            return step;
+          })));
     } else {
-      stepsList = AppStepList(steps: []);
+      stepsList = AppStepList(steps: ObservableList.of(List.empty()));
     }
 
     return stepsList;

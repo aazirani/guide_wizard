@@ -1,8 +1,10 @@
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:guide_wizard/constants/colors.dart';
 import 'package:guide_wizard/constants/dimens.dart';
 import 'package:guide_wizard/constants/lang_keys.dart';
+import 'package:guide_wizard/data/data_load_handler.dart';
 import 'package:guide_wizard/data/network/constants/endpoints.dart';
 import 'package:guide_wizard/stores/app_settings/app_settings_store.dart';
 import 'package:guide_wizard/stores/data/data_store.dart';
@@ -53,7 +55,7 @@ class _StepSliderWidgetState extends State<StepSliderWidget> {
     return CarouselSlider(
       carouselController: _carouselController,
       options: CarouselOptions(
-          initialPage: _dataStore.getIndexOfStep(_appSettingsStore.currentStepId),
+          initialPage: _dataStore.getIndexOfStep(_dataStore.getAllSteps.first.id),
           onPageChanged: (index, reason) {
             _appSettingsStore.setCurrentStepId(_dataStore.getStepByIndex(index).id);
           },
@@ -61,7 +63,7 @@ class _StepSliderWidgetState extends State<StepSliderWidget> {
           enlargeCenterPage: false,
           enableInfiniteScroll: false),
       items:
-      List<int>.generate(_dataStore.getAllSteps().length, (index) => index)
+      List<int>.generate(_dataStore.getAllSteps.length, (index) => index)
           .map((index) {
         return Builder(
           builder: (BuildContext context) {
@@ -201,16 +203,17 @@ class _StepSliderWidgetState extends State<StepSliderWidget> {
         ),
         child: TextButton(
           style: _buildButtonStyle(),
-          onPressed: () {
+          onPressed: () async {
             if (_dataStore.isFirstStep(_dataStore.getStepByIndex(index).id)) {
-              Navigator.push(context,
+              await Navigator.push(context,
                   MaterialPageRoute(builder: (context) => QuestionsListPage(stepId: _dataStore.getStepByIndex(index).id,)));
+              DataLoadHandler().loadDataAndCheckForUpdate();
             } else {
               Navigator.push(
                   context,
                   MaterialPageRoute(
                       builder: (context) => TaskList(
-                        stepId: _dataStore.getStepByIndex(index).id,
+                        step: _dataStore.getStepByIndex(index),
                       )));
             }
           },
@@ -255,12 +258,14 @@ class _StepSliderWidgetState extends State<StepSliderWidget> {
           child: ClipRRect(
             borderRadius:
             BorderRadius.all(Radius.circular(Dimens.progressBarRadius)),
-            child: LinearProgressIndicator(
-              // minHeight: 4,
-                value: _dataStore.getDoneTasks(_dataStore.getStepByIndex(index).id).length / _dataStore.getStepByIndex(index).tasks.length,
-                backgroundColor: AppColors.progressBarBackgroundColor,
-                valueColor:
-                AlwaysStoppedAnimation(AppColors.progressBarValueColor)),
+            child: Observer(
+              builder: (_) => LinearProgressIndicator(
+                // minHeight: 4,
+                  value: _dataStore.getDoneTasks(_dataStore.getStepByIndex(index).id).length / _dataStore.getStepByIndex(index).tasks.length,
+                  backgroundColor: AppColors.progressBarBackgroundColor,
+                  valueColor:
+                  AlwaysStoppedAnimation(AppColors.progressBarValueColor)),
+            ),
           )),
     );
   }

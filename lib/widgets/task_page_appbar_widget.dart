@@ -2,21 +2,23 @@ import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:guide_wizard/constants/colors.dart';
 import 'package:guide_wizard/constants/dimens.dart';
+import 'package:guide_wizard/models/step/app_step.dart';
+import 'package:guide_wizard/models/task/task.dart';
 import 'package:guide_wizard/stores/data/data_store.dart';
 import 'package:guide_wizard/widgets/scrolling_overflow_text.dart';
 import 'package:provider/provider.dart';
 
 class BlocksAppBarWidget extends StatefulWidget implements PreferredSizeWidget {
-  final int taskId;
-  final int stepId;
+  Task task;
+  AppStep step;
   double appBarSize;
   String title;
   BlocksAppBarWidget(
       {Key? key,
-        required this.taskId,
+        required this.task,
         this.appBarSize = Dimens.blocksAppBarWidgetHeight,
         required this.title,
-        required this.stepId})
+        required this.step})
       : super(key: key);
 
   @override
@@ -29,10 +31,10 @@ class BlocksAppBarWidget extends StatefulWidget implements PreferredSizeWidget {
 }
 
 class _BlocksAppBarWidgetState extends State<BlocksAppBarWidget> {
-  get task => _dataStore.getStepById(widget.stepId).tasks.firstWhere((task) => task.id == widget.taskId);
+
   late DataStore _dataStore;
 
-  bool _showDoneButtonFlag() => !_dataStore.isAllTasksOfStepDone(task.step_id);
+  bool _showDoneButtonFlag() => !_dataStore.isAllTasksOfStepDone(widget.step.id);
 
 
   @override
@@ -44,7 +46,7 @@ class _BlocksAppBarWidgetState extends State<BlocksAppBarWidget> {
   _buildDoneUndoneButtonStyle() {
     return ElevatedButton.styleFrom(
         padding: EdgeInsets.all(0),
-        backgroundColor: task.isDone ? AppColors.white : AppColors.main_color,
+        backgroundColor: widget.task.isDone ? AppColors.white : AppColors.main_color,
         foregroundColor: AppColors.bright_foreground_color.withOpacity(0.1),
         shape: RoundedRectangleBorder(
           borderRadius:
@@ -57,8 +59,8 @@ class _BlocksAppBarWidgetState extends State<BlocksAppBarWidget> {
     return ElevatedButton(
         onPressed: () async {
           if(!_dataStore.stepLoading){
-            task.toggleDone();
-            await _dataStore.updateTask(task);
+            //widget.task.toggleDone();
+            await _dataStore.toggleTask(widget.task);
           }
         },
         style: buttonStyle,
@@ -71,7 +73,7 @@ class _BlocksAppBarWidgetState extends State<BlocksAppBarWidget> {
   Widget _buildDoneUnDoneButton() {
     return _buildButton(
       buttonStyle: _buildDoneUndoneButtonStyle(),
-      icon: task.isDone ? Icons.done_rounded : null,
+      icon: widget.task.isDone ? Icons.done_rounded : null,
     );
   }
 

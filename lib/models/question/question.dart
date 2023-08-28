@@ -1,22 +1,53 @@
 import 'package:guide_wizard/models/answer/answer.dart';
+import 'package:mobx/mobx.dart';
 
-class Question {
-  //Server Values
+// Include generated file
+part 'question.g.dart';
+
+// This is the class used by rest of your codebase
+class Question = _Question with _$Question;
+
+abstract class _Question with Store {
+  @observable
   int id;
-  int title;
-  int sub_title;
-  String type;
-  int axis_count;
-  bool is_multiple_choice;
-  int info_url;
-  int info_description;
-  int step_id;
-  int creator_id;
-  String created_at;
-  String updated_at;
-  List<Answer> answers;
 
-  Question({
+  @observable
+  int title;
+
+  @observable
+  int sub_title;
+
+  @observable
+  String type;
+
+  @observable
+  int axis_count;
+
+  @observable
+  bool is_multiple_choice;
+
+  @observable
+  int info_url;
+
+  @observable
+  int info_description;
+
+  @observable
+  int step_id;
+
+  @observable
+  int creator_id;
+
+  @observable
+  String created_at;
+
+  @observable
+  String updated_at;
+
+  @observable
+  ObservableList<Answer> answers;
+
+  _Question({
     required this.id,
     required this.title,
     required this.sub_title,
@@ -32,31 +63,22 @@ class Question {
     required this.answers,
   });
 
-  List<Answer> getAnswers() {
-    return answers;
-  }
+  @computed
+  List<Answer> get getAnswers => answers.toList();
 
+  @action
   void setAnswerValue(Answer answer, bool value){
     answers.firstWhere((element) => element==answer).selected = value;
   }
 
-  factory Question.fromMap(Map<String, dynamic> json) {
-    return Question(
-      id: json["id"],
-      title: json["title"],
-      sub_title: json["sub_title"],
-      type: json["type"],
-      axis_count: json["axis_count"],
-      is_multiple_choice: (json["is_multiple_choice"] == 1) ? true : false,
-      info_url: json["info_url"],
-      info_description: json["info_description"],
-      step_id: json["step_id"],
-      creator_id: json["creator_id"],
-      created_at: json["created_at"],
-      updated_at: json["updated_at"],
-      answers: List<Answer>.from(
-          json["answers"].map((x) => Answer.fromMap(x))),
-    );
+  @computed
+  bool get isImageQuestion => type == "IMAGE";
+
+  @action
+  void deselectAllAnswers() {
+    for (Answer answer in answers) {
+      answer.selected = false;
+    }
   }
 
   Map<String, dynamic> toMap() {
@@ -77,33 +99,25 @@ class Question {
     };
   }
 
-  bool get isImageQuestion{
-    return type == "IMAGE";
-  }
-  Answer? getAnswerByID(int id) {
-    for (Answer answer in answers) {
-      if (answer.id == id) {
-        return answer;
-      }
-    }
-    return null;
-  }
+}
 
-  Answer getAnswerByIndex(int index) {
-    return answers.elementAt(index);
+class QuestionFactory {
+  Question fromMap(Map<String, dynamic> json) {
+    return Question(
+      id: json["id"],
+      title: json["title"],
+      sub_title: json["sub_title"],
+      type: json["type"],
+      axis_count: json["axis_count"],
+      is_multiple_choice: (json["is_multiple_choice"] == 1) ? true : false,
+      info_url: json["info_url"],
+      info_description: json["info_description"],
+      step_id: json["step_id"],
+      creator_id: json["creator_id"],
+      created_at: json["created_at"],
+      updated_at: json["updated_at"],
+      answers: ObservableList<Answer>.of(
+          json["answers"].map((x) => AnswerFactory().fromMap(x)).toList().cast<Answer>()),
+    );
   }
-
-  void deselectAllAnswers() {
-    for (Answer answer in answers) {
-      answer.selected = false;
-    }
-  }
-
-  void selectAnswers(List<Answer> answersToBeSelected) {
-    deselectAllAnswers();
-    for (Answer answer in answersToBeSelected) {
-      answer.selected = true;
-    }
-  }
-
 }

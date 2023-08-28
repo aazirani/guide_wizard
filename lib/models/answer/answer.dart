@@ -1,18 +1,44 @@
 import 'package:flutter/material.dart';
+import 'package:mobx/mobx.dart';
 
-class Answer {
+// Include generated file
+part 'answer.g.dart';
+
+// This is the class used by rest of your codebase
+class Answer = _Answer with _$Answer;
+
+abstract class _Answer with Store {
+  @observable
   int id;
+
+  @observable
   int question_id;
+
+  @observable
   int title;
+
+  @observable
   int order;
+
+  @observable
   String? image;
+
+  @observable
   bool selected; // Not in JSON, only for saving in datasource
+
+  @observable
   bool is_enabled;
+
+  @observable
   int creator_id;
+
+  @observable
   String created_at;
+
+  @observable
   String updated_at;
 
-  Answer({
+  _Answer({
     required this.id,
     required this.question_id,
     required this.title,
@@ -25,40 +51,24 @@ class Answer {
     this.selected = false,
   });
 
-  bool get isSelected {
-    return selected;
-  }
+  @computed
+  bool get isSelected => selected;
 
+  @action
   void setSelected(bool value) {
     selected = value;
   }
 
+  @action
   void toggleSelected() {
     selected = !selected;
   }
 
-  Image getImageWidget() {
-    return Image.network(image!);
-  }
+  @computed
+  Image get getImageWidget => Image.network(image!);
 
-  String get getImage {
-    return image!;
-  }
-
-  factory Answer.fromMap(Map<String, dynamic> json) {
-    return Answer(
-      id: json["id"],
-      question_id: json["question_id"],
-      title: json["title"],
-      order: json["order"],
-      image: json["image"],
-      is_enabled: json["is_enabled"] == 1 ? true : false,
-      creator_id: json["creator_id"],
-      created_at: json["created_at"],
-      updated_at: json["updated_at"],
-      selected: json["selected"] ?? false,
-    );
-  }
+  @computed
+  String get getImage => image!;
 
   Map<String, dynamic> toMap() => {
         "id": id,
@@ -72,5 +82,21 @@ class Answer {
         "updated_at": updated_at,
         "selected": selected,
       };
+}
 
+class AnswerFactory {
+  Answer fromMap(Map<String, dynamic> json) {
+    return Answer(
+      id: json["id"],
+      question_id: json["question_id"],
+      title: json["title"],
+      order: json["order"],
+      image: json["image"],
+      is_enabled: json["is_enabled"] == 1 ? true : false,
+      creator_id: json["creator_id"],
+      created_at: json["created_at"],
+      updated_at: json["updated_at"],
+      selected: json["selected"] ?? false,
+    );
+  }
 }
