@@ -84,7 +84,7 @@ class _StepSliderWidgetState extends State<StepSliderWidget> {
 
   Widget _buildSliderContainer(index) {
     return Observer(
-       observer: (_) => LayoutBuilder(
+       builder: (_) => LayoutBuilder(
         builder: (BuildContext context, BoxConstraints constraints) {
       var heightConstraint = constraints.maxHeight;
       return Container(
@@ -109,7 +109,7 @@ class _StepSliderWidgetState extends State<StepSliderWidget> {
                           right: heightConstraint * Dimens.contentRightPaddingPercentage,
                           bottom: heightConstraint * Dimens.contentBottomPaddingPercentage),
                       child: _buildContent(index, constraints))),
-              (_dataStore.getStepImage(index) != null)
+              (_dataStore.getStepByIndex(index).image != null)
                   ? Expanded(flex: 1, child: _buildAvatar(index, constraints))
                   : Container(width: heightConstraint * Dimens.emptySpaceHeightPercentage)
             ]),
@@ -163,7 +163,7 @@ class _StepSliderWidgetState extends State<StepSliderWidget> {
         padding: EdgeInsets.only(right: heightConstraint * Dimens.avatarRightPaddingPercentage),
         child: LoadImageWithCache(
           imageUrl:
-              Endpoints.stepsImageBaseUrl + _dataStore.getStepImage(index)!,
+              Endpoints.stepsImageBaseUrl + _dataStore.getStepByIndex(index).image!,
           color: AppColors.main_color,
         ),
       ),
