@@ -73,7 +73,7 @@ class SubTaskWidgetState extends State<SubTaskWidget> with AutomaticKeepAliveCli
         iconColor: AppColors.main_color,
         title: Text(
           _technicalNameWithTranslationsStore.getTranslation(sub_task_title_id)!,
-          style: TextStyle(fontSize: Dimens.subtaskTitleFontSize),
+          style: Theme.of(context).textTheme.titleMedium
         ),
         key: Key(widget.task.subTasks[widget.index].id.toString()),
         children: <Widget>[

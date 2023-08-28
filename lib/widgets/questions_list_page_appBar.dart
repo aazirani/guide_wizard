@@ -45,7 +45,7 @@ class _QuestionsListAppBarState extends State<QuestionsListAppBar> {
       ),
       title: ScrollingOverflowText(
         widget.title,
-        style: TextStyle(color: AppColors.white, fontSize: 20),
+        style: Theme.of(context).textTheme.titleLarge!.copyWith(color: AppColors.white),
         overflowRatio: 0.75,
       ),
     );

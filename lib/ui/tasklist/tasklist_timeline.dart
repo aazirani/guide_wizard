@@ -139,10 +139,10 @@ class _TaskListTimeLineState extends State<TaskListTimeLine> {
         alignment: Alignment.centerLeft,
         child: Text(
           "${_technicalNameWithTranslationsStore.getTranslation(widget.task.text)} ",
-          style: TextStyle(
-            color: AppColors.main_color,
-            fontSize: Dimens.taskListTimeLineContentTitle,
-          ),
+          style: Theme.of(context)
+              .textTheme
+              .titleSmall!
+              .copyWith(fontWeight: FontWeight.normal),
         ),
       ),
     );
@@ -170,8 +170,8 @@ class _TaskListTimeLineState extends State<TaskListTimeLine> {
                     : AppColors.deadlineUnDoneBorderColor)),
         child: Center(
             child: Text("${_technicalNameWithTranslationsStore.getTranslationByTechnicalName(LangKeys.deadline)}",
-                style: TextStyle(
-                    fontSize: 13,
+                style: Theme.of(context).textTheme.bodySmall!.copyWith(
+                    fontSize: 14,
                     color: (widget.task.isDone)
                         ? AppColors.deadlineTextDoneColor
                         : AppColors.deadlineTextUnDoneColor))));

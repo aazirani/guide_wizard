@@ -80,7 +80,7 @@ class _QuestionWidgetState extends State<QuestionWidget> with AutomaticKeepAlive
           Flexible(
             child: Text(
               _technicalNameWithTranslationsStore.getTranslation(titleId),
-              style: TextStyle(fontSize: 20, fontWeight: FontWeight.w500),
+              style: Theme.of(context).textTheme.bodyLarge!.copyWith(fontWeight: FontWeight.w600),
             ),
           ),
           Padding(
@@ -101,7 +101,7 @@ class _QuestionWidgetState extends State<QuestionWidget> with AutomaticKeepAlive
       margin: Dimens.questionDescriptionPadding,
       child: Text(
         _technicalNameWithTranslationsStore.getTranslation(questionSubtitleId)!,
-        style: TextStyle(fontSize: 19),
+        style: Theme.of(context).textTheme.bodyLarge!.copyWith(color: AppColors.text_color),
       ),
     );
   }
@@ -133,7 +133,7 @@ class _QuestionWidgetState extends State<QuestionWidget> with AutomaticKeepAlive
           },
           child: Text(
             _technicalNameWithTranslationsStore.getTranslationByTechnicalName(LangKeys.next_question_button_text),
-            style: TextStyle(color: Colors.white, fontSize: 15),
+            style: Theme.of(context).textTheme.bodySmall!.copyWith(color: AppColors.white),
           ),
         ),
       );
@@ -147,7 +147,7 @@ class _QuestionWidgetState extends State<QuestionWidget> with AutomaticKeepAlive
       shape: MaterialStateProperty.all<RoundedRectangleBorder>(
         RoundedRectangleBorder(
           borderRadius: Dimens.infoInsideDialogButtonsRadius,
-          side: BorderSide(color:  AppColors.close_button_color, width: 2),
+          side: BorderSide(color:  AppColors.main_color, width: 2),
         ),
       ),
     );
@@ -163,7 +163,7 @@ class _QuestionWidgetState extends State<QuestionWidget> with AutomaticKeepAlive
           },
           child: Text(
               _technicalNameWithTranslationsStore.getTranslationByTechnicalName(LangKeys.close),
-            style: TextStyle(color: AppColors.close_button_color, fontSize: 15),
+            style: Theme.of(context).textTheme.bodySmall
           ),
         ),
       );
@@ -193,7 +193,7 @@ class _QuestionWidgetState extends State<QuestionWidget> with AutomaticKeepAlive
           },
           child: Text(
             _technicalNameWithTranslationsStore.getTranslationByTechnicalName(LangKeys.read_more),
-            style: TextStyle(color: AppColors.white, fontSize: 15),
+            style: Theme.of(context).textTheme.bodySmall!.copyWith(color: AppColors.white)
           ),
         ),
       );
@@ -211,7 +211,7 @@ class _QuestionWidgetState extends State<QuestionWidget> with AutomaticKeepAlive
             padding: Dimens.infoBottomSheetPadding,
             child: Text(
               _getInfoDescription(),
-              style: TextStyle(fontSize: 17),
+              style: Theme.of(context).textTheme.bodyMedium!.copyWith(color: AppColors.text_color)
             ),
           ),
           bottomRow: Container(
@@ -405,10 +405,7 @@ class _QuestionWidgetState extends State<QuestionWidget> with AutomaticKeepAlive
             Flexible(
               child: Text(
                 _technicalNameWithTranslationsStore.getTranslation(answerTitleId),
-                style: TextStyle(
-                  fontSize: 15,
-                ),
-              ),
+                style: Theme.of(context).textTheme.bodySmall!.copyWith(color: AppColors.text_color),              ),
             ),
           ],
         ),
@@ -462,6 +459,7 @@ class _QuestionWidgetState extends State<QuestionWidget> with AutomaticKeepAlive
           },
           title: Text(
             _technicalNameWithTranslationsStore.getTranslation(answer.title),
+            style: Theme.of(context).textTheme.bodyLarge!.copyWith(color: AppColors.text_color),
           ),
           controlAffinity: ListTileControlAffinity.leading,
           tileColor: AppColors.white,

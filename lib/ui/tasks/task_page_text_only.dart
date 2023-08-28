@@ -89,7 +89,7 @@ class _TaskPageTextOnlyState extends State<TaskPageTextOnly> {
       padding: Dimens.taskPageTextOnlyListViewPadding,
       child: Text(
         _technicalNameWithTranslationsStore.getTranslation(widget.task.description),
-        style: TextStyle(fontSize: Dimens.taskDescriptionFont, color: AppColors.main_color),
+        style: Theme.of(context).textTheme.bodyLarge!.copyWith(color: AppColors.text_color,)
       ),
     );
   }

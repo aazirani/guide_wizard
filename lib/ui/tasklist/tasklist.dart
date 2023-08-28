@@ -54,10 +54,7 @@ class _TaskListState extends State<TaskList> {
         titleSpacing: Dimens.appBar["titleSpacing"],
         title: ScrollingOverflowText(
           _technicalNameWithTranslationsStore.getTranslation(widget.step.name)!,
-          style: TextStyle(
-              color: AppColors.white,
-              fontSize: Dimens.taskTitleFont,
-              fontWeight: FontWeight.bold),
+          style: Theme.of(context).textTheme.titleLarge!.copyWith(color: AppColors.white),
           overflowRatio: 0.77,
         ),
         leading: Padding(
@@ -101,7 +98,7 @@ class _TaskListState extends State<TaskList> {
                 padding: Dimens.numberOfTasksPadding,
                 child: Text(
                     "${widget.step.tasks.length} ${_technicalNameWithTranslationsStore.getTranslationByTechnicalName(LangKeys.tasks)}",
-                    style: TextStyle(color: AppColors.white))),
+                    style: Theme.of(context).textTheme.bodySmall!.copyWith(color: AppColors.white))),
             SizedBox(height: 5),
             _buildProgressBar(),
           ],

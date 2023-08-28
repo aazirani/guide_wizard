@@ -161,7 +161,7 @@ class _TaskPageWithImageState extends State<TaskPageWithImage> {
       padding: Dimens.taskPageTextOnlyListViewPadding,
       child: Text(
         _technicalNameWithTranslationsStore.getTranslation(widget.task.description),
-        style: TextStyle(fontSize: Dimens.descriptionFontSize, color: AppColors.main_color),
+        style: Theme.of(context).textTheme.bodyLarge!.copyWith(color: AppColors.text_color)
       ),
     );
   }

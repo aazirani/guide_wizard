@@ -173,8 +173,7 @@ class _StepSliderWidgetState extends State<StepSliderWidget> {
   Widget _buildStepTitle(index) {
     return AutoSizeText(
       "${_technicalNameWithTranslationsStore.getTranslation(_dataStore.getStepByIndex(index).name)}",
-      style: TextStyle(
-          fontSize: Dimens.stepTitleFont, color: AppColors.main_color),
+      style: Theme.of(context).textTheme.titleMedium,
       maxLines: 3,
       softWrap: true,
       wrapWords: true,
@@ -185,10 +184,7 @@ class _StepSliderWidgetState extends State<StepSliderWidget> {
   Widget _buildStepNoOfTasksOrQuestions(index) {
     return Text(
         _dataStore.getStepByIndex(index).tasks.isEmpty ? noOfQuestionsString(index) : noOfTasksString(index),
-        style: TextStyle(
-          fontSize: Dimens.numOfTasksFont,
-          color: AppColors.main_color,
-        ));
+        style: Theme.of(context).textTheme.bodySmall);
   }
 
   String noOfTasksString(index) {
@@ -250,12 +246,8 @@ class _StepSliderWidgetState extends State<StepSliderWidget> {
               mainAxisAlignment: MainAxisAlignment.center,
               mainAxisSize: MainAxisSize.min,
               children: [
-                Text(
-                    _technicalNameWithTranslationsStore
-                        .getTranslationByTechnicalName(LangKeys.continueKey),
-                    style: TextStyle(
-                        fontSize: Dimens.continueFont,
-                        color: AppColors.main_color)),
+                Text(_technicalNameWithTranslationsStore.getTranslationByTechnicalName(LangKeys.continueKey),
+                    style: Theme.of(context).textTheme.bodySmall,),
                 SizedBox(width: 1),
                 Icon(
                   Icons.arrow_forward_ios_rounded,

@@ -36,7 +36,8 @@ class _ExpansionContentState extends State<ExpansionContent> {
   void didChangeDependencies() {
     super.didChangeDependencies();
     // initializing stores
-    _technicalNameWithTranslationsStore = Provider.of<TechnicalNameWithTranslationsStore>(context);
+    _technicalNameWithTranslationsStore =
+        Provider.of<TechnicalNameWithTranslationsStore>(context);
   }
 
   @override
@@ -53,11 +54,10 @@ class _ExpansionContentState extends State<ExpansionContent> {
                     widgetHeight = size.height;
                   });
                 },
-                child: Column(
-                    children: [
-                      if (widget.deadline != null) _buildDeadlineContainer(),
-                      _buildMarkdownContent()
-                    ])),
+                child: Column(children: [
+                  if (widget.deadline != null) _buildDeadlineContainer(),
+                  _buildMarkdownContent()
+                ])),
           ),
         ),
       ],
@@ -71,15 +71,18 @@ class _ExpansionContentState extends State<ExpansionContent> {
             alignment: Alignment.topLeft,
             child: Container(
               decoration: BoxDecoration(
-                  color: AppColors.red[250]!.withOpacity(Dimens.deadlineContainerColorOpacity),
+                  color: AppColors.red[250]!
+                      .withOpacity(Dimens.deadlineContainerColorOpacity),
                   border: Border(
-                      left: BorderSide(width: Dimens.deadlineContainerBorderWidth, color: AppColors.red[150]!))),
+                      left: BorderSide(
+                          width: Dimens.deadlineContainerBorderWidth,
+                          color: AppColors.red[150]!))),
               child: Padding(
                 padding: Dimens.deadlineContentPadding,
-                child: Text("${widget.deadline}",
-                    style: TextStyle(
-                        color: AppColors.red[200],
-                        fontWeight: FontWeight.w800)),
+                child: Text(
+                  "${widget.deadline}",
+                  style: Theme.of(context).textTheme.bodyMedium,
+                ),
               ),
             )));
   }
@@ -87,11 +90,25 @@ class _ExpansionContentState extends State<ExpansionContent> {
   Widget _buildMarkdownContent() {
     return Markdown(
       onTapLink: (text, url, title) {
-        UrlHandler.openUrl(context: context, url: url!, technicalNameWithTranslationsStore: _technicalNameWithTranslationsStore);
+        UrlHandler.openUrl(
+            context: context,
+            url: url!,
+            technicalNameWithTranslationsStore:
+                _technicalNameWithTranslationsStore);
       },
       shrinkWrap: true,
       physics: NeverScrollableScrollPhysics(),
-      data: fixedJsonMarkdown(widget.markdown));
+      data: fixedJsonMarkdown(widget.markdown),
+      styleSheet: MarkdownStyleSheet(
+        blockquoteDecoration: BoxDecoration(
+          color: AppColors.blockquoteColor.withOpacity(0.2),
+          borderRadius: BorderRadius.all(Radius.circular(5))
+        ),
+          p: Theme.of(context)
+              .textTheme
+              .bodyLarge!
+              .copyWith(color: AppColors.text_color)),
+    );
   }
 
   String fixedJsonMarkdown(String json_markdown) {
