@@ -36,7 +36,7 @@ class UpdatedAtTimesDataSource {
 
     // Making a List<Post> out of List<RecordSnapshot>
     return recordSnapshots.map((snapshot) {
-      final updatedAtTimes = UpdatedAtTimes.fromMap(snapshot.value);
+      final updatedAtTimes = UpdatedAtTimesFactory().fromMap(snapshot.value);
       // An ID is a key of a record from the database.
       // updatedAtTimes.id = snapshot.key;
       return updatedAtTimes;
@@ -54,7 +54,7 @@ class UpdatedAtTimesDataSource {
       _db,
     );
     List listOfUpdatedAtTimes = recordSnapshots.map((snapshot) {
-      updatedAtTimes = UpdatedAtTimes.fromMap(snapshot.value);
+      updatedAtTimes = UpdatedAtTimesFactory().fromMap(snapshot.value);
       return updatedAtTimes;
     }).toList();
 

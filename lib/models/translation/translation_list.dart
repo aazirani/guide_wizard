@@ -1,15 +1,19 @@
-import 'package:guide_wizard/models/translation/translation.dart' as t;
+import 'package:guide_wizard/models/translation/translation.dart';
+import 'package:mobx/mobx.dart';
 
 class TranslationList {
-  final List<t.Translation> translations;
+
+  @observable
+  final ObservableList<Translation> translations;
 
   TranslationList({
     required this.translations,
   });
 
+  @action
   factory TranslationList.fromJson(List<dynamic> json) {
-    List<t.Translation> translations;
-    translations = json.map((translation) => t.Translation.fromMap(translation)).toList();
+    ObservableList<Translation> translations;
+    translations = ObservableList<Translation>.of(json.map((translation) => TranslationFactory().fromMap(translation)));
 
     return TranslationList(
       translations: translations,

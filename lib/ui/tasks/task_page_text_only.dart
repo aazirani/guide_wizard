@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:guide_wizard/constants/colors.dart';
 import 'package:guide_wizard/constants/dimens.dart';
+import 'package:guide_wizard/models/step/app_step.dart';
+import 'package:guide_wizard/models/task/task.dart';
 import 'package:guide_wizard/stores/data/data_store.dart';
 import 'package:guide_wizard/stores/technical_name/technical_name_with_translations_store.dart';
 import 'package:guide_wizard/widgets/sub_task_widget.dart';
@@ -10,15 +12,16 @@ import 'package:provider/provider.dart';
 import 'package:render_metrics/render_metrics.dart';
 
 class TaskPageTextOnly extends StatefulWidget {
-  int taskId;
-
-  TaskPageTextOnly({Key? key, required this.taskId}) : super(key: key);
+  final Task task;
+  final AppStep step;
+  TaskPageTextOnly({Key? key, required this.task, required this.step}) : super(key: key);
 
   @override
   State<TaskPageTextOnly> createState() => _TaskPageTextOnlyState();
 }
 
 class _TaskPageTextOnlyState extends State<TaskPageTextOnly> {
+
   RenderParametersManager renderManager = RenderParametersManager<dynamic>();
   // stores:--------------------------------------------------------------------
   late DataStore _dataStore;
@@ -31,6 +34,9 @@ class _TaskPageTextOnlyState extends State<TaskPageTextOnly> {
     _dataStore = Provider.of<DataStore>(context);
     _technicalNameWithTranslationsStore =
         Provider.of<TechnicalNameWithTranslationsStore>(context);
+    setState(() {
+
+    });
   }
 
   @override
@@ -40,14 +46,16 @@ class _TaskPageTextOnlyState extends State<TaskPageTextOnly> {
 
   @override
   Widget build(BuildContext context) {
-    var titleId = _dataStore.getTaskById(widget.taskId).text;
-    return Scaffold(
-      backgroundColor: AppColors.main_color,
-      appBar: BlocksAppBarWidget(
-          taskId: widget.taskId,
-          title: _technicalNameWithTranslationsStore.getTranslation(titleId),
+    return Observer(
+      builder: (_) => Scaffold(
+        backgroundColor: AppColors.main_color,
+        appBar: BlocksAppBarWidget(
+          task: widget.task,
+          step: widget.step,
+          title: _technicalNameWithTranslationsStore.getTranslation(widget.task.text),
+        ),
+        body: _buildScaffoldBody(),
       ),
-      body: _buildScaffoldBody(),
     );
   }
 
@@ -69,7 +77,7 @@ class _TaskPageTextOnlyState extends State<TaskPageTextOnly> {
     return RawScrollbar(
       child: ListView(
         children: [
-          _technicalNameWithTranslationsStore.getTranslation(_dataStore.getTaskById(widget.taskId).description) == "" ? SizedBox(height: Dimens.taskPageTextOnlyListViewPadding.top,) : _buildDescription(),
+          _technicalNameWithTranslationsStore.getTranslation(widget.task.description) == "" ? SizedBox(height: Dimens.taskPageTextOnlyListViewPadding.top,) : _buildDescription(),
           _buildSubTasksList(),
         ],
       ),
@@ -77,34 +85,26 @@ class _TaskPageTextOnlyState extends State<TaskPageTextOnly> {
   }
 
   _buildDescription() {
-    var descriptionId = _dataStore.getTaskById(widget.taskId).description;
     return Padding(
       padding: Dimens.taskPageTextOnlyListViewPadding,
-      child: Observer(
-        builder: (context) {
-          return Text(
-            _technicalNameWithTranslationsStore.getTranslation(descriptionId),
-            style: TextStyle(fontSize: Dimens.taskDescriptionFont, color: AppColors.main_color),
-
-          );
-        },
+      child: Text(
+        _technicalNameWithTranslationsStore.getTranslation(widget.task.description),
+        style: TextStyle(fontSize: Dimens.taskDescriptionFont, color: AppColors.main_color),
       ),
     );
   }
 
   _buildSubTasksList() {
-    
     return ListView.builder(
       physics: ScrollPhysics(),
       shrinkWrap: true,
-      itemCount: _dataStore.getTaskById(widget.taskId).sub_tasks.length,
+      itemCount: widget.task.sub_tasks.length,
       itemBuilder: (context, i) {
-        var deadlineId = _dataStore.getDeadlineId(widget.taskId, i);
         return SubTaskWidget(
           index: i,
-          subTasks: _dataStore.getTaskById(widget.taskId).sub_tasks,
+          task: widget.task,
+          step: widget.step,
           renderManager: renderManager,
-          deadline: _technicalNameWithTranslationsStore.getTranslation(deadlineId),
         );
       },
     );

@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:guide_wizard/constants/colors.dart';
 import 'package:guide_wizard/constants/dimens.dart';
-import 'package:guide_wizard/models/sub_task/sub_task.dart';
+import 'package:guide_wizard/models/step/app_step.dart';
+import 'package:guide_wizard/models/task/task.dart';
+import 'package:guide_wizard/stores/data/data_store.dart';
 import 'package:guide_wizard/stores/technical_name/technical_name_with_translations_store.dart';
 import 'package:guide_wizard/widgets/app_expansiontile.dart';
 import 'package:guide_wizard/widgets/expansion_content.dart';
@@ -9,55 +11,57 @@ import 'package:provider/provider.dart';
 import 'package:render_metrics/render_metrics.dart';
 
 class SubTaskWidget extends StatefulWidget {
-  int index;
-  List<SubTask> subTasks;
+  final int index;
+  final Task task;
+  final AppStep step;
   RenderParametersManager renderManager;
-  String? deadline;
   SubTaskWidget({
     Key? key,
     required this.index,
-    required this.subTasks,
+    required this.task,
     required this.renderManager,
-    this.deadline,
+    required this.step
   }) : super(key: key);
 
   @override
   State<SubTaskWidget> createState() => SubTaskWidgetState();
 }
 
-class SubTaskWidgetState extends State<SubTaskWidget>
-    with AutomaticKeepAliveClientMixin {
+class SubTaskWidgetState extends State<SubTaskWidget> with AutomaticKeepAliveClientMixin {
+  // stores:--------------------------------------------------------------------
+  late DataStore _dataStore;
   late TechnicalNameWithTranslationsStore _technicalNameWithTranslationsStore;
+
   @override
   void didChangeDependencies() {
     super.didChangeDependencies();
+    _dataStore = Provider.of<DataStore>(context);
     _technicalNameWithTranslationsStore =
         Provider.of<TechnicalNameWithTranslationsStore>(context);
   }
 
   void _runAtExpanding() {
     setState(() {
-      widget.subTasks.map((element) {
+      widget.task.subTasks.map((element) {
         if (element.expanded) {
-          element.rebuildGlobalKey();
           element.expanded = false;
         }
       });
-      widget.subTasks[widget.index].toggleExpanded();
+      widget.task.subTasks[widget.index].toggleExpanded();
     });
   }
 
   Widget _buildExpansionContent() {
-    var markdown_id = widget.subTasks[widget.index].markdown;
+    var markdown_id = widget.task.subTasks[widget.index].markdown;
     return ExpansionContent(
             renderManager: widget.renderManager,
-            markdown: _technicalNameWithTranslationsStore.getTranslation(markdown_id)!,
-            deadline: widget.deadline);
+            markdown: _technicalNameWithTranslationsStore.getTranslation(markdown_id),
+            deadline: _technicalNameWithTranslationsStore.getTranslation(widget.task.subTasks[widget.index].deadline));
   }
 
 
   Widget _buildAppExpansionTileWidget() {
-    var sub_task_title_id = widget.subTasks[widget.index].title;
+    var sub_task_title_id = widget.task.subTasks[widget.index].title;
       return AppExpansionTile(
         onExpansionChanged: ((isNewState) {
           if (isNewState) {
@@ -71,7 +75,7 @@ class SubTaskWidgetState extends State<SubTaskWidget>
           _technicalNameWithTranslationsStore.getTranslation(sub_task_title_id)!,
           style: TextStyle(fontSize: Dimens.subtaskTitleFontSize),
         ),
-        key: widget.subTasks[widget.index].globalKey,
+        key: Key(widget.task.subTasks[widget.index].id.toString()),
         children: <Widget>[
           _buildExpansionContent(),
         ],
@@ -105,7 +109,7 @@ class SubTaskWidgetState extends State<SubTaskWidget>
     );
   }
 
-  Widget _buildExpansionTile({required GlobalKey<AppExpansionTileState> key}) {
+  Widget _buildExpansionTile() {
     return Padding(
       padding: Dimens.expansionPadding,
       child: _buildRoundedExpansionTile(),
@@ -115,7 +119,7 @@ class SubTaskWidgetState extends State<SubTaskWidget>
   @override
   Widget build(BuildContext context) {
     super.build(context);
-    return _buildExpansionTile(key: widget.subTasks[widget.index].globalKey);
+    return _buildExpansionTile();
   }
 
   @override

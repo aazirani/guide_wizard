@@ -1,33 +1,23 @@
 import 'package:guide_wizard/models/task/task.dart';
+import 'package:mobx/mobx.dart';
 
 class TaskList {
-  final List<Task> tasks;
+  @observable
+  final ObservableList<Task> tasks;
+
   TaskList({required this.tasks});
 
+  @action
   factory TaskList.fromJson(List<dynamic> json) {
     List<Task> tasks;
 
-    tasks = json.map((task) => Task.fromMap(task)).toList();
+    tasks = json.map((task) => TaskFactory().fromMap(task)).toList();
 
     return TaskList(
-      tasks: tasks,
+      tasks: ObservableList<Task>.of(tasks),
     );
   }
 
-  int get numTasks {
-    return tasks.length;
-  }
-
-  Task? getTask(int id) {
-    for(Task task in tasks){
-      if(task.id == id){
-        return task;
-      }
-    }
-    return null;
-  }
-
-  set setTasks(List<Task> tasks) {
-    tasks = tasks;
-  }
+  @computed
+  int get numTasks => tasks.length;
 }

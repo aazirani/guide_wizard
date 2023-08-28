@@ -1,13 +1,9 @@
-import 'package:dio/dio.dart';
 import 'package:guide_wizard/data/repository.dart';
 import 'package:guide_wizard/models/answer/answer.dart';
 import 'package:guide_wizard/models/question/question.dart';
-import 'package:guide_wizard/models/question/question_list.dart';
-import 'package:guide_wizard/models/step/step_list.dart';
+import 'package:guide_wizard/models/step/app_step.dart';
 import 'package:guide_wizard/models/task/task.dart';
-import 'package:guide_wizard/models/task/task_list.dart';
 import 'package:guide_wizard/stores/error/error_store.dart';
-import 'package:guide_wizard/utils/dio/dio_error_util.dart';
 import 'package:mobx/mobx.dart';
 
 // // Include generated file
@@ -18,40 +14,22 @@ class DataStore = _DataStore with _$DataStore;
 
 abstract class _DataStore with Store {
   Repository _repository;
-  
-  @observable
-  late ObservableList<double>? values = ObservableList.of(List<double>.filled(getNumberOfSteps(), 0.0));
+
   _DataStore(Repository repo) : this._repository = repo;
-
-  @observable
-  bool dataLoad = false;
-
-  @action
-  void dataLoaded() {
-    this.dataLoad = true;
-  }
-
-  @action
-  void dataNotLoaded() {
-    this.dataLoad = false;
-  }
-
-  @action
-  setValues(newValues) {
-    this.values = ObservableList.of(newValues);
-  }
 
   // store for handling errors
   final ErrorStore errorStore = ErrorStore();
 
-  //steplist observables
-  static ObservableFuture<StepList> emptyStepsResponse = ObservableFuture.value(StepList(steps: []));
+  // observables
+  static ObservableFuture<List<AppStep>> emptyStepsResponse = ObservableFuture.value(List.empty());
 
   @observable
-  ObservableFuture<StepList> fetchStepsFuture = ObservableFuture<StepList>(emptyStepsResponse);
+  ObservableFuture<List<AppStep>> fetchStepsFuture = ObservableFuture<List<AppStep>>(emptyStepsResponse);
+
+  ObservableList<AppStep> stepList = ObservableList.of(List.empty());
 
   @observable
-  StepList stepList = StepList(steps: []);
+  bool _loadingDataFromDbOrServer = false;
 
   @computed
   bool get stepSuccess => fetchStepsFuture.status == FutureStatus.fulfilled;
@@ -59,312 +37,159 @@ abstract class _DataStore with Store {
   @computed
   bool get stepLoading => fetchStepsFuture.status == FutureStatus.pending;
 
-  //tasklist observables
-  static ObservableFuture<TaskList?> emptyTaskResponse = ObservableFuture.value(null);
-
-  static ObservableFuture<dynamic> emptyTruncateTaskResponse = ObservableFuture.value(null);
-
-  @observable
-  ObservableFuture<TaskList?> fetchTasksFuture = ObservableFuture<TaskList?>(emptyTaskResponse);
-
-  @observable
-  ObservableFuture<dynamic> truncateTasksFuture = ObservableFuture<dynamic>(emptyTruncateTaskResponse);
-
-  @observable
-  TaskList taskList = TaskList(tasks: []);
-
-  @observable
-  TaskList allTasks = TaskList(tasks: []);
-
-  @observable
-  bool tasksSuccess = false;
-
-  //questions observables:
-  static ObservableFuture<QuestionList?> emptyQuestionResponse = ObservableFuture.value(null);
-  static ObservableFuture<dynamic> emptyTruncateQuestionResponse = ObservableFuture.value(null);
-
-  @observable
-  ObservableFuture<QuestionList?> fetchQuestionsFuture = ObservableFuture<QuestionList?>(emptyQuestionResponse);
-
-  @observable
-  ObservableFuture<dynamic> truncateQuestionsFuture = ObservableFuture<dynamic>(emptyTruncateQuestionResponse);
-
-  @observable
-  QuestionList questionList = QuestionList(questions: []);
-
-  @observable
-  bool questionSuccess = false;
-  //answers observables:
-  @observable
-  List<Answer> answers = [];
-
-  @observable
-  bool success = false;
-  //tasks computed:
   @computed
-  bool get tasksLoading => fetchTasksFuture.status == FutureStatus.pending;
+  bool get isLoading => _loadingDataFromDbOrServer;
 
   @computed
-  bool get tasksLoadingTruncate => truncateTasksFuture.status == FutureStatus.pending;
+  List<AppStep> get getAllSteps => this.stepList;
 
-  //questions computed:
-  @computed
-  bool get questionLoading => fetchQuestionsFuture.status == FutureStatus.pending;
-
-  @computed
-  bool get questionLoadingTruncate => truncateQuestionsFuture.status == FutureStatus.pending;
-
-// actions......................................................................
+  //Actions......................................................................
   @action
-  Future getSteps() async {
-    final future = _repository.getStep();
-    fetchStepsFuture = ObservableFuture(future);
-    await future.then((stepList) {
-      stepList.steps.sort((a, b) => a.order.compareTo(b.order));
-      this.stepList = stepList;
-    });
+  void loadingStarted(){
+    this._loadingDataFromDbOrServer = true;
   }
 
   @action
-  Future stepDataSourceCount() => _repository.stepDatasourceCount();
+  void loadingFinished(){
+    this._loadingDataFromDbOrServer = false;
+  }
 
   @action
-  Future isDataSourceEmpty() async =>  (await _repository.stepDatasourceCount()) == 0;
+  Future<List<AppStep>> getStepsFromDb() async {
+    try {
+      fetchStepsFuture = ObservableFuture(_repository.getStepsFromDb());
+      List<AppStep> steps = await fetchStepsFuture;
+      _setStepList(steps);
+      return steps;
+    } catch (e) {
+      return List.empty();
+    }
+  }
 
   @action
-  Future truncateSteps() async {
+  Future<List<AppStep>> getStepsFromApi() async {
+    try {
+      fetchStepsFuture = ObservableFuture(_repository.getStepFromApiAndInsert());
+      List<AppStep> steps = await fetchStepsFuture;
+      _setStepList(steps);
+      return steps;
+    } catch (e) {
+      return List.empty();
+    }
+  }
+
+  void _setStepList(List<AppStep> steps) {
+    steps.sort((a, b) => a.order.compareTo(b.order));
+    this.stepList = ObservableList.of(steps);
+  }
+
+  AppStep getStepById(int stepId) {
+    return this.getAllSteps.firstWhere((step) => step.id == stepId);
+  }
+
+  bool isFirstStep(int stepId) {
+    var steps = this.getAllSteps;
+    if(steps.isEmpty) {
+      // Handle the empty list case. Return false or throw an exception.
+      return false;
+    }
+    return steps.reduce((curr, next) => curr.order < next.order ? curr : next)
+        .id == stepId;
+  }
+
+  int getIndexOfStep(int stepId){
+    return this.getAllSteps.indexWhere((step) => step.id == stepId);
+  }
+
+  AppStep getStepByIndex(int index){
+    return this.getAllSteps.elementAt(index);
+  }
+
+  Future<bool> isDataSourceEmpty() async {
+    return (await _repository.stepDatasourceCount()) == 0;
+  }
+
+  @action
+  Future<void> truncateSteps() async {
     await _repository.truncateStep();
   }
 
-  //tasks actions: .............................................................
-  @action
-  Future getAllTasks() async {
-    final future = _repository.getTasks();
-    fetchTasksFuture = ObservableFuture(future);
-    future.then((taskList) {
-      this.allTasks = taskList;
-    }).catchError((error) {
-      errorStore.errorMessage = DioErrorUtil.handleError(error);
-    });
-    return future;
+  //Tasks Actions: .............................................................
+  List<Task> getAllTasks() {
+    return this.getAllSteps.expand((step) => step.tasks).toList();
+  }
+
+  Task getTaskById(int id) {
+    return getAllTasks().firstWhere((task) => task.id == id);
   }
 
   @action
-  Future getTasks(int id) async {
-    final future = _repository.getTasks();
-    fetchTasksFuture = ObservableFuture(future);
-    List<Task> relatedTasks = [];
-    future.then((taskList) {
-      taskList.tasks.forEach((task) {
-        if (task.step_id == id) {
-          relatedTasks.add(task);
-        }
-      });
-      TaskList temp = TaskList(tasks: relatedTasks);
-      this.taskList = temp;
-    });
+  Future<void> toggleTask(Task task) async {
+    task.toggleDone();
+    AppStep step = getAllSteps.firstWhere((step) => step.id == task.step_id);
+    _repository.updateStep(step);
   }
 
   @action
-  Task getTaskById(int taskId) {
-    return taskList.tasks.firstWhere((task) => task.id == taskId);
+  Future<void> updateTask(Task task) async {
+    AppStep step = getAllSteps.firstWhere((step) => step.id == task.step_id);
+    int indexOfTask = step.tasks.indexWhere((t) => t.id == task.id);
+    if (indexOfTask != -1) {
+      step.tasks[indexOfTask] = task;
+    }
+    _repository.updateStep(step);
+
+  }
+
+  //Questions Actions: .........................................................
+  List<Question> getAllQuestions() {
+    return this.getAllSteps.expand((step) => step.questions).toList();
   }
 
   @action
-  Future updateTask(Task task) async {
-    await _repository.updateTask(task);
+  Future<void> updateQuestion(Question question) async {
+    AppStep step = getAllSteps.firstWhere((step) => step.id == question.step_id);
+    int indexOfQuestion = step.questions.indexWhere((q) => q.id == question.id);
+
+    if (indexOfQuestion != -1) {
+      step.questions[indexOfQuestion] = question;
+    }
+    _repository.updateStep(step);
   }
 
-  @action
-  Future updateTasks() async {
-    final future = _repository.getUpdatedTask();
-    fetchTasksFuture = ObservableFuture(future);
-
-    future.then((taskList) {
-      this.taskList = taskList;
-    }).catchError((error) {
-      errorStore.errorMessage = DioErrorUtil.handleError(error);
-    });
-
-    return future;
-  }
-
-  @action
-  Future truncateTasks() async {
-    await _repository.truncateTask();
-  }
-
-  //questions actions: .........................................................
-  @action
-  Future getQuestions() async {
-    final future = _repository.getQuestions();
-    fetchQuestionsFuture = ObservableFuture(future);
-
-    future.then((questionList) {
-      this.questionList = questionList;
-    }).catchError((error) {
-      errorStore.errorMessage = DioErrorUtil.handleError(error);
-    });
-    return future;
-  }
-
-  @action
-  Future updateQuestion(Question question) async {
-    await _repository.updateQuestion(question);
-  }
-
-  @action
   Question getQuestionById(int questionId) {
-    return questionList.questions
-        .firstWhere((question) => question.id == questionId);
+    return getAllQuestions().firstWhere((question) => question.id == questionId);
   }
 
-  @action
-  Future truncateQuestionTable() async {
-    final future = _repository.truncateQuestions();
-    truncateQuestionsFuture = ObservableFuture(future);
-
-    future.catchError((error) {
-      errorStore.errorMessage = DioErrorUtil.handleError(error);
-    });
-
-    return future;
+  //Other: .....................................................................
+  List<Task> getDoneTasks(int stepId) {
+    return getAllTasks().where((task) => task.step_id == stepId && task.isDone).toList();
   }
 
-  @action
-  Future updateQuestions() async {
-    final future = _repository.getUpdatedQuestion();
-    fetchQuestionsFuture = ObservableFuture(future);
-
-    future.then((questionList) {
-      this.questionList = questionList;
-    }).catchError((error) {
-      errorStore.errorMessage = DioErrorUtil.handleError(error);
-    });
-
-    return future;
+  bool isAllTasksOfStepDone(int stepId){
+    return this.getStepById(stepId).tasks.length == this.getDoneTasks(stepId);
   }
 
-  @action
-  Future truncateQuestions() async {
-    await _repository.truncateQuestions();
+  List<Answer> getSelectedAnswers(){
+    return getAllQuestions().expand((question) => question.answers.where((answer) => answer.isSelected)).toList();
   }
 
-  // answers actions:
-  get getAnswers => answers;
-
-  @action
-  Future<void> updateAnswers() async {
-    try {
-      final stepList = await _repository.getStep();
-
-      answers = stepList.steps
-        .expand((step) => step.questions.expand((question) => question.answers.where((answer) => answer.selected)))
-        .toList();
-    } on DioError catch (error) {
-      errorStore.errorMessage = DioErrorUtil.handleError(error);
-    }
+  bool stepIsDone(int stepId) {
+    return (this.isAllTasksOfStepDone(this.getStepById(stepId).id)
+        && this.getStepById(stepId).questions.isEmpty)
+        || (this.getStepById(stepId).questions.expand((question) => question.answers.where((answer) => answer.isSelected)).length == this.getStepById(stepId).questions.length
+            && this.getStepById(stepId).tasks.isEmpty);
   }
 
-  //.............................................................................
-  String? getStepImage(int stepNum) {
-    return this.stepList.steps[stepNum].image;
+  bool stepIsPending(int stepId) {
+    return !this.stepIsDone(stepId) &&
+        ((this.getStepById(stepId).questions.expand((question) => question.answers.where((answer) => answer.isSelected)).isNotEmpty
+    && this.getStepById(stepId).tasks.isEmpty)
+        || this.getStepById(stepId).tasks.where((task) => task.isDone).isNotEmpty && this.getStepById(stepId).questions.isEmpty);
   }
 
-  int getNumberOfSteps() {
-    return this.stepList.steps.length;
+  bool stepIsNotStarted(int stepId) {
+    return this.getStepById(stepId).questions.expand((question) => question.answers.where((answer) => answer.isSelected)).isEmpty && this.getStepById(stepId).tasks.isEmpty
+    || this.getStepById(stepId).tasks.where((task) => task.isDone).isEmpty && this.getStepById(stepId).questions.isEmpty;
   }
-
-  int getNumberOfTaskListTasks() {
-    return this.taskList.numTasks;
-  }
-
-  int getStepId(stepIndex) {
-    return this.stepList.steps[stepIndex].id;
-  }
-
-  int getStepTitleId(stepIndex) {
-    return this.stepList.steps[stepIndex].name;
-  }
-
-  int getTaskTitleId(stepIndex, taskIndex) {
-    return this.stepList.steps[stepIndex].tasks[taskIndex].text;
-  }
-
-  int getTaskTitleIdByIndex(taskIndex) {
-    return this.taskList.tasks[taskIndex].text;
-  }
-
-  int getTaskId(taskIndex) {
-    return this.taskList.tasks[taskIndex].id;
-  }
-
-  Task getTaskByIndex(taskIndex) {
-    return this.taskList.tasks[taskIndex];
-  }
-
-  getNumberOfTasksFromAStep(index) {
-    return this.stepList.steps[index].numTasks;
-  }
-
-  getNumberOfQuestionsFromAStep(index) {
-    return this.stepList.steps[index].questions.length;
-  }
-
-  @action
-  Future<void> saveProgressValues() async {
-    await _repository.saveProgressValueInSharedPreferences(values!);
-  }
-
-  @action
-  void completionPercentages() {
-    ObservableList<double> percentages = ObservableList<double>();
-    for (var i = 0; i < stepList.steps.length; i++) {
-      int numTasks = stepList.steps[i].numTasks;
-      int numDoneTasks = allTasks.tasks
-          .where((task) => task.step_id == stepList.steps[i].id && task.isDone)
-          .length;
-
-      double percentage = numTasks == 0 ? 0 : numDoneTasks / numTasks;
-      percentage = double.parse(percentage.toStringAsFixed(2));
-
-      percentages.add(percentage);
-    }
-
-    setValues(percentages);
-    saveProgressValues();
-  }
-
-  int getNumberofDoneTasks(currentStepNo) {
-    int numDoneTasks = taskList.tasks
-        .where((task) =>
-            task.step_id == stepList.steps[currentStepNo].id && task.isDone)
-        .length;
-
-    return numDoneTasks;
-  }
-
-  bool getTaskIsDoneStatus(taskIndex) {
-    return this.taskList.tasks[taskIndex].isDone;
-  }
-
-  bool getTaskType(taskIndex) {
-    return this.taskList.tasks[taskIndex].isTypeOfText;
-  }
-
-  int getStepOrder(currentStepIndex) {
-    return this.stepList.steps[currentStepIndex].order;
-  }
-
-  initializeValues() async {
-    try {
-      final loadedValues =
-          await _repository.loadProgressValues(stepList.steps.length);
-      this.values = ObservableList.of(loadedValues);
-    } catch (e) {
-      print("Caught exception in constructor: $e");
-    }
-  }
-
-  int getDeadlineId(taskId, index) => getTaskById(taskId).sub_tasks[index].deadline;
 }

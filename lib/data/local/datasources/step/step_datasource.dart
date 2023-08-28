@@ -1,6 +1,7 @@
 import 'package:guide_wizard/data/local/constants/db_constants.dart';
-import 'package:guide_wizard/models/step/step.dart';
+import 'package:guide_wizard/models/step/app_step.dart';
 import 'package:guide_wizard/models/step/step_list.dart';
+import 'package:mobx/mobx.dart';
 import 'package:sembast/sembast.dart';
 
 class StepDataSource {
@@ -19,7 +20,7 @@ class StepDataSource {
   StepDataSource(this._db);
 
   // DB functions:--------------------------------------------------------------
-  Future<int> insert(Step step) async {
+  Future<int> insert(AppStep step) async {
     return await _stepsStore.add(_db, step.toMap());
   }
 
@@ -27,7 +28,7 @@ class StepDataSource {
     return await _stepsStore.count(_db);
   }
 
-  Future<List<Step>> getAllSortedByFilter({List<Filter>? filters}) async {
+  Future<List<AppStep>> getAllSortedByFilter({List<Filter>? filters}) async {
     //creating finder
     final finder = Finder(
         filter: filters != null ? Filter.and(filters) : null,
@@ -40,18 +41,18 @@ class StepDataSource {
 
     // Making a List<Post> out of List<RecordSnapshot>
     return recordSnapshots.map((snapshot) {
-      final step = Step.fromMap(snapshot.value);
+      final step = AppStepFactory().fromMap(snapshot.value);
       // An ID is a key of a record from the database.
       step.id = snapshot.key;
       return step;
     }).toList();
   }
 
-  Future<StepList> getStepsFromDb() async {
+  Future<AppStepList> getStepsFromDb() async {
     print('Loading from database');
 
     // post list
-    StepList stepsList;
+    AppStepList stepsList;
 
     // fetching data
     final recordSnapshots = await _stepsStore.find(
@@ -60,20 +61,20 @@ class StepDataSource {
 
     // Making a List<Post> out of List<RecordSnapshot>
     if (recordSnapshots.length > 0) {
-      stepsList = StepList(
-          steps: recordSnapshots.map((snapshot) {
-        final step = Step.fromMap(snapshot.value);
-        // An ID is a key of a record from the database.
-        return step;
-      }).toList());
+      stepsList = AppStepList(
+          steps: ObservableList.of(recordSnapshots.map((snapshot) {
+            final step = AppStepFactory().fromMap(snapshot.value);
+            // An ID is a key of a record from the database.
+            return step;
+          })));
     } else {
-      stepsList = StepList(steps: []);
+      stepsList = AppStepList(steps: ObservableList.of(List.empty()));
     }
 
     return stepsList;
   }
 
-  Future<int> update(Step step) async {
+  Future<int> update(AppStep step) async {
     // For filtering by key (ID), RegEx, greater than, and many other criteria,
     // we use a Finder.
     final finder = Finder(filter: Filter.byKey(step.id));
@@ -84,7 +85,7 @@ class StepDataSource {
     );
   }
 
-  Future<int> delete(Step step) async {
+  Future<int> delete(AppStep step) async {
     final finder = Finder(filter: Filter.byKey(step.id));
     return await _stepsStore.delete(
       _db,

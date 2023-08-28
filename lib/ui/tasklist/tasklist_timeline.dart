@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:guide_wizard/constants/colors.dart';
 import 'package:guide_wizard/constants/dimens.dart';
 import 'package:guide_wizard/constants/lang_keys.dart';
+import 'package:guide_wizard/models/step/app_step.dart';
+import 'package:guide_wizard/models/task/task.dart';
 import 'package:guide_wizard/stores/data/data_store.dart';
-import 'package:guide_wizard/stores/step/step_store.dart';
 import 'package:guide_wizard/stores/technical_name/technical_name_with_translations_store.dart';
 import 'package:guide_wizard/ui/tasks/task_page_text_only.dart';
 import 'package:guide_wizard/ui/tasks/task_page_with_image.dart';
@@ -12,10 +14,10 @@ import 'package:provider/provider.dart';
 import 'package:timelines/timelines.dart';
 
 class TaskListTimeLine extends StatefulWidget {
-  // final TaskList taskList;
-  final int taskNumber;
-  final StepStore stepStore;
-  TaskListTimeLine({Key? key, required this.taskNumber, required this.stepStore}) : super(key: key);
+  final AppStep step;
+  final Task task;
+  final int index;
+  TaskListTimeLine({Key? key, required this.step, required this.task, required this.index}) : super(key: key);
 
   @override
   State<TaskListTimeLine> createState() => _TaskListTimeLineState();
@@ -39,31 +41,33 @@ class _TaskListTimeLineState extends State<TaskListTimeLine> {
         onTap: () {
           _navigateToTaskPage();
         },
-        child: _buildTimeline(widget.taskNumber));
+        child: _buildTimeline());
   }
 
-  Widget _buildTimeline(taskNumber) {
-    return TimelineTile(
-      nodePosition: 0.05,
-      contents: _buildContents(taskNumber),
-      node: TimelineNode(
-        indicator: _buildIndicator(taskNumber),
-        startConnector: taskNumber == 0 && (widget.stepStore.currentStep) - 1 == 1
-            ? Container()
-            : _buildConnector(),
-        endConnector: (widget.stepStore.currentStep)  == _dataStore.getNumberOfSteps()
-            ? Container()
-            : _buildConnector(),
+  Widget _buildTimeline() {
+    return Observer(
+      builder: (_) => TimelineTile(
+        nodePosition: 0.05,
+        contents: _buildContents(),
+        node: TimelineNode(
+          indicator: _buildIndicator(),
+          startConnector: widget.index == 0
+              ? Container()
+              : _buildConnector(),
+          endConnector: widget.index == widget.step.tasks.length - 1
+              ? Container()
+              : _buildConnector(),
+        ),
       ),
     );
   }
 
-  Widget _buildIndicator(taskNumber) {
+  Widget _buildIndicator() {
     return Container(
         color: AppColors.transparent,
         width: 8,
         height: 8,
-        child: (_taskDone(taskNumber))
+        child: (widget.task.isDone)
             ? DiamondIndicator(fill: true)
             : DiamondIndicator());
   }
@@ -73,7 +77,7 @@ class _TaskListTimeLineState extends State<TaskListTimeLine> {
         direction: Axis.vertical, color: AppColors.tasklistConnectorColor);
   }
 
-  Widget _buildContents(taskNumber) {
+  Widget _buildContents() {
     return Padding(
       padding: Dimens.contentContainerPadding,
       child: Material(
@@ -91,19 +95,19 @@ class _TaskListTimeLineState extends State<TaskListTimeLine> {
               border: Border(
                   left: BorderSide(
                 width: 25,
-                color: (_dataStore.getTaskIsDoneStatus(taskNumber) == true)
+                color: (widget.task.isDone)
                     ? AppColors.contentDoneBorderColor
                     : AppColors.contentUnDoneBorderColor,
               )),
             ),
-            child: _buildInsideElements(taskNumber),
+            child: _buildInsideElements(),
           ),
         ),
       ),
     );
   }
 
-  Widget _buildInsideElements(taskNumber) {
+  Widget _buildInsideElements() {
     return GestureDetector(
       onTap: () {
         _navigateToTaskPage();
@@ -115,12 +119,12 @@ class _TaskListTimeLineState extends State<TaskListTimeLine> {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 mainAxisAlignment: MainAxisAlignment.center,
-                children: (_deadLineAvailable(taskNumber))
+                children: (_deadLineAvailable())
                     ? [
-                        _buildContentTitle(taskNumber),
-                        _buildContentDeadline(taskNumber),
+                        _buildContentTitle(),
+                        _buildContentDeadline(),
                       ]
-                    : [_buildContentTitle(taskNumber)],
+                    : [_buildContentTitle()],
               ),
             ),
           ],
@@ -129,14 +133,12 @@ class _TaskListTimeLineState extends State<TaskListTimeLine> {
     );
   }
 
-  Widget _buildContentTitle(taskNumber) {
-    //text id of the task we want to find the title of
-    var title_id = _dataStore.getTaskTitleIdByIndex(taskNumber);
+  Widget _buildContentTitle() {
     return Flexible(
       child: Align(
         alignment: Alignment.centerLeft,
         child: Text(
-          "${_technicalNameWithTranslationsStore.getTranslation(title_id)} ",
+          "${_technicalNameWithTranslationsStore.getTranslation(widget.task.text)} ",
           style: TextStyle(
             color: AppColors.main_color,
             fontSize: Dimens.taskListTimeLineContentTitle,
@@ -146,67 +148,58 @@ class _TaskListTimeLineState extends State<TaskListTimeLine> {
     );
   }
 
-  Widget _buildContentDeadline(taskNumber) {
+  Widget _buildContentDeadline() {
     return Container(
         padding: Dimens.contentDeadlineTopPadding,
         width: 80,
         height: 40,
-        child: (_deadLineAvailable(taskNumber))
-            ? _buildDeadlineContainer(taskNumber)
+        child: (_deadLineAvailable())
+            ? _buildDeadlineContainer()
             : null);
   }
 
-  Widget _buildDeadlineContainer(taskNumber) {
+  Widget _buildDeadlineContainer() {
     return Container(
         height: 10,
         decoration: BoxDecoration(
             borderRadius: Dimens.contentDeadlineBorderRadius,
             border: Border.all(
                 width: 1,
-                color: (_taskDone(taskNumber))
+                color: (widget.task.isDone)
                     ? AppColors.deadlineDoneBorderColor
                     : AppColors.deadlineUnDoneBorderColor)),
         child: Center(
             child: Text("${_technicalNameWithTranslationsStore.getTranslationByTechnicalName(LangKeys.deadline)}",
                 style: TextStyle(
                     fontSize: 13,
-                    color: (_taskDone(taskNumber)
+                    color: (widget.task.isDone)
                         ? AppColors.deadlineTextDoneColor
-                        : AppColors.deadlineTextUnDoneColor)))));
+                        : AppColors.deadlineTextUnDoneColor))));
   }
 
   //general methods ............................................................
-  double _getScreenWidth() => MediaQuery.of(context).size.width;
 
-  bool _deadLineAvailable(taskNumber) {
-    bool status = _dataStore.taskList.tasks[taskNumber].sub_tasks.any(
-        (sub_task) => _technicalNameWithTranslationsStore
+  bool _deadLineAvailable() {
+    return widget.task.sub_tasks.any(
+            (sub_task) => _technicalNameWithTranslationsStore
             .getTranslation(sub_task.deadline)
             .isNotEmpty);
-    switch (status) {
-      case false:
-        return false;
-    }
-    return true;
-  }
-
-  bool _taskDone(taskNumber) {
-    switch (_dataStore.getTaskIsDoneStatus(taskNumber)) {
-      case true:
-        return true;
-    }
-    return false;
   }
 
   void _navigateToTaskPage() {
-    final taskNumber = widget.taskNumber;
-    final taskType = _dataStore.getTaskType(taskNumber);
-    final taskId = _dataStore.getTaskId(taskNumber);
-    final task = _dataStore.getTaskByIndex(taskNumber);
-
-    final taskPage = taskType
-        ? TaskPageTextOnly(taskId: taskId)
-        : TaskPageWithImage(task: task);
+    Widget taskPage = Container();
+    if(widget.task.isTypeOfText){
+      taskPage = TaskPageTextOnly(
+        task: widget.task,
+        step: widget.step,
+      );
+    }
+    if(widget.task.isTypeOfImage){
+      taskPage = TaskPageWithImage(
+        task: widget.task,
+        step: widget.step,
+      );
+    }
 
     Navigator.push(
       context,
