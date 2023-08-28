@@ -65,7 +65,7 @@ class _HomeScreenState extends State<HomeScreen> {
       body: RefreshIndicator(
         color: AppColors.main_color,
         onRefresh: () async {
-          DataLoadHandler(context: context).loadDataAndCheckForUpdate();
+          DataLoadHandler(context: context).loadDataAndCheckForUpdate(refreshData: true);
         },
         child: SingleChildScrollView(
           physics: AlwaysScrollableScrollPhysics(),

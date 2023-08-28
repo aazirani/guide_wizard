@@ -71,7 +71,7 @@ class DataLoadHandler { // This class is SINGLETON
 
   }
 
-  Future loadDataAndCheckForUpdate({bool initialLoading = false}) async {
+  Future loadDataAndCheckForUpdate({bool initialLoading = false, bool refreshData = false}) async {
     _dataStore.loadingStarted();
     bool isAnswerWasUpdated = await answerWasUpdated();
 
@@ -88,7 +88,7 @@ class DataLoadHandler { // This class is SINGLETON
         });
       }
     }
-    if((noLocalData || isAnswerWasUpdated) && await checkInternetConnectionAndShowMessage()){
+    if((noLocalData || isAnswerWasUpdated || refreshData) && await checkInternetConnectionAndShowMessage()){
       await loadDataFromApi(true, true);
       _dataStore.loadingFinished();
       return;

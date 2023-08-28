@@ -60,6 +60,30 @@ class _TaskPageWithImageState extends State<TaskPageWithImage> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: AppColors.main_color,
+      body: CustomScrollView(
+        physics: ClampingScrollPhysics(),
+        slivers: [
+          SliverAppBar(
+            automaticallyImplyLeading: false,
+            flexibleSpace: BlocksAppBarWidget(
+              task: widget.task,
+              step: widget.step,
+              title: _technicalNameWithTranslationsStore.getTranslation(widget.task.text),
+            ), // Your custom widget goes here
+          ),
+          SliverFillRemaining(
+            child: _buildScaffoldBody()
+          ),
+        ],
+      ),
+    );
+  }
+  
+  /*
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      backgroundColor: AppColors.main_color,
       appBar: BlocksAppBarWidget(
         task: widget.task,
         step: widget.step,
@@ -68,6 +92,7 @@ class _TaskPageWithImageState extends State<TaskPageWithImage> {
       body: _buildScaffoldBody(),
     );
   }
+   */
 
   Widget _buildScaffoldBody() {
     return Stack(
@@ -106,10 +131,11 @@ class _TaskPageWithImageState extends State<TaskPageWithImage> {
             color: AppColors.bright_foreground_color),
             child: RawScrollbar(
               child: ListView.builder(
+                padding: EdgeInsets.zero,
                 scrollDirection: Axis.vertical,
                 shrinkWrap: true,
                 controller: scrollController,
-                itemCount: widget.task.sub_tasks.length,
+                itemCount: widget.task.sub_tasks.length + 1,
                 itemBuilder: _buildDraggableSheetItems,
               ),
             ),
