@@ -54,7 +54,7 @@ class DataLoadHandler { // This class is SINGLETON
   Future<Map<String, bool>> updatedAtWasChanged() async {
     UpdatedAtTimes oldUpdatedAtTimes = await _updatedAtTimesStore.getUpdatedAtTimesFromDb();
 
-    if(DateTime.parse(oldUpdatedAtTimes.last_apps_request_time).isBefore(DateTime.now().subtract(Duration(minutes: 5)))){
+    if(DateTime.parse(oldUpdatedAtTimes.last_apps_request_time).isBefore(DateTime.now().subtract(SettingsConstants.updateRequestStop))){
       UpdatedAtTimes newUpdatedAtTimes = await _updatedAtTimesStore.getUpdatedAtTimesFromApi();
 
       return {
