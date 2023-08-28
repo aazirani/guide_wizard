@@ -22,6 +22,11 @@ class Dimens {
   static const double taskListTimeLineContainerMinHeight = 120;
   static const taskListDistanceFromAppBar = 20.0;
   static const doneBadgeFontSize = 13.0;
+  static const doneBadgeBorderRadius = 5.0;
+  static const doneBadgeHeight = 30.0;
+  static const doneBadgeWidth = 60.0;
+  static const deadlineContainerHeight = 10.0;
+  static const deadlineBorderWidth = 1.0;
   // Subtask: ------------------------------------------------------------
   static const double subtaskTitleFontSize = 19;
   static const listTilePadding = EdgeInsets.symmetric(horizontal: 10, vertical: 5);

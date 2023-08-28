@@ -159,18 +159,19 @@ class _TaskListTimeLineState extends State<TaskListTimeLine> {
     return Align(
       alignment: Alignment.topRight,
       child: Container(
-          height: 30,
-          width: 60,
+          height: Dimens.doneBadgeHeight,
+          width: Dimens.doneBadgeWidth,
           decoration: BoxDecoration(
               border: Border.all(color: AppColors.green[200]!),
               color: AppColors.green[300]!.withOpacity(0.3),
-              borderRadius: BorderRadius.all(Radius.circular(5))),
+              borderRadius: BorderRadius.all(Radius.circular(Dimens.doneBadgeBorderRadius))),
           child: Row(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
               Flexible(
                   flex: 3,
-                  child: Text("Done",
+                  child: Text(
+                    "${_technicalNameWithTranslationsStore.getTranslationByTechnicalName(LangKeys.done_task)}",
                       style: TextStyle(
                           color: AppColors.main_color,
                           fontSize: Dimens.doneBadgeFontSize,
@@ -192,14 +193,14 @@ class _TaskListTimeLineState extends State<TaskListTimeLine> {
 
   Widget _buildDeadlineContainer(taskNumber) {
     return Container(
-        height: 10,
+        height: Dimens.deadlineContainerHeight,
         decoration: BoxDecoration(
             color: _taskDone(taskNumber)
                 ? AppColors.bright_foreground_color
                 : AppColors.deadlineUnDoneContainerColor.withOpacity(0.8),
             borderRadius: Dimens.contentDeadlineBorderRadius,
             border: Border.all(
-                width: 1,
+                width: Dimens.deadlineBorderWidth,
                 color: (_taskDone(taskNumber))
                     ? AppColors.deadlineDoneBorderColor
                     : AppColors.deadlineUnDoneBorderColor)),
@@ -207,7 +208,7 @@ class _TaskListTimeLineState extends State<TaskListTimeLine> {
             child: Text(
                 "${_technicalNameWithTranslationsStore.getTranslationByTechnicalName(LangKeys.deadline)}",
                 style: TextStyle(
-                    fontSize: 13,
+                    fontSize: Dimens.deadlineBorderWidth,
                     color: (_taskDone(taskNumber)
                         ? AppColors.deadlineTextDoneColor
                         : AppColors.deadlineTextUnDoneColor)))));
