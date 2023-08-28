@@ -52,7 +52,14 @@ class Dimens {
   static const sliderContainerPadding = EdgeInsets.only(top: 10);
   static const avatarBoyPadding = EdgeInsets.only(left: 140, bottom: 70);
   static const avatarGirlPadding = EdgeInsets.only(left: 200, bottom: 40, top: 20);
-  static const stepAvatar = EdgeInsets.only(right: 15);
+  static const contentHeightPaddingPercentage = 0.1;
+  static const contentLeftPaddingPercentage = 0.1;
+  static const contentRightPaddingPercentage = 0.01;
+  static const contentBottomPaddingPercentage = 0.05;
+  static const emptySpaceHeightPercentage = 0.1;
+  static const spaceBetweenTitleAndNoOfTasksPercentage = 0.07;
+  static const spaceBetweenNoOfTasksAndContinueButtonPercentage = 0.03;
+  static const avatarRightPaddingPercentage = 0.05;
 
   // task page appbar widget
   static const doneButtonPadding = const EdgeInsets.only(right: 20, left: 20, top: 10);
@@ -65,12 +72,12 @@ class Dimens {
   static const double pendingSliderBorder = 4;
   static const double doneSliderBorder = 2;
   static const double notStartedSliderBorder = 2;
-  static const double buttonRadius = 18;
+  static const double buttonRadius = 30;
   static const double progressBarRadius = 10;
-  static const sliderContainerContentPadding = EdgeInsets.only(top: 30, left: 10);
-  static const progressBarHeight = 20.0;
+  static const double minFontSizeForTextOverFlow = 16;
   static const stepSliderImagePadding = EdgeInsets.all(10);
   static const stepSliderProgressBarPadding = EdgeInsets.only(bottom: 15);
+  static const progressBarHeight = 20.0;
   // compressed tasklist.........................................................
   static const double compressedTaskListTimeLineItemExtend = 70;
   static const compressedTaskListPadding = const EdgeInsets.only(left: 20, top: 10, right: 25, bottom: 10);

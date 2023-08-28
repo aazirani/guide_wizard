@@ -97,6 +97,7 @@ dependencies:
   cached_network_image: ^3.2.3
   simple_circular_progress_bar: ^1.0.2
   progress_state_button: ^1.0.4
+  auto_size_text: ^3.0.0  
   material_dialogs: ^1.1.4
 
 dev_dependencies:
