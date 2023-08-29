@@ -25,10 +25,7 @@ class AppColors {
   };
 
   static const Map<int, Color> blue = const <int, Color>{
-    50: Color(0x4d85bb),
-    100: Color(0xFF001020),
-    150: Color(0xFF3374b1),
-    // 150:,
+    50: Color.fromARGB(255, 97, 145, 218),
   };
 
   static const Map<int, Color> greys = const <int, Color>{
@@ -84,9 +81,13 @@ class AppColors {
   static Color contentDoneBorderColor = green[300]!.withOpacity(0.2);
   static Color contentUnDoneBorderColor = red[50]!.withOpacity(0.2);
   static Color deadlineDoneBorderColor = green[100]!;
-  static Color deadlineUnDoneBorderColor = red[100]!;
+  static Color deadlineUnDoneBorderColor = orange[100]!;
+  static Color deadlineUnDoneContainerColor = orange[50]!;
+  static Color deadlineDoneContainerColor = bright_foreground_color;
   static Color deadlineTextDoneColor = green[100]!;
-  static Color deadlineTextUnDoneColor = red[100]!;
+  static Color deadlineTextUnDoneColor = main_color;
+  static Color taskDoneBorder = green[100]!;
+  static Color taskUnDoneBorder = main_color;
   // questionpage
   static Color nextStepColor = green[100]!;
 

@@ -54,7 +54,10 @@ class _TaskListState extends State<TaskList> {
         titleSpacing: Dimens.appBar["titleSpacing"],
         title: ScrollingOverflowText(
           _technicalNameWithTranslationsStore.getTranslation(widget.step.name)!,
-          style: Theme.of(context).textTheme.titleLarge!.copyWith(color: AppColors.white),
+          style: Theme.of(context)
+              .textTheme
+              .titleLarge!
+              .copyWith(color: AppColors.white),
           overflowRatio: 0.77,
         ),
         leading: Padding(
@@ -98,7 +101,10 @@ class _TaskListState extends State<TaskList> {
                 padding: Dimens.numberOfTasksPadding,
                 child: Text(
                     "${widget.step.tasks.length} ${_technicalNameWithTranslationsStore.getTranslationByTechnicalName(LangKeys.tasks)}",
-                    style: Theme.of(context).textTheme.bodySmall!.copyWith(color: AppColors.white))),
+                    style: Theme.of(context)
+                        .textTheme
+                        .bodySmall!
+                        .copyWith(color: AppColors.white))),
             SizedBox(height: 5),
             _buildProgressBar(),
           ],
@@ -126,14 +132,22 @@ class _TaskListState extends State<TaskList> {
                         Radius.circular(Dimens.draggableScrollableSheetRadius),
                   ),
                   color: AppColors.white),
-              child: ListView.builder(
-                scrollDirection: Axis.vertical,
-                controller: scrollController,
-                itemCount: widget.step.tasks.length,
-                itemBuilder: (context, index) {
-                  return TaskListTimeLine(step: widget.step, index: index, task: widget.step.tasks.elementAt(index));
-                },
-              ),
+              child: Column(children: [
+                SizedBox(height: Dimens.taskListDistanceFromAppBar),
+                Flexible(
+                  child: ListView.builder(
+                    scrollDirection: Axis.vertical,
+                    controller: scrollController,
+                    itemCount: widget.step.tasks.length,
+                    itemBuilder: (context, index) {
+                      return TaskListTimeLine(
+                          step: widget.step,
+                          index: index,
+                          task: widget.step.tasks.elementAt(index));
+                    },
+                  ),
+                )
+              ]),
             ),
           );
         },
@@ -162,7 +176,8 @@ class _TaskListState extends State<TaskList> {
   }
 
   double calculateDoneRatio() {
-    int noOfDoneTasksInThisStep = _dataStore.getDoneTasks(widget.step.id).length;
+    int noOfDoneTasksInThisStep =
+        _dataStore.getDoneTasks(widget.step.id).length;
     int noOfAllTasksInThisStep = widget.step.tasks.length;
     return noOfAllTasksInThisStep == 0
         ? 0.0
