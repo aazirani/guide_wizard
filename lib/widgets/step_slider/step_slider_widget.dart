@@ -82,45 +82,44 @@ class _StepSliderWidgetState extends State<StepSliderWidget> {
   }
 
   Widget _buildSliderContainer(index) {
-    return Observer(
-        builder: (_) => LayoutBuilder(
-            builder: (BuildContext context, BoxConstraints constraints) {
-              var heightConstraint = constraints.maxHeight;
-              return Observer(
-                builder: (_) => Container(
-                  alignment: Alignment.topLeft,
-                  width: _getScreenWidth(),
-                  margin: Dimens.sliderContainerMargin,
-                  decoration: BoxDecoration(
-                    color: _buildSliderColor(index),
-                    border: _buildSliderBorder(index),
-                    borderRadius: BorderRadius.all(Radius.circular(20)),
-                  ),
-                  child: Column(children: [
-                    Flexible(
-                      flex: 80,
-                      child: Row(children: [
-                        Expanded(
-                            flex: 2,
-                            child: Padding(
-                                padding: EdgeInsets.only(
-                                    top: heightConstraint * Dimens.contentHeightPaddingPercentage,
-                                    left: heightConstraint * Dimens.contentLeftPaddingPercentage,
-                                    right: heightConstraint * Dimens.contentRightPaddingPercentage,
-                                    bottom: heightConstraint * Dimens.contentBottomPaddingPercentage),
-                                child: _buildContent(index, constraints))),
-                        (_dataStore.getStepByIndex(index).image != null)
-                            ? Expanded(flex: 1, child: _buildAvatar(index, constraints))
-                            : Container(width: heightConstraint * Dimens.emptySpaceHeightPercentage)
-                      ]),
-                    ),
-                    (_dataStore.getStepByIndex(index).tasks.isNotEmpty)
-                        ? Flexible(flex: 10, child: _buildProgressBar(index))
-                        : Container(height: heightConstraint * Dimens.emptySpaceHeightPercentage),
+    return LayoutBuilder(
+        builder: (BuildContext context, BoxConstraints constraints) {
+          var heightConstraint = constraints.maxHeight;
+          return Observer(
+            builder: (_) => Container(
+              alignment: Alignment.topLeft,
+              width: _getScreenWidth(),
+              margin: Dimens.sliderContainerMargin,
+              decoration: BoxDecoration(
+                color: _buildSliderColor(index),
+                border: _buildSliderBorder(index),
+                borderRadius: BorderRadius.all(Radius.circular(20)),
+              ),
+              child: Column(children: [
+                Flexible(
+                  flex: 80,
+                  child: Row(children: [
+                    Expanded(
+                        flex: 2,
+                        child: Padding(
+                            padding: EdgeInsets.only(
+                                top: heightConstraint * Dimens.contentHeightPaddingPercentage,
+                                left: heightConstraint * Dimens.contentLeftPaddingPercentage,
+                                right: heightConstraint * Dimens.contentRightPaddingPercentage,
+                                bottom: heightConstraint * Dimens.contentBottomPaddingPercentage),
+                            child: _buildContent(index, constraints))),
+                    (_dataStore.getStepByIndex(index).image != null)
+                        ? Expanded(flex: 1, child: _buildAvatar(index, constraints))
+                        : Container(width: heightConstraint * Dimens.emptySpaceHeightPercentage)
                   ]),
                 ),
-              );
-            }));
+                (_dataStore.getStepByIndex(index).tasks.isNotEmpty)
+                    ? Flexible(flex: 10, child: _buildProgressBar(index))
+                    : Container(height: heightConstraint * Dimens.emptySpaceHeightPercentage),
+              ]),
+            ),
+          );
+        });
   }
 
   Widget _buildContent(index, constraints) {
