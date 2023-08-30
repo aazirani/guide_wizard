@@ -16,12 +16,6 @@ abstract class _AppSettingsStore with Store {
   _AppSettingsStore(Repository repository) : this._repository = repository {
   }
 
-  // observables
-  static ObservableFuture<int?> emptyCurrentStepIdResponse = ObservableFuture.value(0);
-
-  @observable
-  ObservableFuture<int?> fetchCurrentStepIdFuture = ObservableFuture<int?>(emptyCurrentStepIdResponse);
-
   static ObservableFuture<bool?> emptyAnswerWasUpdatedResponse = ObservableFuture.value(false);
 
   @observable
@@ -30,21 +24,10 @@ abstract class _AppSettingsStore with Store {
   // disposers:-----------------------------------------------------------------
   late List<ReactionDisposer> _disposers;
 
-  // store variables:-----------------------------------------------------------
-  @computed
-  bool get currentStepIdSuccess => fetchCurrentStepIdFuture.status == FutureStatus.fulfilled;
-
-  @computed
-  bool get currentStepIdLoading => fetchCurrentStepIdFuture.status == FutureStatus.pending;
-
-
   // step number methods:-------------------------------------------------------------------
   @action
-  Future setCurrentStepId(int stepId) async {
-    fetchCurrentStepIdFuture = ObservableFuture(_repository.setCurrentStepId(stepId));
-    await fetchCurrentStepIdFuture.then((steps) async {
-      currentStepId = stepId;
-    });
+  void setCurrentStepId(int stepId) {
+    currentStepId = stepId;
   }
 
   // must update methods:-----------------------------------------------------------

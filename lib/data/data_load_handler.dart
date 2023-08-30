@@ -123,7 +123,7 @@ class DataLoadHandler { // This class is SINGLETON
     await _technicalNameWithTranslationsStore.getTechnicalNameWithTranslationsFromDb();
     List<AppStep> steps = await _dataStore.getStepsFromDb();
     if(steps.isNotEmpty){
-      await _appSettingsStore.setCurrentStepId(steps.first.id);
+      _appSettingsStore.setCurrentStepId(steps.first.id);
     }
   }
 
@@ -134,7 +134,7 @@ class DataLoadHandler { // This class is SINGLETON
     if(contentsShouldBeUpdated && !_dataStore.stepLoading){
       await _dataStore.getStepsFromApi().then((steps) async => {
         if(steps.isNotEmpty){
-          await _appSettingsStore.setCurrentStepId(steps.first.id)
+          _appSettingsStore.setCurrentStepId(steps.first.id)
         }
       });
     }

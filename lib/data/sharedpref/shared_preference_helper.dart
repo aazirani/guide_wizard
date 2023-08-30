@@ -48,16 +48,6 @@ class SharedPreferenceHelper {
   }
 
   // current step:---------------------------------------------------
-  int? get currentStepId {
-    return _sharedPreference.getInt(Preferences.current_step_id);
-  }
-
-  Future<void> setCurrentStepId(int new_current_step_id) {
-    return _sharedPreference.setInt(
-        Preferences.current_step_id, new_current_step_id);
-  }
-
-  // current step:---------------------------------------------------
   bool? get answerWasUpdated {
     return _sharedPreference.getBool(Preferences.answer_was_updated);
   }
