@@ -60,7 +60,6 @@ class AppColors {
   static Color stepTimelineContainerColor = greys[50]!.withOpacity(0.99);
   static Color stepTimelineContainerShadowColor = greys[300]!;
   //step slider
-  static Color stepSliderAvailableColor = green[50]!;
   static Color stepSliderUnavailableColor = greys[100]!;
   static Color stepSliderUnavailableBorder = greys[200]!;
   static Color stepSliderContinueButton = white;
