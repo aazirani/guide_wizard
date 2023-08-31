@@ -21,7 +21,7 @@ class AppColors {
     50: Color.fromARGB(218, 206, 240, 229),
     100: Color.fromARGB(255, 115, 213, 172),
     200: Color.fromARGB(255, 124, 222, 194),
-    300: const Color(0xFF31EC92),
+    300: Color(0xFF31EC92),
   };
 
   static const Map<int, Color> blue = const <int, Color>{
@@ -54,7 +54,7 @@ class AppColors {
   //home page
   static Color homeBodyColor = Color.fromARGB(255, 251, 251, 251);
   //step timeline
-  static const Color stepTimelinePendingColor = Color.fromARGB(255, 49, 236, 146);
+  static Color stepTimelinePendingColor = green[300]!;
   static Color stepTimelineNotStartedNodeColor = greys[300]!;
   static Color stepTimelineNotStartedConnectorColor = greys[300]!;
   static Color stepTimelineContainerColor = greys[50]!.withOpacity(0.99);
