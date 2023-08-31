@@ -86,44 +86,46 @@ class _StepSliderWidgetState extends State<StepSliderWidget> {
     return LayoutBuilder(
         builder: (BuildContext context, BoxConstraints constraints) {
       var heightConstraint = constraints.maxHeight;
-      return Container(
-        alignment: Alignment.topLeft,
-        width: _getScreenWidth(),
-        margin: Dimens.sliderContainerMargin,
-        decoration: BoxDecoration(
-          color: _buildSliderColor(index),
-          border: _buildSliderBorder(index),
-          borderRadius: BorderRadius.all(Radius.circular(10)),
-        ),
-        child: Column(children: [
-          Flexible(
-            flex: 80,
-            child: Row(children: [
-              Expanded(
-                  flex: 2,
-                  child: Padding(
-                      padding: EdgeInsets.only(
-                          top: heightConstraint *
-                              Dimens.contentHeightPaddingPercentage,
-                          left: heightConstraint *
-                              Dimens.contentLeftPaddingPercentage,
-                          right: heightConstraint *
-                              Dimens.contentRightPaddingPercentage,
-                          bottom: heightConstraint *
-                              Dimens.contentBottomPaddingPercentage),
-                      child: _buildContent(index, constraints))),
-              (_dataStore.getStepByIndex(index).image != null)
-                  ? Expanded(flex: 1, child: _buildAvatar(index, constraints))
-                  : Container(
-                      width:
-                          heightConstraint * Dimens.emptySpaceHeightPercentage)
-            ]),
+      return Observer(
+        builder: (_) => Container(
+          alignment: Alignment.topLeft,
+          width: _getScreenWidth(),
+          margin: Dimens.sliderContainerMargin,
+          decoration: BoxDecoration(
+            color: _buildSliderColor(index),
+            border: _buildSliderBorder(index),
+            borderRadius: BorderRadius.all(Radius.circular(10)),
           ),
-          (_dataStore.getStepByIndex(index).tasks.isNotEmpty)
-              ? Flexible(flex: 10, child: _buildProgressBar(index))
-              : Container(
-                  height: heightConstraint * Dimens.emptySpaceHeightPercentage),
-        ]),
+          child: Column(children: [
+            Flexible(
+              flex: 80,
+              child: Row(children: [
+                Expanded(
+                    flex: 2,
+                    child: Padding(
+                        padding: EdgeInsets.only(
+                            top: heightConstraint *
+                                Dimens.contentHeightPaddingPercentage,
+                            left: heightConstraint *
+                                Dimens.contentLeftPaddingPercentage,
+                            right: heightConstraint *
+                                Dimens.contentRightPaddingPercentage,
+                            bottom: heightConstraint *
+                                Dimens.contentBottomPaddingPercentage),
+                        child: _buildContent(index, constraints))),
+                (_dataStore.getStepByIndex(index).image != null)
+                    ? Expanded(flex: 1, child: _buildAvatar(index, constraints))
+                    : Container(
+                        width:
+                            heightConstraint * Dimens.emptySpaceHeightPercentage)
+              ]),
+            ),
+            (_dataStore.getStepByIndex(index).tasks.isNotEmpty)
+                ? Flexible(flex: 10, child: _buildProgressBar(index))
+                : Container(
+                    height: heightConstraint * Dimens.emptySpaceHeightPercentage),
+          ]),
+        ),
       );
     });
   }
@@ -159,7 +161,10 @@ class _StepSliderWidgetState extends State<StepSliderWidget> {
   }
 
   Color _buildSliderColor(index) {
-    return AppColors.green[300]!.withOpacity(0.2);
+    if(_dataStore.stepIsDone(_dataStore.getStepByIndex(index).id)){
+      return AppColors.green[300]!.withOpacity(0.20);
+    }
+    return AppColors.green[200]!.withOpacity(0.10);
   }
 
   Widget _buildAvatar(int index, constraints) {

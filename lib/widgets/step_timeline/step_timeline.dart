@@ -86,8 +86,8 @@ class _StepTimeLineState extends State<StepTimeLine> {
                       padding: Dimens.stepTimelineCurrentStepInnerCirclePadding,
                       decoration: BoxDecoration(
                         color: (_isDoneStep(index)
-                            ? AppColors.main_color
-                            : AppColors.stepTimelinePendingColor),
+                            ? AppColors.stepTimelinePendingColor
+                            : AppColors.main_color),
                         shape: BoxShape.circle,
                       ))))),
     );
