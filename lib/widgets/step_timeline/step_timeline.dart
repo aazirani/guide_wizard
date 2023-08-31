@@ -46,7 +46,7 @@ class _StepTimeLineState extends State<StepTimeLine> {
                   blurRadius: 0.3,
                   offset: Offset(0, 2))
             ]),
-        child: _buildTimeline(),
+        child: Observer(builder: (_) => _buildTimeline()),
       ),
     );
   }
@@ -57,7 +57,7 @@ class _StepTimeLineState extends State<StepTimeLine> {
       builder: TimelineTileBuilder(
         itemCount: _dataStore.getAllSteps.length,
         itemExtent: (_getScreenWidth() - 50) / _dataStore.getAllSteps.length,
-        indicatorBuilder: (context, index) => _buildIndicator(index),
+        indicatorBuilder: (context, index) => Observer(builder: (_) => _buildIndicator(index)),
         startConnectorBuilder: (context, index) => _buildStartConnector(index),
         endConnectorBuilder: (context, index) => _buildEndConnector(index),
       ),
@@ -65,36 +65,37 @@ class _StepTimeLineState extends State<StepTimeLine> {
   }
 
   Widget _buildIndicator(index) {
-    if (_isCurrentStep(index)) {
-      return _buildCurrent(index);
+    if(_dataStore.getStepByIndex(index).id != _appSettingsStore.currentStepId){
+      return _buildNotSelectedIndicator(index);
     }
-    return _buildDoneIndicator();
+    return _buildSelectedIndicator(index);
   }
 
-  Widget _buildCurrent(index) {
-    return Observer(
-      builder: (_) => Center(
-          child: Container(
-              decoration: BoxDecoration(
-                color: AppColors.transparent,
-                shape: BoxShape.circle,
-                border: Border.all(color: AppColors.main_color, width: 4),
-              ),
-              child: Container(
-                  padding: Dimens.stepTimelineCurrentStepOuterCirclePadding,
-                  child: Container(
-                      padding: Dimens.stepTimelineCurrentStepInnerCirclePadding,
-                      decoration: BoxDecoration(
-                        color: (_isDoneStep(index)
-                            ? AppColors.stepTimelinePendingColor
-                            : AppColors.main_color),
-                        shape: BoxShape.circle,
-                      ))))),
-    );
+  Widget _buildSelectedIndicator(int index) {
+    return Center(
+        child: Container(
+            decoration: BoxDecoration(
+              color: AppColors.transparent,
+              shape: BoxShape.circle,
+              border: Border.all(color: AppColors.main_color, width: 4),
+            ),
+            child: Container(
+                padding: Dimens.stepTimelineCurrentStepOuterCirclePadding,
+                child: Container(
+                    padding: Dimens.stepTimelineCurrentStepInnerCirclePadding,
+                    decoration: BoxDecoration(
+                      color: (_dataStore.stepIsDone(_dataStore.getStepByIndex(index).id)
+                          ? AppColors.stepTimelinePendingColor
+                          : AppColors.main_color),
+                      shape: BoxShape.circle,
+                    )))));
   }
 
-  Widget _buildDoneIndicator() {
-    return const DotIndicator(size: 10, color: AppColors.main_color);
+  Widget _buildNotSelectedIndicator(int index) {
+    if(_dataStore.stepIsDone(_dataStore.getStepByIndex(index).id)){
+      return DotIndicator(size: 10, color: AppColors.stepTimelinePendingColor);
+    }
+    return DotIndicator(size: 10, color: AppColors.main_color);
   }
 
   Widget _buildDoneStartConnector() {
@@ -111,14 +112,14 @@ class _StepTimeLineState extends State<StepTimeLine> {
   }
 
   Widget? _buildStartConnector(index) {
-    if (_isFirstStep(index)) {
+    if (_dataStore.isFirstStep(_dataStore.getStepByIndex(index).id)) {
       return null;
     }
     return _buildDoneStartConnector();
   }
 
   Widget? _buildEndConnector(int index) {
-    if (_isLastStep(index)) {
+    if (_dataStore.isLastStep(_dataStore.getStepByIndex(index).id)) {
       return null;
     }
     return _buildDoneEndConnector();
@@ -126,20 +127,4 @@ class _StepTimeLineState extends State<StepTimeLine> {
 
   //logic methods : ..............................................................
   double _getScreenWidth() => MediaQuery.of(context).size.width;
-
-  _isLastStep(index) {
-    return index == _dataStore.getAllSteps.length - 1;
-  }
-
-  _isFirstStep(index) {
-    return _dataStore.isFirstStep(_dataStore.getStepByIndex(index).id);
-  }
-
-  _isCurrentStep(index) {
-    return index == _dataStore.getIndexOfStep(_appSettingsStore.currentStepId);
-  }
-
-  _isDoneStep(index) {
-    return _dataStore.isAllTasksOfStepDone(_dataStore.getStepByIndex(index).id);
-  }
 }

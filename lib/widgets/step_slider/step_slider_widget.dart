@@ -57,8 +57,6 @@ class _StepSliderWidgetState extends State<StepSliderWidget> {
     return CarouselSlider(
       carouselController: _carouselController,
       options: CarouselOptions(
-          initialPage:
-              _dataStore.getIndexOfStep(_dataStore.getAllSteps.first.id),
           onPageChanged: (index, reason) {
             _appSettingsStore
                 .setCurrentStepId(_dataStore.getStepByIndex(index).id);
@@ -331,10 +329,8 @@ class _StepSliderWidgetState extends State<StepSliderWidget> {
   //general methods ............................................................
   double _getScreenHeight() => MediaQuery.of(context).size.height;
   double _getScreenWidth() => MediaQuery.of(context).size.width;
+
   bool _isStepDone(index) {
-    return _dataStore
-            .getDoneTasks(_dataStore.getStepByIndex(index).id)
-            .length ==
-        _dataStore.getStepByIndex(index).tasks.length;
+    return _dataStore.stepIsDone(_dataStore.getStepByIndex(index).id);
   }
 }
