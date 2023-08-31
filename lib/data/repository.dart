@@ -258,14 +258,6 @@ class Repository {
   Future truncateUpdatedAtTimes() =>
       _updatedAtTimesDataSource.deleteAll().catchError((error) => throw error);
 
-  // Current Step Number: -----------------------------------------------------------------
-  Future<int> setCurrentStepId(int stepId) async {
-    await _sharedPrefsHelper.setCurrentStepId(stepId);
-    return stepId;
-  }
-
-  int? get currentStepId => _sharedPrefsHelper.currentStepId;
-
   //URL Parameters: ----------------------------------------------------------------------
   Future<String> getUrlParameters() async {
     List<AppStep> steps = await getStepsFromDb();
