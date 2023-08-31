@@ -140,9 +140,6 @@ class _StepTimeLineState extends State<StepTimeLine> {
   }
 
   _isDoneStep(index) {
-    return _dataStore
-            .getDoneTasks(_dataStore.getStepByIndex(index).id)
-            .length ==
-    _dataStore.getStepByIndex(index).tasks.length;
+    return _dataStore.isAllTasksOfStepDone(_dataStore.getStepByIndex(index).id);
   }
 }

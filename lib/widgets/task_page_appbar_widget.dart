@@ -34,9 +34,6 @@ class _BlocksAppBarWidgetState extends State<BlocksAppBarWidget> {
 
   late DataStore _dataStore;
 
-  bool _showDoneButtonFlag() => !_dataStore.isAllTasksOfStepDone(widget.step.id);
-
-
   @override
   void didChangeDependencies() {
     super.didChangeDependencies();
@@ -110,9 +107,7 @@ class _BlocksAppBarWidgetState extends State<BlocksAppBarWidget> {
             ),
             Padding(
               padding: Dimens.doneButtonPadding,
-              child: _showDoneButtonFlag()
-                  ? _buildDoneUndoneButtonContainer()
-                  : null,
+              child: _buildDoneUndoneButtonContainer()
             ),
           ],
         ),

@@ -167,7 +167,7 @@ abstract class _DataStore with Store {
   }
 
   bool isAllTasksOfStepDone(int stepId){
-    return this.getStepById(stepId).tasks.length == this.getDoneTasks(stepId);
+    return this.getStepById(stepId).tasks.length == this.getDoneTasks(stepId).length;
   }
 
   List<Answer> getSelectedAnswers(){
