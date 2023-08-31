@@ -313,7 +313,6 @@ class _HomeScreenState extends State<HomeScreen> {
       children: [
         _buildPlaceholderCurrentStepIndicator(),
         _buildPlaceholderCarouselSliderContainer(),
-        StepTimeLine(),
         SizedBox(height: Dimens.StepTimelineProgressBarDistance),
         SizedBox(height: Dimens.progressBarCompressedTaskListDistance),
         _buildPlaceholderCompressedTaskListTimeline(),

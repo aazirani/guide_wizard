@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:guide_wizard/constants/colors.dart';
 import 'package:guide_wizard/constants/dimens.dart';
 import 'package:guide_wizard/stores/app_settings/app_settings_store.dart';
@@ -7,7 +8,6 @@ import 'package:provider/provider.dart';
 import 'package:timelines/timelines.dart';
 
 class StepTimeLine extends StatefulWidget {
-
   StepTimeLine({Key? key}) : super(key: key);
 
   @override
@@ -46,7 +46,7 @@ class _StepTimeLineState extends State<StepTimeLine> {
                   blurRadius: 0.3,
                   offset: Offset(0, 2))
             ]),
-        child: _buildTimeline(),
+        child: Observer(builder: (_) => _buildTimeline()),
       ),
     );
   }
@@ -57,8 +57,7 @@ class _StepTimeLineState extends State<StepTimeLine> {
       builder: TimelineTileBuilder(
         itemCount: _dataStore.getAllSteps.length,
         itemExtent: (_getScreenWidth() - 50) / _dataStore.getAllSteps.length,
-        indicatorBuilder: (context, index) =>
-            _buildIndicator(index),
+        indicatorBuilder: (context, index) => Observer(builder: (_) => _buildIndicator(index)),
         startConnectorBuilder: (context, index) => _buildStartConnector(index),
         endConnectorBuilder: (context, index) => _buildEndConnector(index),
       ),
@@ -66,124 +65,37 @@ class _StepTimeLineState extends State<StepTimeLine> {
   }
 
   Widget _buildIndicator(index) {
-    if (_isCurrentStep(index)) {
-      return _buildCurrent(index);
+    if(_dataStore.getStepByIndex(index).id != _appSettingsStore.currentStepId){
+      return _buildNotSelectedIndicator(index);
     }
-    if (_isPendingStep(index)) {
-      return _buildPendingIndicator();
-    }
-
-    if (_isDoneStep(index)) {
-      return _buildDoneIndicator();
-    }
-    return _buildNotStartedIndicator();
+    return _buildSelectedIndicator(index);
   }
 
-  Widget _buildCurrent(index) {
+  Widget _buildSelectedIndicator(int index) {
     return Center(
         child: Container(
             decoration: BoxDecoration(
               color: AppColors.transparent,
               shape: BoxShape.circle,
-              border: Border.all(
-                  color: (_isNotStartedStep(index))
-                      ? AppColors.stepTimelineNotStartedNodeColor
-                      : AppColors.main_color,
-                  width: 4),
+              border: Border.all(color: AppColors.main_color, width: 4),
             ),
             child: Container(
                 padding: Dimens.stepTimelineCurrentStepOuterCirclePadding,
                 child: Container(
                     padding: Dimens.stepTimelineCurrentStepInnerCirclePadding,
                     decoration: BoxDecoration(
-                      color: _colorInnerIndicator(index),
+                      color: (_dataStore.stepIsDone(_dataStore.getStepByIndex(index).id)
+                          ? AppColors.stepTimelinePendingColor
+                          : AppColors.main_color),
                       shape: BoxShape.circle,
                     )))));
   }
 
-  Color _colorInnerIndicator(index) {
-    if (_isPendingStep(index)) {
-      return AppColors.stepTimelinePendingColor;
+  Widget _buildNotSelectedIndicator(int index) {
+    if(_dataStore.stepIsDone(_dataStore.getStepByIndex(index).id)){
+      return DotIndicator(size: 10, color: AppColors.stepTimelinePendingColor);
     }
-    if (_isDoneStep(index)) {
-      return AppColors.main_color;
-    }
-    return AppColors.stepTimelineNotStartedNodeColor;
-  }
-
-  Widget _buildDoneIndicator() {
-    return const DotIndicator(size: 10, color: AppColors.main_color);
-  }
-
-  Widget _buildNotStartedIndicator() {
-    return DotIndicator(
-      size: 10,
-      color: AppColors.stepTimelineNotStartedNodeColor,
-    );
-  }
-
-  Widget _buildPendingIndicator() {
-    return DotIndicator(
-      size: 13,
-      color: AppColors.stepTimelinePendingColor,
-    );
-  }
-
-  BoxDecoration _buildStartGradient() {
-    return BoxDecoration(
-      gradient: LinearGradient(
-        begin: Alignment.centerLeft,
-        end: Alignment.centerRight,
-        colors: [
-          AppColors.step_timeline_connector_gradient[100]!,
-          AppColors.step_timeline_connector_gradient[200]!,
-        ],
-      ),
-    );
-  }
-
-  BoxDecoration _buildEndGradient() {
-    return BoxDecoration(
-      gradient: LinearGradient(
-        begin: Alignment.centerLeft,
-        end: Alignment.centerRight,
-        colors: [
-          AppColors.step_timeline_connector_gradient[50]!,
-          AppColors.step_timeline_connector_gradient[100]!
-        ],
-      ),
-    );
-  }
-
-  Widget _buildPendingStartConnectorGradient() {
-    return DecoratedLineConnector(
-      thickness: Dimens.pendingStartConnectorGradientThickness,
-      decoration: _buildStartGradient(),
-      endIndent: Dimens.pendingStartConnectorGradientEndIndent,
-    );
-  }
-
-  Widget _buildPendingEndConnectorGradient() {
-    return DecoratedLineConnector(
-        thickness: Dimens.pendingEndConnectorGradientThickness,
-        decoration: _buildEndGradient(),
-        indent: Dimens.pendingEndConnectorGradientIndent);
-  }
-
-  Widget _buildNotStartedStartConnector() {
-    return DashedLineConnector(
-        thickness: Dimens.notStartedStartConnectorThickness,
-        color: AppColors.stepTimelineNotStartedConnectorColor,
-        gap: Dimens.notStartedStartConnectorGap,
-        endIndent: Dimens.notStartedStartConnectorEndIndent);
-  }
-
-  Widget _buildNotStartedEndConnector() {
-    return DashedLineConnector(
-        thickness: Dimens.notStartedEndConnectorThickness,
-        color: AppColors.stepTimelineNotStartedConnectorColor,
-        gap: Dimens.notStartedEndConnectorGap,
-        indent: Dimens.notStartedEndConnectorIndent);
+    return DotIndicator(size: 10, color: AppColors.main_color);
   }
 
   Widget _buildDoneStartConnector() {
@@ -200,58 +112,19 @@ class _StepTimeLineState extends State<StepTimeLine> {
   }
 
   Widget? _buildStartConnector(index) {
-    if(_isFirstStep(index)){
+    if (_dataStore.isFirstStep(_dataStore.getStepByIndex(index).id)) {
       return null;
-    }
-    if (_isPendingStep(index)) {
-      return _buildPendingStartConnectorGradient();
-    }
-    if (_isNotStartedStep(index)) {
-      return _buildNotStartedStartConnector();
     }
     return _buildDoneStartConnector();
   }
 
   Widget? _buildEndConnector(int index) {
-    if(_isLastStep(index)){
+    if (_dataStore.isLastStep(_dataStore.getStepByIndex(index).id)) {
       return null;
-    }
-    if (_isPendingStep(index)) {
-      return _buildNotStartedEndConnector();
-    }
-    if (index == _dataStore.getIndexOfStep(_appSettingsStore.currentStepId)) {
-      return _buildPendingEndConnectorGradient();
-    }
-    if (_isNotStartedStep(index)) {
-      return _buildNotStartedEndConnector();
     }
     return _buildDoneEndConnector();
   }
 
   //logic methods : ..............................................................
   double _getScreenWidth() => MediaQuery.of(context).size.width;
-
-  _isLastStep(index) {
-    return index == _dataStore.getAllSteps.length - 1;
-  }
-
-  _isFirstStep(index) {
-    return _dataStore.isFirstStep(_dataStore.getStepByIndex(index).id);
-  }
-
-  _isCurrentStep(index) {
-    return index == _dataStore.getIndexOfStep(_appSettingsStore.currentStepId);
-  }
-
-  _isPendingStep(index) {
-    return _dataStore.stepIsPending(_dataStore.getStepByIndex(index).id);
-  }
-
-  _isDoneStep(index) {
-    return _dataStore.stepIsDone(_dataStore.getStepByIndex(index).id);
-  }
-
-  _isNotStartedStep(index) {
-    return _dataStore.stepIsNotStarted(_dataStore.getStepByIndex(index).id);
-  }
 }

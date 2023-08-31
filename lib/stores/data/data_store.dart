@@ -167,7 +167,7 @@ abstract class _DataStore with Store {
   }
 
   bool isAllTasksOfStepDone(int stepId){
-    return this.getStepById(stepId).tasks.length == this.getDoneTasks(stepId);
+    return this.getStepById(stepId).tasks.length == this.getDoneTasks(stepId).length;
   }
 
   List<Answer> getSelectedAnswers(){
@@ -192,4 +192,9 @@ abstract class _DataStore with Store {
     return this.getStepById(stepId).questions.expand((question) => question.answers.where((answer) => answer.isSelected)).isEmpty && this.getStepById(stepId).tasks.isEmpty
     || this.getStepById(stepId).tasks.where((task) => task.isDone).isEmpty && this.getStepById(stepId).questions.isEmpty;
   }
+
+  bool isLastStep(int stepId) {
+    return this.getIndexOfStep(stepId) == this.getAllSteps.length - 1;
+  }
+
 }
