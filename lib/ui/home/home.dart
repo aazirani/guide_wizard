@@ -179,7 +179,7 @@ class _HomeScreenState extends State<HomeScreen> {
               topRight: Radius.circular(Dimens.homeBodyBorderRadius),
             ),
           ),
-          child: !_dataStore.isLoading && !_technicalNameWithTranslationsStore.technicalNameLoading && !_updatedAtTimesStore.updatedAtTimesLoading && _dataStore.stepSuccess && _technicalNameWithTranslationsStore.technicalNameSuccess && _updatedAtTimesStore.updatedAtTimesSuccess
+          child: !_dataStore.isEmpty && !_dataStore.isLoading && !_technicalNameWithTranslationsStore.technicalNameLoading && !_updatedAtTimesStore.updatedAtTimesLoading && _dataStore.stepSuccess && _technicalNameWithTranslationsStore.technicalNameSuccess && _updatedAtTimesStore.updatedAtTimesSuccess
               ? _buildScreenElements()
               : _shimmerAll(),
         ),

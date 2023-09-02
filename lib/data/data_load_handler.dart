@@ -34,7 +34,6 @@ class DataLoadHandler { // This class is SINGLETON
   Future<bool> hasNoLocalData() async => await _dataStore.isDataSourceEmpty() || await _technicalNameWithTranslationsStore.isDataSourceEmpty();
   Future<bool> answerWasUpdated() async => await _appSettingsStore.getAnswerWasUpdated() ?? false;
 
-
   void showErrorMessage({required Widget messageWidgetObserver, String? buttonLabel, required var onPressedButton, Duration? duration}) {
     ScaffoldMessenger.of(context).clearSnackBars();
     buttonLabel ??= _technicalNameWithTranslationsStore.getTranslationByTechnicalName(LangKeys.no_internet_button_text);
@@ -72,51 +71,77 @@ class DataLoadHandler { // This class is SINGLETON
   }
 
   Future loadDataAndCheckForUpdate({bool initialLoading = false, bool refreshData = false}) async {
-    _dataStore.loadingStarted();
-    bool isAnswerWasUpdated = await answerWasUpdated();
+    if (_dataStore.isLoading) return;
 
+    bool isAnswerWasUpdated = await answerWasUpdated();
     bool noLocalData = await hasNoLocalData();
-    if(initialLoading){
-      if(!noLocalData){
+
+    if(initialLoading) {
+      if(!noLocalData) {
+        _dataStore.loadingStarted();
         await loadDataFromDb();
+        _dataStore.loadingFinished();
       }
-      if(await checkInternetConnectionAndShowMessage()){
+      if(await hasInternet()) {
+        _dataStore.loadingStarted();
         await updatedAtWasChanged().then((updatedAtTimesUpdatedMap) async => {
           if (updatedAtTimesUpdatedMap.length > 0 && updatedAtTimesUpdatedMap.values.any((updateAtChanged) => updateAtChanged)) {
             await loadDataFromApi(updatedAtTimesUpdatedMap[UpdatedAtTimesFactory.LAST_UPDATED_AT_TECHNICAL_NAMES]!, updatedAtTimesUpdatedMap[UpdatedAtTimesFactory.LAST_UPDATED_AT_CONTENT]!)
           }
         });
+        _dataStore.loadingFinished();
       }
     }
-    if((noLocalData || isAnswerWasUpdated || refreshData) && await checkInternetConnectionAndShowMessage()){
-      await loadDataFromApi(true, true);
-      _dataStore.loadingFinished();
-      return;
+    if(noLocalData || isAnswerWasUpdated || refreshData) {
+      if(await checkInternetConnectionAndShowMessage()) {
+        ScaffoldMessenger.of(context).clearSnackBars();
+        _dataStore.loadingStarted();
+        await loadDataFromApi(true, true);
+        _dataStore.loadingFinished();
+      }
+      else {
+        Future.delayed(SettingsConstants.internetCheckingPeriod, () {
+          loadDataAndCheckForUpdate();
+        });
+      }
     }
-    _dataStore.loadingFinished();
   }
 
   Future<bool> checkInternetConnectionAndShowMessage() async {
     bool hasInternetConnection = await hasInternet();
-    if(!hasInternetConnection){
-      showNoInternetMessage(_technicalNameWithTranslationsStore.getTranslationByTechnicalName(LangKeys.update_is_necessary_message_text), NecessaryStrings.update_is_necessary_message_text, null);
+    bool isAnswerWasUpdated = await answerWasUpdated();
+
+    if(!hasInternetConnection) {
+      if(isAnswerWasUpdated) {
+        showUpdateRequiredMessage();
+      }
+      else {
+        showNoInternetMessage(_technicalNameWithTranslationsStore.getTranslationByTechnicalName(LangKeys.no_internet_message), NecessaryStrings.no_internet_message, null);
+      }
     }
     return hasInternetConnection;
   }
 
-  void showNoInternetMessage(String ?text, String backupText, int ?durationInMilliseconds) {
+  void showNoInternetMessage(String ?text, String backupText, int ?durationInMilliseconds) async {
     ScaffoldMessenger.of(context).clearSnackBars();
     String text = _technicalNameWithTranslationsStore.getTranslationByTechnicalName(LangKeys.no_internet_message);
     showErrorMessage(
-        duration: durationInMilliseconds != null ? Duration(milliseconds: durationInMilliseconds) : null,
-        messageWidgetObserver: Text(text.isNotEmpty ? text : backupText),
+      duration: durationInMilliseconds != null ? Duration(milliseconds: durationInMilliseconds) : null,
+      messageWidgetObserver: Text(text.isNotEmpty ? text : backupText),
+      onPressedButton: () async {
+        loadDataAndCheckForUpdate();
+      }
+    );
+  }
+
+  void showUpdateRequiredMessage() {
+    showErrorMessage(
+        duration: Duration(milliseconds: 5000),
+        messageWidgetObserver: Text(NecessaryStrings.update_is_necessary_message_text),
         onPressedButton: () {
           loadDataAndCheckForUpdate();
         }
     );
-    Future.delayed(SettingsConstants.internetCheckingPeriod, () {
-      loadDataAndCheckForUpdate();
-    });
   }
 
   loadDataFromDb() async {
