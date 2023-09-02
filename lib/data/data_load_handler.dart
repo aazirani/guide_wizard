@@ -99,11 +99,6 @@ class DataLoadHandler { // This class is SINGLETON
         await loadDataFromApi(true, true);
         _dataStore.loadingFinished();
       }
-      else {
-        Future.delayed(SettingsConstants.internetCheckingPeriod, () {
-          loadDataAndCheckForUpdate();
-        });
-      }
     }
   }
 
@@ -116,13 +111,14 @@ class DataLoadHandler { // This class is SINGLETON
         showUpdateRequiredMessage();
       }
       else {
-        showNoInternetMessage(_technicalNameWithTranslationsStore.getTranslationByTechnicalName(LangKeys.no_internet_message), NecessaryStrings.no_internet_message, null);
+        showNoInternetMessage();
       }
     }
+
     return hasInternetConnection;
   }
 
-  void showNoInternetMessage(String ?text, String backupText, int ?durationInMilliseconds) async {
+  void showExceptionMessageWithBackgroundCheck(String ?text, String backupText, int ?durationInMilliseconds) async {
     ScaffoldMessenger.of(context).clearSnackBars();
     String text = _technicalNameWithTranslationsStore.getTranslationByTechnicalName(LangKeys.no_internet_message);
     showErrorMessage(
@@ -132,11 +128,22 @@ class DataLoadHandler { // This class is SINGLETON
         loadDataAndCheckForUpdate();
       }
     );
+    Future.delayed(SettingsConstants.internetCheckingPeriod, () {
+      loadDataAndCheckForUpdate();
+    });
+  }
+
+  void showNoInternetMessage() {
+    showExceptionMessageWithBackgroundCheck(_technicalNameWithTranslationsStore.getTranslationByTechnicalName(LangKeys.no_internet_message), NecessaryStrings.no_internet_message, null);
+  }
+
+  void showServerErrorMessage() {
+    showExceptionMessageWithBackgroundCheck(_technicalNameWithTranslationsStore.getTranslationByTechnicalName(LangKeys.cant_reach_server), NecessaryStrings.cant_reach_server, null);
   }
 
   void showUpdateRequiredMessage() {
     showErrorMessage(
-        duration: Duration(milliseconds: 5000),
+        duration: SettingsConstants.updateRequiredSnackBarDuration,
         messageWidgetObserver: Text(NecessaryStrings.update_is_necessary_message_text),
         onPressedButton: () {
           loadDataAndCheckForUpdate();
