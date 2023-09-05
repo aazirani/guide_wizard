@@ -23,12 +23,13 @@ class DataLoadHandler { // This class is SINGLETON
   // Warning: It has to be called with main context before further usage
   factory DataLoadHandler({BuildContext? context}) => _instance ??= DataLoadHandler._(context!);
 
+  int criticalId = 0; // for handling processes entering the loadDataAndCheckForUpdate function!
+
   //stores:---------------------------------------------------------------------
   late DataStore _dataStore = Provider.of<DataStore>(context, listen: false);
   late TechnicalNameWithTranslationsStore _technicalNameWithTranslationsStore =Provider.of<TechnicalNameWithTranslationsStore>(context, listen: false);
   late UpdatedAtTimesStore _updatedAtTimesStore = Provider.of<UpdatedAtTimesStore>(context, listen: false);
   late AppSettingsStore _appSettingsStore = Provider.of<AppSettingsStore>(context, listen: false);
-  late LanguageStore _languageStore = Provider.of<LanguageStore>(context, listen: false);
 
   Future<bool> hasInternet() async => await InternetConnectionChecker().hasConnection;
   Future<bool> hasNoLocalData() async => await _dataStore.isDataSourceEmpty() || await _technicalNameWithTranslationsStore.isDataSourceEmpty();
@@ -70,7 +71,7 @@ class DataLoadHandler { // This class is SINGLETON
 
   }
 
-  Future loadDataAndCheckForUpdate({bool initialLoading = false, bool refreshData = false}) async {
+  Future loadDataAndCheckForUpdate({bool initialLoading = false, bool refreshData = false, int processId = 0}) async {
     if (_dataStore.isLoading) return;
 
     bool isAnswerWasUpdated = await answerWasUpdated();
@@ -93,7 +94,7 @@ class DataLoadHandler { // This class is SINGLETON
       }
     }
     if(noLocalData || isAnswerWasUpdated || refreshData) {
-      if(await checkInternetConnectionAndShowMessage()) {
+      if(await checkInternetConnectionAndShowMessage(processId: processId)) {
         ScaffoldMessenger.of(context).clearSnackBars();
         _dataStore.loadingStarted();
         await loadDataFromApi(true, true);
@@ -102,43 +103,52 @@ class DataLoadHandler { // This class is SINGLETON
     }
   }
 
-  Future<bool> checkInternetConnectionAndShowMessage() async {
+  Future<bool> checkInternetConnectionAndShowMessage({int processId = 0}) async {
     bool hasInternetConnection = await hasInternet();
     bool isAnswerWasUpdated = await answerWasUpdated();
 
-    if(!hasInternetConnection) {
-      if(isAnswerWasUpdated) {
-        showUpdateRequiredMessage();
-      }
-      else {
-        showNoInternetMessage();
+    if(processId == criticalId){
+      if(!hasInternetConnection) {
+        if(isAnswerWasUpdated) {
+          showUpdateRequiredMessage();
+        }
+        else {
+          showNoInternetMessage(processId: processId);
+        }
       }
     }
 
     return hasInternetConnection;
   }
 
-  void showExceptionMessageWithBackgroundCheck(String ?text, String backupText, int ?durationInMilliseconds) async {
+  void showExceptionMessageWithBackgroundCheck({String ?text, required String backupText, int ?durationInMilliseconds, int processId = 0}) async {
     ScaffoldMessenger.of(context).clearSnackBars();
     String text = _technicalNameWithTranslationsStore.getTranslationByTechnicalName(LangKeys.no_internet_message);
     showErrorMessage(
       duration: durationInMilliseconds != null ? Duration(milliseconds: durationInMilliseconds) : null,
       messageWidgetObserver: Text(text.isNotEmpty ? text : backupText),
       onPressedButton: () async {
-        loadDataAndCheckForUpdate();
+        loadDataAndCheckForUpdate(processId: ++criticalId);
       }
     );
     Future.delayed(SettingsConstants.internetCheckingPeriod, () {
-      loadDataAndCheckForUpdate();
+      loadDataAndCheckForUpdate(processId: processId);
     });
   }
 
-  void showNoInternetMessage() {
-    showExceptionMessageWithBackgroundCheck(_technicalNameWithTranslationsStore.getTranslationByTechnicalName(LangKeys.no_internet_message), NecessaryStrings.no_internet_message, null);
+  void showNoInternetMessage({int processId = 0}) {
+    showExceptionMessageWithBackgroundCheck(
+      text: _technicalNameWithTranslationsStore.getTranslationByTechnicalName(LangKeys.no_internet_message),
+      backupText: NecessaryStrings.no_internet_message,
+      processId: processId,
+    );
   }
 
   void showServerErrorMessage() {
-    showExceptionMessageWithBackgroundCheck(_technicalNameWithTranslationsStore.getTranslationByTechnicalName(LangKeys.cant_reach_server), NecessaryStrings.cant_reach_server, null);
+    showExceptionMessageWithBackgroundCheck(
+      text: _technicalNameWithTranslationsStore.getTranslationByTechnicalName(LangKeys.cant_reach_server),
+      backupText: NecessaryStrings.cant_reach_server,
+    );
   }
 
   void showUpdateRequiredMessage() {
