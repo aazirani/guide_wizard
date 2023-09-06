@@ -10,8 +10,7 @@ class SubTaskList {
   factory SubTaskList.fromJson(List<dynamic> json) {
     List<SubTask> subTasks;
 
-    subTasks =
-        json.map((subTask) => SubTaskFactory().fromMap(subTask)).toList();
+    subTasks = json.map((subTask) => SubTaskFactory().fromMap(subTask)).toList();
 
     return SubTaskList(
       subTasks: ObservableList.of(subTasks),

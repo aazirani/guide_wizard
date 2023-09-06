@@ -57,8 +57,7 @@ class _StepTimeLineState extends State<StepTimeLine> {
       builder: TimelineTileBuilder(
         itemCount: _dataStore.getAllSteps.length,
         itemExtent: (_getScreenWidth() - 50) / _dataStore.getAllSteps.length,
-        indicatorBuilder: (context, index) =>
-            Observer(builder: (_) => _buildIndicator(index)),
+        indicatorBuilder: (context, index) => Observer(builder: (_) => _buildIndicator(index)),
         startConnectorBuilder: (context, index) => _buildStartConnector(index),
         endConnectorBuilder: (context, index) => _buildEndConnector(index),
       ),
@@ -66,8 +65,7 @@ class _StepTimeLineState extends State<StepTimeLine> {
   }
 
   Widget _buildIndicator(index) {
-    if (_dataStore.getStepByIndex(index).id !=
-        _appSettingsStore.currentStepId) {
+    if(_dataStore.getStepByIndex(index).id != _appSettingsStore.currentStepId){
       return _buildNotSelectedIndicator(index);
     }
     return _buildSelectedIndicator(index);
@@ -86,8 +84,7 @@ class _StepTimeLineState extends State<StepTimeLine> {
                 child: Container(
                     padding: Dimens.stepTimelineCurrentStepInnerCirclePadding,
                     decoration: BoxDecoration(
-                      color: (_dataStore
-                              .stepIsDone(_dataStore.getStepByIndex(index).id)
+                      color: (_dataStore.stepIsDone(_dataStore.getStepByIndex(index).id)
                           ? AppColors.stepTimelinePendingColor
                           : AppColors.main_color),
                       shape: BoxShape.circle,
@@ -95,7 +92,7 @@ class _StepTimeLineState extends State<StepTimeLine> {
   }
 
   Widget _buildNotSelectedIndicator(int index) {
-    if (_dataStore.stepIsDone(_dataStore.getStepByIndex(index).id)) {
+    if(_dataStore.stepIsDone(_dataStore.getStepByIndex(index).id)){
       return DotIndicator(size: 10, color: AppColors.stepTimelinePendingColor);
     }
     return DotIndicator(size: 10, color: AppColors.main_color);

@@ -12,9 +12,7 @@ class TechnicalNameWithTranslationsList {
   @action
   factory TechnicalNameWithTranslationsList.fromJson(List<dynamic> json) {
     ObservableList<TechnicalNameWithTranslations> list = new ObservableList();
-    json.forEach((translationsWithStepName) => list.add(
-        TechnicalNameWithTranslationsFactory()
-            .fromMap(translationsWithStepName)));
+    json.forEach((translationsWithStepName) => list.add(TechnicalNameWithTranslationsFactory().fromMap(translationsWithStepName)));
     return TechnicalNameWithTranslationsList(
       technicalNameWithTranslations: list,
     );

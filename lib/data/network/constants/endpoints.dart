@@ -16,8 +16,7 @@ class Endpoints {
   // booking endpoints
   static const String getAppData = appApiUrl + "/content/answerIds/";
 
-  static const String getTechnicalNames =
-      appApiUrl + "/translations?answerIds=";
+  static const String getTechnicalNames = appApiUrl + "/translations?answerIds=";
 
   static const String getUpdatedAtTimes = appApiUrl + "/lastUpdates?answerIds=";
 

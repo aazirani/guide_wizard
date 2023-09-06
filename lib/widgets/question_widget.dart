@@ -31,8 +31,7 @@ class QuestionWidget extends StatefulWidget {
   State<QuestionWidget> createState() => _QuestionWidgetState();
 }
 
-class _QuestionWidgetState extends State<QuestionWidget>
-    with AutomaticKeepAliveClientMixin {
+class _QuestionWidgetState extends State<QuestionWidget> with AutomaticKeepAliveClientMixin {
   late DataStore _dataStore;
   late AppSettingsStore _appSettingsStore;
   late TechnicalNameWithTranslationsStore _technicalNameWithTranslationsStore;
@@ -48,13 +47,11 @@ class _QuestionWidgetState extends State<QuestionWidget>
     // initializing stores
     _dataStore = Provider.of<DataStore>(context);
     _appSettingsStore = Provider.of<AppSettingsStore>(context);
-    _technicalNameWithTranslationsStore =
-        Provider.of<TechnicalNameWithTranslationsStore>(context);
+    _technicalNameWithTranslationsStore = Provider.of<TechnicalNameWithTranslationsStore>(context);
   }
 
   @override
   bool get wantKeepAlive => false;
-
   double _getScreenWidth() => MediaQuery.of(context).size.width;
 
   @override
@@ -83,15 +80,14 @@ class _QuestionWidgetState extends State<QuestionWidget>
           Flexible(
             child: Text(
               _technicalNameWithTranslationsStore.getTranslation(titleId),
-              style: Theme.of(context)
-                  .textTheme
-                  .bodyLarge!
-                  .copyWith(fontWeight: FontWeight.w600),
+              style: Theme.of(context).textTheme.bodyLarge!.copyWith(fontWeight: FontWeight.w600),
             ),
           ),
           Padding(
             padding: const EdgeInsets.only(right: 20),
-            child: _hasInfo() ? _buildInfoButton() : SizedBox(),
+            child: _hasInfo()
+                ? _buildInfoButton()
+                : SizedBox(),
           ),
           // _buildHelpButton(),
         ],
@@ -105,10 +101,7 @@ class _QuestionWidgetState extends State<QuestionWidget>
       margin: Dimens.questionDescriptionPadding,
       child: Text(
         _technicalNameWithTranslationsStore.getTranslation(questionSubtitleId),
-        style: Theme.of(context)
-            .textTheme
-            .bodyLarge!
-            .copyWith(color: AppColors.text_color),
+        style: Theme.of(context).textTheme.bodyLarge!.copyWith(color: AppColors.text_color),
       ),
     );
   }
@@ -139,12 +132,8 @@ class _QuestionWidgetState extends State<QuestionWidget>
             await builder.setActiveIndex(widget.index + 1),
           },
           child: Text(
-            _technicalNameWithTranslationsStore.getTranslationByTechnicalName(
-                LangKeys.next_question_button_text),
-            style: Theme.of(context)
-                .textTheme
-                .bodySmall!
-                .copyWith(color: AppColors.white),
+            _technicalNameWithTranslationsStore.getTranslationByTechnicalName(LangKeys.next_question_button_text),
+            style: Theme.of(context).textTheme.bodySmall!.copyWith(color: AppColors.white),
           ),
         ),
       );
@@ -154,12 +143,11 @@ class _QuestionWidgetState extends State<QuestionWidget>
   ButtonStyle _buildInfoCloseButtonStyle({required double scaleBy}) {
     return ButtonStyle(
       minimumSize: MaterialStateProperty.all(sizeOfButton(scaleBy: scaleBy)),
-      overlayColor: MaterialStateColor.resolveWith(
-          (states) => AppColors.close_button_color.withOpacity(0.1)),
+      overlayColor: MaterialStateColor.resolveWith((states) => AppColors.close_button_color.withOpacity(0.1)),
       shape: MaterialStateProperty.all<RoundedRectangleBorder>(
         RoundedRectangleBorder(
           borderRadius: Dimens.infoInsideDialogButtonsRadius,
-          side: BorderSide(color: AppColors.main_color, width: 2),
+          side: BorderSide(color:  AppColors.main_color, width: 2),
         ),
       ),
     );
@@ -174,20 +162,18 @@ class _QuestionWidgetState extends State<QuestionWidget>
             Navigator.of(context).pop();
           },
           child: Text(
-              _technicalNameWithTranslationsStore
-                  .getTranslationByTechnicalName(LangKeys.close),
-              style: Theme.of(context).textTheme.bodySmall),
+              _technicalNameWithTranslationsStore.getTranslationByTechnicalName(LangKeys.close),
+            style: Theme.of(context).textTheme.bodySmall
+          ),
         ),
       );
     });
   }
 
-  ButtonStyle _buildInfoOpenUrlButtonStyle(
-      {required double scaleBy, Color color = AppColors.main_color}) {
+  ButtonStyle _buildInfoOpenUrlButtonStyle({required double scaleBy, Color color = AppColors.main_color}) {
     return ButtonStyle(
       minimumSize: MaterialStateProperty.all(sizeOfButton(scaleBy: scaleBy)),
-      overlayColor: MaterialStateColor.resolveWith(
-          (states) => AppColors.white.withOpacity(0.13)),
+      overlayColor: MaterialStateColor.resolveWith((states) => AppColors.white.withOpacity(0.13)),
       backgroundColor: MaterialStateProperty.all<Color>(color),
       shape: MaterialStateProperty.all<RoundedRectangleBorder>(
         RoundedRectangleBorder(
@@ -203,19 +189,12 @@ class _QuestionWidgetState extends State<QuestionWidget>
         child: TextButton(
           style: _buildInfoOpenUrlButtonStyle(scaleBy: scaleBy),
           onPressed: () {
-            UrlHandler.openUrl(
-                context: context,
-                url: _getInfoUrl(),
-                technicalNameWithTranslationsStore:
-                    _technicalNameWithTranslationsStore);
+            UrlHandler.openUrl(context: context, url: _getInfoUrl(), technicalNameWithTranslationsStore: _technicalNameWithTranslationsStore);
           },
           child: Text(
-              _technicalNameWithTranslationsStore
-                  .getTranslationByTechnicalName(LangKeys.read_more),
-              style: Theme.of(context)
-                  .textTheme
-                  .bodySmall!
-                  .copyWith(color: AppColors.white)),
+            _technicalNameWithTranslationsStore.getTranslationByTechnicalName(LangKeys.read_more),
+            style: Theme.of(context).textTheme.bodySmall!.copyWith(color: AppColors.white)
+          ),
         ),
       );
     });
@@ -230,11 +209,10 @@ class _QuestionWidgetState extends State<QuestionWidget>
         return InfoDialog(
           content: Padding(
             padding: Dimens.infoBottomSheetPadding,
-            child: Text(_getInfoDescription(),
-                style: Theme.of(context)
-                    .textTheme
-                    .bodyMedium!
-                    .copyWith(color: AppColors.text_color)),
+            child: Text(
+              _getInfoDescription(),
+              style: Theme.of(context).textTheme.bodyMedium!.copyWith(color: AppColors.text_color)
+            ),
           ),
           bottomRow: Container(
             color: AppColors.white,
@@ -249,13 +227,11 @@ class _QuestionWidgetState extends State<QuestionWidget>
   }
 
   bool _hasInfoDescription() {
-    return _technicalNameWithTranslationsStore
-        .isTranslationsNotEmpty(widget.question.info_description);
+    return _technicalNameWithTranslationsStore.isTranslationsNotEmpty(widget.question.info_description);
   }
 
   bool _hasInfoUrl() {
-    return _technicalNameWithTranslationsStore
-        .isTranslationsNotEmpty(widget.question.info_url);
+    return _technicalNameWithTranslationsStore.isTranslationsNotEmpty(widget.question.info_url);
   }
 
   bool _hasInfo() {
@@ -263,13 +239,11 @@ class _QuestionWidgetState extends State<QuestionWidget>
   }
 
   String _getInfoDescription() {
-    return _technicalNameWithTranslationsStore
-        .getTranslation(widget.question.info_description);
+    return _technicalNameWithTranslationsStore.getTranslation(widget.question.info_description);
   }
 
   String _getInfoUrl() {
-    return _technicalNameWithTranslationsStore
-        .getTranslation(widget.question.info_url);
+    return _technicalNameWithTranslationsStore.getTranslation(widget.question.info_url);
   }
 
   void _showInfo() {
@@ -280,14 +254,13 @@ class _QuestionWidgetState extends State<QuestionWidget>
         buttonsRow: Row(
           children: [
             _buildInfoCloseButton(scaleBy: 2),
-            SizedBox(
-              width: 10,
-            ),
+            SizedBox(width: 10,),
             _buildInfoOpenUrlButton(scaleBy: 2),
           ],
         ),
       );
-    } else if (hasDescription && !hasUrl) {
+    }
+    else if (hasDescription && !hasUrl) {
       _showInfoInBottomSheet(
         buttonsRow: Row(
           children: [
@@ -295,13 +268,11 @@ class _QuestionWidgetState extends State<QuestionWidget>
           ],
         ),
       );
-    } else if (!hasDescription && hasUrl) {
-      UrlHandler.openUrl(
-          context: context,
-          url: _getInfoUrl(),
-          technicalNameWithTranslationsStore:
-              _technicalNameWithTranslationsStore);
     }
+    else if (!hasDescription && hasUrl) {
+      UrlHandler.openUrl(context: context, url: _getInfoUrl(), technicalNameWithTranslationsStore: _technicalNameWithTranslationsStore);
+    }
+
   }
 
   Widget _buildInfoButton() {
@@ -310,7 +281,7 @@ class _QuestionWidgetState extends State<QuestionWidget>
       child: Material(
         borderRadius: Dimens.infoButtonBorderRadius,
         child: InkWell(
-          onTap: () {
+          onTap:() {
             _showInfo();
           },
           child: Container(
@@ -338,13 +309,11 @@ class _QuestionWidgetState extends State<QuestionWidget>
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        for (int row = 0;
-            row <= widget.question.answers.length / widget.question.axis_count;
-            row++)
-          _buildAOptionsRow(
-              row * widget.question.axis_count,
-              math.min((row + 1) * widget.question.axis_count,
-                  widget.question.answers.length)),
+        for (int row = 0; row <= widget.question.answers.length / widget.question.axis_count; row++)
+        _buildAOptionsRow(
+            row * widget.question.axis_count,
+            math.min((row + 1) * widget.question.axis_count, widget.question.answers.length)
+        ),
       ],
     );
   }
@@ -403,10 +372,7 @@ class _QuestionWidgetState extends State<QuestionWidget>
   }
 
   Widget _buildImageLoader(String imageURL) {
-    return LoadImageWithCache(
-      imageUrl: imageURL,
-      color: AppColors.main_color,
-    );
+    return LoadImageWithCache(imageUrl: imageURL, color: AppColors.main_color,);
   }
 
   Widget _buildImageOptionSubtitle(Answer answer) {
@@ -436,13 +402,8 @@ class _QuestionWidgetState extends State<QuestionWidget>
             ),
             Flexible(
               child: Text(
-                _technicalNameWithTranslationsStore
-                    .getTranslation(answerTitleId),
-                style: Theme.of(context)
-                    .textTheme
-                    .bodySmall!
-                    .copyWith(color: AppColors.text_color),
-              ),
+                _technicalNameWithTranslationsStore.getTranslation(answerTitleId),
+                style: Theme.of(context).textTheme.bodySmall!.copyWith(color: AppColors.text_color),              ),
             ),
           ],
         ),
@@ -453,9 +414,7 @@ class _QuestionWidgetState extends State<QuestionWidget>
   }
 
   bool answerHasTitle(Answer answer) {
-    return !_technicalNameWithTranslationsStore
-        .getTranslation(answer.title)
-        .isEmpty;
+    return !_technicalNameWithTranslationsStore.getTranslation(answer.title).isEmpty;
   }
 
   Widget _buildImageCheckBox(Answer answer) {
@@ -498,10 +457,7 @@ class _QuestionWidgetState extends State<QuestionWidget>
           },
           title: Text(
             _technicalNameWithTranslationsStore.getTranslation(answer.title),
-            style: Theme.of(context)
-                .textTheme
-                .bodyLarge!
-                .copyWith(color: AppColors.text_color),
+            style: Theme.of(context).textTheme.bodyLarge!.copyWith(color: AppColors.text_color),
           ),
           controlAffinity: ListTileControlAffinity.leading,
           tileColor: AppColors.white,
@@ -511,26 +467,15 @@ class _QuestionWidgetState extends State<QuestionWidget>
     );
   }
 
-  Size sizeOfButton({scaleBy = 1}) {
-    return Size(
-        math.max(
-            _getScreenWidth() -
-                (Dimens.buildQuestionsButtonStyle[
-                        "pixels_smaller_than_screen_width"]!) /
-                    scaleBy,
-            0),
-        Dimens.buildQuestionsButtonStyle["height"]!);
+  Size sizeOfButton({scaleBy = 1}){
+    return Size(math.max(_getScreenWidth() - (Dimens.buildQuestionsButtonStyle["pixels_smaller_than_screen_width"]!) / scaleBy, 0), Dimens.buildQuestionsButtonStyle["height"]!);
   }
 
   void answerOnTapFunction(Answer option, bool? value) async {
-    if (!widget.question.is_multiple_choice) {
-      widget.question.answers.forEach((answer) {
-        answer.selected = false;
-      });
+    if(!widget.question.is_multiple_choice) {
+        widget.question.answers.forEach((answer) { answer.selected = false; });
     }
-    widget.question.answers
-        .firstWhere((answer) => answer.id == option.id)
-        .selected = value ?? false;
+    widget.question.answers.firstWhere((answer) => answer.id == option.id).selected = value ?? false;
     await _dataStore.updateQuestion(widget.question);
     await _appSettingsStore.setAnswerWasUpdated(true);
   }

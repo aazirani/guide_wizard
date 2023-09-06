@@ -68,14 +68,13 @@ class TechnicalNameWithTranslationsDataSource {
     // Making a List<Post> out of List<RecordSnapshot>
     if (recordSnapshots.length > 0) {
       translationsWithStepNameList = TechnicalNameWithTranslationsList(
-          technicalNameWithTranslations:
-              ObservableList.of(recordSnapshots.map((snapshot) {
-        final translation =
+          technicalNameWithTranslations: ObservableList.of(recordSnapshots.map((snapshot) {
+            final translation =
             TechnicalNameWithTranslationsFactory().fromMap(snapshot.value);
-        // An ID is a key of a record from the database.
-        translation.id = snapshot.key;
-        return translation;
-      })));
+            // An ID is a key of a record from the database.
+            translation.id = snapshot.key;
+            return translation;
+          })));
     }
 
     return translationsWithStepNameList;

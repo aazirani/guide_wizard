@@ -60,14 +60,15 @@ class TaskDataSource {
     );
     // Making a List<Post> out of List<RecordSnapshot>
     if (recordSnapshots.length > 0) {
-      tasksList =
-          TaskList(tasks: ObservableList.of(recordSnapshots.map((snapshot) {
-        final task = TaskFactory().fromMap(snapshot.value);
-        // An ID is a key of a record from the database.
-        task.id = snapshot.key;
-        return task;
-      })));
-    } else {
+      tasksList = TaskList(
+          tasks: ObservableList.of(recordSnapshots.map((snapshot) {
+            final task = TaskFactory().fromMap(snapshot.value);
+            // An ID is a key of a record from the database.
+            task.id = snapshot.key;
+            return task;
+          })));
+    }
+    else {
       tasksList = TaskList(tasks: ObservableList.of(List.empty()));
     }
 

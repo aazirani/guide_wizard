@@ -19,56 +19,55 @@ abstract class _UpdatedAtTimesStore with Store {
 
   // store variables:-----------------------------------------------------------
   static ObservableFuture<UpdatedAtTimes?> emptyUpdatedAtTimesResponse =
-      ObservableFuture.value(null);
+  ObservableFuture.value(null);
 
   @observable
   ObservableFuture<UpdatedAtTimes?> fetchUpdatedAtTimesFuture =
-      ObservableFuture<UpdatedAtTimes?>(emptyUpdatedAtTimesResponse);
+  ObservableFuture<UpdatedAtTimes?>(emptyUpdatedAtTimesResponse);
 
   @computed
-  bool get updatedAtTimesLoading =>
-      fetchUpdatedAtTimesFuture.status == FutureStatus.pending;
+  bool get updatedAtTimesLoading => fetchUpdatedAtTimesFuture.status == FutureStatus.pending;
 
   @computed
-  bool get updatedAtTimesSuccess =>
-      fetchUpdatedAtTimesFuture.status == FutureStatus.fulfilled;
+  bool get updatedAtTimesSuccess => fetchUpdatedAtTimesFuture.status == FutureStatus.fulfilled;
 
   // actions:-------------------------------------------------------------------
   @action
   Future<UpdatedAtTimes> getUpdatedAtTimesFromDb() async {
     try {
-      fetchUpdatedAtTimesFuture =
-          ObservableFuture(_repository.getUpdatedAtTimesFromDB());
+      fetchUpdatedAtTimesFuture = ObservableFuture(_repository.getUpdatedAtTimesFromDB());
       UpdatedAtTimes? updatedAtTimes = await fetchUpdatedAtTimesFuture;
-      return updatedAtTimes ??
-          UpdatedAtTimes(
-              last_updated_at_content: DateTime(1).toString(),
-              last_updated_at_technical_names: DateTime(1).toString(),
-              last_apps_request_time: DateTime.now().toString());
+      return updatedAtTimes ?? UpdatedAtTimes(
+          last_updated_at_content: DateTime(1).toString(),
+          last_updated_at_technical_names: DateTime(1).toString(),
+          last_apps_request_time: DateTime.now().toString()
+      );
     } catch (e) {
       return UpdatedAtTimes(
           last_updated_at_content: DateTime(1).toString(),
           last_updated_at_technical_names: DateTime(1).toString(),
-          last_apps_request_time: DateTime.now().toString());
+          last_apps_request_time: DateTime.now().toString()
+      );
     }
   }
 
   @action
   Future<UpdatedAtTimes> getUpdatedAtTimesFromApi() async {
     try {
-      fetchUpdatedAtTimesFuture =
-          ObservableFuture(_repository.getUpdatedAtTimesFromApiAndInsert());
+      fetchUpdatedAtTimesFuture = ObservableFuture(_repository.getUpdatedAtTimesFromApiAndInsert());
       UpdatedAtTimes? updatedAtTimes = await fetchUpdatedAtTimesFuture;
-      return updatedAtTimes ??
-          UpdatedAtTimes(
-              last_updated_at_content: DateTime(1).toString(),
-              last_updated_at_technical_names: DateTime(1).toString(),
-              last_apps_request_time: DateTime(1).toString());
+      return updatedAtTimes ?? UpdatedAtTimes(
+          last_updated_at_content: DateTime(1).toString(),
+          last_updated_at_technical_names: DateTime(1).toString(),
+          last_apps_request_time: DateTime(1).toString()
+      );
     } catch (e) {
       return UpdatedAtTimes(
           last_updated_at_content: DateTime(1).toString(),
           last_updated_at_technical_names: DateTime(1).toString(),
-          last_apps_request_time: DateTime(1).toString());
+          last_apps_request_time: DateTime(1).toString()
+      );
     }
   }
+
 }

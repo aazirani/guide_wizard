@@ -39,9 +39,7 @@ class SharedPreferenceHelper {
   }
 
   Future<String> changeLanguage(String language) {
-    return _sharedPreference
-        .setString(Preferences.current_language, language)
-        .then((_) => language);
+    return _sharedPreference.setString(Preferences.current_language, language).then((_) => language);
   }
 
   // Loading dialog:---------------------------------------------------------------------
@@ -55,7 +53,6 @@ class SharedPreferenceHelper {
   }
 
   Future<void> setAnswerWasUpdated(bool mustUpdate) {
-    return _sharedPreference.setBool(
-        Preferences.answer_was_updated, mustUpdate);
+    return _sharedPreference.setBool(Preferences.answer_was_updated, mustUpdate);
   }
 }

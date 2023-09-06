@@ -7,14 +7,7 @@ class ScrollingOverflowText extends StatefulWidget {
   TextStyle? style;
   double height, overflowRatio;
   double? width;
-
-  ScrollingOverflowText(this.text,
-      {Key? key,
-      this.style,
-      this.height = ScrollingOverflowTextConstants.defaultHeight,
-      this.width,
-      this.overflowRatio = ScrollingOverflowTextConstants.defaultOverflowRatio})
-      : super(key: key);
+  ScrollingOverflowText(this.text, {Key? key, this.style, this.height = ScrollingOverflowTextConstants.defaultHeight, this.width, this.overflowRatio = ScrollingOverflowTextConstants.defaultOverflowRatio}) : super(key: key);
 
   @override
   State<ScrollingOverflowText> createState() => _ScrollingOverflowTextState();
@@ -38,14 +31,8 @@ class _ScrollingOverflowTextState extends State<ScrollingOverflowText> {
           textScaleFactor: MediaQuery.of(context).textScaleFactor,
         );
         painter.layout();
-        final overflow = painter.size.width > constraints.maxWidth ||
-            painter.size.width > _getScreenWidth() * widget.overflowRatio;
-        return overflow
-            ? getScrollingText()
-            : Text(
-                widget.text,
-                style: widget.style,
-              );
+        final overflow = painter.size.width > constraints.maxWidth || painter.size.width > _getScreenWidth() * widget.overflowRatio;
+        return overflow ? getScrollingText() : Text(widget.text, style: widget.style,);
       },
     );
   }
@@ -57,12 +44,10 @@ class _ScrollingOverflowTextState extends State<ScrollingOverflowText> {
       child: Marquee(
         text: widget.text,
         style: widget.style,
-        showFadingOnlyWhenScrolling:
-            ScrollingOverflowTextConstants.showFadingOnlyWhenScrolling,
+        showFadingOnlyWhenScrolling: ScrollingOverflowTextConstants.showFadingOnlyWhenScrolling,
         startAfter: ScrollingOverflowTextConstants.startAfter,
         pauseAfterRound: ScrollingOverflowTextConstants.pauseAfterRound,
-        fadingEdgeEndFraction:
-            ScrollingOverflowTextConstants.fadingEdgeEndFraction,
+        fadingEdgeEndFraction: ScrollingOverflowTextConstants.fadingEdgeEndFraction,
         blankSpace: ScrollingOverflowTextConstants.blankSpace,
         velocity: ScrollingOverflowTextConstants.velocity,
       ),

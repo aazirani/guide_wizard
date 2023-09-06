@@ -96,25 +96,24 @@ class AppThemeData {
   static const _semiBold = FontWeight.w600;
   static const _bold = FontWeight.w700;
 
+
   static final TextTheme _textTheme = TextTheme(
     //app bar titles
     titleLarge: TextStyle(fontSize: 20, fontWeight: _bold),
-    // step slider titles, task titles , sub task title
+    // step slider titles, task titles , sub task title 
     titleMedium: TextStyle(fontSize: 19, fontWeight: _medium),
     // "steps" / "Description" / "In Progress" in home / task title in task list with less font weight
-    titleSmall: TextStyle(fontSize: 18, fontWeight: _semiBold),
+    titleSmall: TextStyle(fontSize: 18, fontWeight: _semiBold), 
     // description in task page
-    bodyLarge: TextStyle(fontSize: 18, fontWeight: _regular),
+    bodyLarge: TextStyle(fontSize:18, fontWeight: _regular),
     //description in home, in progress tasks in home, deadline in task page, modal bottom sheet dialog
     bodyMedium: TextStyle(fontSize: 17),
     // no of tasks in step slider and tasklist / button text
-    bodySmall: TextStyle(
-      fontSize: 16,
-    ),
+    bodySmall: TextStyle(fontSize: 16,),
     labelMedium: TextStyle(fontSize: 17),
     labelSmall: TextStyle(fontSize: 14),
   ).apply(
-    displayColor: lightColorScheme.onSurface,
-    bodyColor: lightColorScheme.onSurface,
+    displayColor:  lightColorScheme.onSurface, 
+    bodyColor: lightColorScheme.onSurface, 
   );
 }

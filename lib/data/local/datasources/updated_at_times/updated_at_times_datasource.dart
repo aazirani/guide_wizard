@@ -6,7 +6,7 @@ class UpdatedAtTimesDataSource {
   // A Store with int keys and Map<String, dynamic> values.
   // This Store acts like a persistent map, values of which are Flogs objects converted to Map
   final _updatedAtTimesStore =
-      intMapStoreFactory.store(DBConstants.STORE_NAME_UPDATED_AT_TIMES);
+  intMapStoreFactory.store(DBConstants.STORE_NAME_UPDATED_AT_TIMES);
 
   // database instance
   final Database _db;
@@ -23,8 +23,7 @@ class UpdatedAtTimesDataSource {
     return await _updatedAtTimesStore.count(_db);
   }
 
-  Future<List<UpdatedAtTimes>> getAllSortedByFilter(
-      {List<Filter>? filters}) async {
+  Future<List<UpdatedAtTimes>> getAllSortedByFilter({List<Filter>? filters}) async {
     //creating finder
     final finder = Finder(
         filter: filters != null ? Filter.and(filters) : null,

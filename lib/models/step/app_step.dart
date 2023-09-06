@@ -51,21 +51,21 @@ abstract class _AppStep with Store {
       required this.tasks});
 
   Map<String, dynamic> toMap() => {
-        "id": id,
-        "name": name,
-        "description": description,
-        "order": order,
-        "image": image,
-        "creator_id": creator_id,
-        "created_at": created_at,
-        "updated_at": updated_at,
-        "questions":
-            ObservableList.of(questions.map((question) => question.toMap())),
-        "tasks": ObservableList.of(tasks.map((task) => task.toMap())),
-      };
+      "id": id,
+      "name": name,
+      "description": description,
+      "order": order,
+      "image": image,
+      "creator_id": creator_id,
+      "created_at": created_at,
+      "updated_at": updated_at,
+      "questions": ObservableList.of(questions.map((question) => question.toMap())),
+      "tasks": ObservableList.of(tasks.map((task) => task.toMap())),
+  };
+
 }
 
-class AppStepFactory {
+class AppStepFactory{
   AppStep fromMap(Map<String, dynamic> json) {
     return AppStep(
       id: json["id"],
@@ -76,14 +76,8 @@ class AppStepFactory {
       creator_id: json["creator_id"],
       created_at: json["created_at"],
       updated_at: json["updated_at"],
-      questions: ObservableList.of(json["questions"]
-          .map((x) => QuestionFactory().fromMap(x))
-          .toList()
-          .cast<Question>()),
-      tasks: ObservableList.of(json["tasks"]
-          .map((task) => TaskFactory().fromMap(task))
-          .toList()
-          .cast<Task>()),
+      questions: ObservableList.of(json["questions"].map((x) => QuestionFactory().fromMap(x)).toList().cast<Question>()),
+      tasks: ObservableList.of(json["tasks"].map((task) => TaskFactory().fromMap(task)).toList().cast<Task>()),
     );
   }
 }

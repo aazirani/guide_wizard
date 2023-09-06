@@ -60,10 +60,10 @@ class SubTaskDataSource {
     if (recordSnapshots.length > 0) {
       subTasksList = SubTaskList(
           subTasks: ObservableList.of(recordSnapshots.map((snapshot) {
-        final subTask = SubTaskFactory().fromMap(snapshot.value);
-        // An ID is a key of a record from the database.
-        return subTask;
-      })));
+            final subTask = SubTaskFactory().fromMap(snapshot.value);
+            // An ID is a key of a record from the database.
+            return subTask;
+          })));
     }
 
     return subTasksList;

@@ -51,38 +51,30 @@ class AppColors {
     100: Colors.grey[200]!,
     200: Colors.grey[300]!,
   };
-
   //home page
   static Color homeBodyColor = Color.fromARGB(255, 251, 251, 251);
-
   //step timeline
   static Color stepTimelinePendingColor = green[300]!;
   static Color stepTimelineNotStartedNodeColor = greys[300]!;
   static Color stepTimelineNotStartedConnectorColor = greys[300]!;
   static Color stepTimelineContainerColor = greys[50]!.withOpacity(0.99);
   static Color stepTimelineContainerShadowColor = greys[300]!;
-
   //step slider
   static Color stepSliderUnavailableColor = greys[100]!;
   static Color stepSliderUnavailableBorder = greys[200]!;
   static Color stepSliderContinueButton = white;
-
   //progress bar
   static Color progressBarBackgroundColor = white;
   static Color progressBarValueColor = green[300]!;
-
   //compressed timeline
   static Color timelineCompressedConnectorColor = green[300]!;
   static Color timelineCompressedContainerColor = greys[400]!;
   static Color timelineCompressedContainerShadowColor = greys[500]!;
-
   //diamond indicator
   static Color diamondBorderColor = green[300]!;
   static Color diamondColor = green[300]!;
-
   // tasklist
   static Color tasklistConnectorColor = green[300]!;
-
   // static Color contentColor = greys[600]!;
   static Color contentColor = Colors.white;
   static Color contentDoneBorderColor = green[300]!.withOpacity(0.2);
@@ -95,7 +87,6 @@ class AppColors {
   static Color deadlineTextUnDoneColor = main_color;
   static Color taskDoneBorder = green[100]!;
   static Color taskUnDoneBorder = main_color;
-
   // questionpage
   static Color nextStepColor = green[100]!;
 
@@ -109,10 +100,8 @@ class AppColors {
       const Color.fromRGBO(217, 217, 217, 0.15);
   static const Color bright_foreground_color = Colors.white;
   static const Color blockquoteColor = Color.fromARGB(255, 118, 178, 227);
-
   // static const Color dotted_line_color = Colors.green;
   static Color dotted_line_color = green[300]!;
-
   // static const Color white= const Colors.white.withOpacity(0.5);
   static Color close_button_color = Colors.grey[800]!;
 }

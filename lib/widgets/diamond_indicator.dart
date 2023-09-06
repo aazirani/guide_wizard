@@ -5,7 +5,6 @@ import 'package:guide_wizard/constants/colors.dart';
 
 class DiamondIndicator extends StatelessWidget {
   final bool fill;
-
   const DiamondIndicator({Key? key, this.fill = false}) : super(key: key);
 
   @override

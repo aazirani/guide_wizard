@@ -43,15 +43,15 @@ abstract class _Language with Store {
   });
 
   Map<String, dynamic> toMap() => {
-        "id": id,
-        "language_code": language_code,
-        "language_name": language_name,
-        "is_active": is_active,
-        "is_main_language": is_main_language ? 1 : 0,
-        "creator_id": creator_id,
-        "created_at": created_at,
-        "updated_at": updated_at,
-      };
+    "id": id,
+    "language_code": language_code,
+    "language_name": language_name,
+    "is_active": is_active,
+    "is_main_language": is_main_language ? 1 : 0,
+    "creator_id": creator_id,
+    "created_at": created_at,
+    "updated_at": updated_at,
+  };
 }
 
 class LanguageFactory {

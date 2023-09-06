@@ -27,7 +27,8 @@ class CustomProgressIndicatorWidget extends StatelessWidget {
             ),
           ),
         ),
-        decoration: BoxDecoration(color: Color.fromARGB(100, 105, 105, 105)),
+        decoration: BoxDecoration(
+            color: Color.fromARGB(100, 105, 105, 105)),
       ),
     );
   }

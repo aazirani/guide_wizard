@@ -18,6 +18,7 @@ import 'package:guide_wizard/stores/theme/theme_store.dart';
 import 'package:sembast/sembast.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
+
 final getIt = GetIt.instance;
 
 Future<void> setupLocator() async {
@@ -40,17 +41,13 @@ Future<void> setupLocator() async {
 
   // api's:---------------------------------------------------------------------
   getIt.registerSingleton(StepApi(getIt<DioClient>(), getIt<RestClient>()));
-  getIt.registerSingleton(
-      TechnicalNameApi(getIt<DioClient>(), getIt<RestClient>()));
-  getIt.registerSingleton(
-      UpdatedAtTimesApi(getIt<DioClient>(), getIt<RestClient>()));
+  getIt.registerSingleton(TechnicalNameApi(getIt<DioClient>(), getIt<RestClient>()));
+  getIt.registerSingleton(UpdatedAtTimesApi(getIt<DioClient>(), getIt<RestClient>()));
 
   // data sources
   getIt.registerSingleton(StepDataSource(await getIt.getAsync<Database>()));
-  getIt.registerSingleton(TechnicalNameWithTranslationsDataSource(
-      await getIt.getAsync<Database>()));
-  getIt.registerSingleton(
-      UpdatedAtTimesDataSource(await getIt.getAsync<Database>()));
+  getIt.registerSingleton(TechnicalNameWithTranslationsDataSource(await getIt.getAsync<Database>()));
+  getIt.registerSingleton(UpdatedAtTimesDataSource(await getIt.getAsync<Database>()));
 
   // repository:----------------------------------------------------------------
   getIt.registerSingleton(Repository(

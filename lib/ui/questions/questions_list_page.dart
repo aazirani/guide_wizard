@@ -11,7 +11,6 @@ import 'package:provider/provider.dart';
 
 class QuestionsListPage extends StatefulWidget {
   int stepId;
-
   QuestionsListPage({required this.stepId, Key? key}) : super(key: key);
 
   @override
@@ -21,7 +20,6 @@ class QuestionsListPage extends StatefulWidget {
 class _QuestionsListPageState extends State<QuestionsListPage> {
   get questions => _dataStore.getStepById(widget.stepId).questions;
   Size floatingActionButtonSize = Size(0, 0);
-
   // stores:--------------------------------------------------------------------
   late DataStore _dataStore;
   late TechnicalNameWithTranslationsStore _technicalNameWithTranslationsStore;
@@ -36,17 +34,14 @@ class _QuestionsListPageState extends State<QuestionsListPage> {
     super.didChangeDependencies();
     // initializing stores
     _dataStore = Provider.of<DataStore>(context);
-    _technicalNameWithTranslationsStore =
-        Provider.of<TechnicalNameWithTranslationsStore>(context);
+    _technicalNameWithTranslationsStore = Provider.of<TechnicalNameWithTranslationsStore>(context);
   }
 
   @override
   Widget build(BuildContext context) {
     return Consumer<QuestionsWidgetState>(builder: (context, builder, child) {
       return Scaffold(
-        appBar: QuestionsListAppBar(
-          title: _appBarTitleString(),
-        ),
+        appBar: QuestionsListAppBar(title: _appBarTitleString(),),
         backgroundColor: AppColors.main_color,
         body: ClipRRect(
           borderRadius: BorderRadius.only(
@@ -68,14 +63,11 @@ class _QuestionsListPageState extends State<QuestionsListPage> {
                     child: ListView.builder(
                       shrinkWrap: true,
                       itemCount: questions.length,
-                      itemBuilder: (context, index) =>
-                          _buildQuestionWidget(index),
+                      itemBuilder: (context, index) => _buildQuestionWidget(index),
                     ),
                   ),
                 ),
-                SizedBox(
-                  height: floatingActionButtonSize.height,
-                ),
+                SizedBox(height: floatingActionButtonSize.height,),
               ],
             ),
           ),
@@ -92,7 +84,10 @@ class _QuestionsListPageState extends State<QuestionsListPage> {
 
   Widget _buildQuestionWidget(int index) {
     return Card(
-      child: QuestionWidget(index: index, question: questions[index]),
+      child: QuestionWidget(
+        index: index,
+        question: questions[index]
+      ),
     );
   }
 
@@ -113,7 +108,6 @@ class _QuestionsListPageState extends State<QuestionsListPage> {
   }
 
   String _appBarTitleString() {
-    return _technicalNameWithTranslationsStore
-        .getTranslation(_dataStore.getStepById(widget.stepId).name);
+    return _technicalNameWithTranslationsStore.getTranslation(_dataStore.getStepById(widget.stepId).name);
   }
 }

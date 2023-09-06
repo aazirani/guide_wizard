@@ -10,7 +10,9 @@ import 'package:provider/provider.dart';
 import 'package:timelines/timelines.dart';
 
 class CompressedTaskListTimeline extends StatefulWidget {
-  CompressedTaskListTimeline({Key? key}) : super(key: key);
+
+  CompressedTaskListTimeline({Key? key})
+      : super(key: key);
 
   @override
   State<CompressedTaskListTimeline> createState() =>
@@ -25,7 +27,6 @@ class _CompressedTaskListTimelineState
 
   // Getters ............................................................
   get _getScreenHeight => MediaQuery.of(context).size.height;
-
   get _getScreenWidth => MediaQuery.of(context).size.width;
 
   @override
@@ -55,21 +56,15 @@ class _CompressedTaskListTimelineState
           builder: TimelineTileBuilder(
             itemCount: _dataStore.getAllSteps.length == 0
                 ? 0
-                : _dataStore
-                    .getStepById(_appSettingsStore.currentStepId)
-                    .tasks
-                    .length,
+                : _dataStore.getStepById(_appSettingsStore.currentStepId).tasks.length,
             itemExtent: Dimens.compressedTaskListTimeLineItemExtend,
-            contentsBuilder: (context, index) => _buildContents(index),
+            contentsBuilder: (context, index) =>
+                _buildContents(index),
             indicatorBuilder: (context, index) => _buildIndicator(index),
-            startConnectorBuilder: (context, index) =>
-                index == 0 ? Container() : _buildConnector(),
-            endConnectorBuilder: (context, index) => index ==
-                    _dataStore
-                            .getStepById(_appSettingsStore.currentStepId)
-                            .tasks
-                            .length -
-                        1
+            startConnectorBuilder: (context, index) => index == 0
+                ? Container()
+                : _buildConnector(),
+            endConnectorBuilder: (context, index) => index == _dataStore.getStepById(_appSettingsStore.currentStepId).tasks.length - 1
                 ? Container()
                 : _buildConnector(),
           ),
@@ -78,12 +73,8 @@ class _CompressedTaskListTimelineState
     );
   }
 
-  bool isTaskDone(index) {
-    return _dataStore
-        .getStepById(_appSettingsStore.currentStepId)
-        .tasks
-        .elementAt(index)
-        .isDone;
+  bool isTaskDone(index){
+    return _dataStore.getStepById(_appSettingsStore.currentStepId).tasks.elementAt(index).isDone;
   }
 
   Widget _buildIndicator(taskIndex) {
@@ -92,7 +83,8 @@ class _CompressedTaskListTimelineState
           color: AppColors.transparent,
           width: Dimens.timelineIndicatorDimens,
           height: Dimens.timelineIndicatorDimens,
-          child: DiamondIndicator(fill: isTaskDone(taskIndex))),
+          child: DiamondIndicator(fill: isTaskDone(taskIndex))
+      ),
     );
   }
 
@@ -121,8 +113,9 @@ class _CompressedTaskListTimelineState
           child: Align(
             alignment: Alignment.centerLeft,
             child: Text(
-                "${_technicalNameWithTranslationsStore.getTranslation(_dataStore.getStepById(_appSettingsStore.currentStepId).tasks.elementAt(index).text)}",
-                style: Theme.of(context).textTheme.bodyMedium),
+              "${_technicalNameWithTranslationsStore.getTranslation(_dataStore.getStepById(_appSettingsStore.currentStepId).tasks.elementAt(index).text)}",
+              style: Theme.of(context).textTheme.bodyMedium
+            ),
           ),
         ),
       ],

@@ -59,12 +59,13 @@ class QuestionDataSource {
     if (recordSnapshots.length > 0) {
       questionsList = QuestionList(
           questions: ObservableList.of(recordSnapshots.map((snapshot) {
-        final question = QuestionFactory().fromMap(snapshot.value);
-        // An ID is a key of a record from the database.
-        question.id = snapshot.key;
-        return question;
-      })));
-    } else {
+            final question = QuestionFactory().fromMap(snapshot.value);
+            // An ID is a key of a record from the database.
+            question.id = snapshot.key;
+            return question;
+          })));
+    }
+    else {
       questionsList = QuestionList(questions: ObservableList.of(List.empty()));
     }
 

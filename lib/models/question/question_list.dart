@@ -14,8 +14,7 @@ class QuestionList {
 
   @action
   factory QuestionList.fromJson(List<dynamic> json) {
-    List<Question> questions =
-        json.map((question) => QuestionFactory().fromMap(question)).toList();
+    List<Question> questions = json.map((question) => QuestionFactory().fromMap(question)).toList();
     return QuestionList(
       questions: ObservableList<Question>.of(questions),
     );

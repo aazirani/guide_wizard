@@ -9,84 +9,70 @@ import 'package:mobx/mobx.dart';
 part 'technical_name_with_translations_store.g.dart';
 
 // This is the class used by rest of your codebase
-class TechnicalNameWithTranslationsStore = _TechnicalNameWithTranslationsStore
-    with _$TechnicalNameWithTranslationsStore;
+class TechnicalNameWithTranslationsStore = _TechnicalNameWithTranslationsStore with _$TechnicalNameWithTranslationsStore;
 
 abstract class _TechnicalNameWithTranslationsStore with Store {
   Repository _repository;
+  _TechnicalNameWithTranslationsStore(Repository repo) : this._repository = repo;
 
-  _TechnicalNameWithTranslationsStore(Repository repo)
-      : this._repository = repo;
-
-  static ObservableFuture<TechnicalNameWithTranslationsList>
-      emptyTechnicalNameWithTranslationsResponse = ObservableFuture.value(
-          TechnicalNameWithTranslationsList(
-              technicalNameWithTranslations: ObservableList.of(List.empty())));
+  static ObservableFuture<TechnicalNameWithTranslationsList>emptyTechnicalNameWithTranslationsResponse = ObservableFuture.value(TechnicalNameWithTranslationsList(technicalNameWithTranslations: ObservableList.of(List.empty())));
 
   @observable
   ObservableFuture<TechnicalNameWithTranslationsList>
-      fetchTechnicalNameWithTranslationsFuture =
-      ObservableFuture<TechnicalNameWithTranslationsList>(
-          emptyTechnicalNameWithTranslationsResponse);
+      fetchTechnicalNameWithTranslationsFuture = ObservableFuture<TechnicalNameWithTranslationsList>(emptyTechnicalNameWithTranslationsResponse);
 
   @observable
   int? language_id;
 
   @observable
   TechnicalNameWithTranslationsList technicalNameWithTranslationsList =
-      TechnicalNameWithTranslationsList(
-          technicalNameWithTranslations: ObservableList.of(List.empty()));
+      TechnicalNameWithTranslationsList(technicalNameWithTranslations: ObservableList.of(List.empty()));
 
   @computed
-  bool get technicalNameSuccess =>
-      fetchTechnicalNameWithTranslationsFuture.status == FutureStatus.fulfilled;
+  bool get technicalNameSuccess => fetchTechnicalNameWithTranslationsFuture.status == FutureStatus.fulfilled;
 
   @computed
-  bool get technicalNameLoading =>
-      fetchTechnicalNameWithTranslationsFuture.status == FutureStatus.pending;
+  bool get technicalNameLoading => fetchTechnicalNameWithTranslationsFuture.status == FutureStatus.pending;
 
   @action
   Future getTechnicalNameWithTranslationsFromDb() async {
     try {
-      fetchTechnicalNameWithTranslationsFuture = ObservableFuture(
-          _repository.getTechnicalNameWithTranslationsFromDb());
-      TechnicalNameWithTranslationsList? technicalNameWithTranslationsList =
-          await fetchTechnicalNameWithTranslationsFuture;
-      this.technicalNameWithTranslationsList =
-          technicalNameWithTranslationsList;
+      fetchTechnicalNameWithTranslationsFuture = ObservableFuture(_repository.getTechnicalNameWithTranslationsFromDb());
+      TechnicalNameWithTranslationsList? technicalNameWithTranslationsList = await fetchTechnicalNameWithTranslationsFuture;
+      this.technicalNameWithTranslationsList = technicalNameWithTranslationsList;
       return technicalNameWithTranslationsList;
     } catch (e) {
       return TechnicalNameWithTranslationsList(
-          technicalNameWithTranslations: ObservableList.of(List.empty()));
+          technicalNameWithTranslations: ObservableList.of(List.empty())
+      );
     }
   }
 
   @action
   Future getTechnicalNameWithTranslationsFromApi() async {
     try {
-      fetchTechnicalNameWithTranslationsFuture = ObservableFuture(
-          _repository.getTechnicalNameWithTranslationsFromApiAndInsert());
-      TechnicalNameWithTranslationsList? technicalNameWithTranslationsList =
-          await fetchTechnicalNameWithTranslationsFuture;
-      this.technicalNameWithTranslationsList =
-          technicalNameWithTranslationsList;
+      fetchTechnicalNameWithTranslationsFuture = ObservableFuture(_repository.getTechnicalNameWithTranslationsFromApiAndInsert());
+      TechnicalNameWithTranslationsList? technicalNameWithTranslationsList = await fetchTechnicalNameWithTranslationsFuture;
+      this.technicalNameWithTranslationsList = technicalNameWithTranslationsList;
       return technicalNameWithTranslationsList;
     } catch (e) {
       return TechnicalNameWithTranslationsList(
-          technicalNameWithTranslations: ObservableList.of(List.empty()));
+          technicalNameWithTranslations: ObservableList.of(List.empty())
+      );
     }
   }
 
   @action
   void setCurrentLocale(String languageCode) {
-    try {
-      this.language_id = getSupportedLanguages()
-          .firstWhere((element) => element.language_code == languageCode,
-              orElse: () => getSupportedLanguages().firstWhere(
+    try{
+      this.language_id = getSupportedLanguages().firstWhere(
+              (element) => element.language_code == languageCode,
+          orElse: () => getSupportedLanguages().firstWhere(
                   (element) => element.is_main_language,
-                  orElse: () => getSupportedLanguages().first))
-          .id;
-    } catch (e) {
+              orElse: () => getSupportedLanguages().first
+          )
+      ).id;
+    } catch (e){
       this.language_id = 1;
     }
   }
@@ -99,8 +85,7 @@ abstract class _TechnicalNameWithTranslationsStore with Store {
   // methods: ..................................................................
 
   Future<bool> isDataSourceEmpty() async {
-    return (await _repository.technicalNameWithTranslationsDatasourceCount()) ==
-        0;
+    return (await _repository.technicalNameWithTranslationsDatasourceCount()) == 0;
   }
 
   String getTranslation(int id) {
@@ -128,12 +113,11 @@ abstract class _TechnicalNameWithTranslationsStore with Store {
   }
 
   TechnicalNameWithTranslations? getTechnicalName(int id) {
-    return technicalNameWithTranslationsList.technicalNameWithTranslations
-        .firstWhereOrNull((element) => element.id == id);
+    return technicalNameWithTranslationsList.technicalNameWithTranslations.firstWhereOrNull((element) => element.id == id);
   }
 
   int getTranslationsLength(int id) {
-    if (getTechnicalName(id) == null) return 0;
+    if(getTechnicalName(id) == null) return 0;
     return getTechnicalName(id)!.translations.length;
   }
 
@@ -145,11 +129,10 @@ abstract class _TechnicalNameWithTranslationsStore with Store {
     return !isTranslationsEmpty(id);
   }
 
-  List<Language> getSupportedLanguages() {
+  List<Language> getSupportedLanguages(){
     Set<String> seenLanguageCodes = {};
 
-    List<Language> uniqueLanguages = technicalNameWithTranslationsList
-        .technicalNameWithTranslations
+    List<Language> uniqueLanguages = technicalNameWithTranslationsList.technicalNameWithTranslations
         .expand((text) => text.translations)
         .map((translation) => translation.language)
         .where((lang) => seenLanguageCodes.add(lang.language_code))

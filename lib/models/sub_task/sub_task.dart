@@ -36,7 +36,7 @@ abstract class _SubTask with Store {
 
   @observable
   bool expanded = false;
-
+  
   _SubTask({
     required this.id,
     required this.task_id,
