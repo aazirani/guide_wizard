@@ -62,22 +62,34 @@ class _NextStageButtonState extends State<NextStageButton> {
                   .getTranslationByTechnicalName(LangKeys.next_step_button_text)
               : _technicalNameWithTranslationsStore
                   .getTranslationByTechnicalName(LangKeys.update_steps),
-          style: Theme.of(context).textTheme.bodyLarge!.copyWith(color: AppColors.white, fontWeight: FontWeight.w500),
+          style: Theme.of(context)
+              .textTheme
+              .bodyLarge!
+              .copyWith(color: AppColors.white, fontWeight: FontWeight.w500),
         ),
         ButtonState.loading: Text(
           _technicalNameWithTranslationsStore
               .getTranslationByTechnicalName(LangKeys.getting_updates),
-          style: Theme.of(context).textTheme.bodyLarge!.copyWith(color: AppColors.white, fontWeight: FontWeight.w500),
+          style: Theme.of(context)
+              .textTheme
+              .bodyLarge!
+              .copyWith(color: AppColors.white, fontWeight: FontWeight.w500),
         ),
         ButtonState.fail: Text(
           _technicalNameWithTranslationsStore.getTranslationByTechnicalName(
               LangKeys.next_stage_check_internet),
-          style: Theme.of(context).textTheme.bodyLarge!.copyWith(color: AppColors.white, fontWeight: FontWeight.w500),
+          style: Theme.of(context)
+              .textTheme
+              .bodyLarge!
+              .copyWith(color: AppColors.white, fontWeight: FontWeight.w500),
         ),
         ButtonState.success: Text(
           _technicalNameWithTranslationsStore
               .getTranslationByTechnicalName(LangKeys.update_finished),
-          style: Theme.of(context).textTheme.bodyLarge!.copyWith(color: AppColors.white, fontWeight: FontWeight.w500),
+          style: Theme.of(context)
+              .textTheme
+              .bodyLarge!
+              .copyWith(color: AppColors.white, fontWeight: FontWeight.w500),
         )
       },
       stateColors: {
@@ -94,7 +106,6 @@ class _NextStageButtonState extends State<NextStageButton> {
   }
 
   void onTapFunction() async {
-
     setButtonState(ButtonState.loading);
 
     if (!await DataLoadHandler().hasInternet()) {
@@ -118,14 +129,13 @@ class _NextStageButtonState extends State<NextStageButton> {
     Future.delayed(Duration(milliseconds: 1500), () {
       Navigator.of(context).pushAndRemoveUntil(
           MaterialPageRoute(builder: (context) => HomeScreen()),
-              (Route<dynamic> route) => false
-      );
+          (Route<dynamic> route) => false);
     });
   }
 
-
   Future<void> updateIfAnswersHasChanged() async {
-    bool answerWasUpdated = await _appSettingsStore.getAnswerWasUpdated() ?? false;
+    bool answerWasUpdated =
+        await _appSettingsStore.getAnswerWasUpdated() ?? false;
     if (answerWasUpdated) {
       await DataLoadHandler().loadDataAndCheckForUpdate();
     }

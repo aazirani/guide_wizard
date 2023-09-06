@@ -61,12 +61,12 @@ class StepDataSource {
 
     // Making a List<Post> out of List<RecordSnapshot>
     if (recordSnapshots.length > 0) {
-      stepsList = AppStepList(
-          steps: ObservableList.of(recordSnapshots.map((snapshot) {
-            final step = AppStepFactory().fromMap(snapshot.value);
-            // An ID is a key of a record from the database.
-            return step;
-          })));
+      stepsList =
+          AppStepList(steps: ObservableList.of(recordSnapshots.map((snapshot) {
+        final step = AppStepFactory().fromMap(snapshot.value);
+        // An ID is a key of a record from the database.
+        return step;
+      })));
     } else {
       stepsList = AppStepList(steps: ObservableList.of(List.empty()));
     }

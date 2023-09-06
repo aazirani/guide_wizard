@@ -60,7 +60,8 @@ class RestClient {
     final int statusCode = response.statusCode;
 
     if (statusCode < 200 || statusCode > 400) {
-      throw NetworkException(message: 'Error fetching data from server', statusCode: statusCode);
+      throw NetworkException(
+          message: 'Error fetching data from server', statusCode: statusCode);
     }
 
     return _decoder.convert(res);

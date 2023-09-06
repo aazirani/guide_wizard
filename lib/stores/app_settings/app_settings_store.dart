@@ -13,13 +13,14 @@ abstract class _AppSettingsStore with Store {
   int currentStepId = 0;
 
   // constructor:---------------------------------------------------------------
-  _AppSettingsStore(Repository repository) : this._repository = repository {
-  }
+  _AppSettingsStore(Repository repository) : this._repository = repository {}
 
-  static ObservableFuture<bool?> emptyAnswerWasUpdatedResponse = ObservableFuture.value(false);
+  static ObservableFuture<bool?> emptyAnswerWasUpdatedResponse =
+      ObservableFuture.value(false);
 
   @observable
-  ObservableFuture<bool?> fetchAnswerWasUpdatedFuture = ObservableFuture<bool?>(emptyAnswerWasUpdatedResponse);
+  ObservableFuture<bool?> fetchAnswerWasUpdatedFuture =
+      ObservableFuture<bool?>(emptyAnswerWasUpdatedResponse);
 
   // disposers:-----------------------------------------------------------------
   late List<ReactionDisposer> _disposers;

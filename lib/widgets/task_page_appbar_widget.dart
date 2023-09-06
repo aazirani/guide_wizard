@@ -13,12 +13,13 @@ class BlocksAppBarWidget extends StatefulWidget implements PreferredSizeWidget {
   AppStep step;
   double appBarSize;
   String title;
+
   BlocksAppBarWidget(
       {Key? key,
-        required this.task,
-        this.appBarSize = Dimens.blocksAppBarWidgetHeight,
-        required this.title,
-        required this.step})
+      required this.task,
+      this.appBarSize = Dimens.blocksAppBarWidgetHeight,
+      required this.title,
+      required this.step})
       : super(key: key);
 
   @override
@@ -31,7 +32,6 @@ class BlocksAppBarWidget extends StatefulWidget implements PreferredSizeWidget {
 }
 
 class _BlocksAppBarWidgetState extends State<BlocksAppBarWidget> {
-
   late DataStore _dataStore;
 
   @override
@@ -43,7 +43,8 @@ class _BlocksAppBarWidgetState extends State<BlocksAppBarWidget> {
   _buildDoneUndoneButtonStyle() {
     return ElevatedButton.styleFrom(
         padding: EdgeInsets.all(0),
-        backgroundColor: widget.task.isDone ? AppColors.white : AppColors.main_color,
+        backgroundColor:
+            widget.task.isDone ? AppColors.white : AppColors.main_color,
         foregroundColor: AppColors.bright_foreground_color.withOpacity(0.1),
         shape: RoundedRectangleBorder(
           borderRadius:
@@ -55,7 +56,7 @@ class _BlocksAppBarWidgetState extends State<BlocksAppBarWidget> {
   Widget _buildButton({required ButtonStyle? buttonStyle, IconData? icon}) {
     return ElevatedButton(
         onPressed: () async {
-          if(!_dataStore.stepLoading){
+          if (!_dataStore.stepLoading) {
             //widget.task.toggleDone();
             await _dataStore.toggleTask(widget.task);
           }
@@ -102,13 +103,15 @@ class _BlocksAppBarWidgetState extends State<BlocksAppBarWidget> {
           children: [
             ScrollingOverflowText(
               widget.title,
-              style: Theme.of(context).textTheme.titleLarge!.copyWith(color: AppColors.bright_foreground_color),
+              style: Theme.of(context)
+                  .textTheme
+                  .titleLarge!
+                  .copyWith(color: AppColors.bright_foreground_color),
               overflowRatio: 0.65,
             ),
             Padding(
-              padding: Dimens.doneButtonPadding,
-              child: _buildDoneUndoneButtonContainer()
-            ),
+                padding: Dimens.doneButtonPadding,
+                child: _buildDoneUndoneButtonContainer()),
           ],
         ),
       ),

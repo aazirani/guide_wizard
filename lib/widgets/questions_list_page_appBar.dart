@@ -3,18 +3,18 @@ import 'package:guide_wizard/constants/colors.dart';
 import 'package:guide_wizard/constants/dimens.dart';
 import 'package:guide_wizard/widgets/scrolling_overflow_text.dart';
 
-class QuestionsListAppBar extends StatefulWidget implements PreferredSizeWidget {
+class QuestionsListAppBar extends StatefulWidget
+    implements PreferredSizeWidget {
   double appBarSize;
   double fontSize;
   String title;
 
-  QuestionsListAppBar(
-      {Key? key,
-        this.appBarSize = Dimens.questionListPageAppBarHeight,
-        this.fontSize = Dimens.questionListPageAppBarFontSize,
-        this.title = "",
-      })
-      : super(key: key);
+  QuestionsListAppBar({
+    Key? key,
+    this.appBarSize = Dimens.questionListPageAppBarHeight,
+    this.fontSize = Dimens.questionListPageAppBarFontSize,
+    this.title = "",
+  }) : super(key: key);
 
   @override
   State<QuestionsListAppBar> createState() => _QuestionsListAppBarState();
@@ -26,7 +26,6 @@ class QuestionsListAppBar extends StatefulWidget implements PreferredSizeWidget 
 }
 
 class _QuestionsListAppBarState extends State<QuestionsListAppBar> {
-
   @override
   Widget build(BuildContext context) {
     return AppBar(
@@ -45,10 +44,12 @@ class _QuestionsListAppBarState extends State<QuestionsListAppBar> {
       ),
       title: ScrollingOverflowText(
         widget.title,
-        style: Theme.of(context).textTheme.titleLarge!.copyWith(color: AppColors.white),
+        style: Theme.of(context)
+            .textTheme
+            .titleLarge!
+            .copyWith(color: AppColors.white),
         overflowRatio: 0.75,
       ),
     );
   }
-
 }

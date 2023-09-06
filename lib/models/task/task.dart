@@ -56,18 +56,19 @@ abstract class _Task with Store {
   });
 
   Map<String, dynamic> toMap() => {
-    "id": id,
-    "step_id": step_id,
-    "text": text,
-    "description": description,
-    "image_1": image_1,
-    "image_2": image_2,
-    "sub_tasks": ObservableList.of(sub_tasks.map((sub_task) => sub_task.toMap())),
-    "creator_id": creator_id,
-    "created_at": created_at,
-    "updated_at": updated_at,
-    "isDone": isDone,
-  };
+        "id": id,
+        "step_id": step_id,
+        "text": text,
+        "description": description,
+        "image_1": image_1,
+        "image_2": image_2,
+        "sub_tasks":
+            ObservableList.of(sub_tasks.map((sub_task) => sub_task.toMap())),
+        "creator_id": creator_id,
+        "created_at": created_at,
+        "updated_at": updated_at,
+        "isDone": isDone,
+      };
 
   @computed
   bool get isTypeOfText => image_1 == null && image_2 == null;
@@ -104,7 +105,10 @@ class TaskFactory {
       creator_id: json["creator_id"],
       created_at: json["created_at"],
       updated_at: json["updated_at"],
-      sub_tasks: ObservableList<SubTask>.of(json["sub_tasks"].map((x) => SubTaskFactory().fromMap(x)).toList().cast<SubTask>()),
+      sub_tasks: ObservableList<SubTask>.of(json["sub_tasks"]
+          .map((x) => SubTaskFactory().fromMap(x))
+          .toList()
+          .cast<SubTask>()),
       isDone: json["isDone"] ?? false,
     );
   }

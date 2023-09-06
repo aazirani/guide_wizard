@@ -8,13 +8,16 @@ import 'package:provider/provider.dart';
 class LoadImageWithCache extends StatefulWidget {
   String imageUrl;
   Color color;
-  LoadImageWithCache({Key? key, required this.imageUrl, required this.color}) : super(key: key);
+
+  LoadImageWithCache({Key? key, required this.imageUrl, required this.color})
+      : super(key: key);
 
   @override
   State<LoadImageWithCache> createState() => _LoadImageWithCacheState();
 }
 
-class _LoadImageWithCacheState extends State<LoadImageWithCache> with SingleTickerProviderStateMixin{
+class _LoadImageWithCacheState extends State<LoadImageWithCache>
+    with SingleTickerProviderStateMixin {
   // stores:--------------------------------------------------------------------
   late TechnicalNameWithTranslationsStore _technicalNameWithTranslationsStore;
 
@@ -22,7 +25,8 @@ class _LoadImageWithCacheState extends State<LoadImageWithCache> with SingleTick
   void didChangeDependencies() {
     super.didChangeDependencies();
     // initializing stores
-    _technicalNameWithTranslationsStore = Provider.of<TechnicalNameWithTranslationsStore>(context);
+    _technicalNameWithTranslationsStore =
+        Provider.of<TechnicalNameWithTranslationsStore>(context);
   }
 
   @override
@@ -34,15 +38,22 @@ class _LoadImageWithCacheState extends State<LoadImageWithCache> with SingleTick
         return Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            Icon(Icons.sentiment_dissatisfied_outlined, size: 80, color: widget.color),
-            SizedBox(height: 5,),
+            Icon(Icons.sentiment_dissatisfied_outlined,
+                size: 80, color: widget.color),
+            SizedBox(
+              height: 5,
+            ),
             Text(
-              _technicalNameWithTranslationsStore.getTranslationByTechnicalName(LangKeys.could_not_load),
-              style: TextStyle(fontSize: Dimens.imageCouldntLoadFontSize, color: widget.color),)
+              _technicalNameWithTranslationsStore
+                  .getTranslationByTechnicalName(LangKeys.could_not_load),
+              style: TextStyle(
+                  fontSize: Dimens.imageCouldntLoadFontSize,
+                  color: widget.color),
+            )
           ],
         );
       },
-      progressIndicatorBuilder: (context, url, downloadProgress)  {
+      progressIndicatorBuilder: (context, url, downloadProgress) {
         return Center(
           child: Container(
             height: 120,

@@ -16,9 +16,11 @@ class TechnicalNameApi {
   // injecting dio instance
   TechnicalNameApi(this._dioClient, this._restClient);
 
-  Future<TechnicalNameWithTranslationsList> getTechnicalNamesWithTranslations(String parameters) async {
+  Future<TechnicalNameWithTranslationsList> getTechnicalNamesWithTranslations(
+      String parameters) async {
     try {
-      final res = await _dioClient.get(Endpoints.getTechnicalNames + parameters);
+      final res =
+          await _dioClient.get(Endpoints.getTechnicalNames + parameters);
       return TechnicalNameWithTranslationsList.fromJson(res["rows"]);
     } catch (e) {
       print(e.toString());

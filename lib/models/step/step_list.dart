@@ -12,11 +12,13 @@ class AppStepList {
   @action
   factory AppStepList.fromJson(List<dynamic> json) {
     List<AppStep> steps;
-    steps = ObservableList.of(json.map((step) => AppStepFactory().fromMap(step)).toList().cast<AppStep>());
+    steps = ObservableList.of(json
+        .map((step) => AppStepFactory().fromMap(step))
+        .toList()
+        .cast<AppStep>());
 
     return AppStepList(
       steps: ObservableList.of(steps),
     );
   }
-
 }

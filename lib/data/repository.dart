@@ -46,7 +46,9 @@ class Repository {
 
   Future<List<AppStep>> getStepsFromDb() async {
     if (await _stepDataSource.count() > 0) {
-      return _stepDataSource.getStepsFromDb().then((appStepList) => appStepList.steps);
+      return _stepDataSource
+          .getStepsFromDb()
+          .then((appStepList) => appStepList.steps);
     } else {
       // Return an empty list or handle this case differently, without making an API call
       return List.empty();
@@ -55,12 +57,13 @@ class Repository {
 
   Future<List<AppStep>> getStepFromApiAndInsert() async {
     AppStepList stepList = await _stepApi.getSteps(await getUrlParameters());
-    List<AppStep> existingSteps = await getStepsFromDb(); // This should not loop now
+    List<AppStep> existingSteps =
+        await getStepsFromDb(); // This should not loop now
     return updateContent(existingSteps, stepList.steps);
   }
 
-
-  Future<List<AppStep>> updateContent(List<AppStep> stepsBeforeUpdate, List<AppStep> stepsAfterUpdate) async {
+  Future<List<AppStep>> updateContent(
+      List<AppStep> stepsBeforeUpdate, List<AppStep> stepsAfterUpdate) async {
     await await truncateStep();
 
     // Update selected answers
@@ -75,7 +78,8 @@ class Repository {
     return stepsAfterUpdate;
   }
 
-  void updateSelectedAnswers(List<AppStep> stepsBeforeUpdate, List<AppStep> stepsAfterUpdate) {
+  void updateSelectedAnswers(
+      List<AppStep> stepsBeforeUpdate, List<AppStep> stepsAfterUpdate) {
     var selectedAnswerIds = stepsBeforeUpdate
         .expand((step) => step.questions)
         .expand((question) => question.answers)
@@ -90,7 +94,8 @@ class Repository {
         .forEach((answer) => answer.setSelected(true));
   }
 
-  void updateDoneTasks(List<AppStep> stepsBeforeUpdate, List<AppStep> stepsAfterUpdate) {
+  void updateDoneTasks(
+      List<AppStep> stepsBeforeUpdate, List<AppStep> stepsAfterUpdate) {
     var doneTaskIds = stepsBeforeUpdate
         .expand((step) => step.tasks)
         .where((task) => task.isDone)
@@ -108,7 +113,9 @@ class Repository {
   }
 
   Future technicalNameWithTranslationsDatasourceCount() async {
-    return await _technicalNameWithTranslationsDataSource.count().catchError((error) => throw error);
+    return await _technicalNameWithTranslationsDataSource
+        .count()
+        .catchError((error) => throw error);
   }
 
   Future truncateStep() =>
@@ -130,18 +137,23 @@ class Repository {
       .catchError((error) => throw error);
 
   // TranslationsWithTechnicalName: ---------------------------------------------------------------------
-  Future<TechnicalNameWithTranslationsList> getTechnicalNameWithTranslationsFromDb() async {
+  Future<TechnicalNameWithTranslationsList>
+      getTechnicalNameWithTranslationsFromDb() async {
     return await technicalNameWithTranslationsDatasourceCount() > 0
         ? _technicalNameWithTranslationsDataSource.getTranslationsFromDb()
         : getTechnicalNameWithTranslationsFromApiAndInsert();
   }
 
-  Future<TechnicalNameWithTranslationsList> getTechnicalNameWithTranslationsFromApiAndInsert() async {
-    TechnicalNameWithTranslationsList technicalNameWithTranslationsList = await _technicalNameApi.getTechnicalNamesWithTranslations(await getUrlParameters());
+  Future<TechnicalNameWithTranslationsList>
+      getTechnicalNameWithTranslationsFromApiAndInsert() async {
+    TechnicalNameWithTranslationsList technicalNameWithTranslationsList =
+        await _technicalNameApi
+            .getTechnicalNamesWithTranslations(await getUrlParameters());
 
     await truncateTechnicalNameWithTranslations();
 
-    technicalNameWithTranslationsList.technicalNameWithTranslations.forEach((technicalNameWithTranslations) async {
+    technicalNameWithTranslationsList.technicalNameWithTranslations
+        .forEach((technicalNameWithTranslations) async {
       _technicalNameWithTranslationsDataSource
           .insert(technicalNameWithTranslations);
     });
@@ -235,7 +247,7 @@ class Repository {
    */
 
   Future<UpdatedAtTimes> getUpdatedAtTimesFromDB() async {
-    if(await _updatedAtTimesDataSource.count() < 1){
+    if (await _updatedAtTimesDataSource.count() < 1) {
       return await getUpdatedAtTimesFromApiAndInsert();
     }
     return await _updatedAtTimesDataSource.getUpdatedAtTimesFromDb();
@@ -248,7 +260,8 @@ class Repository {
     return await updateUpdatedAtTimes(updatedAtTimes);
   }
 
-  Future<UpdatedAtTimes> updateUpdatedAtTimes(UpdatedAtTimes updatedAtTimes) async {
+  Future<UpdatedAtTimes> updateUpdatedAtTimes(
+      UpdatedAtTimes updatedAtTimes) async {
     await this.truncateUpdatedAtTimes();
     _updatedAtTimesDataSource.insert(updatedAtTimes);
 
@@ -261,13 +274,13 @@ class Repository {
   //URL Parameters: ----------------------------------------------------------------------
   Future<String> getUrlParameters() async {
     List<AppStep> steps = await getStepsFromDb();
-    if(steps.isEmpty){
+    if (steps.isEmpty) {
       return "";
     }
     return steps
         .expand((step) => step.questions)
-        .expand((question) =>
-        question.answers.where((answer) => answer.isSelected))
+        .expand(
+            (question) => question.answers.where((answer) => answer.isSelected))
         .map((answer) => answer.id)
         .toList()
         .join(",");

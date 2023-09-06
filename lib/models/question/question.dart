@@ -67,8 +67,8 @@ abstract class _Question with Store {
   List<Answer> get getAnswers => answers.toList();
 
   @action
-  void setAnswerValue(Answer answer, bool value){
-    answers.firstWhere((element) => element==answer).selected = value;
+  void setAnswerValue(Answer answer, bool value) {
+    answers.firstWhere((element) => element == answer).selected = value;
   }
 
   @computed
@@ -98,7 +98,6 @@ abstract class _Question with Store {
       "answers": List<dynamic>.from(answers.map((x) => x.toMap())),
     };
   }
-
 }
 
 class QuestionFactory {
@@ -116,8 +115,10 @@ class QuestionFactory {
       creator_id: json["creator_id"],
       created_at: json["created_at"],
       updated_at: json["updated_at"],
-      answers: ObservableList<Answer>.of(
-          json["answers"].map((x) => AnswerFactory().fromMap(x)).toList().cast<Answer>()),
+      answers: ObservableList<Answer>.of(json["answers"]
+          .map((x) => AnswerFactory().fromMap(x))
+          .toList()
+          .cast<Answer>()),
     );
   }
 }

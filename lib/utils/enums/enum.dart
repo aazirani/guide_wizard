@@ -5,6 +5,6 @@ enum StepStatus {
 }
 
 enum TaskStatus {
-  Done, 
+  Done,
   notDone,
 }

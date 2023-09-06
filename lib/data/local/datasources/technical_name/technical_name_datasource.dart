@@ -4,7 +4,6 @@ import 'package:guide_wizard/models/technical_name/technical_name_list.dart';
 import 'package:mobx/mobx.dart';
 import 'package:sembast/sembast.dart';
 
-
 class TechnicalNameDataSource {
   // A Store with int keys and Map<String, dynamic> values.
   // This Store acts like a persistent map, values of which are Flogs objects converted to Map
@@ -68,11 +67,11 @@ class TechnicalNameDataSource {
     if (recordSnapshots.length > 0) {
       technicalNameList = TechnicalNameList(
           technicalNames: ObservableList.of(recordSnapshots.map((snapshot) {
-            final technicalName = TechnicalNameFactory().fromMap(snapshot.value);
-            // An ID is a key of a record from the database.
-            technicalName.id = snapshot.key;
-            return technicalName;
-          })));
+        final technicalName = TechnicalNameFactory().fromMap(snapshot.value);
+        // An ID is a key of a record from the database.
+        technicalName.id = snapshot.key;
+        return technicalName;
+      })));
     }
 
     return technicalNameList;

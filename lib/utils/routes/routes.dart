@@ -12,6 +12,3 @@ class Routes {
     home: (BuildContext context) => HomeScreen(),
   };
 }
-
-
-

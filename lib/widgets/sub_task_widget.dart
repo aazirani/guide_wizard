@@ -3,7 +3,6 @@ import 'package:guide_wizard/constants/colors.dart';
 import 'package:guide_wizard/constants/dimens.dart';
 import 'package:guide_wizard/models/step/app_step.dart';
 import 'package:guide_wizard/models/task/task.dart';
-import 'package:guide_wizard/stores/data/data_store.dart';
 import 'package:guide_wizard/stores/technical_name/technical_name_with_translations_store.dart';
 import 'package:guide_wizard/widgets/app_expansiontile.dart';
 import 'package:guide_wizard/widgets/expansion_content.dart';
@@ -15,19 +14,21 @@ class SubTaskWidget extends StatefulWidget {
   final Task task;
   final AppStep step;
   RenderParametersManager renderManager;
-  SubTaskWidget({
-    Key? key,
-    required this.index,
-    required this.task,
-    required this.renderManager,
-    required this.step
-  }) : super(key: key);
+
+  SubTaskWidget(
+      {Key? key,
+      required this.index,
+      required this.task,
+      required this.renderManager,
+      required this.step})
+      : super(key: key);
 
   @override
   State<SubTaskWidget> createState() => SubTaskWidgetState();
 }
 
-class SubTaskWidgetState extends State<SubTaskWidget> with AutomaticKeepAliveClientMixin {
+class SubTaskWidgetState extends State<SubTaskWidget>
+    with AutomaticKeepAliveClientMixin {
   // stores:--------------------------------------------------------------------
   late TechnicalNameWithTranslationsStore _technicalNameWithTranslationsStore;
 
@@ -52,33 +53,33 @@ class SubTaskWidgetState extends State<SubTaskWidget> with AutomaticKeepAliveCli
   Widget _buildExpansionContent() {
     var markdown_id = widget.task.subTasks[widget.index].markdown;
     return ExpansionContent(
-            renderManager: widget.renderManager,
-            markdown: _technicalNameWithTranslationsStore.getTranslation(markdown_id),
-            deadline: _technicalNameWithTranslationsStore.getTranslation(widget.task.subTasks[widget.index].deadline));
+        renderManager: widget.renderManager,
+        markdown:
+            _technicalNameWithTranslationsStore.getTranslation(markdown_id),
+        deadline: _technicalNameWithTranslationsStore
+            .getTranslation(widget.task.subTasks[widget.index].deadline));
   }
-
 
   Widget _buildAppExpansionTileWidget() {
     var sub_task_title_id = widget.task.subTasks[widget.index].title;
-      return AppExpansionTile(
-        onExpansionChanged: ((isNewState) {
-          if (isNewState) {
-            _runAtExpanding();
-          }
-        }),
-        maintainState: true,
-        textColor: AppColors.main_color,
-        iconColor: AppColors.main_color,
-        title: Text(
+    return AppExpansionTile(
+      onExpansionChanged: ((isNewState) {
+        if (isNewState) {
+          _runAtExpanding();
+        }
+      }),
+      maintainState: true,
+      textColor: AppColors.main_color,
+      iconColor: AppColors.main_color,
+      title: Text(
           _technicalNameWithTranslationsStore.getTranslation(sub_task_title_id),
-          style: Theme.of(context).textTheme.titleMedium
-        ),
-        key: Key(widget.task.subTasks[widget.index].id.toString()),
-        children: <Widget>[
-          _buildExpansionContent(),
-        ],
-      );
-    }
+          style: Theme.of(context).textTheme.titleMedium),
+      key: Key(widget.task.subTasks[widget.index].id.toString()),
+      children: <Widget>[
+        _buildExpansionContent(),
+      ],
+    );
+  }
 
   Widget _buildAppExpansionTileWidgetWithCustomTheme() {
     return ListTileTheme(

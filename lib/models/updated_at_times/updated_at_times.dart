@@ -17,14 +17,14 @@ abstract class _UpdatedAtTimes with Store {
   String last_apps_request_time;
 
   static String LAST_UPDATED_AT_CONTENT = "last_updated_at_content";
-  static String LAST_UPDATED_AT_TECHNICAL_NAMES = "last_updated_at_technical_names";
+  static String LAST_UPDATED_AT_TECHNICAL_NAMES =
+      "last_updated_at_technical_names";
   static String LAST_APPS_REQUEST_TIME = "last_apps_request_time";
 
-  _UpdatedAtTimes({
-    required this.last_updated_at_content,
-    required this.last_updated_at_technical_names,
-    required this.last_apps_request_time
-  });
+  _UpdatedAtTimes(
+      {required this.last_updated_at_content,
+      required this.last_updated_at_technical_names,
+      required this.last_apps_request_time});
 
   Map<String, dynamic> toMap() {
     return {
@@ -36,23 +36,25 @@ abstract class _UpdatedAtTimes with Store {
 }
 
 class UpdatedAtTimesFactory {
-
   static String LAST_UPDATED_AT_CONTENT = "last_updated_at_content";
-  static String LAST_UPDATED_AT_TECHNICAL_NAMES = "last_updated_at_technical_names";
+  static String LAST_UPDATED_AT_TECHNICAL_NAMES =
+      "last_updated_at_technical_names";
   static String LAST_APPS_REQUEST_TIME = "last_apps_request_time";
 
   UpdatedAtTimes fromMap(Map<String, dynamic> json) {
     return UpdatedAtTimes(
-      last_updated_at_content: json[LAST_UPDATED_AT_CONTENT],
-      last_updated_at_technical_names: json[LAST_UPDATED_AT_TECHNICAL_NAMES],
-      last_apps_request_time: json[LAST_APPS_REQUEST_TIME] != null ? json[LAST_APPS_REQUEST_TIME] : DateTime(1).toString()
-    );
+        last_updated_at_content: json[LAST_UPDATED_AT_CONTENT],
+        last_updated_at_technical_names: json[LAST_UPDATED_AT_TECHNICAL_NAMES],
+        last_apps_request_time: json[LAST_APPS_REQUEST_TIME] != null
+            ? json[LAST_APPS_REQUEST_TIME]
+            : DateTime(1).toString());
   }
-
 
   UpdatedAtTimes fromJson(List<dynamic> json) {
     List<UpdatedAtTimes> updatedAtTimes;
-    updatedAtTimes = json.map((updatedAt) => UpdatedAtTimesFactory().fromMap(updatedAt)).toList();
+    updatedAtTimes = json
+        .map((updatedAt) => UpdatedAtTimesFactory().fromMap(updatedAt))
+        .toList();
     updatedAtTimes.first.last_apps_request_time = DateTime.now().toString();
     return updatedAtTimes.first;
   }

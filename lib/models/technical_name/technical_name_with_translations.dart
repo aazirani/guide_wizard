@@ -5,7 +5,8 @@ import 'package:mobx/mobx.dart';
 part 'technical_name_with_translations.g.dart';
 
 // This is the class used by rest of your codebase
-class TechnicalNameWithTranslations = _TechnicalNameWithTranslations with _$TechnicalNameWithTranslations;
+class TechnicalNameWithTranslations = _TechnicalNameWithTranslations
+    with _$TechnicalNameWithTranslations;
 
 abstract class _TechnicalNameWithTranslations with Store {
   @observable
@@ -48,7 +49,7 @@ abstract class _TechnicalNameWithTranslations with Store {
   }
 }
 
-class TechnicalNameWithTranslationsFactory  {
+class TechnicalNameWithTranslationsFactory {
   TechnicalNameWithTranslations fromMap(Map<String, dynamic> json) {
     return TechnicalNameWithTranslations(
       id: json["id"],

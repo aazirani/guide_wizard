@@ -5,7 +5,6 @@ import 'package:guide_wizard/constants/dimens.dart';
 import 'package:guide_wizard/constants/lang_keys.dart';
 import 'package:guide_wizard/models/step/app_step.dart';
 import 'package:guide_wizard/models/task/task.dart';
-import 'package:guide_wizard/stores/data/data_store.dart';
 import 'package:guide_wizard/stores/technical_name/technical_name_with_translations_store.dart';
 import 'package:guide_wizard/ui/tasks/task_page_text_only.dart';
 import 'package:guide_wizard/ui/tasks/task_page_with_image.dart';
@@ -17,7 +16,10 @@ class TaskListTimeLine extends StatefulWidget {
   final AppStep step;
   final Task task;
   final int index;
-  TaskListTimeLine({Key? key, required this.step, required this.task, required this.index}) : super(key: key);
+
+  TaskListTimeLine(
+      {Key? key, required this.step, required this.task, required this.index})
+      : super(key: key);
 
   @override
   State<TaskListTimeLine> createState() => _TaskListTimeLineState();
@@ -25,6 +27,7 @@ class TaskListTimeLine extends StatefulWidget {
 
 class _TaskListTimeLineState extends State<TaskListTimeLine> {
   late TechnicalNameWithTranslationsStore _technicalNameWithTranslationsStore;
+
   @override
   void didChangeDependencies() {
     super.didChangeDependencies();
@@ -49,9 +52,7 @@ class _TaskListTimeLineState extends State<TaskListTimeLine> {
         contents: _buildContents(),
         node: TimelineNode(
           indicator: _buildIndicator(),
-          startConnector: widget.index == 0
-              ? Container()
-              : _buildConnector(),
+          startConnector: widget.index == 0 ? Container() : _buildConnector(),
           endConnector: widget.index == widget.step.tasks.length - 1
               ? Container()
               : _buildConnector(),
@@ -160,14 +161,15 @@ class _TaskListTimeLineState extends State<TaskListTimeLine> {
           decoration: BoxDecoration(
               border: Border.all(color: AppColors.green[200]!),
               color: AppColors.green[300]!.withOpacity(0.3),
-              borderRadius: BorderRadius.all(Radius.circular(Dimens.doneBadgeBorderRadius))),
+              borderRadius: BorderRadius.all(
+                  Radius.circular(Dimens.doneBadgeBorderRadius))),
           child: Row(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
               Flexible(
                   flex: 3,
                   child: Text(
-                    "${_technicalNameWithTranslationsStore.getTranslationByTechnicalName(LangKeys.done_task)}",
+                      "${_technicalNameWithTranslationsStore.getTranslationByTechnicalName(LangKeys.done_task)}",
                       style: TextStyle(
                           color: AppColors.main_color,
                           fontSize: Dimens.doneBadgeFontSize,
@@ -182,9 +184,7 @@ class _TaskListTimeLineState extends State<TaskListTimeLine> {
         padding: Dimens.contentDeadlineTopPadding,
         width: 80,
         height: 40,
-        child: (_deadLineAvailable())
-            ? _buildDeadlineContainer()
-            : null);
+        child: (_deadLineAvailable()) ? _buildDeadlineContainer() : null);
   }
 
   Widget _buildDeadlineContainer() {
@@ -201,7 +201,8 @@ class _TaskListTimeLineState extends State<TaskListTimeLine> {
                     ? AppColors.deadlineDoneBorderColor
                     : AppColors.deadlineUnDoneBorderColor)),
         child: Center(
-            child: Text("${_technicalNameWithTranslationsStore.getTranslationByTechnicalName(LangKeys.deadline)}",
+            child: Text(
+                "${_technicalNameWithTranslationsStore.getTranslationByTechnicalName(LangKeys.deadline)}",
                 style: Theme.of(context).textTheme.bodySmall!.copyWith(
                     fontSize: 14,
                     color: (widget.task.isDone)
@@ -212,21 +213,21 @@ class _TaskListTimeLineState extends State<TaskListTimeLine> {
   //general methods ............................................................
 
   bool _deadLineAvailable() {
-    return widget.task.sub_tasks.any(
-            (sub_task) => _technicalNameWithTranslationsStore
+    return widget.task.sub_tasks.any((sub_task) =>
+        _technicalNameWithTranslationsStore
             .getTranslation(sub_task.deadline)
             .isNotEmpty);
   }
 
   void _navigateToTaskPage() {
     Widget taskPage = Container();
-    if(widget.task.isTypeOfText){
+    if (widget.task.isTypeOfText) {
       taskPage = TaskPageTextOnly(
         task: widget.task,
         step: widget.step,
       );
     }
-    if(widget.task.isTypeOfImage){
+    if (widget.task.isTypeOfImage) {
       taskPage = TaskPageWithImage(
         task: widget.task,
         step: widget.step,

@@ -6,7 +6,7 @@ import 'package:guide_wizard/data/network/dio_client.dart';
 import 'package:guide_wizard/data/network/rest_client.dart';
 import 'package:guide_wizard/models/updated_at_times/updated_at_times.dart';
 
-class UpdatedAtTimesApi{
+class UpdatedAtTimesApi {
   // dio instance
   final DioClient _dioClient;
 
@@ -19,7 +19,8 @@ class UpdatedAtTimesApi{
   /// Returns list of post in response
   Future<UpdatedAtTimes> getUpdatedAtTimes(String parameters) async {
     try {
-      final res = json.decode(await _dioClient.get(Endpoints.getUpdatedAtTimes + parameters));
+      final res = json.decode(
+          await _dioClient.get(Endpoints.getUpdatedAtTimes + parameters));
       return UpdatedAtTimesFactory().fromJson([res]);
     } catch (e) {
       print(e.toString());

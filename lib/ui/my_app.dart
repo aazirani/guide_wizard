@@ -23,9 +23,12 @@ class MyApp extends StatelessWidget {
   final ThemeStore _themeStore = ThemeStore(getIt<Repository>());
   final LanguageStore _languageStore = LanguageStore(getIt<Repository>());
   final DataStore _dataStore = DataStore(getIt<Repository>());
-  final TechnicalNameWithTranslationsStore _technicalNameWithTranslationsStore = TechnicalNameWithTranslationsStore(getIt<Repository>());
-  final UpdatedAtTimesStore _updatedAtTimesStore = UpdatedAtTimesStore(getIt<Repository>());
-  final AppSettingsStore _appSettingsStore = AppSettingsStore(getIt<Repository>());
+  final TechnicalNameWithTranslationsStore _technicalNameWithTranslationsStore =
+      TechnicalNameWithTranslationsStore(getIt<Repository>());
+  final UpdatedAtTimesStore _updatedAtTimesStore =
+      UpdatedAtTimesStore(getIt<Repository>());
+  final AppSettingsStore _appSettingsStore =
+      AppSettingsStore(getIt<Repository>());
 
   @override
   Widget build(BuildContext context) {
@@ -34,9 +37,12 @@ class MyApp extends StatelessWidget {
         Provider<ThemeStore>(create: (_) => _themeStore),
         Provider<LanguageStore>(create: (_) => _languageStore),
         Provider<DataStore>(create: (_) => _dataStore),
-        ListenableProvider<QuestionsWidgetState>(create: (_) => QuestionsWidgetState(activeIndex: 0)),
-        ListenableProvider<InternetConnectionState>(create: (_) => InternetConnectionState()),
-        Provider<TechnicalNameWithTranslationsStore>(create: (_) => _technicalNameWithTranslationsStore),
+        ListenableProvider<QuestionsWidgetState>(
+            create: (_) => QuestionsWidgetState(activeIndex: 0)),
+        ListenableProvider<InternetConnectionState>(
+            create: (_) => InternetConnectionState()),
+        Provider<TechnicalNameWithTranslationsStore>(
+            create: (_) => _technicalNameWithTranslationsStore),
         Provider<LanguageStore>(create: (_) => _languageStore),
         Provider<UpdatedAtTimesStore>(create: (_) => _updatedAtTimesStore),
         Provider<AppSettingsStore>(create: (_) => _appSettingsStore),

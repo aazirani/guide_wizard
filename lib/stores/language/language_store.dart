@@ -7,7 +7,6 @@ part 'language_store.g.dart';
 class LanguageStore = _LanguageStore with _$LanguageStore;
 
 abstract class _LanguageStore with Store {
-
   // repository instance
   final Repository _repository;
 

@@ -4,7 +4,6 @@ import 'package:guide_wizard/constants/colors.dart';
 import 'package:guide_wizard/constants/dimens.dart';
 import 'package:guide_wizard/models/step/app_step.dart';
 import 'package:guide_wizard/models/task/task.dart';
-import 'package:guide_wizard/stores/data/data_store.dart';
 import 'package:guide_wizard/stores/technical_name/technical_name_with_translations_store.dart';
 import 'package:guide_wizard/widgets/sub_task_widget.dart';
 import 'package:guide_wizard/widgets/task_page_appbar_widget.dart';
@@ -14,15 +13,17 @@ import 'package:render_metrics/render_metrics.dart';
 class TaskPageTextOnly extends StatefulWidget {
   final Task task;
   final AppStep step;
-  TaskPageTextOnly({Key? key, required this.task, required this.step}) : super(key: key);
+
+  TaskPageTextOnly({Key? key, required this.task, required this.step})
+      : super(key: key);
 
   @override
   State<TaskPageTextOnly> createState() => _TaskPageTextOnlyState();
 }
 
 class _TaskPageTextOnlyState extends State<TaskPageTextOnly> {
-
   RenderParametersManager renderManager = RenderParametersManager<dynamic>();
+
   // stores:--------------------------------------------------------------------
   late TechnicalNameWithTranslationsStore _technicalNameWithTranslationsStore;
 
@@ -32,9 +33,7 @@ class _TaskPageTextOnlyState extends State<TaskPageTextOnly> {
     // initializing stores
     _technicalNameWithTranslationsStore =
         Provider.of<TechnicalNameWithTranslationsStore>(context);
-    setState(() {
-
-    });
+    setState(() {});
   }
 
   @override
@@ -50,7 +49,8 @@ class _TaskPageTextOnlyState extends State<TaskPageTextOnly> {
         appBar: BlocksAppBarWidget(
           task: widget.task,
           step: widget.step,
-          title: _technicalNameWithTranslationsStore.getTranslation(widget.task.text),
+          title: _technicalNameWithTranslationsStore
+              .getTranslation(widget.task.text),
         ),
         body: _buildScaffoldBody(),
       ),
@@ -75,7 +75,13 @@ class _TaskPageTextOnlyState extends State<TaskPageTextOnly> {
     return RawScrollbar(
       child: ListView(
         children: [
-          _technicalNameWithTranslationsStore.getTranslation(widget.task.description) == "" ? SizedBox(height: Dimens.taskPageTextOnlyListViewPadding.top,) : _buildDescription(),
+          _technicalNameWithTranslationsStore
+                      .getTranslation(widget.task.description) ==
+                  ""
+              ? SizedBox(
+                  height: Dimens.taskPageTextOnlyListViewPadding.top,
+                )
+              : _buildDescription(),
           _buildSubTasksList(),
         ],
       ),
@@ -86,9 +92,11 @@ class _TaskPageTextOnlyState extends State<TaskPageTextOnly> {
     return Padding(
       padding: Dimens.taskPageTextOnlyListViewPadding,
       child: Text(
-        _technicalNameWithTranslationsStore.getTranslation(widget.task.description),
-        style: Theme.of(context).textTheme.bodyLarge!.copyWith(color: AppColors.text_color,)
-      ),
+          _technicalNameWithTranslationsStore
+              .getTranslation(widget.task.description),
+          style: Theme.of(context).textTheme.bodyLarge!.copyWith(
+                color: AppColors.text_color,
+              )),
     );
   }
 

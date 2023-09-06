@@ -29,6 +29,7 @@ class ExpansionContent extends StatefulWidget {
 
 class _ExpansionContentState extends State<ExpansionContent> {
   double widgetHeight = 0;
+
   // stores:--------------------------------------------------------------------
   late TechnicalNameWithTranslationsStore _technicalNameWithTranslationsStore;
 
@@ -73,8 +74,8 @@ class _ExpansionContentState extends State<ExpansionContent> {
             alignment: Alignment.topLeft,
             child: Container(
               decoration: BoxDecoration(
-                  color: AppColors.orange[50]!.withOpacity(0.1),
-                  ),
+                color: AppColors.orange[50]!.withOpacity(0.1),
+              ),
               child: Padding(
                   padding: Dimens.deadlineContentPadding,
                   child: Text.rich(
@@ -89,8 +90,9 @@ class _ExpansionContentState extends State<ExpansionContent> {
                               )),
                         ),
                         TextSpan(
-                            text: "${widget.deadline}",
-                            style: Theme.of(context).textTheme.bodyMedium,),
+                          text: "${widget.deadline}",
+                          style: Theme.of(context).textTheme.bodyMedium,
+                        ),
                       ],
                     ),
                   )),
@@ -110,10 +112,9 @@ class _ExpansionContentState extends State<ExpansionContent> {
       physics: NeverScrollableScrollPhysics(),
       data: fixedJsonMarkdown(widget.markdown),
       styleSheet: MarkdownStyleSheet(
-        blockquoteDecoration: BoxDecoration(
-          color: AppColors.blockquoteColor.withOpacity(0.2),
-          borderRadius: BorderRadius.all(Radius.circular(5))
-        ),
+          blockquoteDecoration: BoxDecoration(
+              color: AppColors.blockquoteColor.withOpacity(0.2),
+              borderRadius: BorderRadius.all(Radius.circular(5))),
           p: Theme.of(context)
               .textTheme
               .bodyLarge!
