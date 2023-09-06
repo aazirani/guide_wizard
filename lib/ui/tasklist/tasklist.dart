@@ -24,7 +24,6 @@ class _TaskListState extends State<TaskList> {
   // stores:--------------------------------------------------------------------
   late DataStore _dataStore;
   late TechnicalNameWithTranslationsStore _technicalNameWithTranslationsStore;
-  late AppSettingsStore _appSettingsStore;
 
   @override
   void didChangeDependencies() {
@@ -33,7 +32,6 @@ class _TaskListState extends State<TaskList> {
     _dataStore = Provider.of<DataStore>(context);
     _technicalNameWithTranslationsStore =
         Provider.of<TechnicalNameWithTranslationsStore>(context);
-    _appSettingsStore = Provider.of<AppSettingsStore>(context);
   }
 
   var progressBarSize = Size.zero;

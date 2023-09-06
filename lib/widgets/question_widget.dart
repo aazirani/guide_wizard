@@ -100,7 +100,7 @@ class _QuestionWidgetState extends State<QuestionWidget> with AutomaticKeepAlive
     return Container(
       margin: Dimens.questionDescriptionPadding,
       child: Text(
-        _technicalNameWithTranslationsStore.getTranslation(questionSubtitleId)!,
+        _technicalNameWithTranslationsStore.getTranslation(questionSubtitleId),
         style: Theme.of(context).textTheme.bodyLarge!.copyWith(color: AppColors.text_color),
       ),
     );
@@ -243,7 +243,7 @@ class _QuestionWidgetState extends State<QuestionWidget> with AutomaticKeepAlive
   }
 
   String _getInfoUrl() {
-    return _technicalNameWithTranslationsStore.getTranslation(widget.question.info_url)!;
+    return _technicalNameWithTranslationsStore.getTranslation(widget.question.info_url);
   }
 
   void _showInfo() {
@@ -338,8 +338,6 @@ class _QuestionWidgetState extends State<QuestionWidget> with AutomaticKeepAlive
         children: [
           Container(
             margin: const EdgeInsets.all(8),
-            // height: 200, //TODO: can admin set height manually?
-            //   width: 200, //TODO: can admin set width manually?
             child: ListTile(
                 horizontalTitleGap: 0,
                 minVerticalPadding: 0,

@@ -29,13 +29,11 @@ class SubTaskWidget extends StatefulWidget {
 
 class SubTaskWidgetState extends State<SubTaskWidget> with AutomaticKeepAliveClientMixin {
   // stores:--------------------------------------------------------------------
-  late DataStore _dataStore;
   late TechnicalNameWithTranslationsStore _technicalNameWithTranslationsStore;
 
   @override
   void didChangeDependencies() {
     super.didChangeDependencies();
-    _dataStore = Provider.of<DataStore>(context);
     _technicalNameWithTranslationsStore =
         Provider.of<TechnicalNameWithTranslationsStore>(context);
   }
@@ -72,7 +70,7 @@ class SubTaskWidgetState extends State<SubTaskWidget> with AutomaticKeepAliveCli
         textColor: AppColors.main_color,
         iconColor: AppColors.main_color,
         title: Text(
-          _technicalNameWithTranslationsStore.getTranslation(sub_task_title_id)!,
+          _technicalNameWithTranslationsStore.getTranslation(sub_task_title_id),
           style: Theme.of(context).textTheme.titleMedium
         ),
         key: Key(widget.task.subTasks[widget.index].id.toString()),

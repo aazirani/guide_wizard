@@ -8,7 +8,6 @@ import 'package:guide_wizard/models/step/app_step.dart';
 import 'package:guide_wizard/models/updated_at_times/updated_at_times.dart';
 import 'package:guide_wizard/stores/app_settings/app_settings_store.dart';
 import 'package:guide_wizard/stores/data/data_store.dart';
-import 'package:guide_wizard/stores/language/language_store.dart';
 import 'package:guide_wizard/stores/technical_name/technical_name_with_translations_store.dart';
 import 'package:guide_wizard/stores/updated_at_times/updated_at_times_store.dart';
 import 'package:internet_connection_checker/internet_connection_checker.dart';

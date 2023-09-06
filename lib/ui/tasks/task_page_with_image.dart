@@ -26,7 +26,6 @@ class TaskPageWithImage extends StatefulWidget {
 class _TaskPageWithImageState extends State<TaskPageWithImage> {
   RenderParametersManager renderManager = RenderParametersManager<dynamic>();
   // stores:--------------------------------------------------------------------
-  late DataStore _dataStore;
   late TechnicalNameWithTranslationsStore _technicalNameWithTranslationsStore;
   var imageSlideSize = Size.zero;
 
@@ -34,7 +33,6 @@ class _TaskPageWithImageState extends State<TaskPageWithImage> {
   void didChangeDependencies() {
     super.didChangeDependencies();
     // initializing stores
-    _dataStore = Provider.of<DataStore>(context);
     _technicalNameWithTranslationsStore =
         Provider.of<TechnicalNameWithTranslationsStore>(context);
   }

@@ -24,14 +24,12 @@ class _TaskPageTextOnlyState extends State<TaskPageTextOnly> {
 
   RenderParametersManager renderManager = RenderParametersManager<dynamic>();
   // stores:--------------------------------------------------------------------
-  late DataStore _dataStore;
   late TechnicalNameWithTranslationsStore _technicalNameWithTranslationsStore;
 
   @override
   void didChangeDependencies() {
     super.didChangeDependencies();
     // initializing stores
-    _dataStore = Provider.of<DataStore>(context);
     _technicalNameWithTranslationsStore =
         Provider.of<TechnicalNameWithTranslationsStore>(context);
     setState(() {
