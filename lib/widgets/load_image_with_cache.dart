@@ -38,7 +38,7 @@ class _LoadImageWithCacheState extends State<LoadImageWithCache> with SingleTick
             SizedBox(height: 5,),
             Text(
               _technicalNameWithTranslationsStore.getTranslationByTechnicalName(LangKeys.could_not_load),
-              style: TextStyle(fontSize: Dimens.imageCouldntLoadFontSize, color: widget.color),)
+              style: TextStyle(fontSize: Dimens.imageCouldNotLoadFontSize, color: widget.color),)
           ],
         );
       },
