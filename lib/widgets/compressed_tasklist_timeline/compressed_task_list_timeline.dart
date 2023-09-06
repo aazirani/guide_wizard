@@ -25,10 +25,6 @@ class _CompressedTaskListTimelineState
   late TechnicalNameWithTranslationsStore _technicalNameWithTranslationsStore;
   late AppSettingsStore _appSettingsStore;
 
-  // Getters ............................................................
-  get _getScreenHeight => MediaQuery.of(context).size.height;
-  get _getScreenWidth => MediaQuery.of(context).size.width;
-
   @override
   void didChangeDependencies() {
     super.didChangeDependencies();

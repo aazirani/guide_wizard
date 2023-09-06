@@ -5,7 +5,6 @@ import 'package:guide_wizard/constants/colors.dart';
 import 'package:guide_wizard/constants/dimens.dart';
 import 'package:guide_wizard/models/step/app_step.dart';
 import 'package:guide_wizard/models/task/task.dart';
-import 'package:guide_wizard/stores/data/data_store.dart';
 import 'package:guide_wizard/stores/technical_name/technical_name_with_translations_store.dart';
 import 'package:guide_wizard/widgets/image_slide.dart';
 import 'package:guide_wizard/widgets/measure_size.dart';
@@ -45,12 +44,6 @@ class _TaskPageWithImageState extends State<TaskPageWithImage> {
   double _getHeightOfDraggableScrollableSheet() {
     double screenHeight = MediaQuery.of(context).size.height;
     double widgetSize = (screenHeight - (Dimens.blocksAppBarWidgetHeight + imageSlideSize.height) + MediaQuery.of(context).padding.top + 25) / (screenHeight);
-    return math.min(widgetSize, 1);
-  }
-
-  double _getMaxHeightOfDraggableScrollableSheet() {
-    double screenHeight = MediaQuery.of(context).size.height;
-    double widgetSize = (screenHeight - 20) / (screenHeight);
     return math.min(widgetSize, 1);
   }
 

@@ -5,7 +5,6 @@ import 'package:guide_wizard/constants/dimens.dart';
 import 'package:guide_wizard/constants/lang_keys.dart';
 import 'package:guide_wizard/models/step/app_step.dart';
 import 'package:guide_wizard/models/task/task.dart';
-import 'package:guide_wizard/stores/data/data_store.dart';
 import 'package:guide_wizard/stores/technical_name/technical_name_with_translations_store.dart';
 import 'package:guide_wizard/ui/tasks/task_page_text_only.dart';
 import 'package:guide_wizard/ui/tasks/task_page_with_image.dart';

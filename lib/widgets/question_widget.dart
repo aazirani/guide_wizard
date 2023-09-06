@@ -14,7 +14,6 @@ import 'package:guide_wizard/stores/technical_name/technical_name_with_translati
 import 'package:guide_wizard/url_handler.dart';
 import 'package:guide_wizard/widgets/info_dialog.dart';
 import 'package:guide_wizard/widgets/load_image_with_cache.dart';
-import 'package:guide_wizard/widgets/next_stage_button.dart';
 import 'package:provider/provider.dart';
 
 class QuestionWidget extends StatefulWidget {
@@ -104,40 +103,6 @@ class _QuestionWidgetState extends State<QuestionWidget> with AutomaticKeepAlive
         style: Theme.of(context).textTheme.bodyLarge!.copyWith(color: AppColors.text_color),
       ),
     );
-  }
-
-  ButtonStyle _buildQuestionsButtonStyle(Color color) {
-    return ButtonStyle(
-      minimumSize: MaterialStateProperty.all(sizeOfButton()),
-      backgroundColor: MaterialStateProperty.all<Color>(color),
-      shape: MaterialStateProperty.all<RoundedRectangleBorder>(
-        RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(5.0),
-        ),
-      ),
-    );
-  }
-
-  Widget _buildNextStageButton() {
-    return NextStageButton();
-  }
-
-  Widget _buildNextQuestionButton() {
-    return Consumer<QuestionsWidgetState>(builder: (context, builder, child) {
-      return Padding(
-        padding: Dimens.questionButtonPadding,
-        child: TextButton(
-          style: _buildQuestionsButtonStyle(AppColors.main_color),
-          onPressed: () async => {
-            await builder.setActiveIndex(widget.index + 1),
-          },
-          child: Text(
-            _technicalNameWithTranslationsStore.getTranslationByTechnicalName(LangKeys.next_question_button_text),
-            style: Theme.of(context).textTheme.bodySmall!.copyWith(color: AppColors.white),
-          ),
-        ),
-      );
-    });
   }
 
   ButtonStyle _buildInfoCloseButtonStyle({required double scaleBy}) {

@@ -3,7 +3,6 @@ import 'package:guide_wizard/constants/colors.dart';
 import 'package:guide_wizard/constants/dimens.dart';
 import 'package:guide_wizard/models/step/app_step.dart';
 import 'package:guide_wizard/models/task/task.dart';
-import 'package:guide_wizard/stores/data/data_store.dart';
 import 'package:guide_wizard/stores/technical_name/technical_name_with_translations_store.dart';
 import 'package:guide_wizard/widgets/app_expansiontile.dart';
 import 'package:guide_wizard/widgets/expansion_content.dart';

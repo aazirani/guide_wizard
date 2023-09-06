@@ -7,26 +7,6 @@ import 'package:url_launcher/url_launcher.dart';
 class UrlHandler {
   UrlHandler._();
 
-  // void _openURLInChromeSafari(String url) async{
-  //   widget.browser.open(
-  //       url: Uri.parse(url),
-  //   options: ChromeSafariBrowserClassOptions(
-  //   android: AndroidChromeCustomTabsOptions(
-  //   shareState: CustomTabsShareState.SHARE_STATE_OFF),
-  //   ios: IOSSafariOptions(barCollapsingEnabled: true)));
-  // }
-
-  static Future<void> _launchInWebViewOrVC(Uri url) async {
-    if (!await launchUrl(
-      url,
-      mode: LaunchMode.inAppWebView,
-      webViewConfiguration: const WebViewConfiguration(
-          headers: <String, String>{'my_header_key': 'my_header_value'}),
-    )) {
-      throw 'Could not launch $url';
-    }
-  }
-
   static _launchURL(String urlAddress) async {
     final Uri url = Uri.parse(urlAddress);
     if (!await launchUrl(url)) {
