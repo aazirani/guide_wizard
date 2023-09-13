@@ -47,13 +47,13 @@ class _CompressedTaskListTimelineState
           shrinkWrap: true,
           theme: TimelineThemeData(
             direction: Axis.vertical,
-            nodePosition: Dimens.timelineNodePosition,
+            nodePosition: Dimens.compressedTaskList.timelineNodePosition,
           ),
           builder: TimelineTileBuilder(
             itemCount: _dataStore.getAllSteps.length == 0
                 ? 0
                 : _dataStore.getStepById(_appSettingsStore.currentStepId).tasks.length,
-            itemExtent: Dimens.compressedTaskListTimeLineItemExtend,
+            itemExtent: Dimens.compressedTaskList.timeLineItemExtend,
             contentsBuilder: (context, index) =>
                 _buildContents(index),
             indicatorBuilder: (context, index) => _buildIndicator(index),
@@ -77,8 +77,8 @@ class _CompressedTaskListTimelineState
     return Observer(
       builder: (_) => Container(
           color: AppColors.transparent,
-          width: Dimens.timelineIndicatorDimens,
-          height: Dimens.timelineIndicatorDimens,
+          width: Dimens.compressedTaskList.timelineIndicatorDimens,
+          height: Dimens.compressedTaskList.timelineIndicatorDimens,
           child: DiamondIndicator(fill: isTaskDone(taskIndex))
       ),
     );
@@ -92,11 +92,11 @@ class _CompressedTaskListTimelineState
 
   Widget _buildContents(index) {
     return Container(
-      margin: Dimens.contentLeftMargin,
-      padding: Dimens.compressedTaskListContentPadding,
+      margin: Dimens.compressedTaskList.contentLeftMargin,
+      padding: Dimens.compressedTaskList.contentPadding,
       decoration: BoxDecoration(
         color: AppColors.timelineCompressedContainerColor,
-        borderRadius: BorderRadius.all(Radius.circular(Dimens.contentRadius)),
+        borderRadius: BorderRadius.all(Radius.circular(Dimens.compressedTaskList.contentRadius)),
       ),
       child: _buildContentTitle(index),
     );

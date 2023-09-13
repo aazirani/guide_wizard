@@ -82,11 +82,11 @@ class SubTaskWidgetState extends State<SubTaskWidget> with AutomaticKeepAliveCli
   Widget _buildAppExpansionTileWidgetWithCustomTheme() {
     return ListTileTheme(
       shape: RoundedRectangleBorder(
-        borderRadius: Dimens.expansionTileBorderRadius,
+        borderRadius: Dimens.subTaskWidget.expansionTileBorderRadius,
       ),
       tileColor: AppColors.button_background_color,
       textColor: AppColors.main_color,
-      contentPadding: Dimens.listTilePadding,
+      contentPadding: Dimens.subTaskWidget.listTilePadding,
       dense: false,
       horizontalTitleGap: 0.0,
       minLeadingWidth: 0,
@@ -96,11 +96,11 @@ class SubTaskWidgetState extends State<SubTaskWidget> with AutomaticKeepAliveCli
 
   Widget _buildRoundedExpansionTile() {
     return ClipRRect(
-      borderRadius: Dimens.expansionTileBorderRadius,
+      borderRadius: Dimens.subTaskWidget.expansionTileBorderRadius,
       child: Card(
           elevation: 4,
           shape: RoundedRectangleBorder(
-            borderRadius: Dimens.expansionTileBorderRadius,
+            borderRadius: Dimens.subTaskWidget.expansionTileBorderRadius,
           ),
           child: _buildAppExpansionTileWidgetWithCustomTheme()),
     );
@@ -108,7 +108,7 @@ class SubTaskWidgetState extends State<SubTaskWidget> with AutomaticKeepAliveCli
 
   Widget _buildExpansionTile() {
     return Padding(
-      padding: Dimens.expansionPadding,
+      padding: Dimens.subTaskWidget.expansionPadding,
       child: _buildRoundedExpansionTile(),
     );
   }

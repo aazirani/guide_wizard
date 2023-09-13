@@ -62,7 +62,7 @@ class _TaskPageTextOnlyState extends State<TaskPageTextOnly> {
         color: AppColors.main_color,
         child: Container(
           decoration: BoxDecoration(
-              borderRadius: Dimens.taskPageTextOnlyScaffoldBorder,
+              borderRadius: Dimens.taskPage.textOnlyScaffoldBorder,
               color: AppColors.bright_foreground_color),
           child: _buildPageContent(),
         ),
@@ -74,7 +74,7 @@ class _TaskPageTextOnlyState extends State<TaskPageTextOnly> {
     return RawScrollbar(
       child: ListView(
         children: [
-          _technicalNameWithTranslationsStore.getTranslation(widget.task.description) == "" ? SizedBox(height: Dimens.taskPageTextOnlyListViewPadding.top,) : _buildDescription(),
+          _technicalNameWithTranslationsStore.getTranslation(widget.task.description) == "" ? SizedBox(height: Dimens.taskPage.textOnlyListViewPadding.top,) : _buildDescription(),
           _buildSubTasksList(),
         ],
       ),
@@ -83,7 +83,7 @@ class _TaskPageTextOnlyState extends State<TaskPageTextOnly> {
 
   _buildDescription() {
     return Padding(
-      padding: Dimens.taskPageTextOnlyListViewPadding,
+      padding: Dimens.taskPage.textOnlyListViewPadding,
       child: Text(
         _technicalNameWithTranslationsStore.getTranslation(widget.task.description),
         style: Theme.of(context).textTheme.bodyLarge!.copyWith(color: AppColors.text_color,)

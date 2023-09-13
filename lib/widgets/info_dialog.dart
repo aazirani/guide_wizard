@@ -44,7 +44,7 @@ class _InfoDialogState extends State<InfoDialog> {
           builder: (_, controller) => Container(
             decoration: BoxDecoration(
                 color: AppColors.white,
-                borderRadius: Dimens.taskPageTextOnlyScaffoldBorder,
+                borderRadius: Dimens.taskPage.textOnlyScaffoldBorder,
             ),
             child: SafeArea(
               child: Stack(

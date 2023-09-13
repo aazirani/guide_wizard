@@ -4,14 +4,12 @@ import 'package:guide_wizard/constants/dimens.dart';
 import 'package:guide_wizard/widgets/scrolling_overflow_text.dart';
 
 class QuestionsListAppBar extends StatefulWidget implements PreferredSizeWidget {
-  double appBarSize;
-  double fontSize;
+  double appBarSize = Dimens.questionListPageAppBar.height;
+  double fontSize = Dimens.questionListPageAppBar.fontSize;
   String title;
 
   QuestionsListAppBar(
       {Key? key,
-        this.appBarSize = Dimens.questionListPageAppBarHeight,
-        this.fontSize = Dimens.questionListPageAppBarFontSize,
         this.title = "",
       })
       : super(key: key);
@@ -32,8 +30,8 @@ class _QuestionsListAppBarState extends State<QuestionsListAppBar> {
     return AppBar(
       automaticallyImplyLeading: false,
       backgroundColor: AppColors.main_color,
-      toolbarHeight: Dimens.appBar["toolbarHeight"],
-      titleSpacing: Dimens.appBar["titleSpacing"],
+      toolbarHeight: Dimens.appBar.toolbarHeight,
+      titleSpacing: Dimens.appBar.titleSpacing,
       leading: IconButton(
         onPressed: () {
           Navigator.pop(context);

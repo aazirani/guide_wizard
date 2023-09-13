@@ -43,7 +43,7 @@ class _TaskPageWithImageState extends State<TaskPageWithImage> {
 
   double _getHeightOfDraggableScrollableSheet() {
     double screenHeight = MediaQuery.of(context).size.height;
-    double widgetSize = (screenHeight - (Dimens.blocksAppBarWidgetHeight + imageSlideSize.height) + MediaQuery.of(context).padding.top + 25) / (screenHeight);
+    double widgetSize = (screenHeight - (Dimens.taskPage.blocksAppBarWidgetHeight + imageSlideSize.height) + MediaQuery.of(context).padding.top + 25) / (screenHeight);
     return math.min(widgetSize, 1);
   }
 
@@ -118,7 +118,7 @@ class _TaskPageWithImageState extends State<TaskPageWithImage> {
         builder: (BuildContext context, ScrollController scrollController) {
           return Container(
             decoration: BoxDecoration(
-              borderRadius: Dimens.taskPageTextOnlyScaffoldBorder,
+              borderRadius: Dimens.taskPage.textOnlyScaffoldBorder,
             color: AppColors.bright_foreground_color),
             child: RawScrollbar(
               child: ListView.builder(
@@ -147,9 +147,9 @@ class _TaskPageWithImageState extends State<TaskPageWithImage> {
   }
 
   _buildDescription() {
-    if (_technicalNameWithTranslationsStore.getTranslation(widget.task.description) == "") return SizedBox(height: Dimens.taskPageTextOnlyListViewPadding.top,);
+    if (_technicalNameWithTranslationsStore.getTranslation(widget.task.description) == "") return SizedBox(height: Dimens.taskPage.textOnlyListViewPadding.top,);
     return Padding(
-      padding: Dimens.taskPageTextOnlyListViewPadding,
+      padding: Dimens.taskPage.textOnlyListViewPadding,
       child: Text(
         _technicalNameWithTranslationsStore.getTranslation(widget.task.description),
         style: Theme.of(context).textTheme.bodyLarge!.copyWith(color: AppColors.text_color)

@@ -57,7 +57,7 @@ class _QuestionWidgetState extends State<QuestionWidget> with AutomaticKeepAlive
   Widget build(BuildContext context) {
     super.build(context);
     return ListTile(
-      contentPadding: Dimens.questionWidgetListTilePadding,
+      contentPadding: Dimens.questionWidget.listTilePadding,
       title: _buildTitle(),
       subtitle: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -97,7 +97,7 @@ class _QuestionWidgetState extends State<QuestionWidget> with AutomaticKeepAlive
   Widget _buildDescription() {
     var questionSubtitleId = widget.question.sub_title;
     return Container(
-      margin: Dimens.questionDescriptionPadding,
+      margin: Dimens.questionWidget.descriptionPadding,
       child: Text(
         _technicalNameWithTranslationsStore.getTranslation(questionSubtitleId),
         style: Theme.of(context).textTheme.bodyLarge!.copyWith(color: AppColors.text_color),
@@ -111,7 +111,7 @@ class _QuestionWidgetState extends State<QuestionWidget> with AutomaticKeepAlive
       overlayColor: MaterialStateColor.resolveWith((states) => AppColors.close_button_color.withOpacity(0.1)),
       shape: MaterialStateProperty.all<RoundedRectangleBorder>(
         RoundedRectangleBorder(
-          borderRadius: Dimens.infoInsideDialogButtonsRadius,
+          borderRadius: Dimens.questionWidget.infoInsideDialogButtonsRadius,
           side: BorderSide(color:  AppColors.main_color, width: 2),
         ),
       ),
@@ -173,7 +173,7 @@ class _QuestionWidgetState extends State<QuestionWidget> with AutomaticKeepAlive
       builder: (BuildContext context) {
         return InfoDialog(
           content: Padding(
-            padding: Dimens.infoBottomSheetPadding,
+            padding: Dimens.questionWidget.infoBottomSheetPadding,
             child: Text(
               _getInfoDescription(),
               style: Theme.of(context).textTheme.bodyMedium!.copyWith(color: AppColors.text_color)
@@ -182,7 +182,7 @@ class _QuestionWidgetState extends State<QuestionWidget> with AutomaticKeepAlive
           bottomRow: Container(
             color: AppColors.white,
             child: Padding(
-              padding: Dimens.infoButtonsPadding,
+              padding: Dimens.questionWidget.infoButtonsPadding,
               child: buttonsRow,
             ),
           ),
@@ -242,15 +242,15 @@ class _QuestionWidgetState extends State<QuestionWidget> with AutomaticKeepAlive
 
   Widget _buildInfoButton() {
     return Container(
-      margin: Dimens.infoButtonContainerMargin,
+      margin: Dimens.questionWidget.infoButtonContainerMargin,
       child: Material(
-        borderRadius: Dimens.infoButtonBorderRadius,
+        borderRadius: Dimens.questionWidget.infoButtonBorderRadius,
         child: InkWell(
           onTap:() {
             _showInfo();
           },
           child: Container(
-            padding: Dimens.infoButtonContainerPadding,
+            padding: Dimens.questionWidget.infoButtonContainerPadding,
             child: Icon(
               Icons.help_outline_rounded,
               color: Colors.white,
@@ -403,7 +403,7 @@ class _QuestionWidgetState extends State<QuestionWidget> with AutomaticKeepAlive
   Widget _buildSingleTextOption(Answer answer) {
     return Flexible(
       child: Container(
-        margin: Dimens.singleTextOptionPadding,
+        margin: Dimens.questionWidget.singleTextOptionPadding,
         child: CheckboxListTile(
           shape: RoundedRectangleBorder(
             side: BorderSide(
@@ -433,7 +433,7 @@ class _QuestionWidgetState extends State<QuestionWidget> with AutomaticKeepAlive
   }
 
   Size sizeOfButton({scaleBy = 1}){
-    return Size(math.max(_getScreenWidth() - (Dimens.buildQuestionsButtonStyle["pixels_smaller_than_screen_width"]!) / scaleBy, 0), Dimens.buildQuestionsButtonStyle["height"]!);
+    return Size(math.max(_getScreenWidth() - (Dimens.questionWidget.buildQuestionsButtonStyle["pixels_smaller_than_screen_width"]!) / scaleBy, 0), Dimens.questionWidget.buildQuestionsButtonStyle["height"]!);
   }
 
   void answerOnTapFunction(Answer option, bool? value) async {

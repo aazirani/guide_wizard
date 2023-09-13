@@ -88,7 +88,7 @@ class _StepSliderWidgetState extends State<StepSliderWidget> {
         builder: (_) => Container(
           alignment: Alignment.topLeft,
           width: _getScreenWidth(),
-          margin: Dimens.sliderContainerMargin,
+          margin: Dimens.stepSlider.sliderContainerMargin,
           decoration: BoxDecoration(
             color: _buildSliderColor(index),
             border: _buildSliderBorder(index),
@@ -103,25 +103,25 @@ class _StepSliderWidgetState extends State<StepSliderWidget> {
                     child: Padding(
                         padding: EdgeInsets.only(
                             top: heightConstraint *
-                                Dimens.contentHeightPaddingPercentage,
+                                Dimens.stepSlider.contentHeightPaddingPercentage,
                             left: heightConstraint *
-                                Dimens.contentLeftPaddingPercentage,
+                                Dimens.stepSlider.contentLeftPaddingPercentage,
                             right: heightConstraint *
-                                Dimens.contentRightPaddingPercentage,
+                                Dimens.stepSlider.contentRightPaddingPercentage,
                             bottom: heightConstraint *
-                                Dimens.contentBottomPaddingPercentage),
+                                Dimens.stepSlider.contentBottomPaddingPercentage),
                         child: _buildContent(index, constraints))),
                 (_dataStore.getStepByIndex(index).image != null)
                     ? Expanded(flex: 1, child: _buildAvatar(index, constraints))
                     : Container(
                         width:
-                            heightConstraint * Dimens.emptySpaceHeightPercentage)
+                            heightConstraint * Dimens.stepSlider.emptySpaceHeightPercentage)
               ]),
             ),
             (_dataStore.getStepByIndex(index).tasks.isNotEmpty)
                 ? Flexible(flex: 10, child: _buildProgressBar(index))
                 : Container(
-                    height: heightConstraint * Dimens.emptySpaceHeightPercentage),
+                    height: heightConstraint * Dimens.stepSlider.emptySpaceHeightPercentage),
           ]),
         ),
       );
@@ -138,11 +138,11 @@ class _StepSliderWidgetState extends State<StepSliderWidget> {
             Flexible(flex: 4, child: _buildStepTitle(index)),
             SizedBox(
                 height: heightConstraint *
-                    Dimens.spaceBetweenTitleAndNoOfTasksPercentage),
+                    Dimens.stepSlider.spaceBetweenTitleAndNoOfTasksPercentage),
             Flexible(flex: 1, child: _buildStepNoOfTasksOrQuestions(index)),
             SizedBox(
                 height: heightConstraint *
-                    Dimens.spaceBetweenNoOfTasksAndContinueButtonPercentage),
+                    Dimens.stepSlider.spaceBetweenNoOfTasksAndContinueButtonPercentage),
           ])),
       Expanded(flex: 2, child: _buildContinueButton(index)),
     ]);
@@ -171,7 +171,7 @@ class _StepSliderWidgetState extends State<StepSliderWidget> {
     return Container(
       child: Padding(
         padding: EdgeInsets.only(
-            right: heightConstraint * Dimens.avatarRightPaddingPercentage),
+            right: heightConstraint * Dimens.stepSlider.avatarRightPaddingPercentage),
         child: LoadImageWithCache(
           imageUrl: Endpoints.stepsImageBaseUrl +
               _dataStore.getStepByIndex(index).image!,
@@ -188,7 +188,7 @@ class _StepSliderWidgetState extends State<StepSliderWidget> {
       maxLines: 3,
       softWrap: true,
       wrapWords: true,
-      minFontSize: Dimens.minFontSizeForTextOverFlow,
+      minFontSize: Dimens.stepSlider.minFontSizeForTextOverFlow,
     );
   }
 
@@ -287,7 +287,7 @@ class _StepSliderWidgetState extends State<StepSliderWidget> {
           (states) => AppColors.green[100]!.withOpacity(0.3)),
       shape: MaterialStateProperty.all<RoundedRectangleBorder>(
         RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(Dimens.buttonRadius),
+            borderRadius: BorderRadius.circular(Dimens.stepSlider.buttonRadius),
             side: BorderSide(color: AppColors.main_color)),
       ),
     );
@@ -301,7 +301,7 @@ class _StepSliderWidgetState extends State<StepSliderWidget> {
         child: Observer(
           builder: (_) => ClipRRect(
             borderRadius:
-                BorderRadius.all(Radius.circular(Dimens.progressBarRadius)),
+                BorderRadius.all(Radius.circular(Dimens.stepSlider.progressBarRadius)),
             child: LinearProgressIndicator(
                 value: _dataStore
                         .getDoneTasks(_dataStore.getStepByIndex(index).id)
@@ -318,12 +318,12 @@ class _StepSliderWidgetState extends State<StepSliderWidget> {
 
   Border _buildPendingBorder() {
     return Border.all(
-        width: Dimens.pendingSliderBorder, color: AppColors.main_color);
+        width: Dimens.stepSlider.pendingSliderBorder, color: AppColors.main_color);
   }
 
   Border _buildDoneBorder() {
     return Border.all(
-        width: Dimens.doneSliderBorder, color: AppColors.main_color);
+        width: Dimens.stepSlider.doneSliderBorder, color: AppColors.main_color);
   }
 
   //general methods ............................................................

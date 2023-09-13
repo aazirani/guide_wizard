@@ -38,7 +38,7 @@ class _LoadImageWithCacheState extends State<LoadImageWithCache> with SingleTick
             SizedBox(height: 5,),
             Text(
               _technicalNameWithTranslationsStore.getTranslationByTechnicalName(LangKeys.could_not_load),
-              style: TextStyle(fontSize: Dimens.imageCouldNotLoadFontSize, color: widget.color),)
+              style: TextStyle(fontSize: Dimens.loadImageWithCache.imageCouldNotLoadFontSize, color: widget.color),)
           ],
         );
       },
@@ -49,8 +49,8 @@ class _LoadImageWithCacheState extends State<LoadImageWithCache> with SingleTick
             width: double.infinity,
             child: Center(
               child: Container(
-                width: Dimens.imageLoadingIndicatorSize["width"],
-                height: Dimens.imageLoadingIndicatorSize["height"],
+                width: Dimens.loadImageWithCache.imageLoadingIndicatorSize["width"],
+                height: Dimens.loadImageWithCache.imageLoadingIndicatorSize["height"],
                 child: SizedBox(
                   child: CircularProgressIndicator(
                     strokeWidth: 4.5,

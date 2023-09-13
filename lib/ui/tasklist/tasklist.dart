@@ -47,8 +47,8 @@ class _TaskListState extends State<TaskList> {
   PreferredSizeWidget _buildAppBar() {
     return AppBar(
         backgroundColor: AppColors.main_color,
-        toolbarHeight: Dimens.appBar["toolbarHeight"],
-        titleSpacing: Dimens.appBar["titleSpacing"],
+        toolbarHeight: Dimens.appBar.toolbarHeight,
+        titleSpacing: Dimens.appBar.toolbarHeight,
         title: ScrollingOverflowText(
           _technicalNameWithTranslationsStore.getTranslation(widget.step.name),
           style: Theme.of(context)
@@ -58,7 +58,7 @@ class _TaskListState extends State<TaskList> {
           overflowRatio: 0.77,
         ),
         leading: Padding(
-          padding: Dimens.back_button,
+          padding: Dimens.taskList.backButton,
           child: IconButton(
               icon: Icon(Icons.arrow_back),
               onPressed: () {
@@ -89,13 +89,13 @@ class _TaskListState extends State<TaskList> {
       heightFactor: 1,
       child: FittedBox(
           child: Padding(
-        padding: Dimens.taskProgressBarPadding,
+        padding: Dimens.taskList.taskProgressBarPadding,
         child: Column(
           mainAxisAlignment: MainAxisAlignment.start,
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Padding(
-                padding: Dimens.numberOfTasksPadding,
+                padding: Dimens.taskList.numberOfTasksPadding,
                 child: Text(
                     "${widget.step.tasks.length} ${_technicalNameWithTranslationsStore.getTranslationByTechnicalName(LangKeys.tasks)}",
                     style: Theme.of(context)
@@ -124,13 +124,13 @@ class _TaskListState extends State<TaskList> {
               decoration: BoxDecoration(
                   borderRadius: BorderRadius.only(
                     topLeft:
-                        Radius.circular(Dimens.draggableScrollableSheetRadius),
+                        Radius.circular(Dimens.taskList.draggableScrollableSheetRadius),
                     topRight:
-                        Radius.circular(Dimens.draggableScrollableSheetRadius),
+                        Radius.circular(Dimens.taskList.draggableScrollableSheetRadius),
                   ),
                   color: AppColors.white),
               child: Column(children: [
-                SizedBox(height: Dimens.taskListDistanceFromAppBar),
+                SizedBox(height: Dimens.taskList.distanceFromAppBar),
                 Flexible(
                   child: ListView.builder(
                     scrollDirection: Axis.vertical,
@@ -157,10 +157,10 @@ class _TaskListState extends State<TaskList> {
       height: 20,
       width: _getScreenWidth() / 1.19,
       child: Padding(
-          padding: Dimens.taskListProgressBarPadding,
+          padding: Dimens.taskList.progressBarPadding,
           child: ClipRRect(
             borderRadius: BorderRadius.all(
-                Radius.circular(Dimens.taskListProgressBarRadius)),
+                Radius.circular(Dimens.taskList.progressBarRadius)),
             child: Observer(
               builder: (_) => LinearProgressIndicator(
                   value: calculateDoneRatio(),
