@@ -39,7 +39,6 @@ class StepSliderDimens {
 }
 
 class StepTimeLineDimens {
-  // For Home Screen - step timeline
   final containerBorderRadius = BorderRadius.all(Radius.circular(30));
   final containerPadding = const EdgeInsets.only(left: 25, right: 25);
   final currentStepOuterCirclePadding = const EdgeInsets.all(2);
