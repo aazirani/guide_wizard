@@ -3,7 +3,6 @@ import 'package:guide_wizard/constants/colors.dart';
 import 'package:guide_wizard/constants/dimens.dart';
 import 'package:guide_wizard/models/step/app_step.dart';
 import 'package:guide_wizard/models/task/task.dart';
-import 'package:guide_wizard/stores/data/data_store.dart';
 import 'package:guide_wizard/stores/technical_name/technical_name_with_translations_store.dart';
 import 'package:guide_wizard/widgets/app_expansiontile.dart';
 import 'package:guide_wizard/widgets/expansion_content.dart';
@@ -29,13 +28,11 @@ class SubTaskWidget extends StatefulWidget {
 
 class SubTaskWidgetState extends State<SubTaskWidget> with AutomaticKeepAliveClientMixin {
   // stores:--------------------------------------------------------------------
-  late DataStore _dataStore;
   late TechnicalNameWithTranslationsStore _technicalNameWithTranslationsStore;
 
   @override
   void didChangeDependencies() {
     super.didChangeDependencies();
-    _dataStore = Provider.of<DataStore>(context);
     _technicalNameWithTranslationsStore =
         Provider.of<TechnicalNameWithTranslationsStore>(context);
   }
@@ -72,7 +69,7 @@ class SubTaskWidgetState extends State<SubTaskWidget> with AutomaticKeepAliveCli
         textColor: AppColors.main_color,
         iconColor: AppColors.main_color,
         title: Text(
-          _technicalNameWithTranslationsStore.getTranslation(sub_task_title_id)!,
+          _technicalNameWithTranslationsStore.getTranslation(sub_task_title_id),
           style: Theme.of(context).textTheme.titleMedium
         ),
         key: Key(widget.task.subTasks[widget.index].id.toString()),
@@ -85,11 +82,11 @@ class SubTaskWidgetState extends State<SubTaskWidget> with AutomaticKeepAliveCli
   Widget _buildAppExpansionTileWidgetWithCustomTheme() {
     return ListTileTheme(
       shape: RoundedRectangleBorder(
-        borderRadius: Dimens.expansionTileBorderRadius,
+        borderRadius: Dimens.subTaskWidget.expansionTileBorderRadius,
       ),
       tileColor: AppColors.button_background_color,
       textColor: AppColors.main_color,
-      contentPadding: Dimens.listTilePadding,
+      contentPadding: Dimens.subTaskWidget.listTilePadding,
       dense: false,
       horizontalTitleGap: 0.0,
       minLeadingWidth: 0,
@@ -99,11 +96,11 @@ class SubTaskWidgetState extends State<SubTaskWidget> with AutomaticKeepAliveCli
 
   Widget _buildRoundedExpansionTile() {
     return ClipRRect(
-      borderRadius: Dimens.expansionTileBorderRadius,
+      borderRadius: Dimens.subTaskWidget.expansionTileBorderRadius,
       child: Card(
           elevation: 4,
           shape: RoundedRectangleBorder(
-            borderRadius: Dimens.expansionTileBorderRadius,
+            borderRadius: Dimens.subTaskWidget.expansionTileBorderRadius,
           ),
           child: _buildAppExpansionTileWidgetWithCustomTheme()),
     );
@@ -111,7 +108,7 @@ class SubTaskWidgetState extends State<SubTaskWidget> with AutomaticKeepAliveCli
 
   Widget _buildExpansionTile() {
     return Padding(
-      padding: Dimens.expansionPadding,
+      padding: Dimens.subTaskWidget.expansionPadding,
       child: _buildRoundedExpansionTile(),
     );
   }

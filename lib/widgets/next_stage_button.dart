@@ -11,9 +11,9 @@ import 'package:progress_state_button/progress_button.dart';
 import 'package:provider/provider.dart';
 
 class NextStageButton extends StatefulWidget {
-  double height;
+  double height = Dimens.nextStageButton.defaultHeight;
 
-  NextStageButton({this.height = Dimens.nextStageDefaultHeight, Key? key})
+  NextStageButton({Key? key})
       : super(key: key);
 
   @override
@@ -54,7 +54,7 @@ class _NextStageButtonState extends State<NextStageButton> {
       minWidth: _getScreenWidth() - 20,
       maxWidth: _getScreenWidth() - 20,
       height: widget.height,
-      radius: Dimens.nextStageButtonRadius,
+      radius: Dimens.nextStageButton.radius,
       stateWidgets: {
         ButtonState.idle: Text(
           _dataStore.isFirstStep(_appSettingsStore.currentStepId)
@@ -89,7 +89,7 @@ class _NextStageButtonState extends State<NextStageButton> {
       minWidthStates: [],
       onPressed: onTapFunction,
       state: buttonState,
-      padding: Dimens.nextStageButtonPadding,
+      padding: Dimens.nextStageButton.padding,
     );
   }
 

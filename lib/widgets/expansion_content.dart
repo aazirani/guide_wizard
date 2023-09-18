@@ -47,7 +47,7 @@ class _ExpansionContentState extends State<ExpansionContent> {
       children: [
         Flexible(
           child: Padding(
-            padding: Dimens.expansionContentPadding,
+            padding: Dimens.expansionContent.padding,
             child: MeasureSize(
                 onChange: (Size size) {
                   setState(() {
@@ -68,7 +68,7 @@ class _ExpansionContentState extends State<ExpansionContent> {
 
   Widget _buildDeadlineContainer() {
     return Padding(
-        padding: Dimens.deadlineContainerPadding,
+        padding: Dimens.expansionContent.deadlineContainerPadding,
         child: Align(
             alignment: Alignment.topLeft,
             child: Container(
@@ -76,7 +76,7 @@ class _ExpansionContentState extends State<ExpansionContent> {
                   color: AppColors.orange[50]!.withOpacity(0.1),
                   ),
               child: Padding(
-                  padding: Dimens.deadlineContentPadding,
+                  padding: Dimens.expansionContent.deadlineContentPadding,
                   child: Text.rich(
                     TextSpan(
                       children: [

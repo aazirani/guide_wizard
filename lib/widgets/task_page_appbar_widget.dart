@@ -11,12 +11,11 @@ import 'package:provider/provider.dart';
 class BlocksAppBarWidget extends StatefulWidget implements PreferredSizeWidget {
   Task task;
   AppStep step;
-  double appBarSize;
+  double appBarSize = Dimens.taskPage.blocksAppBarWidgetHeight;
   String title;
   BlocksAppBarWidget(
       {Key? key,
         required this.task,
-        this.appBarSize = Dimens.blocksAppBarWidgetHeight,
         required this.title,
         required this.step})
       : super(key: key);
@@ -47,7 +46,7 @@ class _BlocksAppBarWidgetState extends State<BlocksAppBarWidget> {
         foregroundColor: AppColors.bright_foreground_color.withOpacity(0.1),
         shape: RoundedRectangleBorder(
           borderRadius:
-              BorderRadius.circular(Dimens.doneUndoneButtonBorderRadius),
+              BorderRadius.circular(Dimens.taskPageAppBarWidget.doneUndoneButtonBorderRadius),
         ),
         side: BorderSide(color: AppColors.white, width: 1.5));
   }
@@ -76,8 +75,8 @@ class _BlocksAppBarWidgetState extends State<BlocksAppBarWidget> {
 
   Widget _buildDoneUndoneButtonContainer() {
     return Container(
-        height: Dimens.doneUndoneButtonHeight,
-        width: Dimens.doneUndoneButtonWidth,
+        height: Dimens.taskPageAppBarWidget.doneUndoneButtonHeight,
+        width: Dimens.taskPageAppBarWidget.doneUndoneButtonWidth,
         child: _buildDoneUnDoneButton());
   }
 
@@ -86,7 +85,7 @@ class _BlocksAppBarWidgetState extends State<BlocksAppBarWidget> {
     return Observer(
       builder: (_) => AppBar(
         backgroundColor: AppColors.main_color,
-        toolbarHeight: Dimens.appBar["toolbarHeight"],
+        toolbarHeight: Dimens.appBar.toolbarHeight,
         titleSpacing: 0,
         leading: IconButton(
           onPressed: () {
@@ -106,7 +105,7 @@ class _BlocksAppBarWidgetState extends State<BlocksAppBarWidget> {
               overflowRatio: 0.65,
             ),
             Padding(
-              padding: Dimens.doneButtonPadding,
+              padding: Dimens.taskPageAppBarWidget.doneButtonPadding,
               child: _buildDoneUndoneButtonContainer()
             ),
           ],

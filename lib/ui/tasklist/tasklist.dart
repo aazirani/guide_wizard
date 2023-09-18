@@ -4,7 +4,6 @@ import 'package:guide_wizard/constants/colors.dart';
 import 'package:guide_wizard/constants/dimens.dart';
 import 'package:guide_wizard/constants/lang_keys.dart';
 import 'package:guide_wizard/models/step/app_step.dart';
-import 'package:guide_wizard/stores/app_settings/app_settings_store.dart';
 import 'package:guide_wizard/stores/data/data_store.dart';
 import 'package:guide_wizard/stores/technical_name/technical_name_with_translations_store.dart';
 import 'package:guide_wizard/ui/tasklist/tasklist_timeline.dart';
@@ -24,7 +23,6 @@ class _TaskListState extends State<TaskList> {
   // stores:--------------------------------------------------------------------
   late DataStore _dataStore;
   late TechnicalNameWithTranslationsStore _technicalNameWithTranslationsStore;
-  late AppSettingsStore _appSettingsStore;
 
   @override
   void didChangeDependencies() {
@@ -33,7 +31,6 @@ class _TaskListState extends State<TaskList> {
     _dataStore = Provider.of<DataStore>(context);
     _technicalNameWithTranslationsStore =
         Provider.of<TechnicalNameWithTranslationsStore>(context);
-    _appSettingsStore = Provider.of<AppSettingsStore>(context);
   }
 
   var progressBarSize = Size.zero;
@@ -50,10 +47,10 @@ class _TaskListState extends State<TaskList> {
   PreferredSizeWidget _buildAppBar() {
     return AppBar(
         backgroundColor: AppColors.main_color,
-        toolbarHeight: Dimens.appBar["toolbarHeight"],
-        titleSpacing: Dimens.appBar["titleSpacing"],
+        toolbarHeight: Dimens.appBar.toolbarHeight,
+        titleSpacing: Dimens.appBar.toolbarHeight,
         title: ScrollingOverflowText(
-          _technicalNameWithTranslationsStore.getTranslation(widget.step.name)!,
+          _technicalNameWithTranslationsStore.getTranslation(widget.step.name),
           style: Theme.of(context)
               .textTheme
               .titleLarge!
@@ -61,7 +58,7 @@ class _TaskListState extends State<TaskList> {
           overflowRatio: 0.77,
         ),
         leading: Padding(
-          padding: Dimens.back_button,
+          padding: Dimens.taskList.backButton,
           child: IconButton(
               icon: Icon(Icons.arrow_back),
               onPressed: () {
@@ -92,13 +89,13 @@ class _TaskListState extends State<TaskList> {
       heightFactor: 1,
       child: FittedBox(
           child: Padding(
-        padding: Dimens.taskProgressBarPadding,
+        padding: Dimens.taskList.taskProgressBarPadding,
         child: Column(
           mainAxisAlignment: MainAxisAlignment.start,
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Padding(
-                padding: Dimens.numberOfTasksPadding,
+                padding: Dimens.taskList.numberOfTasksPadding,
                 child: Text(
                     "${widget.step.tasks.length} ${_technicalNameWithTranslationsStore.getTranslationByTechnicalName(LangKeys.tasks)}",
                     style: Theme.of(context)
@@ -127,13 +124,13 @@ class _TaskListState extends State<TaskList> {
               decoration: BoxDecoration(
                   borderRadius: BorderRadius.only(
                     topLeft:
-                        Radius.circular(Dimens.draggableScrollableSheetRadius),
+                        Radius.circular(Dimens.taskList.draggableScrollableSheetRadius),
                     topRight:
-                        Radius.circular(Dimens.draggableScrollableSheetRadius),
+                        Radius.circular(Dimens.taskList.draggableScrollableSheetRadius),
                   ),
                   color: AppColors.white),
               child: Column(children: [
-                SizedBox(height: Dimens.taskListDistanceFromAppBar),
+                SizedBox(height: Dimens.taskList.distanceFromAppBar),
                 Flexible(
                   child: ListView.builder(
                     scrollDirection: Axis.vertical,
@@ -160,10 +157,10 @@ class _TaskListState extends State<TaskList> {
       height: 20,
       width: _getScreenWidth() / 1.19,
       child: Padding(
-          padding: Dimens.taskListProgressBarPadding,
+          padding: Dimens.taskList.progressBarPadding,
           child: ClipRRect(
             borderRadius: BorderRadius.all(
-                Radius.circular(Dimens.taskListProgressBarRadius)),
+                Radius.circular(Dimens.taskList.progressBarRadius)),
             child: Observer(
               builder: (_) => LinearProgressIndicator(
                   value: calculateDoneRatio(),

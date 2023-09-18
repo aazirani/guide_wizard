@@ -82,8 +82,8 @@ class _HomeScreenState extends State<HomeScreen> {
   PreferredSizeWidget _buildAppBar() {
     return AppBar(
       automaticallyImplyLeading: false,
-      toolbarHeight: Dimens.appBar["toolbarHeight"],
-      titleSpacing: Dimens.appBar["titleSpacing"],
+      toolbarHeight: Dimens.appBar.toolbarHeight,
+      titleSpacing: Dimens.appBar.titleSpacing,
       backgroundColor: AppColors.main_color,
       actions: _buildActions(context),
       title: Padding(
@@ -120,7 +120,7 @@ class _HomeScreenState extends State<HomeScreen> {
       context: context,
       child: Observer(
         builder: (_) => MaterialDialog(
-          borderRadius: Dimens.buttonRadius,
+          borderRadius: Dimens.homeScreen.buttonRadius,
           enableFullWidth: true,
           headerColor: Theme.of(context).primaryColor,
           backgroundColor: Theme.of(context).scaffoldBackgroundColor,
@@ -166,8 +166,8 @@ class _HomeScreenState extends State<HomeScreen> {
   Widget _buildBody(BuildContext context) {
     return ClipRRect(
       borderRadius: BorderRadius.only(
-          topLeft: Radius.circular(Dimens.homeBodyBorderRadius),
-          topRight: Radius.circular(Dimens.homeBodyBorderRadius)),
+          topLeft: Radius.circular(Dimens.homeScreen.bodyBorderRadius),
+          topRight: Radius.circular(Dimens.homeScreen.bodyBorderRadius)),
       child: Observer(
         builder: (_) => Container(
           height: MediaQuery.of(context).size.height,
@@ -175,8 +175,8 @@ class _HomeScreenState extends State<HomeScreen> {
           decoration: BoxDecoration(
             color: AppColors.homeBodyColor,
             borderRadius: BorderRadius.only(
-              topLeft: Radius.circular(Dimens.homeBodyBorderRadius),
-              topRight: Radius.circular(Dimens.homeBodyBorderRadius),
+              topLeft: Radius.circular(Dimens.homeScreen.bodyBorderRadius),
+              topRight: Radius.circular(Dimens.homeScreen.bodyBorderRadius),
             ),
           ),
           child: !_dataStore.isEmpty && !_dataStore.isLoading && !_technicalNameWithTranslationsStore.technicalNameLoading && !_updatedAtTimesStore.updatedAtTimesLoading && _dataStore.stepSuccess && _technicalNameWithTranslationsStore.technicalNameSuccess && _updatedAtTimesStore.updatedAtTimesSuccess
@@ -220,7 +220,7 @@ class _HomeScreenState extends State<HomeScreen> {
 
   Widget _buildCurrentStepIndicator() {
     return Padding(
-        padding: Dimens.currentStepIndicatorPadding,
+        padding: Dimens.homeScreen.currentStepIndicatorPadding,
         child: Row(children: [
           _buildStepsText(),
           SizedBox(width: 10),
@@ -245,7 +245,7 @@ class _HomeScreenState extends State<HomeScreen> {
         mainAxisAlignment: MainAxisAlignment.start,
         children: [
           Padding(
-              padding: Dimens.inProgressTextPadding,
+              padding: Dimens.homeScreen.inProgressTextPadding,
               child: Align(
                   alignment: Alignment.centerLeft,
                   child: Text(_technicalNameWithTranslationsStore.getTranslationByTechnicalName(LangKeys.description),
@@ -255,11 +255,11 @@ class _HomeScreenState extends State<HomeScreen> {
 
           Flexible(
             child: Container(
-              margin: Dimens.questionsStepDescMargin,
-              padding: Dimens.questionsStepDescPadding,
+              margin: Dimens.homeScreen.questionsStepDescMargin,
+              padding: Dimens.homeScreen.questionsStepDescPadding,
               decoration: BoxDecoration(
                 color: AppColors.timelineCompressedContainerColor,
-                borderRadius: BorderRadius.all(Radius.circular(Dimens.contentRadius)),
+                borderRadius: BorderRadius.all(Radius.circular(Dimens.compressedTaskList.contentRadius)),
               ),
               child: RawScrollbar(
                 child: SingleChildScrollView(
@@ -288,7 +288,7 @@ class _HomeScreenState extends State<HomeScreen> {
       child: Column(
         children: [
           Padding(
-            padding: Dimens.inProgressTextPadding,
+            padding: Dimens.homeScreen.inProgressTextPadding,
             child: Align(
               alignment: Alignment.centerLeft,
               child: Text(
@@ -299,7 +299,7 @@ class _HomeScreenState extends State<HomeScreen> {
           ),
           Flexible(
             child: Padding(
-              padding: Dimens.compressedTaskListPadding,
+              padding: Dimens.compressedTaskList.padding,
               child: CompressedTaskListTimeline(),
             ),
           ),
@@ -313,8 +313,8 @@ class _HomeScreenState extends State<HomeScreen> {
       children: [
         _buildPlaceholderCurrentStepIndicator(),
         _buildPlaceholderCarouselSliderContainer(),
-        SizedBox(height: Dimens.StepTimelineProgressBarDistance),
-        SizedBox(height: Dimens.progressBarCompressedTaskListDistance),
+        SizedBox(height: Dimens.homeScreen.StepTimelineProgressBarDistance),
+        SizedBox(height: Dimens.homeScreen.progressBarCompressedTaskListDistance),
         _buildPlaceholderCompressedTaskListTimeline(),
       ],
     );
@@ -322,7 +322,7 @@ class _HomeScreenState extends State<HomeScreen> {
 
   _buildPlaceholderCurrentStepIndicator() {
     return Padding(
-        padding: Dimens.currentStepIndicatorPadding,
+        padding: Dimens.homeScreen.currentStepIndicatorPadding,
         child: Row(children: [
           _buildStepsText(),
         ]));
@@ -331,9 +331,9 @@ class _HomeScreenState extends State<HomeScreen> {
   Widget _buildPlaceholderCarouselSliderContainer() {
     return Container(
       alignment: Alignment.topRight,
-      padding: Dimens.placeHolderCarouselSliderContainerPadding,
+      padding: Dimens.homeScreen.placeHolderCarouselSliderContainerPadding,
       height: MediaQuery.of(context).size.height /
-          Dimens.placeHolderCarouselSliderHeightRatio,
+          Dimens.homeScreen.placeHolderCarouselSliderHeightRatio,
       child: _buildPlaceholderStepSliderWidget(),
     );
   }
@@ -345,17 +345,17 @@ class _HomeScreenState extends State<HomeScreen> {
         return Container(
           alignment: Alignment.topLeft,
           width: _getScreenWidth,
-          margin: Dimens.sliderContainerMargin,
-          padding: Dimens.sliderContainerPadding,
+          margin: Dimens.stepSlider.sliderContainerMargin,
+          padding: Dimens.stepSlider.sliderContainerPadding,
           decoration: BoxDecoration(
             color: Colors.grey,
             borderRadius: BorderRadius.all(
-                Radius.circular(Dimens.placeHolderStepSliderBorderRadius)),
+                Radius.circular(Dimens.homeScreen.placeHolderStepSliderBorderRadius)),
           ),
         );
       },
       options: CarouselOptions(
-        height: _getScreenHeight / Dimens.placeHolderCarouselHeightRatio,
+        height: _getScreenHeight / Dimens.homeScreen.placeHolderCarouselHeightRatio,
         initialPage: 0,
         enableInfiniteScroll: false,
         autoPlay: false,
@@ -367,14 +367,14 @@ class _HomeScreenState extends State<HomeScreen> {
 
   Widget _buildPlaceholderCompressedTaskListTimeline() {
     return Padding(
-      padding: Dimens.stepTimelineContainerPadding,
+      padding: Dimens.stepTimeLine.containerPadding,
       child: Container(
         decoration: BoxDecoration(
             color: Colors.grey,
-            borderRadius: BorderRadius.all(Radius.circular(Dimens.compressedTaskListBorderRadius))),
-        padding: Dimens.timelineContainerPadding,
+            borderRadius: BorderRadius.all(Radius.circular(Dimens.homeScreen.compressedTaskListBorderRadius))),
+        padding: Dimens.compressedTaskList.timelineContainerPadding,
         height: _getScreenHeight /
-            Dimens.placeHolderCompressedTaskListHeightRatio,
+            Dimens.homeScreen.placeHolderCompressedTaskListHeightRatio,
         width: double.infinity,
         child: Align(
           alignment: Alignment.topLeft,

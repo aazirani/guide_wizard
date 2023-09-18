@@ -4,7 +4,6 @@ import 'package:guide_wizard/constants/colors.dart';
 import 'package:guide_wizard/constants/dimens.dart';
 import 'package:guide_wizard/models/step/app_step.dart';
 import 'package:guide_wizard/models/task/task.dart';
-import 'package:guide_wizard/stores/data/data_store.dart';
 import 'package:guide_wizard/stores/technical_name/technical_name_with_translations_store.dart';
 import 'package:guide_wizard/widgets/sub_task_widget.dart';
 import 'package:guide_wizard/widgets/task_page_appbar_widget.dart';
@@ -24,14 +23,12 @@ class _TaskPageTextOnlyState extends State<TaskPageTextOnly> {
 
   RenderParametersManager renderManager = RenderParametersManager<dynamic>();
   // stores:--------------------------------------------------------------------
-  late DataStore _dataStore;
   late TechnicalNameWithTranslationsStore _technicalNameWithTranslationsStore;
 
   @override
   void didChangeDependencies() {
     super.didChangeDependencies();
     // initializing stores
-    _dataStore = Provider.of<DataStore>(context);
     _technicalNameWithTranslationsStore =
         Provider.of<TechnicalNameWithTranslationsStore>(context);
     setState(() {
@@ -65,7 +62,7 @@ class _TaskPageTextOnlyState extends State<TaskPageTextOnly> {
         color: AppColors.main_color,
         child: Container(
           decoration: BoxDecoration(
-              borderRadius: Dimens.taskPageTextOnlyScaffoldBorder,
+              borderRadius: Dimens.taskPage.textOnlyScaffoldBorder,
               color: AppColors.bright_foreground_color),
           child: _buildPageContent(),
         ),
@@ -77,7 +74,7 @@ class _TaskPageTextOnlyState extends State<TaskPageTextOnly> {
     return RawScrollbar(
       child: ListView(
         children: [
-          _technicalNameWithTranslationsStore.getTranslation(widget.task.description) == "" ? SizedBox(height: Dimens.taskPageTextOnlyListViewPadding.top,) : _buildDescription(),
+          _technicalNameWithTranslationsStore.getTranslation(widget.task.description) == "" ? SizedBox(height: Dimens.taskPage.textOnlyListViewPadding.top,) : _buildDescription(),
           _buildSubTasksList(),
         ],
       ),
@@ -86,7 +83,7 @@ class _TaskPageTextOnlyState extends State<TaskPageTextOnly> {
 
   _buildDescription() {
     return Padding(
-      padding: Dimens.taskPageTextOnlyListViewPadding,
+      padding: Dimens.taskPage.textOnlyListViewPadding,
       child: Text(
         _technicalNameWithTranslationsStore.getTranslation(widget.task.description),
         style: Theme.of(context).textTheme.bodyLarge!.copyWith(color: AppColors.text_color,)

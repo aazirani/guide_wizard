@@ -33,13 +33,13 @@ class _StepTimeLineState extends State<StepTimeLine> {
 
   Widget _buildTimelineContainer() {
     return Padding(
-      padding: Dimens.stepTimelineContainerPadding,
+      padding: Dimens.stepTimeLine.containerPadding,
       child: Container(
         width: _getScreenWidth(),
         height: 40,
         decoration: BoxDecoration(
             color: AppColors.stepTimelineContainerColor,
-            borderRadius: Dimens.stepTimelineContainerBorderRadius,
+            borderRadius: Dimens.stepTimeLine.containerBorderRadius,
             boxShadow: [
               BoxShadow(
                   color: AppColors.stepTimelineContainerShadowColor,
@@ -80,9 +80,9 @@ class _StepTimeLineState extends State<StepTimeLine> {
               border: Border.all(color: AppColors.main_color, width: 4),
             ),
             child: Container(
-                padding: Dimens.stepTimelineCurrentStepOuterCirclePadding,
+                padding: Dimens.stepTimeLine.currentStepOuterCirclePadding,
                 child: Container(
-                    padding: Dimens.stepTimelineCurrentStepInnerCirclePadding,
+                    padding: Dimens.stepTimeLine.currentStepInnerCirclePadding,
                     decoration: BoxDecoration(
                       color: (_dataStore.stepIsDone(_dataStore.getStepByIndex(index).id)
                           ? AppColors.stepTimelinePendingColor
@@ -105,9 +105,9 @@ class _StepTimeLineState extends State<StepTimeLine> {
 
   Widget _buildDoneEndConnector() {
     return SolidLineConnector(
-      thickness: Dimens.doneEndConnectorThickness,
+      thickness: Dimens.stepTimeLine.doneEndConnectorThickness,
       color: AppColors.main_color,
-      indent: Dimens.doneEndConnectorIndent,
+      indent: Dimens.stepTimeLine.doneEndConnectorIndent,
     );
   }
 
