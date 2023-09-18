@@ -26,6 +26,7 @@ abstract class _DataStore with Store {
   @observable
   ObservableFuture<List<AppStep>> fetchStepsFuture = ObservableFuture<List<AppStep>>(emptyStepsResponse);
 
+  @observable
   ObservableList<AppStep> stepList = ObservableList.of(List.empty());
 
   @observable
@@ -42,6 +43,9 @@ abstract class _DataStore with Store {
 
   @computed
   List<AppStep> get getAllSteps => this.stepList;
+
+  @computed
+  bool get isEmpty => fetchStepsFuture.value == null ? true : fetchStepsFuture.value!.isEmpty;
 
   //Actions......................................................................
   @action

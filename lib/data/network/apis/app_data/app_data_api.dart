@@ -1,5 +1,6 @@
 import 'dart:async';
 
+import 'package:guide_wizard/data/data_load_handler.dart';
 import 'package:guide_wizard/data/network/constants/endpoints.dart';
 import 'package:guide_wizard/data/network/dio_client.dart';
 import 'package:guide_wizard/data/network/rest_client.dart';
@@ -22,7 +23,7 @@ class StepApi {
       return AppStepList.fromJson(res["rows"]);
     } catch (e) {
       print(e.toString());
-      //DataLoadHandler().showServerErrorMessage();
+      DataLoadHandler().showServerErrorMessage();
       throw e;
     }
   }
