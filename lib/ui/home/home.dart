@@ -188,18 +188,9 @@ class _HomeScreenState extends State<HomeScreen> {
   }
 
   Widget _shimmerAll() {
-    return Shimmer(
-      period: Duration(seconds: 3),
-      gradient: LinearGradient(
-        colors: [
-          AppColors.shimmerGradientGreys[50]!,
-          AppColors.shimmerGradientGreys[100]!,
-          AppColors.shimmerGradientGreys[200]!,
-        ],
-        begin: Alignment(-1, -1),
-        end: Alignment(1, 1),
-        stops: [0.5, 0.75, 1],
-      ),
+    return Shimmer.fromColors(
+      baseColor: AppColors.shimmerGradientGreys[200]!,
+      highlightColor: AppColors.shimmerGradientGreys[100]!,
       child: _buildPlaceholderScreenElements(),
     );
   }
@@ -313,11 +304,33 @@ class _HomeScreenState extends State<HomeScreen> {
       children: [
         _buildPlaceholderCurrentStepIndicator(),
         _buildPlaceholderCarouselSliderContainer(),
+        _buildPlaceholderStepTimeline(),
         SizedBox(height: Dimens.StepTimelineProgressBarDistance),
         SizedBox(height: Dimens.progressBarCompressedTaskListDistance),
         _buildPlaceholderCompressedTaskListTimeline(),
       ],
     );
+  }
+
+  _buildPlaceholderStepTimeline(){
+    return Padding(
+      padding: Dimens.stepTimelineContainerPadding,
+      child: Container(
+        // width: _getScreenWidth(),
+        width: MediaQuery.of(context).size.width,
+        height: 40,
+        decoration: BoxDecoration(
+            color: AppColors.stepTimelineContainerColor,
+            borderRadius: Dimens.stepTimelineContainerBorderRadius,
+            boxShadow: [
+              BoxShadow(
+                  color: AppColors.stepTimelineContainerShadowColor,
+                  blurRadius: 0.3,
+                  offset: Offset(0, 2))
+            ]),
+      ),
+    );
+
   }
 
   _buildPlaceholderCurrentStepIndicator() {
