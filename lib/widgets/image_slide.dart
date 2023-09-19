@@ -2,6 +2,7 @@ import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
 import 'package:guide_wizard/constants/colors.dart';
 import 'package:guide_wizard/data/network/constants/endpoints.dart';
+import 'package:guide_wizard/utils/extension/context_extensions.dart';
 import 'package:guide_wizard/widgets/load_image_with_cache.dart';
 import 'package:smooth_page_indicator/smooth_page_indicator.dart';
 
@@ -23,7 +24,7 @@ class _ImageSlideState extends State<ImageSlide> {
   @override
   void initState() {
     super.initState();
-    _imagesList = widget.images.map((e) => LoadImageWithCache(imageUrl: Endpoints.tasksImageBaseUrl + e!, color: AppColors.grey,),).toList();
+    _imagesList = widget.images.map((e) => LoadImageWithCache(imageUrl: Endpoints.tasksImageBaseUrl + e!, color: AppColors.grey50,),).toList();
   }
 
   @override
@@ -57,8 +58,8 @@ class _ImageSlideState extends State<ImageSlide> {
                 count: _imagesList.length,
                 textDirection: TextDirection.ltr,
                 effect: ScrollingDotsEffect(
-                  activeDotColor: AppColors.bright_foreground_color,
-                  dotColor: AppColors.bright_foreground_color.withOpacity(0.7),
+                  activeDotColor: context.lightBackgroundColor,
+                  dotColor: context.lightBackgroundColor.withOpacity(0.7),
                   activeStrokeWidth: 2.6,
                   activeDotScale: 1.3,
                   maxVisibleDots: 5,

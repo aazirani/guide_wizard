@@ -32,22 +32,6 @@ mixin _$LanguageStore on _LanguageStore, Store {
     });
   }
 
-  late final _$language_idAtom =
-      Atom(name: '_LanguageStore.language_id', context: context);
-
-  @override
-  int? get language_id {
-    _$language_idAtom.reportRead();
-    return super.language_id;
-  }
-
-  @override
-  set language_id(int? value) {
-    _$language_idAtom.reportWrite(value, super.language_id, () {
-      super.language_id = value;
-    });
-  }
-
   late final _$initAsyncAction =
       AsyncAction('_LanguageStore.init', context: context);
 
@@ -71,31 +55,8 @@ mixin _$LanguageStore on _LanguageStore, Store {
   }
 
   @override
-  String getCode() {
-    final _$actionInfo = _$_LanguageStoreActionController.startAction(
-        name: '_LanguageStore.getCode');
-    try {
-      return super.getCode();
-    } finally {
-      _$_LanguageStoreActionController.endAction(_$actionInfo);
-    }
-  }
-
-  @override
-  String? getLanguage() {
-    final _$actionInfo = _$_LanguageStoreActionController.startAction(
-        name: '_LanguageStore.getLanguage');
-    try {
-      return super.getLanguage();
-    } finally {
-      _$_LanguageStoreActionController.endAction(_$actionInfo);
-    }
-  }
-
-  @override
   String toString() {
     return '''
-language_id: ${language_id},
 locale: ${locale}
     ''';
   }

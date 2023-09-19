@@ -2,6 +2,7 @@ import 'dart:math' as math;
 
 import 'package:flutter/material.dart';
 import 'package:guide_wizard/constants/colors.dart';
+import 'package:guide_wizard/utils/extension/context_extensions.dart';
 
 class DiamondIndicator extends StatelessWidget {
   final bool fill;
@@ -10,7 +11,7 @@ class DiamondIndicator extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: AppColors.transparent,
+      backgroundColor: context.transparent,
       body: Center(
         child: Transform(
           alignment: Alignment.center,
@@ -19,10 +20,10 @@ class DiamondIndicator extends StatelessWidget {
           ),
           child: Container(
             decoration: BoxDecoration(
-              color: (fill) ? AppColors.diamondColor : AppColors.transparent,
+              color: (fill) ? context.secondaryColor : context.transparent,
               border: Border.all(
                 width: 2,
-                color: AppColors.diamondBorderColor,
+                color: context.secondaryColor,
               ),
             ),
             child: InkWell(

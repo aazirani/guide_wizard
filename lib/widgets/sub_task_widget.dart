@@ -9,6 +9,7 @@ import 'package:guide_wizard/widgets/app_expansiontile.dart';
 import 'package:guide_wizard/widgets/expansion_content.dart';
 import 'package:provider/provider.dart';
 import 'package:render_metrics/render_metrics.dart';
+import 'package:guide_wizard/utils/extension/context_extensions.dart';
 
 class SubTaskWidget extends StatefulWidget {
   final int index;
@@ -69,8 +70,8 @@ class SubTaskWidgetState extends State<SubTaskWidget> with AutomaticKeepAliveCli
           }
         }),
         maintainState: true,
-        textColor: AppColors.main_color,
-        iconColor: AppColors.main_color,
+        textColor: context.primaryColor,
+        iconColor: context.primaryColor,
         title: Text(
           _technicalNameWithTranslationsStore.getTranslation(sub_task_title_id)!,
           style: Theme.of(context).textTheme.titleMedium
@@ -87,8 +88,8 @@ class SubTaskWidgetState extends State<SubTaskWidget> with AutomaticKeepAliveCli
       shape: RoundedRectangleBorder(
         borderRadius: Dimens.expansionTileBorderRadius,
       ),
-      tileColor: AppColors.button_background_color,
-      textColor: AppColors.main_color,
+      tileColor: context.tileColor,
+      textColor: context.primaryColor,
       contentPadding: Dimens.listTilePadding,
       dense: false,
       horizontalTitleGap: 0.0,

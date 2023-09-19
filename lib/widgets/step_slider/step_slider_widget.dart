@@ -14,6 +14,7 @@ import 'package:guide_wizard/ui/questions/questions_list_page.dart';
 import 'package:guide_wizard/ui/tasklist/tasklist.dart';
 import 'package:guide_wizard/widgets/load_image_with_cache.dart';
 import 'package:provider/provider.dart';
+import 'package:guide_wizard/utils/extension/context_extensions.dart';
 
 class StepSliderWidget extends StatefulWidget {
   StepSliderWidget({Key? key}) : super(key: key);
@@ -160,9 +161,9 @@ class _StepSliderWidgetState extends State<StepSliderWidget> {
 
   Color _buildSliderColor(index) {
     if(_dataStore.stepIsDone(_dataStore.getStepByIndex(index).id)){
-      return AppColors.green[300]!.withOpacity(0.20);
+      return context.secondaryColor.withOpacity(0.20);
     }
-    return AppColors.green[200]!.withOpacity(0.10);
+    return context.secondaryContainerColor.withOpacity(0.10);
   }
 
   Widget _buildAvatar(int index, constraints) {
@@ -175,7 +176,7 @@ class _StepSliderWidgetState extends State<StepSliderWidget> {
         child: LoadImageWithCache(
           imageUrl: Endpoints.stepsImageBaseUrl +
               _dataStore.getStepByIndex(index).image!,
-          color: AppColors.main_color,
+          color: context.primaryColor,
         ),
       ),
     );
@@ -270,7 +271,7 @@ class _StepSliderWidgetState extends State<StepSliderWidget> {
                 SizedBox(width: 1),
                 Icon(
                   Icons.arrow_forward_ios_rounded,
-                  color: AppColors.main_color,
+                  color: context.primaryColor,
                   size: 16,
                 )
               ]),
@@ -282,13 +283,13 @@ class _StepSliderWidgetState extends State<StepSliderWidget> {
   ButtonStyle _buildButtonStyle() {
     return ButtonStyle(
       backgroundColor: MaterialStateProperty.all(
-          AppColors.stepSliderContinueButton.withOpacity(0.5)),
+          context.lightBackgroundColor.withOpacity(0.5)),
       overlayColor: MaterialStateColor.resolveWith(
-          (states) => AppColors.green[100]!.withOpacity(0.3)),
+          (states) => context.secondaryContainerColor.withOpacity(0.3)),
       shape: MaterialStateProperty.all<RoundedRectangleBorder>(
         RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(Dimens.buttonRadius),
-            side: BorderSide(color: AppColors.main_color)),
+            side: BorderSide(color: context.primaryColor)),
       ),
     );
   }
@@ -307,9 +308,9 @@ class _StepSliderWidgetState extends State<StepSliderWidget> {
                         .getDoneTasks(_dataStore.getStepByIndex(index).id)
                         .length /
                     _dataStore.getStepByIndex(index).tasks.length,
-                backgroundColor: AppColors.progressBarBackgroundColor,
+                backgroundColor: context.lightBackgroundColor,
                 valueColor:
-                    AlwaysStoppedAnimation(AppColors.progressBarValueColor)),
+                    AlwaysStoppedAnimation(context.secondaryColor)),
           ),
         ),
       ),
@@ -318,12 +319,12 @@ class _StepSliderWidgetState extends State<StepSliderWidget> {
 
   Border _buildPendingBorder() {
     return Border.all(
-        width: Dimens.pendingSliderBorder, color: AppColors.main_color);
+        width: Dimens.pendingSliderBorder, color: context.primaryColor);
   }
 
   Border _buildDoneBorder() {
     return Border.all(
-        width: Dimens.doneSliderBorder, color: AppColors.main_color);
+        width: Dimens.doneSliderBorder, color: context.primaryColor);
   }
 
   //general methods ............................................................

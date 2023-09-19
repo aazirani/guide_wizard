@@ -8,6 +8,7 @@ import 'package:guide_wizard/widgets/next_stage_button.dart';
 import 'package:guide_wizard/widgets/question_widget.dart';
 import 'package:guide_wizard/widgets/questions_list_page_appBar.dart';
 import 'package:provider/provider.dart';
+import 'package:guide_wizard/utils/extension/context_extensions.dart';
 
 class QuestionsListPage extends StatefulWidget {
   int stepId;
@@ -42,7 +43,7 @@ class _QuestionsListPageState extends State<QuestionsListPage> {
     return Consumer<QuestionsWidgetState>(builder: (context, builder, child) {
       return Scaffold(
         appBar: QuestionsListAppBar(title: _appBarTitleString(),),
-        backgroundColor: AppColors.main_color,
+        backgroundColor: context.primaryColor,
         body: ClipRRect(
           borderRadius: BorderRadius.only(
               topLeft: Radius.circular(30), topRight: Radius.circular(30)),
@@ -50,7 +51,7 @@ class _QuestionsListPageState extends State<QuestionsListPage> {
             height: MediaQuery.of(context).size.height,
             width: MediaQuery.of(context).size.width,
             decoration: BoxDecoration(
-              color: AppColors.white,
+              color: context.lightBackgroundColor,
               borderRadius: BorderRadius.only(
                 topLeft: Radius.circular(30),
                 topRight: Radius.circular(30),
