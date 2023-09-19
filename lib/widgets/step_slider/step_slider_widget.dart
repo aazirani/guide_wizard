@@ -57,9 +57,9 @@ class _StepSliderWidgetState extends State<StepSliderWidget> {
     return CarouselSlider(
       carouselController: _carouselController,
       options: CarouselOptions(
+          initialPage: _dataStore.getIndexOfStep(_appSettingsStore.currentStepId),
           onPageChanged: (index, reason) {
-            _appSettingsStore
-                .setCurrentStepId(_dataStore.getStepByIndex(index).id);
+            _appSettingsStore.setCurrentStepId(_dataStore.getStepByIndex(index).id);
           },
           height: _getScreenHeight() / 4,
           enlargeCenterPage: true,
@@ -114,14 +114,15 @@ class _StepSliderWidgetState extends State<StepSliderWidget> {
                 (_dataStore.getStepByIndex(index).image != null)
                     ? Expanded(flex: 1, child: _buildAvatar(index, constraints))
                     : Container(
-                        width:
-                            heightConstraint * Dimens.emptySpaceHeightPercentage)
+                        width: heightConstraint *
+                            Dimens.emptySpaceHeightPercentage)
               ]),
             ),
             (_dataStore.getStepByIndex(index).tasks.isNotEmpty)
                 ? Flexible(flex: 10, child: _buildProgressBar(index))
                 : Container(
-                    height: heightConstraint * Dimens.emptySpaceHeightPercentage),
+                    height:
+                        heightConstraint * Dimens.emptySpaceHeightPercentage),
           ]),
         ),
       );
@@ -159,7 +160,7 @@ class _StepSliderWidgetState extends State<StepSliderWidget> {
   }
 
   Color _buildSliderColor(index) {
-    if(_dataStore.stepIsDone(_dataStore.getStepByIndex(index).id)){
+    if (_dataStore.stepIsDone(_dataStore.getStepByIndex(index).id)) {
       return AppColors.green[300]!.withOpacity(0.20);
     }
     return AppColors.green[200]!.withOpacity(0.10);
@@ -250,6 +251,7 @@ class _StepSliderWidgetState extends State<StepSliderWidget> {
                           )));
               DataLoadHandler().loadDataAndCheckForUpdate();
             } else {
+              _appSettingsStore.setCurrentStepId(3);
               Navigator.push(
                   context,
                   MaterialPageRoute(
