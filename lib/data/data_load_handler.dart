@@ -13,7 +13,8 @@ import 'package:guide_wizard/stores/updated_at_times/updated_at_times_store.dart
 import 'package:internet_connection_checker/internet_connection_checker.dart';
 import 'package:provider/provider.dart';
 
-class DataLoadHandler { // This class is SINGLETON
+class DataLoadHandler {
+  // This class is SINGLETON
   late BuildContext context;
   static DataLoadHandler? _instance;
 
@@ -26,7 +27,7 @@ class DataLoadHandler { // This class is SINGLETON
 
   //stores:---------------------------------------------------------------------
   late DataStore _dataStore = Provider.of<DataStore>(context, listen: false);
-  late TechnicalNameWithTranslationsStore _technicalNameWithTranslationsStore =Provider.of<TechnicalNameWithTranslationsStore>(context, listen: false);
+  late TechnicalNameWithTranslationsStore _technicalNameWithTranslationsStore = Provider.of<TechnicalNameWithTranslationsStore>(context, listen: false);
   late UpdatedAtTimesStore _updatedAtTimesStore = Provider.of<UpdatedAtTimesStore>(context, listen: false);
   late AppSettingsStore _appSettingsStore = Provider.of<AppSettingsStore>(context, listen: false);
 
@@ -43,31 +44,36 @@ class DataLoadHandler { // This class is SINGLETON
       dismissDirection: DismissDirection.none,
       content: messageWidgetObserver,
       action: SnackBarAction(
-          label: buttonLabel.isNotEmpty ? buttonLabel : NecessaryStrings.no_internet_button_text,
-          onPressed: onPressedButton,
+        label: buttonLabel.isNotEmpty
+            ? buttonLabel
+            : NecessaryStrings.no_internet_button_text,
+        onPressed: onPressedButton,
       ),
     );
     ScaffoldMessenger.of(context).showSnackBar(snackBar);
   }
 
   Future<Map<String, bool>> updatedAtWasChanged() async {
-    UpdatedAtTimes oldUpdatedAtTimes = await _updatedAtTimesStore.getUpdatedAtTimesFromDb();
+    UpdatedAtTimes oldUpdatedAtTimes =
+        await _updatedAtTimesStore.getUpdatedAtTimesFromDb();
 
-    if(DateTime.parse(oldUpdatedAtTimes.last_apps_request_time).isBefore(DateTime.now().subtract(SettingsConstants.updateRequestStop))){
+    if (DateTime.parse(oldUpdatedAtTimes.last_apps_request_time).isBefore(
+        DateTime.now().subtract(SettingsConstants.updateRequestStop))) {
       UpdatedAtTimes newUpdatedAtTimes = await _updatedAtTimesStore.getUpdatedAtTimesFromApi();
 
       return {
-        UpdatedAtTimesFactory.LAST_UPDATED_AT_CONTENT : DateTime.parse(oldUpdatedAtTimes.last_updated_at_content).isBefore(DateTime.parse(newUpdatedAtTimes.last_updated_at_content)),
-        UpdatedAtTimesFactory.LAST_UPDATED_AT_TECHNICAL_NAMES : DateTime.parse(oldUpdatedAtTimes.last_updated_at_technical_names).isBefore(DateTime.parse(newUpdatedAtTimes.last_updated_at_technical_names))
+        UpdatedAtTimesFactory.LAST_UPDATED_AT_CONTENT:
+            DateTime.parse(oldUpdatedAtTimes.last_updated_at_content).isBefore(DateTime.parse(newUpdatedAtTimes.last_updated_at_content)),
+        UpdatedAtTimesFactory.LAST_UPDATED_AT_TECHNICAL_NAMES:
+            DateTime.parse(oldUpdatedAtTimes.last_updated_at_technical_names).isBefore(DateTime.parse(newUpdatedAtTimes.last_updated_at_technical_names))
       };
     } else {
       return {
-        UpdatedAtTimesFactory.LAST_UPDATED_AT_CONTENT : false,
-        UpdatedAtTimesFactory.LAST_UPDATED_AT_TECHNICAL_NAMES : false,
-        UpdatedAtTimesFactory.LAST_APPS_REQUEST_TIME : false
+        UpdatedAtTimesFactory.LAST_UPDATED_AT_CONTENT: false,
+        UpdatedAtTimesFactory.LAST_UPDATED_AT_TECHNICAL_NAMES: false,
+        UpdatedAtTimesFactory.LAST_APPS_REQUEST_TIME: false
       };
     }
-
   }
 
   Future loadDataAndCheckForUpdate({bool initialLoading = false, bool refreshData = false, int processId = 0}) async {
@@ -163,24 +169,32 @@ class DataLoadHandler { // This class is SINGLETON
   loadDataFromDb() async {
     await _technicalNameWithTranslationsStore.getTechnicalNameWithTranslationsFromDb();
     List<AppStep> steps = await _dataStore.getStepsFromDb();
-    if(steps.isNotEmpty){
-      _appSettingsStore.setCurrentStepId(steps.first.id);
+    if (steps.isNotEmpty) {
+      if (_dataStore.stepIsDone(_dataStore.getStepByIndex(0).id))
+        _appSettingsStore.setCurrentStepId(_dataStore.getStepByIndex(1).id);
+      else {
+        _appSettingsStore.setCurrentStepId(steps.first.id);
+      }
     }
   }
 
-  loadDataFromApi(bool technicalNamesShouldBeUpdated, bool contentsShouldBeUpdated) async {
-    if(technicalNamesShouldBeUpdated && !_technicalNameWithTranslationsStore.technicalNameLoading){
+  loadDataFromApi(
+      bool technicalNamesShouldBeUpdated, bool contentsShouldBeUpdated) async {
+    if (technicalNamesShouldBeUpdated &&
+        !_technicalNameWithTranslationsStore.technicalNameLoading) {
       await _technicalNameWithTranslationsStore.getTechnicalNameWithTranslationsFromApi();
     }
-    if(contentsShouldBeUpdated && !_dataStore.stepLoading){
+    if (contentsShouldBeUpdated && !_dataStore.stepLoading) {
       await _dataStore.getStepsFromApi().then((steps) async => {
-        if(steps.isNotEmpty){
-          _appSettingsStore.setCurrentStepId(steps.first.id)
-        }
-      });
+            if (steps.isNotEmpty)
+              {
+                _appSettingsStore.setCurrentStepId(steps.first.id)
+              }
+          });
     }
 
-    if(_technicalNameWithTranslationsStore.technicalNameSuccess && _dataStore.stepSuccess){
+    if (_technicalNameWithTranslationsStore.technicalNameSuccess &&
+        _dataStore.stepSuccess) {
       await _appSettingsStore.setAnswerWasUpdated(false);
     }
   }

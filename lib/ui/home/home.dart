@@ -65,12 +65,15 @@ class _HomeScreenState extends State<HomeScreen> {
       body: RefreshIndicator(
         color: context.primaryColor,
         onRefresh: () async {
-          DataLoadHandler(context: context).loadDataAndCheckForUpdate(refreshData: true);
+          DataLoadHandler(context: context)
+              .loadDataAndCheckForUpdate(refreshData: true);
         },
         child: SingleChildScrollView(
           physics: AlwaysScrollableScrollPhysics(),
           child: Container(
-            height: MediaQuery.of(context).size.height -_buildAppBar().preferredSize.height - MediaQuery.of(context).padding.top,
+            height: MediaQuery.of(context).size.height -
+                _buildAppBar().preferredSize.height -
+                MediaQuery.of(context).padding.top,
             child: _buildBody(context),
           ),
         ),
@@ -103,6 +106,7 @@ class _HomeScreenState extends State<HomeScreen> {
       _buildLanguageButton(),
     ];
   }
+
   Widget _buildLanguageButton() {
     return IconButton(
       onPressed: () {
@@ -130,23 +134,23 @@ class _HomeScreenState extends State<HomeScreen> {
           onCloseButtonClicked: () {
             Navigator.of(context).pop();
           },
-          children: _technicalNameWithTranslationsStore.getSupportedLanguages()
+          children: _technicalNameWithTranslationsStore
+              .getSupportedLanguages()
               .map(
                 (object) => ListTile(
-              dense: true,
-              contentPadding: EdgeInsets.all(0.0),
-              title: Text(
-                object.language_name,
-                style: Theme.of(context).textTheme.bodySmall
-              ),
-              onTap: () {
-                Navigator.of(context).pop();
-                // change user language based on selected locale
-                _languageStore.changeLanguage(object.language_code);
-                _technicalNameWithTranslationsStore.setCurrentLocale(object.language_code);
-              },
-            ),
-          )
+                  dense: true,
+                  contentPadding: EdgeInsets.all(0.0),
+                  title: Text(object.language_name,
+                      style: Theme.of(context).textTheme.bodySmall),
+                  onTap: () {
+                    Navigator.of(context).pop();
+                    // change user language based on selected locale
+                    _languageStore.changeLanguage(object.language_code);
+                    _technicalNameWithTranslationsStore
+                        .setCurrentLocale(object.language_code);
+                  },
+                ),
+              )
               .toList(),
         ),
       ),
@@ -204,7 +208,9 @@ class _HomeScreenState extends State<HomeScreen> {
         _buildCurrentStepIndicator(),
         StepSliderWidget(),
         StepTimeLine(),
-        _dataStore.isFirstStep(_appSettingsStore.currentStepId) ? _buildQuestionDescription() : _buildInProgressCompressedTaskList(),
+        _dataStore.isFirstStep(_appSettingsStore.currentStepId)
+            ? _buildQuestionDescription()
+            : _buildInProgressCompressedTaskList(),
       ],
     );
   }
@@ -220,7 +226,9 @@ class _HomeScreenState extends State<HomeScreen> {
   }
 
   Widget _buildStepsText() {
-    return Text(_technicalNameWithTranslationsStore.getTranslationByTechnicalName(LangKeys.steps),
+    return Text(
+        _technicalNameWithTranslationsStore
+            .getTranslationByTechnicalName(LangKeys.steps),
         style: Theme.of(context).textTheme.titleSmall);
   }
 
@@ -239,11 +247,10 @@ class _HomeScreenState extends State<HomeScreen> {
               padding: Dimens.homeScreen.inProgressTextPadding,
               child: Align(
                   alignment: Alignment.centerLeft,
-                  child: Text(_technicalNameWithTranslationsStore.getTranslationByTechnicalName(LangKeys.description),
-                      style: Theme.of(context).textTheme.titleSmall
-                          )
-                          )),
-
+                  child: Text(
+                      _technicalNameWithTranslationsStore
+                          .getTranslationByTechnicalName(LangKeys.description),
+                      style: Theme.of(context).textTheme.titleSmall))),
           Flexible(
             child: Container(
               margin: Dimens.homeScreen.questionsStepDescMargin,
@@ -259,9 +266,12 @@ class _HomeScreenState extends State<HomeScreen> {
                     children: [
                       Flexible(
                         child: Text(
-                          _technicalNameWithTranslationsStore.getTranslation(_dataStore.getStepById(_appSettingsStore.currentStepId).description),
-                          style: Theme.of(context).textTheme.bodyMedium
-                        ),
+                            _technicalNameWithTranslationsStore.getTranslation(
+                                _dataStore
+                                    .getStepById(
+                                        _appSettingsStore.currentStepId)
+                                    .description),
+                            style: Theme.of(context).textTheme.bodyMedium),
                       ),
                     ],
                   ),
@@ -283,7 +293,8 @@ class _HomeScreenState extends State<HomeScreen> {
             child: Align(
               alignment: Alignment.centerLeft,
               child: Text(
-                _technicalNameWithTranslationsStore.getTranslationByTechnicalName(LangKeys.in_progress),
+                _technicalNameWithTranslationsStore
+                    .getTranslationByTechnicalName(LangKeys.in_progress),
                 style: Theme.of(context).textTheme.titleSmall,
               ),
             ),

@@ -94,7 +94,6 @@ class _NextStageButtonState extends State<NextStageButton> {
   }
 
   void onTapFunction() async {
-
     setButtonState(ButtonState.loading);
 
     if (!await DataLoadHandler().hasInternet()) {
@@ -118,11 +117,13 @@ class _NextStageButtonState extends State<NextStageButton> {
     Future.delayed(Duration(milliseconds: 1500), () {
       Navigator.of(context).pushAndRemoveUntil(
           MaterialPageRoute(builder: (context) => HomeScreen()),
-              (Route<dynamic> route) => false
-      );
+          (Route<dynamic> route) => false);
     });
-  }
 
+    if (_dataStore.stepIsDone(_dataStore.getStepByIndex(0).id)) {
+      _appSettingsStore.setCurrentStepId(_dataStore.getStepByIndex(1).id);
+    }
+  }
 
   Future<void> updateIfAnswersHasChanged() async {
     bool answerWasUpdated = await _appSettingsStore.getAnswerWasUpdated() ?? false;
