@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:guide_wizard/constants/colors.dart';
 import 'package:guide_wizard/constants/dimens.dart';
 import 'package:guide_wizard/widgets/scrolling_overflow_text.dart';
 import 'package:guide_wizard/utils/extension/context_extensions.dart';

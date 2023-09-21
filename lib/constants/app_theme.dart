@@ -19,7 +19,6 @@
 /// `import` this file in your project, anywhere you needed it.
 /// `import 'path/to/theme.dart';`
 import 'package:flutter/material.dart';
-import 'package:guide_wizard/constants/colors.dart';
 
 class AppThemeData {
   static const _lightFillColor = Colors.black;

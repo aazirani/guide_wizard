@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:guide_wizard/constants/colors.dart';
 import 'package:guide_wizard/providers/question_widget_state/question_widget_state.dart';
 import 'package:guide_wizard/stores/data/data_store.dart';
 import 'package:guide_wizard/stores/technical_name/technical_name_with_translations_store.dart';
