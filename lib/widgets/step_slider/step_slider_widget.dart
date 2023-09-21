@@ -251,7 +251,6 @@ class _StepSliderWidgetState extends State<StepSliderWidget> {
                           )));
               DataLoadHandler().loadDataAndCheckForUpdate();
             } else {
-              _appSettingsStore.setCurrentStepId(3);
               Navigator.push(
                   context,
                   MaterialPageRoute(
