@@ -7,6 +7,7 @@ import 'package:guide_wizard/stores/app_settings/app_settings_store.dart';
 import 'package:guide_wizard/stores/data/data_store.dart';
 import 'package:guide_wizard/stores/technical_name/technical_name_with_translations_store.dart';
 import 'package:guide_wizard/ui/home/home.dart';
+import 'package:guide_wizard/utils/extension/context_extensions.dart';
 import 'package:progress_state_button/progress_button.dart';
 import 'package:provider/provider.dart';
 
@@ -62,29 +63,29 @@ class _NextStageButtonState extends State<NextStageButton> {
                   .getTranslationByTechnicalName(LangKeys.next_step_button_text)
               : _technicalNameWithTranslationsStore
                   .getTranslationByTechnicalName(LangKeys.update_steps),
-          style: Theme.of(context).textTheme.bodyLarge!.copyWith(color: AppColors.white, fontWeight: FontWeight.w500),
+          style: Theme.of(context).textTheme.bodyLarge!.copyWith(color: context.lightBackgroundColor, fontWeight: FontWeight.w500),
         ),
         ButtonState.loading: Text(
           _technicalNameWithTranslationsStore
               .getTranslationByTechnicalName(LangKeys.getting_updates),
-          style: Theme.of(context).textTheme.bodyLarge!.copyWith(color: AppColors.white, fontWeight: FontWeight.w500),
+          style: Theme.of(context).textTheme.bodyLarge!.copyWith(color: context.lightBackgroundColor, fontWeight: FontWeight.w500),
         ),
         ButtonState.fail: Text(
           _technicalNameWithTranslationsStore.getTranslationByTechnicalName(
               LangKeys.next_stage_check_internet),
-          style: Theme.of(context).textTheme.bodyLarge!.copyWith(color: AppColors.white, fontWeight: FontWeight.w500),
+          style: Theme.of(context).textTheme.bodyLarge!.copyWith(color: context.lightBackgroundColor, fontWeight: FontWeight.w500),
         ),
         ButtonState.success: Text(
           _technicalNameWithTranslationsStore
               .getTranslationByTechnicalName(LangKeys.update_finished),
-          style: Theme.of(context).textTheme.bodyLarge!.copyWith(color: AppColors.white, fontWeight: FontWeight.w500),
+          style: Theme.of(context).textTheme.bodyLarge!.copyWith(color: context.lightBackgroundColor, fontWeight: FontWeight.w500),
         )
       },
       stateColors: {
-        ButtonState.idle: AppColors.nextStepColor,
-        ButtonState.loading: AppColors.nextStepColor,
-        ButtonState.fail: AppColors.red[100]!,
-        ButtonState.success: AppColors.nextStepColor,
+        ButtonState.idle: context.secondaryContainerColor,
+        ButtonState.loading: context.secondaryContainerColor,
+        ButtonState.fail: context.errorColor,
+        ButtonState.success: context.secondaryContainerColor,
       },
       minWidthStates: [],
       onPressed: onTapFunction,

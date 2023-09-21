@@ -7,6 +7,7 @@ import 'package:guide_wizard/models/task/task.dart';
 import 'package:guide_wizard/stores/data/data_store.dart';
 import 'package:guide_wizard/widgets/scrolling_overflow_text.dart';
 import 'package:provider/provider.dart';
+import 'package:guide_wizard/utils/extension/context_extensions.dart';
 
 class BlocksAppBarWidget extends StatefulWidget implements PreferredSizeWidget {
   Task task;
@@ -42,13 +43,13 @@ class _BlocksAppBarWidgetState extends State<BlocksAppBarWidget> {
   _buildDoneUndoneButtonStyle() {
     return ElevatedButton.styleFrom(
         padding: EdgeInsets.all(0),
-        backgroundColor: widget.task.isDone ? AppColors.white : AppColors.main_color,
-        foregroundColor: AppColors.bright_foreground_color.withOpacity(0.1),
+        backgroundColor: widget.task.isDone ? context.lightBackgroundColor : context.primaryColor,
+        foregroundColor: context.doneButtonColor,
         shape: RoundedRectangleBorder(
           borderRadius:
               BorderRadius.circular(Dimens.taskPageAppBarWidget.doneUndoneButtonBorderRadius),
         ),
-        side: BorderSide(color: AppColors.white, width: 1.5));
+        side: BorderSide(color: context.lightBackgroundColor, width: 1.5));
   }
 
   Widget _buildButton({required ButtonStyle? buttonStyle, IconData? icon}) {
@@ -62,7 +63,7 @@ class _BlocksAppBarWidgetState extends State<BlocksAppBarWidget> {
         style: buttonStyle,
         child: Icon(
           icon,
-          color: AppColors.main_color,
+          color: context.primaryColor,
         ));
   }
 
@@ -84,7 +85,7 @@ class _BlocksAppBarWidgetState extends State<BlocksAppBarWidget> {
   Widget build(BuildContext context) {
     return Observer(
       builder: (_) => AppBar(
-        backgroundColor: AppColors.main_color,
+        backgroundColor: context.primaryColor,
         toolbarHeight: Dimens.appBar.toolbarHeight,
         titleSpacing: 0,
         leading: IconButton(
@@ -93,7 +94,7 @@ class _BlocksAppBarWidgetState extends State<BlocksAppBarWidget> {
           },
           icon: Icon(
             Icons.arrow_back_rounded,
-            color: AppColors.bright_foreground_color,
+            color: context.lightBackgroundColor,
           ),
         ),
         title: Row(
@@ -101,7 +102,7 @@ class _BlocksAppBarWidgetState extends State<BlocksAppBarWidget> {
           children: [
             ScrollingOverflowText(
               widget.title,
-              style: Theme.of(context).textTheme.titleLarge!.copyWith(color: AppColors.bright_foreground_color),
+              style: Theme.of(context).textTheme.titleLarge!.copyWith(color: context.textOnDarkBackgroundColor),
               overflowRatio: 0.65,
             ),
             Padding(

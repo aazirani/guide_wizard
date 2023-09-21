@@ -2,7 +2,6 @@ import 'package:auto_size_text/auto_size_text.dart';
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
-import 'package:guide_wizard/constants/colors.dart';
 import 'package:guide_wizard/constants/dimens.dart';
 import 'package:guide_wizard/constants/lang_keys.dart';
 import 'package:guide_wizard/data/data_load_handler.dart';
@@ -14,6 +13,7 @@ import 'package:guide_wizard/ui/questions/questions_list_page.dart';
 import 'package:guide_wizard/ui/tasklist/tasklist.dart';
 import 'package:guide_wizard/widgets/load_image_with_cache.dart';
 import 'package:provider/provider.dart';
+import 'package:guide_wizard/utils/extension/context_extensions.dart';
 
 class StepSliderWidget extends StatefulWidget {
   StepSliderWidget({Key? key}) : super(key: key);
@@ -103,25 +103,28 @@ class _StepSliderWidgetState extends State<StepSliderWidget> {
                     child: Padding(
                         padding: EdgeInsets.only(
                             top: heightConstraint *
-                                Dimens.stepSlider.contentHeightPaddingPercentage,
+                                Dimens
+                                    .stepSlider.contentHeightPaddingPercentage,
                             left: heightConstraint *
                                 Dimens.stepSlider.contentLeftPaddingPercentage,
                             right: heightConstraint *
                                 Dimens.stepSlider.contentRightPaddingPercentage,
                             bottom: heightConstraint *
-                                Dimens.stepSlider.contentBottomPaddingPercentage),
+                                Dimens
+                                    .stepSlider.contentBottomPaddingPercentage),
                         child: _buildContent(index, constraints))),
                 (_dataStore.getStepByIndex(index).image != null)
                     ? Expanded(flex: 1, child: _buildAvatar(index, constraints))
                     : Container(
-                        width:
-                            heightConstraint * Dimens.stepSlider.emptySpaceHeightPercentage)
+                        width: heightConstraint *
+                            Dimens.stepSlider.emptySpaceHeightPercentage)
               ]),
             ),
             (_dataStore.getStepByIndex(index).tasks.isNotEmpty)
                 ? Flexible(flex: 10, child: _buildProgressBar(index))
                 : Container(
-                    height: heightConstraint * Dimens.stepSlider.emptySpaceHeightPercentage),
+                    height: heightConstraint *
+                        Dimens.stepSlider.emptySpaceHeightPercentage),
           ]),
         ),
       );
@@ -142,7 +145,8 @@ class _StepSliderWidgetState extends State<StepSliderWidget> {
             Flexible(flex: 1, child: _buildStepNoOfTasksOrQuestions(index)),
             SizedBox(
                 height: heightConstraint *
-                    Dimens.stepSlider.spaceBetweenNoOfTasksAndContinueButtonPercentage),
+                    Dimens.stepSlider
+                        .spaceBetweenNoOfTasksAndContinueButtonPercentage),
           ])),
       Expanded(flex: 2, child: _buildContinueButton(index)),
     ]);
@@ -159,10 +163,10 @@ class _StepSliderWidgetState extends State<StepSliderWidget> {
   }
 
   Color _buildSliderColor(index) {
-    if(_dataStore.stepIsDone(_dataStore.getStepByIndex(index).id)){
-      return AppColors.green[300]!.withOpacity(0.20);
+    if (_dataStore.stepIsDone(_dataStore.getStepByIndex(index).id)) {
+      return context.doneStepColor;
     }
-    return AppColors.green[200]!.withOpacity(0.10);
+    return context.unDoneStepColor;
   }
 
   Widget _buildAvatar(int index, constraints) {
@@ -171,11 +175,12 @@ class _StepSliderWidgetState extends State<StepSliderWidget> {
     return Container(
       child: Padding(
         padding: EdgeInsets.only(
-            right: heightConstraint * Dimens.stepSlider.avatarRightPaddingPercentage),
+            right: heightConstraint *
+                Dimens.stepSlider.avatarRightPaddingPercentage),
         child: LoadImageWithCache(
           imageUrl: Endpoints.stepsImageBaseUrl +
               _dataStore.getStepByIndex(index).image!,
-          color: AppColors.main_color,
+          color: context.primaryColor,
         ),
       ),
     );
@@ -270,7 +275,7 @@ class _StepSliderWidgetState extends State<StepSliderWidget> {
                 SizedBox(width: 1),
                 Icon(
                   Icons.arrow_forward_ios_rounded,
-                  color: AppColors.main_color,
+                  color: context.primaryColor,
                   size: 16,
                 )
               ]),
@@ -281,14 +286,13 @@ class _StepSliderWidgetState extends State<StepSliderWidget> {
 
   ButtonStyle _buildButtonStyle() {
     return ButtonStyle(
-      backgroundColor: MaterialStateProperty.all(
-          AppColors.stepSliderContinueButton.withOpacity(0.5)),
+      backgroundColor: MaterialStateProperty.all(context.continueButtonColor),
       overlayColor: MaterialStateColor.resolveWith(
-          (states) => AppColors.green[100]!.withOpacity(0.3)),
+          (states) => context.continueOverlayColor),
       shape: MaterialStateProperty.all<RoundedRectangleBorder>(
         RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(Dimens.stepSlider.buttonRadius),
-            side: BorderSide(color: AppColors.main_color)),
+            side: BorderSide(color: context.primaryColor)),
       ),
     );
   }
@@ -300,16 +304,15 @@ class _StepSliderWidgetState extends State<StepSliderWidget> {
       child: Container(
         child: Observer(
           builder: (_) => ClipRRect(
-            borderRadius:
-                BorderRadius.all(Radius.circular(Dimens.stepSlider.progressBarRadius)),
+            borderRadius: BorderRadius.all(
+                Radius.circular(Dimens.stepSlider.progressBarRadius)),
             child: LinearProgressIndicator(
                 value: _dataStore
                         .getDoneTasks(_dataStore.getStepByIndex(index).id)
                         .length /
                     _dataStore.getStepByIndex(index).tasks.length,
-                backgroundColor: AppColors.progressBarBackgroundColor,
-                valueColor:
-                    AlwaysStoppedAnimation(AppColors.progressBarValueColor)),
+                backgroundColor: context.lightBackgroundColor,
+                valueColor: AlwaysStoppedAnimation(context.secondaryColor)),
           ),
         ),
       ),
@@ -318,12 +321,13 @@ class _StepSliderWidgetState extends State<StepSliderWidget> {
 
   Border _buildPendingBorder() {
     return Border.all(
-        width: Dimens.stepSlider.pendingSliderBorder, color: AppColors.main_color);
+        width: Dimens.stepSlider.pendingSliderBorder,
+        color: context.primaryColor);
   }
 
   Border _buildDoneBorder() {
     return Border.all(
-        width: Dimens.stepSlider.doneSliderBorder, color: AppColors.main_color);
+        width: Dimens.stepSlider.doneSliderBorder, color: context.primaryColor);
   }
 
   //general methods ............................................................

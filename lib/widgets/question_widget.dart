@@ -15,6 +15,7 @@ import 'package:guide_wizard/url_handler.dart';
 import 'package:guide_wizard/widgets/info_dialog.dart';
 import 'package:guide_wizard/widgets/load_image_with_cache.dart';
 import 'package:provider/provider.dart';
+import 'package:guide_wizard/utils/extension/context_extensions.dart';
 
 class QuestionWidget extends StatefulWidget {
   Question question;
@@ -100,7 +101,7 @@ class _QuestionWidgetState extends State<QuestionWidget> with AutomaticKeepAlive
       margin: Dimens.questionWidget.descriptionPadding,
       child: Text(
         _technicalNameWithTranslationsStore.getTranslation(questionSubtitleId),
-        style: Theme.of(context).textTheme.bodyLarge!.copyWith(color: AppColors.text_color),
+        style: Theme.of(context).textTheme.bodyLarge!.copyWith(color: context.textOnLightBackgroundColor),
       ),
     );
   }
@@ -108,11 +109,13 @@ class _QuestionWidgetState extends State<QuestionWidget> with AutomaticKeepAlive
   ButtonStyle _buildInfoCloseButtonStyle({required double scaleBy}) {
     return ButtonStyle(
       minimumSize: MaterialStateProperty.all(sizeOfButton(scaleBy: scaleBy)),
-      overlayColor: MaterialStateColor.resolveWith((states) => AppColors.close_button_color.withOpacity(0.1)),
+      overlayColor: MaterialStateColor.resolveWith((states) => 
+      context.closeButtonOverlayColor
+      ),
       shape: MaterialStateProperty.all<RoundedRectangleBorder>(
         RoundedRectangleBorder(
           borderRadius: Dimens.questionWidget.infoInsideDialogButtonsRadius,
-          side: BorderSide(color:  AppColors.main_color, width: 2),
+          side: BorderSide(color:  context.primaryColor, width: 2),
         ),
       ),
     );
@@ -135,11 +138,12 @@ class _QuestionWidgetState extends State<QuestionWidget> with AutomaticKeepAlive
     });
   }
 
-  ButtonStyle _buildInfoOpenUrlButtonStyle({required double scaleBy, Color color = AppColors.main_color}) {
+  ButtonStyle _buildInfoOpenUrlButtonStyle({required double scaleBy, Color? color}) {
+    final selectedColor = color ?? context.primaryColor;
     return ButtonStyle(
       minimumSize: MaterialStateProperty.all(sizeOfButton(scaleBy: scaleBy)),
-      overlayColor: MaterialStateColor.resolveWith((states) => AppColors.white.withOpacity(0.13)),
-      backgroundColor: MaterialStateProperty.all<Color>(color),
+      overlayColor: MaterialStateColor.resolveWith((states) => context.openButtonOverlayColor),
+      backgroundColor: MaterialStateProperty.all<Color>(selectedColor),
       shape: MaterialStateProperty.all<RoundedRectangleBorder>(
         RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(5.0),
@@ -158,7 +162,7 @@ class _QuestionWidgetState extends State<QuestionWidget> with AutomaticKeepAlive
           },
           child: Text(
             _technicalNameWithTranslationsStore.getTranslationByTechnicalName(LangKeys.read_more),
-            style: Theme.of(context).textTheme.bodySmall!.copyWith(color: AppColors.white)
+            style: Theme.of(context).textTheme.bodySmall!.copyWith(color: context.lightBackgroundColor)
           ),
         ),
       );
@@ -176,11 +180,11 @@ class _QuestionWidgetState extends State<QuestionWidget> with AutomaticKeepAlive
             padding: Dimens.questionWidget.infoBottomSheetPadding,
             child: Text(
               _getInfoDescription(),
-              style: Theme.of(context).textTheme.bodyMedium!.copyWith(color: AppColors.text_color)
+              style: Theme.of(context).textTheme.bodyMedium!.copyWith(color: context.textOnLightBackgroundColor)
             ),
           ),
           bottomRow: Container(
-            color: AppColors.white,
+            color: context.lightBackgroundColor,
             child: Padding(
               padding: Dimens.questionWidget.infoButtonsPadding,
               child: buttonsRow,
@@ -257,7 +261,7 @@ class _QuestionWidgetState extends State<QuestionWidget> with AutomaticKeepAlive
             ),
           ),
         ),
-        color: AppColors.main_color,
+        color: context.primaryColor,
       ),
     );
   }
@@ -316,7 +320,7 @@ class _QuestionWidgetState extends State<QuestionWidget> with AutomaticKeepAlive
                 shape: RoundedRectangleBorder(
                   side: BorderSide(
                       color: answer.isSelected
-                          ? AppColors.main_color
+                          ? context.primaryColor
                           : Colors.transparent,
                       width: 2),
                   borderRadius: BorderRadius.circular(5),
@@ -328,7 +332,7 @@ class _QuestionWidgetState extends State<QuestionWidget> with AutomaticKeepAlive
                     _buildImageOptionSubtitle(answer),
                   ],
                 ),
-                tileColor: AppColors.greys[500]),
+                tileColor: context.containerColor),
           ),
           _buildImageCheckBox(answer),
         ],
@@ -337,7 +341,7 @@ class _QuestionWidgetState extends State<QuestionWidget> with AutomaticKeepAlive
   }
 
   Widget _buildImageLoader(String imageURL) {
-    return LoadImageWithCache(imageUrl: imageURL, color: AppColors.main_color,);
+    return LoadImageWithCache(imageUrl: imageURL, color: context.primaryColor,);
   }
 
   Widget _buildImageOptionSubtitle(Answer answer) {
@@ -357,7 +361,7 @@ class _QuestionWidgetState extends State<QuestionWidget> with AutomaticKeepAlive
                     });
                   },
                   checkColor: Colors.white,
-                  activeColor: AppColors.main_color,
+                  activeColor: context.primaryColor,
                   shape: CircleBorder(),
                 ),
                 height: 30,
@@ -368,7 +372,7 @@ class _QuestionWidgetState extends State<QuestionWidget> with AutomaticKeepAlive
             Flexible(
               child: Text(
                 _technicalNameWithTranslationsStore.getTranslation(answerTitleId),
-                style: Theme.of(context).textTheme.bodySmall!.copyWith(color: AppColors.text_color),              ),
+                style: Theme.of(context).textTheme.bodySmall!.copyWith(color: context.textOnLightBackgroundColor),              ),
             ),
           ],
         ),
@@ -393,8 +397,8 @@ class _QuestionWidgetState extends State<QuestionWidget> with AutomaticKeepAlive
           answerOnTapFunction(answer, value);
         });
       },
-      checkColor: AppColors.white,
-      activeColor: AppColors.main_color,
+      checkColor: context.lightBackgroundColor,
+      activeColor: context.primaryColor,
       shape: CircleBorder(),
       side: BorderSide(color: Colors.transparent),
     );
@@ -408,7 +412,7 @@ class _QuestionWidgetState extends State<QuestionWidget> with AutomaticKeepAlive
           shape: RoundedRectangleBorder(
             side: BorderSide(
                 color: answer.isSelected
-                    ? AppColors.main_color
+                    ? context.primaryColor
                     : Colors.transparent,
                 width: 2),
             borderRadius: BorderRadius.circular(5),
@@ -422,11 +426,11 @@ class _QuestionWidgetState extends State<QuestionWidget> with AutomaticKeepAlive
           },
           title: Text(
             _technicalNameWithTranslationsStore.getTranslation(answer.title),
-            style: Theme.of(context).textTheme.bodyLarge!.copyWith(color: AppColors.text_color),
+            style: Theme.of(context).textTheme.bodyLarge!.copyWith(color: context.textOnLightBackgroundColor),
           ),
           controlAffinity: ListTileControlAffinity.leading,
-          tileColor: AppColors.white,
-          activeColor: AppColors.main_color,
+          tileColor: context.lightBackgroundColor,
+          activeColor: context.primaryColor,
         ),
       ),
     );

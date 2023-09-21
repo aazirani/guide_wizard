@@ -19,6 +19,7 @@
 /// `import` this file in your project, anywhere you needed it.
 /// `import 'path/to/theme.dart';`
 import 'package:flutter/material.dart';
+import 'package:guide_wizard/constants/colors.dart';
 
 class AppThemeData {
   static const _lightFillColor = Colors.black;
@@ -27,26 +28,22 @@ class AppThemeData {
   static final Color _lightFocusColor = Colors.black.withOpacity(0.12);
   static final Color _darkFocusColor = Colors.white.withOpacity(0.12);
 
-  static ThemeData lightThemeData =
-      themeData(lightColorScheme, _lightFocusColor);
+  static ThemeData lightThemeData = themeData(lightColorScheme, _lightFocusColor);
   static ThemeData darkThemeData = themeData(darkColorScheme, _darkFocusColor);
 
   static ThemeData themeData(ColorScheme colorScheme, Color focusColor) {
     return ThemeData(
       colorScheme: colorScheme,
       textTheme: _textTheme,
-      // Matches manifest.json colors and background color.
-      primaryColor: const Color(0xFF030303),
       appBarTheme: AppBarTheme(
         backgroundColor: colorScheme.background,
         elevation: 0,
         iconTheme: IconThemeData(color: colorScheme.primary),
       ),
       iconTheme: IconThemeData(color: colorScheme.onPrimary),
-      canvasColor: colorScheme.background,
       scaffoldBackgroundColor: colorScheme.background,
       highlightColor: Colors.transparent,
-      focusColor: focusColor,
+      shadowColor: AppColors.grey200,
       snackBarTheme: SnackBarThemeData(
         behavior: SnackBarBehavior.floating,
         backgroundColor: Color.alphaBlend(
@@ -58,19 +55,24 @@ class AppThemeData {
     );
   }
 
-  static const ColorScheme lightColorScheme = ColorScheme(
-    primary: Color(0xFFd21e1d),
-    primaryContainer: Color(0xFF9e1718),
-    secondary: Color(0xFFEFF3F3),
-    secondaryContainer: Color(0xFFFAFBFB),
-    background: Color(0xFFE6EBEB),
-    surface: Color(0xFFFAFBFB),
-    onBackground: Colors.white,
-    error: _lightFillColor,
+  static ColorScheme lightColorScheme = ColorScheme(
+    primary: AppColors.blue100,
+    primaryContainer: AppColors.blue50,
+    onPrimary: AppColors.white,
+    secondary: AppColors.green100,
+    secondaryContainer: AppColors.green50,
+    background: AppColors.white,
+    onBackground: AppColors.blue200,
+    tertiary: AppColors.orange100,
+    tertiaryContainer: AppColors.orange50,
+    surface: AppColors.grey50,
+    error: AppColors.red100,
     onError: _lightFillColor,
-    onPrimary: _lightFillColor,
-    onSecondary: Color(0xFF322942),
-    onSurface: Color.fromRGBO(0, 81, 158, 1),
+    errorContainer: AppColors.grey100,
+    onErrorContainer: AppColors.grey50,
+    onSecondary: AppColors.blue200,
+    onSurface: AppColors.blue200,
+    surfaceTint: AppColors.grey300,
     brightness: Brightness.light,
   );
 
@@ -117,3 +119,5 @@ class AppThemeData {
     bodyColor: lightColorScheme.onSurface, 
   );
 }
+
+

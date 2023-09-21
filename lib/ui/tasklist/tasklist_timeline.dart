@@ -11,6 +11,7 @@ import 'package:guide_wizard/ui/tasks/task_page_with_image.dart';
 import 'package:guide_wizard/widgets/diamond_indicator.dart';
 import 'package:provider/provider.dart';
 import 'package:timelines/timelines.dart';
+import 'package:guide_wizard/utils/extension/context_extensions.dart';
 
 class TaskListTimeLine extends StatefulWidget {
   final AppStep step;
@@ -61,7 +62,7 @@ class _TaskListTimeLineState extends State<TaskListTimeLine> {
 
   Widget _buildIndicator() {
     return Container(
-        color: AppColors.transparent,
+        color: context.transparent,
         width: 8,
         height: 8,
         child: (widget.task.isDone)
@@ -71,7 +72,7 @@ class _TaskListTimeLineState extends State<TaskListTimeLine> {
 
   Widget _buildConnector() {
     return SolidLineConnector(
-        direction: Axis.vertical, color: AppColors.tasklistConnectorColor);
+        direction: Axis.vertical, color: context.secondaryColor);
   }
 
   Widget _buildContents() {
@@ -82,7 +83,7 @@ class _TaskListTimeLineState extends State<TaskListTimeLine> {
         borderRadius: Dimens.taskListTimeLine.contentContainerBorderRadius,
         child: Container(
           decoration: BoxDecoration(
-            color: AppColors.bright_foreground_color,
+            color: context.lightBackgroundColor,
             borderRadius: Dimens.taskListTimeLine.contentContainerBorderRadius,
           ),
           child: Container(
@@ -92,13 +93,13 @@ class _TaskListTimeLineState extends State<TaskListTimeLine> {
               maxHeight: Dimens.taskListTimeLine.containerMinHeight,
             ),
             decoration: BoxDecoration(
-              color: AppColors.contentColor,
+              color: context.lightBackgroundColor,
               borderRadius: Dimens.taskListTimeLine.contentContainerBorderRadius,
               border: Border.all(
                 width: widget.task.isDone ? 1 : 3,
                 color: (widget.task.isDone)
-                    ? AppColors.taskDoneBorder
-                    : AppColors.taskUnDoneBorder,
+                    ? context.secondaryContainerColor
+                    : context.primaryColor,
               ),
             ),
             child: _buildInsideElements(),
@@ -157,8 +158,8 @@ class _TaskListTimeLineState extends State<TaskListTimeLine> {
           height: Dimens.taskListTimeLine.doneBadgeHeight,
           width: Dimens.taskListTimeLine.doneBadgeWidth,
           decoration: BoxDecoration(
-              border: Border.all(color: AppColors.green[200]!),
-              color: AppColors.green[300]!.withOpacity(0.3),
+              border: Border.all(color: context.secondaryContainerColor),
+              color: context.doneBadgeColor,
               borderRadius: BorderRadius.all(Radius.circular(Dimens.taskListTimeLine.doneBadgeBorderRadius))),
           child: Row(
             mainAxisAlignment: MainAxisAlignment.center,
@@ -168,7 +169,7 @@ class _TaskListTimeLineState extends State<TaskListTimeLine> {
                   child: Text(
                     "${_technicalNameWithTranslationsStore.getTranslationByTechnicalName(LangKeys.done_task)}",
                       style: TextStyle(
-                          color: AppColors.main_color,
+                          color: context.primaryColor,
                           fontSize: Dimens.taskListTimeLine.doneBadgeFontSize,
                           fontWeight: FontWeight.w800))),
             ],
@@ -191,21 +192,21 @@ class _TaskListTimeLineState extends State<TaskListTimeLine> {
         height: Dimens.taskListTimeLine.deadlineContainerHeight,
         decoration: BoxDecoration(
             color: widget.task.isDone
-                ? AppColors.bright_foreground_color
-                : AppColors.deadlineUnDoneContainerColor.withOpacity(0.8),
+                ? context.lightBackgroundColor
+                : context.deadlineBadgeColor,
             borderRadius: Dimens.taskListTimeLine.contentDeadlineBorderRadius,
             border: Border.all(
                 width: Dimens.taskListTimeLine.deadlineBorderWidth,
                 color: (widget.task.isDone)
-                    ? AppColors.deadlineDoneBorderColor
-                    : AppColors.deadlineUnDoneBorderColor)),
+                    ? context.secondaryContainerColor
+                    : context.deadlineColor)),
         child: Center(
             child: Text("${_technicalNameWithTranslationsStore.getTranslationByTechnicalName(LangKeys.deadline)}",
                 style: Theme.of(context).textTheme.bodySmall!.copyWith(
                     fontSize: 14,
                     color: (widget.task.isDone)
-                        ? AppColors.deadlineTextDoneColor
-                        : AppColors.deadlineTextUnDoneColor))));
+                        ? context.secondaryContainerColor
+                        : context.primaryColor))));
   }
 
   //general methods ............................................................

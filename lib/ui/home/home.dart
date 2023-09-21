@@ -16,6 +16,7 @@ import 'package:guide_wizard/widgets/step_timeline/step_timeline.dart';
 import 'package:material_dialog/material_dialog.dart';
 import 'package:provider/provider.dart';
 import 'package:shimmer/shimmer.dart';
+import 'package:guide_wizard/utils/extension/context_extensions.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({
@@ -60,10 +61,10 @@ class _HomeScreenState extends State<HomeScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: AppColors.main_color,
+      backgroundColor: context.primaryColor,
       appBar: _buildAppBar(),
       body: RefreshIndicator(
-        color: AppColors.main_color,
+        color: context.primaryColor,
         onRefresh: () async {
           DataLoadHandler(context: context).loadDataAndCheckForUpdate(refreshData: true);
         },
@@ -84,14 +85,14 @@ class _HomeScreenState extends State<HomeScreen> {
       automaticallyImplyLeading: false,
       toolbarHeight: Dimens.appBar.toolbarHeight,
       titleSpacing: Dimens.appBar.titleSpacing,
-      backgroundColor: AppColors.main_color,
+      backgroundColor: context.primaryColor,
       actions: _buildActions(context),
       title: Padding(
         padding: EdgeInsets.only(left: 10),
         child: Observer(
           builder: (_) => Text(
               _technicalNameWithTranslationsStore.getTranslationByTechnicalName(LangKeys.steps_title),
-              style: Theme.of(context).textTheme.titleLarge!.copyWith(color: AppColors.white),
+              style: Theme.of(context).textTheme.titleLarge!.copyWith(color: Theme.of(context).colorScheme.onPrimary),
           ),
         ),
       ),
@@ -173,7 +174,7 @@ class _HomeScreenState extends State<HomeScreen> {
           height: MediaQuery.of(context).size.height,
           width: MediaQuery.of(context).size.width,
           decoration: BoxDecoration(
-            color: AppColors.homeBodyColor,
+            color: context.lightBackgroundColor,
             borderRadius: BorderRadius.only(
               topLeft: Radius.circular(Dimens.homeScreen.bodyBorderRadius),
               topRight: Radius.circular(Dimens.homeScreen.bodyBorderRadius),
@@ -188,18 +189,9 @@ class _HomeScreenState extends State<HomeScreen> {
   }
 
   Widget _shimmerAll() {
-    return Shimmer(
-      period: Duration(seconds: 3),
-      gradient: LinearGradient(
-        colors: [
-          AppColors.shimmerGradientGreys[50]!,
-          AppColors.shimmerGradientGreys[100]!,
-          AppColors.shimmerGradientGreys[200]!,
-        ],
-        begin: Alignment(-1, -1),
-        end: Alignment(1, 1),
-        stops: [0.5, 0.75, 1],
-      ),
+    return Shimmer.fromColors(
+      baseColor: context.shimmerBaseColor,
+      highlightColor: context.shimmerHeighlightColor,
       child: _buildPlaceholderScreenElements(),
     );
   }
@@ -258,7 +250,7 @@ class _HomeScreenState extends State<HomeScreen> {
               margin: Dimens.homeScreen.questionsStepDescMargin,
               padding: Dimens.homeScreen.questionsStepDescPadding,
               decoration: BoxDecoration(
-                color: AppColors.timelineCompressedContainerColor,
+                color: context.containerColor,
                 borderRadius: BorderRadius.all(Radius.circular(Dimens.compressedTaskList.contentRadius)),
               ),
               child: RawScrollbar(
@@ -313,11 +305,32 @@ class _HomeScreenState extends State<HomeScreen> {
       children: [
         _buildPlaceholderCurrentStepIndicator(),
         _buildPlaceholderCarouselSliderContainer(),
+         _buildPlaceholderStepTimeline(),
         SizedBox(height: Dimens.homeScreen.StepTimelineProgressBarDistance),
         SizedBox(height: Dimens.homeScreen.progressBarCompressedTaskListDistance),
         _buildPlaceholderCompressedTaskListTimeline(),
       ],
     );
+  }
+
+  _buildPlaceholderStepTimeline(){
+    return Padding(
+      padding: Dimens.stepTimeLine.containerPadding,
+      child: Container(
+        width: MediaQuery.of(context).size.width,
+        height: 40,
+        decoration: BoxDecoration(
+            color: context.containerColor,
+            borderRadius: Dimens.stepTimeLine.containerBorderRadius,
+            boxShadow: [
+              BoxShadow(
+                  color: context.shadowColor,
+                  blurRadius: 0.3,
+                  offset: Offset(0, 2))
+            ]),
+      ),
+    );
+
   }
 
   _buildPlaceholderCurrentStepIndicator() {

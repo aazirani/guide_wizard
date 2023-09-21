@@ -9,6 +9,7 @@ import 'package:guide_wizard/widgets/sub_task_widget.dart';
 import 'package:guide_wizard/widgets/task_page_appbar_widget.dart';
 import 'package:provider/provider.dart';
 import 'package:render_metrics/render_metrics.dart';
+import 'package:guide_wizard/utils/extension/context_extensions.dart';
 
 class TaskPageTextOnly extends StatefulWidget {
   final Task task;
@@ -45,7 +46,7 @@ class _TaskPageTextOnlyState extends State<TaskPageTextOnly> {
   Widget build(BuildContext context) {
     return Observer(
       builder: (_) => Scaffold(
-        backgroundColor: AppColors.main_color,
+        backgroundColor: context.primaryColor,
         appBar: BlocksAppBarWidget(
           task: widget.task,
           step: widget.step,
@@ -59,11 +60,11 @@ class _TaskPageTextOnlyState extends State<TaskPageTextOnly> {
   Widget _buildScaffoldBody() {
     return SizedBox.expand(
       child: Container(
-        color: AppColors.main_color,
+        color: context.primaryColor,
         child: Container(
           decoration: BoxDecoration(
               borderRadius: Dimens.taskPage.textOnlyScaffoldBorder,
-              color: AppColors.bright_foreground_color),
+              color: context.lightBackgroundColor),
           child: _buildPageContent(),
         ),
       ),
@@ -86,7 +87,7 @@ class _TaskPageTextOnlyState extends State<TaskPageTextOnly> {
       padding: Dimens.taskPage.textOnlyListViewPadding,
       child: Text(
         _technicalNameWithTranslationsStore.getTranslation(widget.task.description),
-        style: Theme.of(context).textTheme.bodyLarge!.copyWith(color: AppColors.text_color,)
+        style: Theme.of(context).textTheme.bodyLarge!.copyWith(color: context.textOnLightBackgroundColor,)
       ),
     );
   }

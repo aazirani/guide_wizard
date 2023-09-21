@@ -12,6 +12,7 @@ import 'package:guide_wizard/widgets/sub_task_widget.dart';
 import 'package:guide_wizard/widgets/task_page_appbar_widget.dart';
 import 'package:provider/provider.dart';
 import 'package:render_metrics/render_metrics.dart';
+import 'package:guide_wizard/utils/extension/context_extensions.dart';
 
 class TaskPageWithImage extends StatefulWidget {
   final Task task;
@@ -50,7 +51,7 @@ class _TaskPageWithImageState extends State<TaskPageWithImage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: AppColors.main_color,
+      backgroundColor: context.primaryColor,
       body: CustomScrollView(
         physics: ClampingScrollPhysics(),
         slivers: [
@@ -69,21 +70,6 @@ class _TaskPageWithImageState extends State<TaskPageWithImage> {
       ),
     );
   }
-  
-  /*
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      backgroundColor: AppColors.main_color,
-      appBar: BlocksAppBarWidget(
-        task: widget.task,
-        step: widget.step,
-        title: _technicalNameWithTranslationsStore.getTranslation(widget.task.text),
-      ),
-      body: _buildScaffoldBody(),
-    );
-  }
-   */
 
   Widget _buildScaffoldBody() {
     return Stack(
@@ -119,7 +105,7 @@ class _TaskPageWithImageState extends State<TaskPageWithImage> {
           return Container(
             decoration: BoxDecoration(
               borderRadius: Dimens.taskPage.textOnlyScaffoldBorder,
-            color: AppColors.bright_foreground_color),
+            color: context.lightBackgroundColor),
             child: RawScrollbar(
               child: ListView.builder(
                 padding: EdgeInsets.zero,
@@ -152,7 +138,7 @@ class _TaskPageWithImageState extends State<TaskPageWithImage> {
       padding: Dimens.taskPage.textOnlyListViewPadding,
       child: Text(
         _technicalNameWithTranslationsStore.getTranslation(widget.task.description),
-        style: Theme.of(context).textTheme.bodyLarge!.copyWith(color: AppColors.text_color)
+        style: Theme.of(context).textTheme.bodyLarge!.copyWith(color: context.textOnLightBackgroundColor)
       ),
     );
   }

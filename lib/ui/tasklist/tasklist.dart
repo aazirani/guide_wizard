@@ -10,6 +10,7 @@ import 'package:guide_wizard/ui/tasklist/tasklist_timeline.dart';
 import 'package:guide_wizard/widgets/measure_size.dart';
 import 'package:guide_wizard/widgets/scrolling_overflow_text.dart';
 import 'package:provider/provider.dart';
+import 'package:guide_wizard/utils/extension/context_extensions.dart';
 
 class TaskList extends StatefulWidget {
   AppStep step;
@@ -38,7 +39,7 @@ class _TaskListState extends State<TaskList> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        backgroundColor: AppColors.main_color,
+        backgroundColor: context.primaryColor,
         appBar: _buildAppBar(),
         body: _buildBody());
   }
@@ -46,7 +47,7 @@ class _TaskListState extends State<TaskList> {
   //appBar methods .............................................................
   PreferredSizeWidget _buildAppBar() {
     return AppBar(
-        backgroundColor: AppColors.main_color,
+        backgroundColor: context.primaryColor,
         toolbarHeight: Dimens.appBar.toolbarHeight,
         titleSpacing: Dimens.appBar.toolbarHeight,
         title: ScrollingOverflowText(
@@ -54,7 +55,7 @@ class _TaskListState extends State<TaskList> {
           style: Theme.of(context)
               .textTheme
               .titleLarge!
-              .copyWith(color: AppColors.white),
+              .copyWith(color: context.textOnDarkBackgroundColor),
           overflowRatio: 0.77,
         ),
         leading: Padding(
@@ -64,7 +65,7 @@ class _TaskListState extends State<TaskList> {
               onPressed: () {
                 Navigator.pop(context);
               },
-              color: AppColors.white),
+              color: context.lightBackgroundColor),
         ));
   }
 
@@ -101,7 +102,7 @@ class _TaskListState extends State<TaskList> {
                     style: Theme.of(context)
                         .textTheme
                         .bodySmall!
-                        .copyWith(color: AppColors.white))),
+                        .copyWith(color: context.textOnDarkBackgroundColor))),
             SizedBox(height: 5),
             _buildProgressBar(),
           ],
@@ -119,7 +120,7 @@ class _TaskListState extends State<TaskList> {
         minChildSize: _getProgressBarHeight(),
         builder: (BuildContext context, ScrollController scrollController) {
           return Container(
-            color: AppColors.main_color,
+            color: context.primaryColor,
             child: Container(
               decoration: BoxDecoration(
                   borderRadius: BorderRadius.only(
@@ -128,7 +129,7 @@ class _TaskListState extends State<TaskList> {
                     topRight:
                         Radius.circular(Dimens.taskList.draggableScrollableSheetRadius),
                   ),
-                  color: AppColors.white),
+                  color: context.lightBackgroundColor),
               child: Column(children: [
                 SizedBox(height: Dimens.taskList.distanceFromAppBar),
                 Flexible(
@@ -164,9 +165,9 @@ class _TaskListState extends State<TaskList> {
             child: Observer(
               builder: (_) => LinearProgressIndicator(
                   value: calculateDoneRatio(),
-                  backgroundColor: AppColors.white,
+                  backgroundColor: context.lightBackgroundColor,
                   valueColor:
-                      AlwaysStoppedAnimation(AppColors.progressBarValueColor)),
+                      AlwaysStoppedAnimation(context.secondaryColor)),
             ),
           )),
     );

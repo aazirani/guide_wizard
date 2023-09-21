@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
-import 'package:guide_wizard/constants/colors.dart';
 import 'package:guide_wizard/constants/dimens.dart';
 import 'package:guide_wizard/stores/app_settings/app_settings_store.dart';
 import 'package:guide_wizard/stores/data/data_store.dart';
 import 'package:guide_wizard/stores/technical_name/technical_name_with_translations_store.dart';
+import 'package:guide_wizard/utils/extension/context_extensions.dart';
 import 'package:guide_wizard/widgets/diamond_indicator.dart';
 import 'package:provider/provider.dart';
 import 'package:timelines/timelines.dart';
@@ -76,7 +76,7 @@ class _CompressedTaskListTimelineState
   Widget _buildIndicator(taskIndex) {
     return Observer(
       builder: (_) => Container(
-          color: AppColors.transparent,
+          color: context.transparent,
           width: Dimens.compressedTaskList.timelineIndicatorDimens,
           height: Dimens.compressedTaskList.timelineIndicatorDimens,
           child: DiamondIndicator(fill: isTaskDone(taskIndex))
@@ -87,7 +87,7 @@ class _CompressedTaskListTimelineState
   Widget _buildConnector() {
     return SolidLineConnector(
         direction: Axis.vertical,
-        color: AppColors.timelineCompressedConnectorColor);
+        color: context.secondaryColor);
   }
 
   Widget _buildContents(index) {
@@ -95,7 +95,7 @@ class _CompressedTaskListTimelineState
       margin: Dimens.compressedTaskList.contentLeftMargin,
       padding: Dimens.compressedTaskList.contentPadding,
       decoration: BoxDecoration(
-        color: AppColors.timelineCompressedContainerColor,
+        color: context.containerColor,
         borderRadius: BorderRadius.all(Radius.circular(Dimens.compressedTaskList.contentRadius)),
       ),
       child: _buildContentTitle(index),

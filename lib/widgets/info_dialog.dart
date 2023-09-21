@@ -3,6 +3,7 @@ import 'dart:math' as math;
 import 'package:flutter/material.dart';
 import 'package:guide_wizard/constants/colors.dart';
 import 'package:guide_wizard/constants/dimens.dart';
+import 'package:guide_wizard/utils/extension/context_extensions.dart';
 import 'package:guide_wizard/widgets/measure_size.dart';
 import 'package:guide_wizard/widgets/questions_list_page_appBar.dart';
 
@@ -43,7 +44,7 @@ class _InfoDialogState extends State<InfoDialog> {
           initialChildSize: 1,
           builder: (_, controller) => Container(
             decoration: BoxDecoration(
-                color: AppColors.white,
+                color: context.lightBackgroundColor,
                 borderRadius: Dimens.taskPage.textOnlyScaffoldBorder,
             ),
             child: SafeArea(

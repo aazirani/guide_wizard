@@ -4,6 +4,7 @@ import 'package:guide_wizard/constants/colors.dart';
 import 'package:guide_wizard/constants/dimens.dart';
 import 'package:guide_wizard/stores/technical_name/technical_name_with_translations_store.dart';
 import 'package:guide_wizard/url_handler.dart';
+import 'package:guide_wizard/utils/extension/context_extensions.dart';
 import 'package:guide_wizard/widgets/measure_size.dart';
 import 'package:provider/provider.dart';
 import 'package:render_metrics/render_metrics.dart';
@@ -73,7 +74,7 @@ class _ExpansionContentState extends State<ExpansionContent> {
             alignment: Alignment.topLeft,
             child: Container(
               decoration: BoxDecoration(
-                  color: AppColors.orange[50]!.withOpacity(0.1),
+                  color: context.deadlineContainerColor,
                   ),
               child: Padding(
                   padding: Dimens.expansionContent.deadlineContentPadding,
@@ -85,7 +86,7 @@ class _ExpansionContentState extends State<ExpansionContent> {
                               padding: EdgeInsets.only(right: 8),
                               child: Icon(
                                 Icons.calendar_month,
-                                color: AppColors.orange[100],
+                                color: context.deadlineColor,
                               )),
                         ),
                         TextSpan(
@@ -111,13 +112,13 @@ class _ExpansionContentState extends State<ExpansionContent> {
       data: fixedJsonMarkdown(widget.markdown),
       styleSheet: MarkdownStyleSheet(
         blockquoteDecoration: BoxDecoration(
-          color: AppColors.blockquoteColor.withOpacity(0.2),
+          color: context.blockQuoteColor,
           borderRadius: BorderRadius.all(Radius.circular(5))
         ),
           p: Theme.of(context)
               .textTheme
               .bodyLarge!
-              .copyWith(color: AppColors.text_color)),
+              .copyWith(color: context.textOnLightBackgroundColor)),
     );
   }
 
