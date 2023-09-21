@@ -74,7 +74,7 @@ class _ExpansionContentState extends State<ExpansionContent> {
             alignment: Alignment.topLeft,
             child: Container(
               decoration: BoxDecoration(
-                  color: context.deadlineContainerColor.withOpacity(0.1),
+                  color: context.deadlineContainerColor,
                   ),
               child: Padding(
                   padding: Dimens.deadlineContentPadding,
@@ -112,7 +112,7 @@ class _ExpansionContentState extends State<ExpansionContent> {
       data: fixedJsonMarkdown(widget.markdown),
       styleSheet: MarkdownStyleSheet(
         blockquoteDecoration: BoxDecoration(
-          color: context.primaryContainerColor.withOpacity(0.2),
+          color: context.blockQuoteColor,
           borderRadius: BorderRadius.all(Radius.circular(5))
         ),
           p: Theme.of(context)

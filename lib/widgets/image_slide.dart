@@ -59,7 +59,7 @@ class _ImageSlideState extends State<ImageSlide> {
                 textDirection: TextDirection.ltr,
                 effect: ScrollingDotsEffect(
                   activeDotColor: context.lightBackgroundColor,
-                  dotColor: context.lightBackgroundColor.withOpacity(0.7),
+                  dotColor: context.dotColor,
                   activeStrokeWidth: 2.6,
                   activeDotScale: 1.3,
                   maxVisibleDots: 5,

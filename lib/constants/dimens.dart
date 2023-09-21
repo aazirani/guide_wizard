@@ -31,7 +31,6 @@ class Dimens {
   static const double subtaskTitleFontSize = 19;
   static const listTilePadding = EdgeInsets.symmetric(horizontal: 10, vertical: 5);
   static const deadlineContainerPadding = EdgeInsets.only(left: 10, top: 10, right: 15);
-  static const deadlineContainerColorOpacity = 0.05;
   static const deadlineContentPadding = EdgeInsets.all(10);
   static const deadlineContainerBorderWidth = 2.0;
 

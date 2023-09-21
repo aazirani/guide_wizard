@@ -161,9 +161,9 @@ class _StepSliderWidgetState extends State<StepSliderWidget> {
 
   Color _buildSliderColor(index) {
     if(_dataStore.stepIsDone(_dataStore.getStepByIndex(index).id)){
-      return context.secondaryColor.withOpacity(0.20);
+      return context.doneStepColor;
     }
-    return context.secondaryContainerColor.withOpacity(0.10);
+    return context.unDoneStepColor;
   }
 
   Widget _buildAvatar(int index, constraints) {
@@ -283,9 +283,9 @@ class _StepSliderWidgetState extends State<StepSliderWidget> {
   ButtonStyle _buildButtonStyle() {
     return ButtonStyle(
       backgroundColor: MaterialStateProperty.all(
-          context.lightBackgroundColor.withOpacity(0.5)),
+          context.continueButtonColor),
       overlayColor: MaterialStateColor.resolveWith(
-          (states) => context.secondaryContainerColor.withOpacity(0.3)),
+          (states) => context.continueOverlayColor),
       shape: MaterialStateProperty.all<RoundedRectangleBorder>(
         RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(Dimens.buttonRadius),

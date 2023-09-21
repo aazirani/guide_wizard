@@ -45,7 +45,7 @@ class _BlocksAppBarWidgetState extends State<BlocksAppBarWidget> {
     return ElevatedButton.styleFrom(
         padding: EdgeInsets.all(0),
         backgroundColor: widget.task.isDone ? context.lightBackgroundColor : context.primaryColor,
-        foregroundColor: context.lightBackgroundColor.withOpacity(0.1),
+        foregroundColor: context.doneButtonColor,
         shape: RoundedRectangleBorder(
           borderRadius:
               BorderRadius.circular(Dimens.doneUndoneButtonBorderRadius),

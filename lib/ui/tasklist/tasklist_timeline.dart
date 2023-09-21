@@ -162,7 +162,7 @@ class _TaskListTimeLineState extends State<TaskListTimeLine> {
           width: Dimens.doneBadgeWidth,
           decoration: BoxDecoration(
               border: Border.all(color: context.secondaryContainerColor),
-              color: context.secondaryColor.withOpacity(0.3),
+              color: context.doneBadgeColor,
               borderRadius: BorderRadius.all(Radius.circular(Dimens.doneBadgeBorderRadius))),
           child: Row(
             mainAxisAlignment: MainAxisAlignment.center,
@@ -196,7 +196,7 @@ class _TaskListTimeLineState extends State<TaskListTimeLine> {
         decoration: BoxDecoration(
             color: widget.task.isDone
                 ? context.lightBackgroundColor
-                : context.deadlineContainerColor.withOpacity(0.8),
+                : context.deadlineBadgeColor,
             borderRadius: Dimens.contentDeadlineBorderRadius,
             border: Border.all(
                 width: Dimens.deadlineBorderWidth,

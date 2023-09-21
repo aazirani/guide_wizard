@@ -317,7 +317,6 @@ class _HomeScreenState extends State<HomeScreen> {
     return Padding(
       padding: Dimens.stepTimelineContainerPadding,
       child: Container(
-        // width: _getScreenWidth(),
         width: MediaQuery.of(context).size.width,
         height: 40,
         decoration: BoxDecoration(

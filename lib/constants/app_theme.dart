@@ -27,7 +27,6 @@ class AppThemeData {
 
   static final Color _lightFocusColor = Colors.black.withOpacity(0.12);
   static final Color _darkFocusColor = Colors.white.withOpacity(0.12);
-  // static final Color _shimmerBaseColor = AppColors.
 
   static ThemeData lightThemeData = themeData(lightColorScheme, _lightFocusColor);
   static ThemeData darkThemeData = themeData(darkColorScheme, _darkFocusColor);
@@ -64,7 +63,6 @@ class AppThemeData {
     secondaryContainer: AppColors.green50,
     background: AppColors.white,
     onBackground: AppColors.blue200,
-    //deadline
     tertiary: AppColors.orange100,
     tertiaryContainer: AppColors.orange50,
     surface: AppColors.grey50,

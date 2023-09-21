@@ -79,21 +79,6 @@ class _TaskPageWithImageState extends State<TaskPageWithImage> {
       ),
     );
   }
-  
-  /*
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      backgroundColor: context.primaryColor,
-      appBar: BlocksAppBarWidget(
-        task: widget.task,
-        step: widget.step,
-        title: _technicalNameWithTranslationsStore.getTranslation(widget.task.text),
-      ),
-      body: _buildScaffoldBody(),
-    );
-  }
-   */
 
   Widget _buildScaffoldBody() {
     return Stack(

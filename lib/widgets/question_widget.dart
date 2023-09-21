@@ -145,7 +145,7 @@ class _QuestionWidgetState extends State<QuestionWidget> with AutomaticKeepAlive
     return ButtonStyle(
       minimumSize: MaterialStateProperty.all(sizeOfButton(scaleBy: scaleBy)),
       overlayColor: MaterialStateColor.resolveWith((states) => 
-      context.shadowColor.withOpacity(0.1)
+      context.closeButtonOverlayColor
       ),
       shape: MaterialStateProperty.all<RoundedRectangleBorder>(
         RoundedRectangleBorder(
@@ -177,7 +177,7 @@ class _QuestionWidgetState extends State<QuestionWidget> with AutomaticKeepAlive
     final selectedColor = color ?? context.primaryColor;
     return ButtonStyle(
       minimumSize: MaterialStateProperty.all(sizeOfButton(scaleBy: scaleBy)),
-      overlayColor: MaterialStateColor.resolveWith((states) => context.lightBackgroundColor.withOpacity(0.13)),
+      overlayColor: MaterialStateColor.resolveWith((states) => context.openButtonOverlayColor),
       backgroundColor: MaterialStateProperty.all<Color>(selectedColor),
       shape: MaterialStateProperty.all<RoundedRectangleBorder>(
         RoundedRectangleBorder(

@@ -43,7 +43,7 @@ class UrlHandler {
     ButtonStyle _textButtonStyle() {
       return ButtonStyle(
         overlayColor: MaterialStateColor.resolveWith((states) =>
-            context.primaryColor.withOpacity(0.13)),
+            context.openButtonOverlayColor),
         shape: MaterialStateProperty.all<RoundedRectangleBorder>(
           RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(5.0),
