@@ -1,6 +1,6 @@
 import 'package:get/get.dart';
 import 'package:guide_wizard/data/repository.dart';
-import 'package:guide_wizard/models/language/Language.dart';
+import 'package:guide_wizard/models/language/language.dart';
 import 'package:guide_wizard/models/technical_name/technical_name_with_translations.dart';
 import 'package:guide_wizard/models/technical_name/technical_name_with_translations_list.dart';
 import 'package:mobx/mobx.dart';
@@ -15,47 +15,66 @@ abstract class _TechnicalNameWithTranslationsStore with Store {
   Repository _repository;
   _TechnicalNameWithTranslationsStore(Repository repo) : this._repository = repo;
 
-  static ObservableFuture<TechnicalNameWithTranslationsList>emptyTechnicalNameWithTranslationsResponse = ObservableFuture.value(TechnicalNameWithTranslationsList(technicalNameWithTranslations: []));
+  static ObservableFuture<TechnicalNameWithTranslationsList>emptyTechnicalNameWithTranslationsResponse = ObservableFuture.value(TechnicalNameWithTranslationsList(technicalNameWithTranslations: ObservableList.of(List.empty())));
 
   @observable
   ObservableFuture<TechnicalNameWithTranslationsList>
-      fetchTechnicalNameWithTranslationsFuture =
-      ObservableFuture<TechnicalNameWithTranslationsList>(
-          emptyTechnicalNameWithTranslationsResponse);
+      fetchTechnicalNameWithTranslationsFuture = ObservableFuture<TechnicalNameWithTranslationsList>(emptyTechnicalNameWithTranslationsResponse);
 
   @observable
   int? language_id;
 
   @observable
   TechnicalNameWithTranslationsList technicalNameWithTranslationsList =
-      TechnicalNameWithTranslationsList(technicalNameWithTranslations: []);
-
-  @observable
-  bool success = false;
+      TechnicalNameWithTranslationsList(technicalNameWithTranslations: ObservableList.of(List.empty()));
 
   @computed
-  bool get loading =>
-      fetchTechnicalNameWithTranslationsFuture.status == FutureStatus.pending;
+  bool get technicalNameSuccess => fetchTechnicalNameWithTranslationsFuture.status == FutureStatus.fulfilled;
+
+  @computed
+  bool get technicalNameLoading => fetchTechnicalNameWithTranslationsFuture.status == FutureStatus.pending;
 
   @action
-  Future getTechnicalNameWithTranslations() async {
-    final future = _repository.getTechnicalNameWithTranslations();
-    fetchTechnicalNameWithTranslationsFuture = ObservableFuture(future);
-    await future.then((technicalNameWithTranslationsList) {
-      this.technicalNameWithTranslationsList =
-          technicalNameWithTranslationsList;
-    });
+  Future getTechnicalNameWithTranslationsFromDb() async {
+    try {
+      fetchTechnicalNameWithTranslationsFuture = ObservableFuture(_repository.getTechnicalNameWithTranslationsFromDb());
+      TechnicalNameWithTranslationsList? technicalNameWithTranslationsList = await fetchTechnicalNameWithTranslationsFuture;
+      this.technicalNameWithTranslationsList = technicalNameWithTranslationsList;
+      return technicalNameWithTranslationsList;
+    } catch (e) {
+      return TechnicalNameWithTranslationsList(
+          technicalNameWithTranslations: ObservableList.of(List.empty())
+      );
+    }
+  }
+
+  @action
+  Future getTechnicalNameWithTranslationsFromApi() async {
+    try {
+      fetchTechnicalNameWithTranslationsFuture = ObservableFuture(_repository.getTechnicalNameWithTranslationsFromApiAndInsert());
+      TechnicalNameWithTranslationsList? technicalNameWithTranslationsList = await fetchTechnicalNameWithTranslationsFuture;
+      this.technicalNameWithTranslationsList = technicalNameWithTranslationsList;
+      return technicalNameWithTranslationsList;
+    } catch (e) {
+      return TechnicalNameWithTranslationsList(
+          technicalNameWithTranslations: ObservableList.of(List.empty())
+      );
+    }
   }
 
   @action
   void setCurrentLocale(String languageCode) {
-    this.language_id = getSupportedLanguages().firstWhere(
-            (element) => element.language_code == languageCode,
-        orElse: () => getSupportedLanguages().firstWhere(
-                (element) => element.is_main_language,
-            orElse: () => getSupportedLanguages().first
-        )
-    ).id;
+    try{
+      this.language_id = getSupportedLanguages().firstWhere(
+              (element) => element.language_code == languageCode,
+          orElse: () => getSupportedLanguages().firstWhere(
+                  (element) => element.is_main_language,
+              orElse: () => getSupportedLanguages().first
+          )
+      ).id;
+    } catch (e){
+      this.language_id = 1;
+    }
   }
 
   @action
@@ -64,6 +83,11 @@ abstract class _TechnicalNameWithTranslationsStore with Store {
   }
 
   // methods: ..................................................................
+
+  Future<bool> isDataSourceEmpty() async {
+    return (await _repository.technicalNameWithTranslationsDatasourceCount()) == 0;
+  }
+
   String getTranslation(int id) {
     if (isTranslationsEmpty(id)) return "";
     try {

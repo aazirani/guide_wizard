@@ -1,145 +1,120 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
-import 'package:guide_wizard/constants/colors.dart';
 import 'package:guide_wizard/constants/dimens.dart';
-import 'package:guide_wizard/models/step/step_list.dart';
+import 'package:guide_wizard/stores/app_settings/app_settings_store.dart';
 import 'package:guide_wizard/stores/data/data_store.dart';
-import 'package:guide_wizard/stores/step/step_store.dart';
 import 'package:guide_wizard/stores/technical_name/technical_name_with_translations_store.dart';
+import 'package:guide_wizard/utils/extension/context_extensions.dart';
 import 'package:guide_wizard/widgets/diamond_indicator.dart';
 import 'package:provider/provider.dart';
 import 'package:timelines/timelines.dart';
 
-class CompressedTasklistTimeline extends StatefulWidget {
-  StepList stepList;
-  CompressedTasklistTimeline({Key? key, required this.stepList})
+class CompressedTaskListTimeline extends StatefulWidget {
+
+  CompressedTaskListTimeline({Key? key})
       : super(key: key);
 
   @override
-  State<CompressedTasklistTimeline> createState() =>
-      _CompressedTasklistTimelineState();
+  State<CompressedTaskListTimeline> createState() =>
+      _CompressedTaskListTimelineState();
 }
 
-class _CompressedTasklistTimelineState
-    extends State<CompressedTasklistTimeline> {
+class _CompressedTaskListTimelineState
+    extends State<CompressedTaskListTimeline> {
   late DataStore _dataStore;
-  late StepStore _stepStore;
   late TechnicalNameWithTranslationsStore _technicalNameWithTranslationsStore;
+  late AppSettingsStore _appSettingsStore;
 
   @override
   void didChangeDependencies() {
     super.didChangeDependencies();
     // initializing stores
-    _stepStore = Provider.of<StepStore>(context);
     _dataStore = Provider.of<DataStore>(context);
     _technicalNameWithTranslationsStore =
         Provider.of<TechnicalNameWithTranslationsStore>(context);
+    _appSettingsStore = Provider.of<AppSettingsStore>(context);
   }
 
   @override
   Widget build(BuildContext context) {
-    return _buildTimelineContainer();
-  }
-
-  Widget _buildTimelineContainer() {
-    return Container(
-      padding: Dimens.timelineContainerPadding,
-      height: _getScreenHeight() / 2.8,
-      width: double.infinity,
-      child: Align(
-        alignment: Alignment.topLeft,
-        child: _buildTimeline(),
-      ),
-    );
+    return _buildTimeline();
   }
 
   Widget _buildTimeline() {
     return Observer(
-      builder: (_) => Align(
-        alignment: Alignment.topLeft,
+      builder: (_) => RawScrollbar(
         child: Timeline.tileBuilder(
-            theme: TimelineThemeData(
-              direction: Axis.vertical,
-              nodePosition: Dimens.timelineNodePosition,
-            ),
-            builder: TimelineTileBuilder(
-              itemCount: _dataStore.getNumberOfSteps() == 0
-                  ? 0
-                  : _dataStore.getNumberOfTasksFromAStep((_stepStore.currentStep) - 1),
-              itemExtent: 70,
-              contentsBuilder: (context, index) =>
-                  _buildContents(index, _stepStore),
-              indicatorBuilder: (context, index) => _buildIndicator(index, _stepStore.currentStep),
-              startConnectorBuilder: (context, index) => index == 0 && (_stepStore.currentStep) - 1 == 1
-                  ? Container()
-                  : _buildConnector(),
-              endConnectorBuilder: (context, index) => (_stepStore.currentStep)  == _dataStore.getNumberOfSteps()
-                  ? Container()
-                  : _buildConnector(),
-            )),
+          shrinkWrap: true,
+          theme: TimelineThemeData(
+            direction: Axis.vertical,
+            nodePosition: Dimens.compressedTaskList.timelineNodePosition,
+          ),
+          builder: TimelineTileBuilder(
+            itemCount: _dataStore.getAllSteps.length == 0
+                ? 0
+                : _dataStore.getStepById(_appSettingsStore.currentStepId).tasks.length,
+            itemExtent: Dimens.compressedTaskList.timeLineItemExtend,
+            contentsBuilder: (context, index) =>
+                _buildContents(index),
+            indicatorBuilder: (context, index) => _buildIndicator(index),
+            startConnectorBuilder: (context, index) => index == 0
+                ? Container()
+                : _buildConnector(),
+            endConnectorBuilder: (context, index) => index == _dataStore.getStepById(_appSettingsStore.currentStepId).tasks.length - 1
+                ? Container()
+                : _buildConnector(),
+          ),
+        ),
       ),
     );
   }
 
-  bool isTaskDone(taskIndex, currentStepIndex){
-    return _dataStore.allTasks
-        .tasks.where((element) => element.step_id == _dataStore.stepList.steps[currentStepIndex - 1].id).toList()[taskIndex].isDone;
+  bool isTaskDone(index){
+    return _dataStore.getStepById(_appSettingsStore.currentStepId).tasks.elementAt(index).isDone;
   }
 
-  Widget _buildIndicator(taskIndex, currentStepIndex) {
-    return Container(
-        color: AppColors.transparent,
-        width: Dimens.timelineIndicatorDimens,
-        height: Dimens.timelineIndicatorDimens,
-        child: DiamondIndicator(fill: isTaskDone(taskIndex, currentStepIndex),));
+  Widget _buildIndicator(taskIndex) {
+    return Observer(
+      builder: (_) => Container(
+          color: context.transparent,
+          width: Dimens.compressedTaskList.timelineIndicatorDimens,
+          height: Dimens.compressedTaskList.timelineIndicatorDimens,
+          child: DiamondIndicator(fill: isTaskDone(taskIndex))
+      ),
+    );
   }
 
   Widget _buildConnector() {
     return SolidLineConnector(
         direction: Axis.vertical,
-        color: AppColors.timelineCompressedConnectorColor);
+        color: context.secondaryColor);
   }
 
-  Widget _buildContents(index, stepStore) {
+  Widget _buildContents(index) {
     return Container(
-      width: _getScreenWidth() / 1.23,
-      height: _getScreenHeight() / 15,
-      margin: Dimens.contentLeftMargin,
-      padding: Dimens.compressedTaskListContentPadding,
+      margin: Dimens.compressedTaskList.contentLeftMargin,
+      padding: Dimens.compressedTaskList.contentPadding,
       decoration: BoxDecoration(
-        color: AppColors.timelineCompressedContainerColor,
-        borderRadius: BorderRadius.all(Radius.circular(Dimens.contentRadius)),
+        color: context.containerColor,
+        borderRadius: BorderRadius.all(Radius.circular(Dimens.compressedTaskList.contentRadius)),
       ),
-      child: Row(
-        children: [
-          _buildContentTitle(index, stepStore),
-        ],
-      ),
+      child: _buildContentTitle(index),
     );
   }
 
-  Widget _buildContentTitle(index, stepStore) {
-    var stepTitleId = _dataStore.getTaskTitleId(stepStore.currentStep - 1, index);
-    return Flexible(
-      child: Align(
-        alignment: Alignment.centerLeft,
-        child: Text(
-            "${_technicalNameWithTranslationsStore.getTranslation(stepTitleId)}",
-            style: TextStyle(
-              color: AppColors.main_color,
-              fontSize: Dimens.taskListTimeLineContentTitle,
-            )),
-      ),
+  Widget _buildContentTitle(index) {
+    return Row(
+      children: [
+        Flexible(
+          child: Align(
+            alignment: Alignment.centerLeft,
+            child: Text(
+              "${_technicalNameWithTranslationsStore.getTranslation(_dataStore.getStepById(_appSettingsStore.currentStepId).tasks.elementAt(index).text)}",
+              style: Theme.of(context).textTheme.bodyMedium
+            ),
+          ),
+        ),
+      ],
     );
   }
-
-  Widget _buildContentMoreButton() {
-    return Align(
-        alignment: Alignment.centerRight,
-        child: Icon(Icons.more_vert, color: AppColors.main_color));
-  }
-
-  //general methods ............................................................
-  double _getScreenHeight() => MediaQuery.of(context).size.height;
-  double _getScreenWidth() => MediaQuery.of(context).size.width;
 }

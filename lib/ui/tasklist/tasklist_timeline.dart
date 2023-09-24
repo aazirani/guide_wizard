@@ -1,34 +1,33 @@
 import 'package:flutter/material.dart';
-import 'package:guide_wizard/constants/colors.dart';
+import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:guide_wizard/constants/dimens.dart';
 import 'package:guide_wizard/constants/lang_keys.dart';
-import 'package:guide_wizard/stores/data/data_store.dart';
-import 'package:guide_wizard/stores/step/step_store.dart';
+import 'package:guide_wizard/models/step/app_step.dart';
+import 'package:guide_wizard/models/task/task.dart';
 import 'package:guide_wizard/stores/technical_name/technical_name_with_translations_store.dart';
 import 'package:guide_wizard/ui/tasks/task_page_text_only.dart';
 import 'package:guide_wizard/ui/tasks/task_page_with_image.dart';
 import 'package:guide_wizard/widgets/diamond_indicator.dart';
 import 'package:provider/provider.dart';
 import 'package:timelines/timelines.dart';
+import 'package:guide_wizard/utils/extension/context_extensions.dart';
 
 class TaskListTimeLine extends StatefulWidget {
-  // final TaskList taskList;
-  final int taskNumber;
-  final StepStore stepStore;
-  TaskListTimeLine({Key? key, required this.taskNumber, required this.stepStore}) : super(key: key);
+  final AppStep step;
+  final Task task;
+  final int index;
+  TaskListTimeLine({Key? key, required this.step, required this.task, required this.index}) : super(key: key);
 
   @override
   State<TaskListTimeLine> createState() => _TaskListTimeLineState();
 }
 
 class _TaskListTimeLineState extends State<TaskListTimeLine> {
-  late DataStore _dataStore;
   late TechnicalNameWithTranslationsStore _technicalNameWithTranslationsStore;
   @override
   void didChangeDependencies() {
     super.didChangeDependencies();
     // initializing stores
-    _dataStore = Provider.of<DataStore>(context);
     _technicalNameWithTranslationsStore =
         Provider.of<TechnicalNameWithTranslationsStore>(context);
   }
@@ -39,71 +38,77 @@ class _TaskListTimeLineState extends State<TaskListTimeLine> {
         onTap: () {
           _navigateToTaskPage();
         },
-        child: _buildTimeline(widget.taskNumber));
+        child: _buildTimeline());
   }
 
-  Widget _buildTimeline(taskNumber) {
-    return TimelineTile(
-      nodePosition: 0.05,
-      contents: _buildContents(taskNumber),
-      node: TimelineNode(
-        indicator: _buildIndicator(taskNumber),
-        startConnector: taskNumber == 0 && (widget.stepStore.currentStep) - 1 == 1
-            ? Container()
-            : _buildConnector(),
-        endConnector: (widget.stepStore.currentStep)  == _dataStore.getNumberOfSteps()
-            ? Container()
-            : _buildConnector(),
+  Widget _buildTimeline() {
+    return Observer(
+      builder: (_) => TimelineTile(
+        nodePosition: 0.05,
+        contents: _buildContents(),
+        node: TimelineNode(
+          indicator: _buildIndicator(),
+          startConnector: widget.index == 0
+              ? Container()
+              : _buildConnector(),
+          endConnector: widget.index == widget.step.tasks.length - 1
+              ? Container()
+              : _buildConnector(),
+        ),
       ),
     );
   }
 
-  Widget _buildIndicator(taskNumber) {
+  Widget _buildIndicator() {
     return Container(
-        color: AppColors.transparent,
+        color: context.transparent,
         width: 8,
         height: 8,
-        child: (_taskDone(taskNumber))
+        child: (widget.task.isDone)
             ? DiamondIndicator(fill: true)
             : DiamondIndicator());
   }
 
   Widget _buildConnector() {
     return SolidLineConnector(
-        direction: Axis.vertical, color: AppColors.tasklistConnectorColor);
+        direction: Axis.vertical, color: context.secondaryColor);
   }
 
-  Widget _buildContents(taskNumber) {
+  Widget _buildContents() {
     return Padding(
-      padding: Dimens.contentContainerPadding,
+      padding: Dimens.taskListTimeLine.contentContainerPadding,
       child: Material(
-        elevation: 5,
-        borderRadius: Dimens.contentContainerBorderRadius,
-        child: ClipRRect(
-          borderRadius: Dimens.contentContainerBorderRadius,
+        elevation: widget.task.isDone ? 3 : 4,
+        borderRadius: Dimens.taskListTimeLine.contentContainerBorderRadius,
+        child: Container(
+          decoration: BoxDecoration(
+            color: context.lightBackgroundColor,
+            borderRadius: Dimens.taskListTimeLine.contentContainerBorderRadius,
+          ),
           child: Container(
-            padding: Dimens.contentPadding,
+            padding: Dimens.taskListTimeLine.contentPadding,
             constraints: BoxConstraints(
-              minHeight: Dimens.taskListTimeLineContainerMinHeight,
+              minHeight: Dimens.taskListTimeLine.containerMinHeight,
+              maxHeight: Dimens.taskListTimeLine.containerMinHeight,
             ),
             decoration: BoxDecoration(
-              color: AppColors.contentColor,
-              border: Border(
-                  left: BorderSide(
-                width: 25,
-                color: (_dataStore.getTaskIsDoneStatus(taskNumber) == true)
-                    ? AppColors.contentDoneBorderColor
-                    : AppColors.contentUnDoneBorderColor,
-              )),
+              color: context.lightBackgroundColor,
+              borderRadius: Dimens.taskListTimeLine.contentContainerBorderRadius,
+              border: Border.all(
+                width: widget.task.isDone ? 1 : 3,
+                color: (widget.task.isDone)
+                    ? context.secondaryContainerColor
+                    : context.primaryColor,
+              ),
             ),
-            child: _buildInsideElements(taskNumber),
+            child: _buildInsideElements(),
           ),
         ),
       ),
     );
   }
 
-  Widget _buildInsideElements(taskNumber) {
+  Widget _buildInsideElements() {
     return GestureDetector(
       onTap: () {
         _navigateToTaskPage();
@@ -115,98 +120,117 @@ class _TaskListTimeLineState extends State<TaskListTimeLine> {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 mainAxisAlignment: MainAxisAlignment.center,
-                children: (_deadLineAvailable(taskNumber))
+                children: (_deadLineAvailable())
                     ? [
-                        _buildContentTitle(taskNumber),
-                        _buildContentDeadline(taskNumber),
+                        _buildContentTitle(),
+                        _buildContentDeadline(),
                       ]
-                    : [_buildContentTitle(taskNumber)],
+                    : [_buildContentTitle()],
               ),
             ),
+            widget.task.isDone ? _buildDoneBadge() : Container(),
           ],
         ),
       ),
     );
   }
 
-  Widget _buildContentTitle(taskNumber) {
-    //text id of the task we want to find the title of
-    var title_id = _dataStore.getTaskTitleIdByIndex(taskNumber);
+  Widget _buildContentTitle() {
     return Flexible(
       child: Align(
         alignment: Alignment.centerLeft,
         child: Text(
-          "${_technicalNameWithTranslationsStore.getTranslation(title_id)} ",
-          style: TextStyle(
-            color: AppColors.main_color,
-            fontSize: Dimens.taskListTimeLineContentTitle,
-          ),
+          "${_technicalNameWithTranslationsStore.getTranslation(widget.task.text)} ",
+          style: Theme.of(context)
+              .textTheme
+              .titleSmall!
+              .copyWith(fontWeight: FontWeight.normal),
         ),
       ),
     );
   }
 
-  Widget _buildContentDeadline(taskNumber) {
+  Widget _buildDoneBadge() {
+    return Align(
+      alignment: Alignment.topRight,
+      child: Container(
+          height: Dimens.taskListTimeLine.doneBadgeHeight,
+          width: Dimens.taskListTimeLine.doneBadgeWidth,
+          decoration: BoxDecoration(
+              border: Border.all(color: context.secondaryContainerColor),
+              color: context.doneBadgeColor,
+              borderRadius: BorderRadius.all(Radius.circular(Dimens.taskListTimeLine.doneBadgeBorderRadius))),
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Flexible(
+                  flex: 3,
+                  child: Text(
+                    "${_technicalNameWithTranslationsStore.getTranslationByTechnicalName(LangKeys.done_task)}",
+                      style: TextStyle(
+                          color: context.primaryColor,
+                          fontSize: Dimens.taskListTimeLine.doneBadgeFontSize,
+                          fontWeight: FontWeight.w800))),
+            ],
+          )),
+    );
+  }
+
+  Widget _buildContentDeadline() {
     return Container(
-        padding: Dimens.contentDeadlineTopPadding,
+        padding: Dimens.taskListTimeLine.contentDeadlineTopPadding,
         width: 80,
         height: 40,
-        child: (_deadLineAvailable(taskNumber))
-            ? _buildDeadlineContainer(taskNumber)
+        child: (_deadLineAvailable())
+            ? _buildDeadlineContainer()
             : null);
   }
 
-  Widget _buildDeadlineContainer(taskNumber) {
+  Widget _buildDeadlineContainer() {
     return Container(
-        height: 10,
+        height: Dimens.taskListTimeLine.deadlineContainerHeight,
         decoration: BoxDecoration(
-            borderRadius: Dimens.contentDeadlineBorderRadius,
+            color: widget.task.isDone
+                ? context.lightBackgroundColor
+                : context.deadlineBadgeColor,
+            borderRadius: Dimens.taskListTimeLine.contentDeadlineBorderRadius,
             border: Border.all(
-                width: 1,
-                color: (_taskDone(taskNumber))
-                    ? AppColors.deadlineDoneBorderColor
-                    : AppColors.deadlineUnDoneBorderColor)),
+                width: Dimens.taskListTimeLine.deadlineBorderWidth,
+                color: (widget.task.isDone)
+                    ? context.secondaryContainerColor
+                    : context.deadlineColor)),
         child: Center(
             child: Text("${_technicalNameWithTranslationsStore.getTranslationByTechnicalName(LangKeys.deadline)}",
-                style: TextStyle(
-                    fontSize: 13,
-                    color: (_taskDone(taskNumber)
-                        ? AppColors.deadlineTextDoneColor
-                        : AppColors.deadlineTextUnDoneColor)))));
+                style: Theme.of(context).textTheme.bodySmall!.copyWith(
+                    fontSize: 14,
+                    color: (widget.task.isDone)
+                        ? context.secondaryContainerColor
+                        : context.primaryColor))));
   }
 
   //general methods ............................................................
-  double _getScreenWidth() => MediaQuery.of(context).size.width;
 
-  bool _deadLineAvailable(taskNumber) {
-    bool status = _dataStore.taskList.tasks[taskNumber].sub_tasks.any(
-        (sub_task) => _technicalNameWithTranslationsStore
+  bool _deadLineAvailable() {
+    return widget.task.sub_tasks.any(
+            (sub_task) => _technicalNameWithTranslationsStore
             .getTranslation(sub_task.deadline)
             .isNotEmpty);
-    switch (status) {
-      case false:
-        return false;
-    }
-    return true;
-  }
-
-  bool _taskDone(taskNumber) {
-    switch (_dataStore.getTaskIsDoneStatus(taskNumber)) {
-      case true:
-        return true;
-    }
-    return false;
   }
 
   void _navigateToTaskPage() {
-    final taskNumber = widget.taskNumber;
-    final taskType = _dataStore.getTaskType(taskNumber);
-    final taskId = _dataStore.getTaskId(taskNumber);
-    final task = _dataStore.getTaskByIndex(taskNumber);
-
-    final taskPage = taskType
-        ? TaskPageTextOnly(taskId: taskId)
-        : TaskPageWithImage(task: task);
+    Widget taskPage = Container();
+    if(widget.task.isTypeOfText){
+      taskPage = TaskPageTextOnly(
+        task: widget.task,
+        step: widget.step,
+      );
+    }
+    if(widget.task.isTypeOfImage){
+      taskPage = TaskPageWithImage(
+        task: widget.task,
+        step: widget.step,
+      );
+    }
 
     Navigator.push(
       context,

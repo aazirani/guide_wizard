@@ -1,21 +1,22 @@
+import 'dart:math' as math;
+
 import 'package:flutter/material.dart';
-import 'package:flutter_mobx/flutter_mobx.dart';
-import 'package:guide_wizard/constants/colors.dart';
 import 'package:guide_wizard/constants/dimens.dart';
+import 'package:guide_wizard/models/step/app_step.dart';
 import 'package:guide_wizard/models/task/task.dart';
 import 'package:guide_wizard/stores/technical_name/technical_name_with_translations_store.dart';
 import 'package:guide_wizard/widgets/image_slide.dart';
 import 'package:guide_wizard/widgets/measure_size.dart';
-import 'package:guide_wizard/widgets/questions_list_page_appBar.dart';
 import 'package:guide_wizard/widgets/sub_task_widget.dart';
 import 'package:guide_wizard/widgets/task_page_appbar_widget.dart';
 import 'package:provider/provider.dart';
 import 'package:render_metrics/render_metrics.dart';
-import 'dart:math' as math;
+import 'package:guide_wizard/utils/extension/context_extensions.dart';
 
 class TaskPageWithImage extends StatefulWidget {
-  Task task;
-  TaskPageWithImage({Key? key, required this.task}) : super(key: key);
+  final Task task;
+  final AppStep step;
+  TaskPageWithImage({Key? key, required this.task, required this.step}) : super(key: key);
 
   @override
   State<TaskPageWithImage> createState() => _TaskPageWithImageState();
@@ -23,6 +24,7 @@ class TaskPageWithImage extends StatefulWidget {
 
 class _TaskPageWithImageState extends State<TaskPageWithImage> {
   RenderParametersManager renderManager = RenderParametersManager<dynamic>();
+  // stores:--------------------------------------------------------------------
   late TechnicalNameWithTranslationsStore _technicalNameWithTranslationsStore;
   var imageSlideSize = Size.zero;
 
@@ -30,7 +32,8 @@ class _TaskPageWithImageState extends State<TaskPageWithImage> {
   void didChangeDependencies() {
     super.didChangeDependencies();
     // initializing stores
-    _technicalNameWithTranslationsStore = Provider.of<TechnicalNameWithTranslationsStore>(context);
+    _technicalNameWithTranslationsStore =
+        Provider.of<TechnicalNameWithTranslationsStore>(context);
   }
 
   @override
@@ -40,24 +43,30 @@ class _TaskPageWithImageState extends State<TaskPageWithImage> {
 
   double _getHeightOfDraggableScrollableSheet() {
     double screenHeight = MediaQuery.of(context).size.height;
-    double widgetSize = (screenHeight - (Dimens.blocksAppBarWidgetHeight + imageSlideSize.height) + MediaQuery.of(context).padding.top + 25) / (screenHeight);
+    double widgetSize = (screenHeight - (Dimens.taskPage.blocksAppBarWidgetHeight + imageSlideSize.height) + MediaQuery.of(context).padding.top + 25) / (screenHeight);
     return math.min(widgetSize, 1);
-  }
-
-  double _getMaxHeightOfDraggableScrollableSheet() {
-    double screenHeight = MediaQuery.of(context).size.height;
-    return (screenHeight - 20) / (screenHeight);
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: AppColors.main_color,
-      appBar: BlocksAppBarWidget(
-        taskId: widget.task.id,
-        title: _technicalNameWithTranslationsStore.getTranslation(widget.task.text),
+      backgroundColor: context.primaryColor,
+      body: CustomScrollView(
+        physics: ClampingScrollPhysics(),
+        slivers: [
+          SliverAppBar(
+            automaticallyImplyLeading: false,
+            flexibleSpace: BlocksAppBarWidget(
+              task: widget.task,
+              step: widget.step,
+              title: _technicalNameWithTranslationsStore.getTranslation(widget.task.text),
+            ), // Your custom widget goes here
+          ),
+          SliverFillRemaining(
+            child: _buildScaffoldBody()
+          ),
+        ],
       ),
-      body: _buildScaffoldBody(),
     );
   }
 
@@ -91,18 +100,18 @@ class _TaskPageWithImageState extends State<TaskPageWithImage> {
         snap: true,
         initialChildSize: _getHeightOfDraggableScrollableSheet(),
         minChildSize: _getHeightOfDraggableScrollableSheet(),
-        maxChildSize: math.max(_getMaxHeightOfDraggableScrollableSheet(), _getHeightOfDraggableScrollableSheet()),
         builder: (BuildContext context, ScrollController scrollController) {
           return Container(
             decoration: BoxDecoration(
-              borderRadius: Dimens.taskPageTextOnlyScaffoldBorder,
-            color: AppColors.bright_foreground_color),
+              borderRadius: Dimens.taskPage.textOnlyScaffoldBorder,
+            color: context.lightBackgroundColor),
             child: RawScrollbar(
               child: ListView.builder(
+                padding: EdgeInsets.zero,
                 scrollDirection: Axis.vertical,
                 shrinkWrap: true,
                 controller: scrollController,
-                itemCount: 1 + widget.task.subTaskCount,
+                itemCount: widget.task.sub_tasks.length + 1,
                 itemBuilder: _buildDraggableSheetItems,
               ),
             ),
@@ -116,22 +125,19 @@ class _TaskPageWithImageState extends State<TaskPageWithImage> {
     if(i == 0) return _buildDescription();
     return SubTaskWidget(
       index: i - 1,
-      subTasks: widget.task.sub_tasks,
+      task: widget.task,
+      step: widget.step,
       renderManager: renderManager,
     );
   }
 
   _buildDescription() {
-    if (_technicalNameWithTranslationsStore.getTranslation(widget.task.description) == "") return SizedBox(height: Dimens.taskPageTextOnlyListViewPadding.top,);
+    if (_technicalNameWithTranslationsStore.getTranslation(widget.task.description) == "") return SizedBox(height: Dimens.taskPage.textOnlyListViewPadding.top,);
     return Padding(
-      padding: Dimens.taskPageTextOnlyListViewPadding,
-      child: Observer(
-        builder: (context) {
-          return Text(
-            _technicalNameWithTranslationsStore.getTranslation(widget.task.description),
-            style: TextStyle(fontSize: Dimens.descriptionFontSize, color: AppColors.main_color),
-          );
-        },
+      padding: Dimens.taskPage.textOnlyListViewPadding,
+      child: Text(
+        _technicalNameWithTranslationsStore.getTranslation(widget.task.description),
+        style: Theme.of(context).textTheme.bodyLarge!.copyWith(color: context.textOnLightBackgroundColor)
       ),
     );
   }

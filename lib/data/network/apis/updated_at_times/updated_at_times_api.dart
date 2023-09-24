@@ -20,7 +20,7 @@ class UpdatedAtTimesApi{
   Future<UpdatedAtTimes> getUpdatedAtTimes(String parameters) async {
     try {
       final res = json.decode(await _dioClient.get(Endpoints.getUpdatedAtTimes + parameters));
-      return UpdatedAtTimes.fromJson([res]);
+      return UpdatedAtTimesFactory().fromJson([res]);
     } catch (e) {
       print(e.toString());
       throw e;

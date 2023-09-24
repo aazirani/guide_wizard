@@ -1,4 +1,4 @@
-import 'package:fast_cached_network_image/fast_cached_network_image.dart';
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:guide_wizard/constants/dimens.dart';
 import 'package:guide_wizard/constants/lang_keys.dart';
@@ -27,11 +27,10 @@ class _LoadImageWithCacheState extends State<LoadImageWithCache> with SingleTick
 
   @override
   Widget build(BuildContext context) {
-    return FastCachedImage(
-      url: widget.imageUrl,
+    return CachedNetworkImage(
+      imageUrl: widget.imageUrl,
       fit: BoxFit.cover,
-      fadeInDuration: const Duration(milliseconds: 500),
-      errorBuilder: (context, exception, stacktrace) {
+      errorWidget: (context, url, error) {
         return Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
@@ -39,23 +38,24 @@ class _LoadImageWithCacheState extends State<LoadImageWithCache> with SingleTick
             SizedBox(height: 5,),
             Text(
               _technicalNameWithTranslationsStore.getTranslationByTechnicalName(LangKeys.could_not_load),
-              style: TextStyle(fontSize: Dimens.imageCouldntLoadFontSize, color: widget.color),)
+              style: TextStyle(fontSize: Dimens.loadImageWithCache.imageCouldNotLoadFontSize, color: widget.color),)
           ],
         );
       },
-      loadingBuilder: (context, progress) {
+      progressIndicatorBuilder: (context, url, downloadProgress)  {
         return Center(
           child: Container(
             height: 120,
             width: double.infinity,
             child: Center(
               child: Container(
-                width: Dimens.imageLoadingIndicatorSize["width"],
-                height: Dimens.imageLoadingIndicatorSize["height"],
+                width: Dimens.loadImageWithCache.imageLoadingIndicatorSize["width"],
+                height: Dimens.loadImageWithCache.imageLoadingIndicatorSize["height"],
                 child: SizedBox(
                   child: CircularProgressIndicator(
                     strokeWidth: 4.5,
                     color: widget.color,
+                    value: downloadProgress.progress,
                     // value: progress.progressPercentage.value // Can use it to show the actual process of downloading
                   ),
                 ),

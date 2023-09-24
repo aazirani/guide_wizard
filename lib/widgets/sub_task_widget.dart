@@ -1,33 +1,35 @@
 import 'package:flutter/material.dart';
-import 'package:guide_wizard/constants/colors.dart';
 import 'package:guide_wizard/constants/dimens.dart';
-import 'package:guide_wizard/models/sub_task/sub_task.dart';
+import 'package:guide_wizard/models/step/app_step.dart';
+import 'package:guide_wizard/models/task/task.dart';
 import 'package:guide_wizard/stores/technical_name/technical_name_with_translations_store.dart';
 import 'package:guide_wizard/widgets/app_expansiontile.dart';
 import 'package:guide_wizard/widgets/expansion_content.dart';
 import 'package:provider/provider.dart';
 import 'package:render_metrics/render_metrics.dart';
+import 'package:guide_wizard/utils/extension/context_extensions.dart';
 
 class SubTaskWidget extends StatefulWidget {
-  int index;
-  List<SubTask> subTasks;
+  final int index;
+  final Task task;
+  final AppStep step;
   RenderParametersManager renderManager;
-  String? deadline;
   SubTaskWidget({
     Key? key,
     required this.index,
-    required this.subTasks,
+    required this.task,
     required this.renderManager,
-    this.deadline,
+    required this.step
   }) : super(key: key);
 
   @override
   State<SubTaskWidget> createState() => SubTaskWidgetState();
 }
 
-class SubTaskWidgetState extends State<SubTaskWidget>
-    with AutomaticKeepAliveClientMixin {
+class SubTaskWidgetState extends State<SubTaskWidget> with AutomaticKeepAliveClientMixin {
+  // stores:--------------------------------------------------------------------
   late TechnicalNameWithTranslationsStore _technicalNameWithTranslationsStore;
+
   @override
   void didChangeDependencies() {
     super.didChangeDependencies();
@@ -37,27 +39,26 @@ class SubTaskWidgetState extends State<SubTaskWidget>
 
   void _runAtExpanding() {
     setState(() {
-      widget.subTasks.map((element) {
+      widget.task.subTasks.map((element) {
         if (element.expanded) {
-          element.rebuildGlobalKey();
           element.expanded = false;
         }
       });
-      widget.subTasks[widget.index].toggleExpanded();
+      widget.task.subTasks[widget.index].toggleExpanded();
     });
   }
 
   Widget _buildExpansionContent() {
-    var markdown_id = widget.subTasks[widget.index].markdown;
+    var markdown_id = widget.task.subTasks[widget.index].markdown;
     return ExpansionContent(
             renderManager: widget.renderManager,
-            markdown: _technicalNameWithTranslationsStore.getTranslation(markdown_id)!,
-            deadline: widget.deadline);
+            markdown: _technicalNameWithTranslationsStore.getTranslation(markdown_id),
+            deadline: _technicalNameWithTranslationsStore.getTranslation(widget.task.subTasks[widget.index].deadline));
   }
 
 
   Widget _buildAppExpansionTileWidget() {
-    var sub_task_title_id = widget.subTasks[widget.index].title;
+    var sub_task_title_id = widget.task.subTasks[widget.index].title;
       return AppExpansionTile(
         onExpansionChanged: ((isNewState) {
           if (isNewState) {
@@ -65,13 +66,13 @@ class SubTaskWidgetState extends State<SubTaskWidget>
           }
         }),
         maintainState: true,
-        textColor: AppColors.main_color,
-        iconColor: AppColors.main_color,
+        textColor: context.primaryColor,
+        iconColor: context.primaryColor,
         title: Text(
-          _technicalNameWithTranslationsStore.getTranslation(sub_task_title_id)!,
-          style: TextStyle(fontSize: Dimens.subtaskTitleFontSize),
+          _technicalNameWithTranslationsStore.getTranslation(sub_task_title_id),
+          style: Theme.of(context).textTheme.titleMedium
         ),
-        key: widget.subTasks[widget.index].globalKey,
+        key: Key(widget.task.subTasks[widget.index].id.toString()),
         children: <Widget>[
           _buildExpansionContent(),
         ],
@@ -81,11 +82,11 @@ class SubTaskWidgetState extends State<SubTaskWidget>
   Widget _buildAppExpansionTileWidgetWithCustomTheme() {
     return ListTileTheme(
       shape: RoundedRectangleBorder(
-        borderRadius: Dimens.expansionTileBorderRadius,
+        borderRadius: Dimens.subTaskWidget.expansionTileBorderRadius,
       ),
-      tileColor: AppColors.button_background_color,
-      textColor: AppColors.main_color,
-      contentPadding: Dimens.listTilePadding,
+      tileColor: context.tileColor,
+      textColor: context.primaryColor,
+      contentPadding: Dimens.subTaskWidget.listTilePadding,
       dense: false,
       horizontalTitleGap: 0.0,
       minLeadingWidth: 0,
@@ -95,19 +96,19 @@ class SubTaskWidgetState extends State<SubTaskWidget>
 
   Widget _buildRoundedExpansionTile() {
     return ClipRRect(
-      borderRadius: Dimens.expansionTileBorderRadius,
+      borderRadius: Dimens.subTaskWidget.expansionTileBorderRadius,
       child: Card(
           elevation: 4,
           shape: RoundedRectangleBorder(
-            borderRadius: Dimens.expansionTileBorderRadius,
+            borderRadius: Dimens.subTaskWidget.expansionTileBorderRadius,
           ),
           child: _buildAppExpansionTileWidgetWithCustomTheme()),
     );
   }
 
-  Widget _buildExpansionTile({required GlobalKey<AppExpansionTileState> key}) {
+  Widget _buildExpansionTile() {
     return Padding(
-      padding: Dimens.expansionPadding,
+      padding: Dimens.subTaskWidget.expansionPadding,
       child: _buildRoundedExpansionTile(),
     );
   }
@@ -115,7 +116,7 @@ class SubTaskWidgetState extends State<SubTaskWidget>
   @override
   Widget build(BuildContext context) {
     super.build(context);
-    return _buildExpansionTile(key: widget.subTasks[widget.index].globalKey);
+    return _buildExpansionTile();
   }
 
   @override

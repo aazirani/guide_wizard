@@ -34,4 +34,5 @@ class LangKeys {
   static String next_stage_check_internet = "textSetting_next_stage_check_internet";
   static String update_finished = "textSetting_update_finished";
 
+  static String done_task = "textSetting_done_task";
 }

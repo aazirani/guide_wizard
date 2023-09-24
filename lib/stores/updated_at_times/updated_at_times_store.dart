@@ -1,7 +1,6 @@
 import 'package:guide_wizard/data/repository.dart';
 import 'package:guide_wizard/models/updated_at_times/updated_at_times.dart';
 import 'package:guide_wizard/stores/error/error_store.dart';
-import 'package:guide_wizard/utils/dio/dio_error_util.dart';
 import 'package:mobx/mobx.dart';
 
 part 'updated_at_times_store.g.dart';
@@ -21,79 +20,54 @@ abstract class _UpdatedAtTimesStore with Store {
   // store variables:-----------------------------------------------------------
   static ObservableFuture<UpdatedAtTimes?> emptyUpdatedAtTimesResponse =
   ObservableFuture.value(null);
-  static ObservableFuture<dynamic> emptyTruncateUpdatedAtTimesResponse =
-  ObservableFuture.value(null);
 
   @observable
   ObservableFuture<UpdatedAtTimes?> fetchUpdatedAtTimesFuture =
   ObservableFuture<UpdatedAtTimes?>(emptyUpdatedAtTimesResponse);
 
-  @observable
-  ObservableFuture<dynamic> truncateQuestionsFuture =
-  ObservableFuture<dynamic>(emptyTruncateUpdatedAtTimesResponse);
-
-  @observable
-  UpdatedAtTimes? updatedAtTimes;
-
-  @observable
-  bool success = false;
+  @computed
+  bool get updatedAtTimesLoading => fetchUpdatedAtTimesFuture.status == FutureStatus.pending;
 
   @computed
-  bool get loading => fetchUpdatedAtTimesFuture.status == FutureStatus.pending;
-
-  @computed
-  bool get loadingTruncate => truncateQuestionsFuture.status == FutureStatus.pending;
+  bool get updatedAtTimesSuccess => fetchUpdatedAtTimesFuture.status == FutureStatus.fulfilled;
 
   // actions:-------------------------------------------------------------------
   @action
-  Future updateContentIfNeeded({forceUpdate = false}) async {
-    await _repository.updateContentIfNeeded(forceUpdate: forceUpdate);
+  Future<UpdatedAtTimes> getUpdatedAtTimesFromDb() async {
+    try {
+      fetchUpdatedAtTimesFuture = ObservableFuture(_repository.getUpdatedAtTimesFromDB());
+      UpdatedAtTimes? updatedAtTimes = await fetchUpdatedAtTimesFuture;
+      return updatedAtTimes ?? UpdatedAtTimes(
+          last_updated_at_content: DateTime(1).toString(),
+          last_updated_at_technical_names: DateTime(1).toString(),
+          last_apps_request_time: DateTime.now().toString()
+      );
+    } catch (e) {
+      return UpdatedAtTimes(
+          last_updated_at_content: DateTime(1).toString(),
+          last_updated_at_technical_names: DateTime(1).toString(),
+          last_apps_request_time: DateTime.now().toString()
+      );
+    }
   }
 
   @action
-  Future truncateContent() async {
-    await _repository.truncateContent();
+  Future<UpdatedAtTimes> getUpdatedAtTimesFromApi() async {
+    try {
+      fetchUpdatedAtTimesFuture = ObservableFuture(_repository.getUpdatedAtTimesFromApiAndInsert());
+      UpdatedAtTimes? updatedAtTimes = await fetchUpdatedAtTimesFuture;
+      return updatedAtTimes ?? UpdatedAtTimes(
+          last_updated_at_content: DateTime(1).toString(),
+          last_updated_at_technical_names: DateTime(1).toString(),
+          last_apps_request_time: DateTime(1).toString()
+      );
+    } catch (e) {
+      return UpdatedAtTimes(
+          last_updated_at_content: DateTime(1).toString(),
+          last_updated_at_technical_names: DateTime(1).toString(),
+          last_apps_request_time: DateTime(1).toString()
+      );
+    }
   }
 
-  @action
-  Future getUpdatedAtTimes() async {
-    final future = _repository.getTheLastUpdatedAtTimes();
-    fetchUpdatedAtTimesFuture = ObservableFuture(future);
-
-    future.then((updatedAtTimes) {
-      this.updatedAtTimes = updatedAtTimes;
-    }).catchError((error) {
-      errorStore.errorMessage = DioErrorUtil.handleError(error);
-    });
-
-    return future;
-  }
-
-  Future truncateTable() async {
-    final future = _repository.truncateUpdatedAtTimes();
-    truncateQuestionsFuture = ObservableFuture(future);
-
-    future.catchError((error) {
-      errorStore.errorMessage = DioErrorUtil.handleError(error);
-    });
-
-    return future;
-  }
-
-  Future updateUpdatedAtTimes() async {
-    final future = _repository.getTheLastUpdatedAtTimes();
-    fetchUpdatedAtTimesFuture = ObservableFuture(future);
-
-    future.then((updatedAtTimes) {
-      this.updatedAtTimes = updatedAtTimes;
-    }).catchError((error) {
-      errorStore.errorMessage = DioErrorUtil.handleError(error);
-    });
-
-    return future;
-  }
-
-  Future truncateUpdatedAtTimes() async {
-    await _repository.truncateUpdatedAtTimes();
-  }
 }

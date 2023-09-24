@@ -34,8 +34,8 @@ dependencies:
 
   # MobX is a library for reactively managing the state of your applications. Use the power of
   # observables, actions, and reactions to supercharge your Dart and Flutter apps.
-  mobx: ^2.0.1
-  flutter_mobx: ^2.0.0
+  mobx: ^2.2.0
+  flutter_mobx: ^2.0.6+5
 
   # An helper to easily exposes a value using InheritedWidget without having to write one.
   provider: ^5.0.0
@@ -94,9 +94,10 @@ dependencies:
   animated_text_kit: ^4.2.1
   font_awesome_flutter: ^9.1.0
   xen_popup_card: ^0.0.1
-  fast_cached_network_image: ^1.1.1
+  cached_network_image: ^3.2.3
   simple_circular_progress_bar: ^1.0.2
   progress_state_button: ^1.0.4
+  auto_size_text: ^3.0.0  
   material_dialogs: ^1.1.4
 
 dev_dependencies:

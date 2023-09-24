@@ -1,30 +1,28 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
-import 'package:guide_wizard/constants/colors.dart';
 import 'package:guide_wizard/constants/dimens.dart';
 import 'package:guide_wizard/constants/lang_keys.dart';
-import 'package:guide_wizard/stores/app_settings/app_settings_store.dart';
+import 'package:guide_wizard/models/step/app_step.dart';
 import 'package:guide_wizard/stores/data/data_store.dart';
-import 'package:guide_wizard/stores/step/step_store.dart';
 import 'package:guide_wizard/stores/technical_name/technical_name_with_translations_store.dart';
 import 'package:guide_wizard/ui/tasklist/tasklist_timeline.dart';
 import 'package:guide_wizard/widgets/measure_size.dart';
 import 'package:guide_wizard/widgets/scrolling_overflow_text.dart';
 import 'package:provider/provider.dart';
+import 'package:guide_wizard/utils/extension/context_extensions.dart';
 
 class TaskList extends StatefulWidget {
-  int currentStepNo;
-  TaskList({Key? key, required this.currentStepNo}) : super(key: key);
+  AppStep step;
+  TaskList({Key? key, required this.step}) : super(key: key);
 
   @override
   State<TaskList> createState() => _TaskListState();
 }
 
 class _TaskListState extends State<TaskList> {
+  // stores:--------------------------------------------------------------------
   late DataStore _dataStore;
   late TechnicalNameWithTranslationsStore _technicalNameWithTranslationsStore;
-  late StepStore _stepStore;
-  late AppSettingsStore _appSettingsStore;
 
   @override
   void didChangeDependencies() {
@@ -33,48 +31,40 @@ class _TaskListState extends State<TaskList> {
     _dataStore = Provider.of<DataStore>(context);
     _technicalNameWithTranslationsStore =
         Provider.of<TechnicalNameWithTranslationsStore>(context);
-    _stepStore = Provider.of<StepStore>(context);
-    _appSettingsStore = Provider.of<AppSettingsStore>(context);
   }
 
   var progressBarSize = Size.zero;
 
   @override
   Widget build(BuildContext context) {
-    return WillPopScope(
-      onWillPop: () async => _changeStepAndNavigateHome(),
-      child: Scaffold(
-          backgroundColor: AppColors.main_color,
-          appBar: _buildAppBar(),
-          body: _buildBody()),
-    );
+    return Scaffold(
+        backgroundColor: context.primaryColor,
+        appBar: _buildAppBar(),
+        body: _buildBody());
   }
 
   //appBar methods .............................................................
   PreferredSizeWidget _buildAppBar() {
-    //text id of the step we want to find the title of
-    int step_title_id = _dataStore.getStepTitleId(widget.currentStepNo);
     return AppBar(
-        backgroundColor: AppColors.main_color,
-        toolbarHeight: Dimens.appBar["toolbarHeight"],
-        titleSpacing: Dimens.appBar["titleSpacing"],
+        backgroundColor: context.primaryColor,
+        toolbarHeight: Dimens.appBar.toolbarHeight,
+        titleSpacing: Dimens.appBar.toolbarHeight,
         title: ScrollingOverflowText(
-          _technicalNameWithTranslationsStore.getTranslation(step_title_id)!,
-          style: TextStyle(
-              color: AppColors.white,
-              fontSize: Dimens.taskTitleFont,
-              fontWeight: FontWeight.bold),
+          _technicalNameWithTranslationsStore.getTranslation(widget.step.name),
+          style: Theme.of(context)
+              .textTheme
+              .titleLarge!
+              .copyWith(color: context.textOnDarkBackgroundColor),
           overflowRatio: 0.77,
         ),
         leading: Padding(
-          padding: Dimens.back_button,
+          padding: Dimens.taskList.backButton,
           child: IconButton(
               icon: Icon(Icons.arrow_back),
               onPressed: () {
                 Navigator.pop(context);
-                _changeStepAndNavigateHome();
               },
-              color: AppColors.white),
+              color: context.lightBackgroundColor),
         ));
   }
 
@@ -99,20 +89,21 @@ class _TaskListState extends State<TaskList> {
       heightFactor: 1,
       child: FittedBox(
           child: Padding(
-        padding: Dimens.taskProgressBarPadding,
+        padding: Dimens.taskList.taskProgressBarPadding,
         child: Column(
           mainAxisAlignment: MainAxisAlignment.start,
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Padding(
-                padding: Dimens.numberOfTasksPadding,
-                child: Observer(
-                  builder: (_) => Text(
-                      "${_dataStore.getNumberOfTaskListTasks()} ${_technicalNameWithTranslationsStore.getTranslationByTechnicalName(LangKeys.tasks)}",
-                      style: TextStyle(color: AppColors.white)),
-                )),
+                padding: Dimens.taskList.numberOfTasksPadding,
+                child: Text(
+                    "${widget.step.tasks.length} ${_technicalNameWithTranslationsStore.getTranslationByTechnicalName(LangKeys.tasks)}",
+                    style: Theme.of(context)
+                        .textTheme
+                        .bodySmall!
+                        .copyWith(color: context.textOnDarkBackgroundColor))),
             SizedBox(height: 5),
-            Observer(builder: (_) => _buildProgressBar()),
+            _buildProgressBar(),
           ],
         ),
       )),
@@ -128,26 +119,32 @@ class _TaskListState extends State<TaskList> {
         minChildSize: _getProgressBarHeight(),
         builder: (BuildContext context, ScrollController scrollController) {
           return Container(
-            color: AppColors.main_color,
+            color: context.primaryColor,
             child: Container(
               decoration: BoxDecoration(
                   borderRadius: BorderRadius.only(
                     topLeft:
-                        Radius.circular(Dimens.draggableScrollableSheetRadius),
+                        Radius.circular(Dimens.taskList.draggableScrollableSheetRadius),
                     topRight:
-                        Radius.circular(Dimens.draggableScrollableSheetRadius),
+                        Radius.circular(Dimens.taskList.draggableScrollableSheetRadius),
                   ),
-                  color: AppColors.white),
-              child: Observer(
-                builder: (_) => ListView.builder(
-                  scrollDirection: Axis.vertical,
-                  controller: scrollController,
-                  itemCount: _dataStore.getNumberOfTaskListTasks(),
-                  itemBuilder: (context, i) {
-                    return TaskListTimeLine(taskNumber: i, stepStore: _stepStore);
-                  },
-                ),
-              ),
+                  color: context.lightBackgroundColor),
+              child: Column(children: [
+                SizedBox(height: Dimens.taskList.distanceFromAppBar),
+                Flexible(
+                  child: ListView.builder(
+                    scrollDirection: Axis.vertical,
+                    controller: scrollController,
+                    itemCount: widget.step.tasks.length,
+                    itemBuilder: (context, index) {
+                      return TaskListTimeLine(
+                          step: widget.step,
+                          index: index,
+                          task: widget.step.tasks.elementAt(index));
+                    },
+                  ),
+                )
+              ]),
             ),
           );
         },
@@ -156,38 +153,35 @@ class _TaskListState extends State<TaskList> {
   }
 
   Widget _buildProgressBar() {
-    var noOfDoneTasksInThisStep =
-        _dataStore.getNumberofDoneTasks(_stepStore.currentStep - 1);
-    var noOfAllTasksInThisStep =
-        _dataStore.getNumberOfTasksFromAStep(_stepStore.currentStep - 1);
-    var percentage = noOfAllTasksInThisStep == 0
-        ? 0.0
-        : noOfDoneTasksInThisStep / noOfAllTasksInThisStep;
     return Container(
       height: 20,
       width: _getScreenWidth() / 1.19,
       child: Padding(
-          padding: Dimens.taskListProgressBarPadding,
+          padding: Dimens.taskList.progressBarPadding,
           child: ClipRRect(
             borderRadius: BorderRadius.all(
-                Radius.circular(Dimens.taskListProgressBarRadius)),
-            child: LinearProgressIndicator(
-                value: percentage,
-                backgroundColor: AppColors.white,
-                valueColor:
-                    AlwaysStoppedAnimation(AppColors.progressBarValueColor)),
+                Radius.circular(Dimens.taskList.progressBarRadius)),
+            child: Observer(
+              builder: (_) => LinearProgressIndicator(
+                  value: calculateDoneRatio(),
+                  backgroundColor: context.lightBackgroundColor,
+                  valueColor:
+                      AlwaysStoppedAnimation(context.secondaryColor)),
+            ),
           )),
     );
   }
 
-  // general methods ...........................................................
-  _changeStepAndNavigateHome() {
-    if (_dataStore.values![_appSettingsStore.currentStepNumber] == 1) {
-      _appSettingsStore.currentStepNumber += 1;
-    }
-    return true;
+  double calculateDoneRatio() {
+    int noOfDoneTasksInThisStep =
+        _dataStore.getDoneTasks(widget.step.id).length;
+    int noOfAllTasksInThisStep = widget.step.tasks.length;
+    return noOfAllTasksInThisStep == 0
+        ? 0.0
+        : noOfDoneTasksInThisStep / noOfAllTasksInThisStep;
   }
 
+  // general methods ...........................................................
   double _getProgressBarHeight() {
     return (_getScreenHeight() -
             (progressBarSize.height + _getStatusBarHeight())) /

@@ -1,23 +1,21 @@
-import 'dart:async';
-
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
-import 'package:guide_wizard/constants/colors.dart';
 import 'package:guide_wizard/constants/dimens.dart';
 import 'package:guide_wizard/constants/lang_keys.dart';
-import 'package:guide_wizard/data/data_laod_handler.dart';
+import 'package:guide_wizard/data/data_load_handler.dart';
 import 'package:guide_wizard/stores/app_settings/app_settings_store.dart';
 import 'package:guide_wizard/stores/data/data_store.dart';
 import 'package:guide_wizard/stores/language/language_store.dart';
-import 'package:guide_wizard/stores/step/step_store.dart';
 import 'package:guide_wizard/stores/technical_name/technical_name_with_translations_store.dart';
+import 'package:guide_wizard/stores/updated_at_times/updated_at_times_store.dart';
 import 'package:guide_wizard/widgets/compressed_tasklist_timeline/compressed_task_list_timeline.dart';
 import 'package:guide_wizard/widgets/step_slider/step_slider_widget.dart';
 import 'package:guide_wizard/widgets/step_timeline/step_timeline.dart';
 import 'package:material_dialog/material_dialog.dart';
 import 'package:provider/provider.dart';
 import 'package:shimmer/shimmer.dart';
+import 'package:guide_wizard/utils/extension/context_extensions.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({
@@ -29,56 +27,53 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _HomeScreenState extends State<HomeScreen> {
-  //stores:---------------------------------------------------------------------
+  // Stores :---------------------------------------------------------------------
   late DataStore _dataStore;
-  late StepStore _stepStore;
   late TechnicalNameWithTranslationsStore _technicalNameWithTranslationsStore;
   late LanguageStore _languageStore;
+  late UpdatedAtTimesStore _updatedAtTimesStore;
   late AppSettingsStore _appSettingsStore;
-  late DataLoadHandler _dataLoadHandler;
+  late DataLoadHandler _dataLoadHandler = DataLoadHandler(context: context);
+
+  // Getters :---------------------------------------------------------------------
+  get _getScreenHeight => MediaQuery.of(context).size.height;
+  get _getScreenWidth => MediaQuery.of(context).size.width;
 
   @override
   void didChangeDependencies() {
     super.didChangeDependencies();
     // initializing stores
     _dataStore = Provider.of<DataStore>(context);
-    _stepStore = Provider.of<StepStore>(context);
     _technicalNameWithTranslationsStore =
         Provider.of<TechnicalNameWithTranslationsStore>(context);
     _languageStore = Provider.of<LanguageStore>(context);
+    _updatedAtTimesStore = Provider.of<UpdatedAtTimesStore>(context);
     _appSettingsStore = Provider.of<AppSettingsStore>(context);
-    _dataLoadHandler = DataLoadHandler(context: context);
   }
 
   @override
   void initState() {
+    _dataLoadHandler.loadDataAndCheckForUpdate(initialLoading: true);
     super.initState();
-    Future.delayed(Duration(milliseconds: 000), () async {
-      await _dataLoadHandler.loadDataAndCheckForUpdate();
-      _languageStore.init();
-      _technicalNameWithTranslationsStore.setCurrentLocale(_languageStore.locale);
-    });
-  }
-
-  @override
-  void dispose() {
-    super.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: AppColors.main_color,
+      backgroundColor: context.primaryColor,
       appBar: _buildAppBar(),
       body: RefreshIndicator(
-        color: AppColors.main_color,
+        color: context.primaryColor,
         onRefresh: () async {
-          DataLoadHandler(context: context).checkTimeAndForceUpdate();
+          DataLoadHandler(context: context)
+              .loadDataAndCheckForUpdate(refreshData: true);
         },
         child: SingleChildScrollView(
           physics: AlwaysScrollableScrollPhysics(),
           child: Container(
-            height: MediaQuery.of(context).size.height -_buildAppBar().preferredSize.height - MediaQuery.of(context).padding.top,
+            height: MediaQuery.of(context).size.height -
+                _buildAppBar().preferredSize.height -
+                MediaQuery.of(context).padding.top,
             child: _buildBody(context),
           ),
         ),
@@ -90,16 +85,16 @@ class _HomeScreenState extends State<HomeScreen> {
   PreferredSizeWidget _buildAppBar() {
     return AppBar(
       automaticallyImplyLeading: false,
-      toolbarHeight: Dimens.appBar["toolbarHeight"],
-      titleSpacing: Dimens.appBar["titleSpacing"],
-      backgroundColor: AppColors.main_color,
+      toolbarHeight: Dimens.appBar.toolbarHeight,
+      titleSpacing: Dimens.appBar.titleSpacing,
+      backgroundColor: context.primaryColor,
       actions: _buildActions(context),
       title: Padding(
         padding: EdgeInsets.only(left: 10),
         child: Observer(
           builder: (_) => Text(
               _technicalNameWithTranslationsStore.getTranslationByTechnicalName(LangKeys.steps_title),
-              style: TextStyle(color: AppColors.title_color, fontSize: 20)
+              style: Theme.of(context).textTheme.titleLarge!.copyWith(color: Theme.of(context).colorScheme.onPrimary),
           ),
         ),
       ),
@@ -111,6 +106,7 @@ class _HomeScreenState extends State<HomeScreen> {
       _buildLanguageButton(),
     ];
   }
+
   Widget _buildLanguageButton() {
     return IconButton(
       onPressed: () {
@@ -126,37 +122,37 @@ class _HomeScreenState extends State<HomeScreen> {
   _buildLanguageDialog() {
     _showDialog<String>(
       context: context,
-      child: MaterialDialog(
-        borderRadius: Dimens.buttonRadius,
-        enableFullWidth: true,
-        headerColor: Theme.of(context).primaryColor,
-        backgroundColor: Theme.of(context).scaffoldBackgroundColor,
-        closeButtonColor: Colors.white,
-        enableCloseButton: true,
-        enableBackButton: false,
-        onCloseButtonClicked: () {
-          Navigator.of(context).pop();
-        },
-        children: _technicalNameWithTranslationsStore.getSupportedLanguages()
-            .map(
-              (object) => ListTile(
-            dense: true,
-            contentPadding: EdgeInsets.all(0.0),
-            title: Text(
-              object.language_name,
-              style: TextStyle(
-                color: Colors.black
-              ),
-            ),
-            onTap: () {
-              Navigator.of(context).pop();
-              // change user language based on selected locale
-              _languageStore.changeLanguage(object.language_code);
-              _technicalNameWithTranslationsStore.setCurrentLocale(object.language_code);
-            },
-          ),
-        )
-            .toList(),
+      child: Observer(
+        builder: (_) => MaterialDialog(
+          borderRadius: Dimens.homeScreen.buttonRadius,
+          enableFullWidth: true,
+          headerColor: Theme.of(context).primaryColor,
+          backgroundColor: Theme.of(context).scaffoldBackgroundColor,
+          closeButtonColor: Colors.white,
+          enableCloseButton: true,
+          enableBackButton: false,
+          onCloseButtonClicked: () {
+            Navigator.of(context).pop();
+          },
+          children: _technicalNameWithTranslationsStore
+              .getSupportedLanguages()
+              .map(
+                (object) => ListTile(
+                  dense: true,
+                  contentPadding: EdgeInsets.all(0.0),
+                  title: Text(object.language_name,
+                      style: Theme.of(context).textTheme.bodySmall),
+                  onTap: () {
+                    Navigator.of(context).pop();
+                    // change user language based on selected locale
+                    _languageStore.changeLanguage(object.language_code);
+                    _technicalNameWithTranslationsStore
+                        .setCurrentLocale(object.language_code);
+                  },
+                ),
+              )
+              .toList(),
+        ),
       ),
     );
   }
@@ -172,24 +168,23 @@ class _HomeScreenState extends State<HomeScreen> {
 
 //body build methods ...........................................................
   Widget _buildBody(BuildContext context) {
-    return Observer(
-      builder: (_) => ClipRRect(
-        borderRadius: BorderRadius.only(
-            topLeft: Radius.circular(Dimens.homeBodyBorderRadius),
-            topRight: Radius.circular(Dimens.homeBodyBorderRadius)),
-        child: Container(
+    return ClipRRect(
+      borderRadius: BorderRadius.only(
+          topLeft: Radius.circular(Dimens.homeScreen.bodyBorderRadius),
+          topRight: Radius.circular(Dimens.homeScreen.bodyBorderRadius)),
+      child: Observer(
+        builder: (_) => Container(
           height: MediaQuery.of(context).size.height,
           width: MediaQuery.of(context).size.width,
           decoration: BoxDecoration(
-            color: AppColors.homeBodyColor,
+            color: context.lightBackgroundColor,
             borderRadius: BorderRadius.only(
-              topLeft: Radius.circular(Dimens.homeBodyBorderRadius),
-              topRight: Radius.circular(Dimens.homeBodyBorderRadius),
+              topLeft: Radius.circular(Dimens.homeScreen.bodyBorderRadius),
+              topRight: Radius.circular(Dimens.homeScreen.bodyBorderRadius),
             ),
           ),
-          child: _dataStore.dataLoad
-              ? _buildScreenElements(
-                  _appSettingsStore.currentStepNumber, _dataStore.values!)
+          child: !_dataStore.isEmpty && !_dataStore.isLoading && !_technicalNameWithTranslationsStore.technicalNameLoading && !_updatedAtTimesStore.updatedAtTimesLoading && _dataStore.stepSuccess && _technicalNameWithTranslationsStore.technicalNameSuccess && _updatedAtTimesStore.updatedAtTimesSuccess
+              ? _buildScreenElements()
               : _shimmerAll(),
         ),
       ),
@@ -197,110 +192,91 @@ class _HomeScreenState extends State<HomeScreen> {
   }
 
   Widget _shimmerAll() {
-    return Shimmer(
-      period: Duration(seconds: 3),
-      gradient: LinearGradient(
-        colors: [
-          AppColors.shimmerGradientGreys[50]!,
-          AppColors.shimmerGradientGreys[100]!,
-          AppColors.shimmerGradientGreys[200]!,
-        ],
-        begin: Alignment(-1, -1),
-        end: Alignment(1, 1),
-        stops: [0.5, 0.75, 1],
-      ),
+    return Shimmer.fromColors(
+      baseColor: context.shimmerBaseColor,
+      highlightColor: context.shimmerHeighlightColor,
       child: _buildPlaceholderScreenElements(),
     );
   }
 
-  Widget _buildScreenElements(int current, values) {
+  Widget _buildScreenElements() {
     _languageStore.changeLanguage(_languageStore.locale);
     _technicalNameWithTranslationsStore.setCurrentLocale(_languageStore.locale);
     return Column(
       crossAxisAlignment: CrossAxisAlignment.center,
       children: [
         _buildCurrentStepIndicator(),
-        Observer(
-            builder: (_) => StepSliderWidget(stepList: _dataStore.stepList)),
-        Observer(
-          builder: (_) => StepTimeLine(
-            stepNo: _appSettingsStore.stepsCount,
-          ),
-        ),
-         Observer(builder: (_) => _stepStore.currentStep == 1 ? _buildQuestionDescription() : _buildInProgressCompressedTaskList()),
+        StepSliderWidget(),
+        StepTimeLine(),
+        _dataStore.isFirstStep(_appSettingsStore.currentStepId)
+            ? _buildQuestionDescription()
+            : _buildInProgressCompressedTaskList(),
       ],
     );
   }
 
   Widget _buildCurrentStepIndicator() {
     return Padding(
-        padding: Dimens.currentStepIndicatorPadding,
+        padding: Dimens.homeScreen.currentStepIndicatorPadding,
         child: Row(children: [
           _buildStepsText(),
           SizedBox(width: 10),
-          _buildCurrentStepText(_stepStore),
+          _buildCurrentStepText(),
         ]));
   }
 
   Widget _buildStepsText() {
-    return Text(_technicalNameWithTranslationsStore.getTranslationByTechnicalName(LangKeys.steps),
-        style: TextStyle(
-            color: AppColors.main_color,
-            fontSize: Dimens.stepsTextFont,
-            fontWeight: FontWeight.bold));
+    return Text(
+        _technicalNameWithTranslationsStore
+            .getTranslationByTechnicalName(LangKeys.steps),
+        style: Theme.of(context).textTheme.titleSmall);
   }
 
-  Widget _buildCurrentStepText(stepStore) {
-    return Observer(
-        builder: (_) => Text(
-            "${stepStore.currentStep}/${_appSettingsStore.stepsCount}",
-            style: TextStyle(color: AppColors.main_color)));
+  Widget _buildCurrentStepText() {
+    return Text(
+        "${_dataStore.getAllSteps.indexWhere((step) => step.id == _appSettingsStore.currentStepId) + 1}/${_dataStore.getAllSteps.length}",
+        style: Theme.of(context).textTheme.titleSmall);
   }
 
   Widget _buildQuestionDescription() {
-    int questionDescId = _dataStore.stepList.steps[0].description;
-    return Observer(
-      builder: (_) => Column(
+    return Expanded(
+      child: Column(
         mainAxisAlignment: MainAxisAlignment.start,
         children: [
           Padding(
-              padding: Dimens.inProgressTextPadding,
+              padding: Dimens.homeScreen.inProgressTextPadding,
               child: Align(
                   alignment: Alignment.centerLeft,
-                  child: Text(_technicalNameWithTranslationsStore.getTranslationByTechnicalName(LangKeys.description),
-                      style: TextStyle(
-                          fontSize: Dimens.inProgressTextFont,
-                          color: AppColors.main_color,
-                          fontWeight: FontWeight.bold)))),
-
-          Container(
-            width: _getScreenWidth() / 1.23,
-            margin: Dimens.questionsStepDescMargin,
-            padding: Dimens.questionsStepDescPadding,
-            constraints: BoxConstraints(
-              maxHeight: MediaQuery.of(context).size.height / 4,
-            ),
-            decoration: BoxDecoration(
-              color: AppColors.timelineCompressedContainerColor,
-              borderRadius: BorderRadius.all(Radius.circular(Dimens.contentRadius)),
-            ),
-            child: Column(
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                Flexible(
-                  child: RawScrollbar(
-                    child: SingleChildScrollView(
-                      child: Text(
-                        _technicalNameWithTranslationsStore.getTranslation(questionDescId),
-                        style: TextStyle(
-                          color: AppColors.main_color,
-                          fontSize: Dimens.questionsStepDescFontSize,
-                        ),
+                  child: Text(
+                      _technicalNameWithTranslationsStore
+                          .getTranslationByTechnicalName(LangKeys.description),
+                      style: Theme.of(context).textTheme.titleSmall))),
+          Flexible(
+            child: Container(
+              margin: Dimens.homeScreen.questionsStepDescMargin,
+              padding: Dimens.homeScreen.questionsStepDescPadding,
+              decoration: BoxDecoration(
+                color: context.containerColor,
+                borderRadius: BorderRadius.all(Radius.circular(Dimens.compressedTaskList.contentRadius)),
+              ),
+              child: RawScrollbar(
+                child: SingleChildScrollView(
+                  child: Column(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      Flexible(
+                        child: Text(
+                            _technicalNameWithTranslationsStore.getTranslation(
+                                _dataStore
+                                    .getStepById(
+                                        _appSettingsStore.currentStepId)
+                                    .description),
+                            style: Theme.of(context).textTheme.bodyMedium),
                       ),
-                    ),
+                    ],
                   ),
                 ),
-              ],
+              ),
             ),
           ),
         ],
@@ -309,19 +285,28 @@ class _HomeScreenState extends State<HomeScreen> {
   }
 
   Widget _buildInProgressCompressedTaskList() {
-    return Column(
-      children: [
-        Padding(
-            padding: Dimens.inProgressTextPadding,
+    return Flexible(
+      child: Column(
+        children: [
+          Padding(
+            padding: Dimens.homeScreen.inProgressTextPadding,
             child: Align(
-                alignment: Alignment.centerLeft,
-                child: Text(_technicalNameWithTranslationsStore.getTranslationByTechnicalName(LangKeys.in_progress),
-                    style: TextStyle(
-                        fontSize: Dimens.inProgressTextFont,
-                        color: AppColors.main_color,
-                        fontWeight: FontWeight.bold)))),
-        CompressedTasklistTimeline(stepList: _dataStore.stepList),
-      ],
+              alignment: Alignment.centerLeft,
+              child: Text(
+                _technicalNameWithTranslationsStore
+                    .getTranslationByTechnicalName(LangKeys.in_progress),
+                style: Theme.of(context).textTheme.titleSmall,
+              ),
+            ),
+          ),
+          Flexible(
+            child: Padding(
+              padding: Dimens.compressedTaskList.padding,
+              child: CompressedTaskListTimeline(),
+            ),
+          ),
+        ],
+      ),
     );
   }
 
@@ -330,18 +315,37 @@ class _HomeScreenState extends State<HomeScreen> {
       children: [
         _buildPlaceholderCurrentStepIndicator(),
         _buildPlaceholderCarouselSliderContainer(),
-        StepTimeLine(stepNo: 0),
-        SizedBox(height: Dimens.StepTimelineProgressBarDistance),
-        // _buildInProgressCompressedTaskList(),
-        SizedBox(height: Dimens.progressBarCompressedTaskListDistance),
-        _buildPlaceholderCompressedTasklistTimeline(),
+         _buildPlaceholderStepTimeline(),
+        SizedBox(height: Dimens.homeScreen.StepTimelineProgressBarDistance),
+        SizedBox(height: Dimens.homeScreen.progressBarCompressedTaskListDistance),
+        _buildPlaceholderCompressedTaskListTimeline(),
       ],
     );
   }
 
+  _buildPlaceholderStepTimeline(){
+    return Padding(
+      padding: Dimens.stepTimeLine.containerPadding,
+      child: Container(
+        width: MediaQuery.of(context).size.width,
+        height: 40,
+        decoration: BoxDecoration(
+            color: context.containerColor,
+            borderRadius: Dimens.stepTimeLine.containerBorderRadius,
+            boxShadow: [
+              BoxShadow(
+                  color: context.shadowColor,
+                  blurRadius: 0.3,
+                  offset: Offset(0, 2))
+            ]),
+      ),
+    );
+
+  }
+
   _buildPlaceholderCurrentStepIndicator() {
     return Padding(
-        padding: Dimens.currentStepIndicatorPadding,
+        padding: Dimens.homeScreen.currentStepIndicatorPadding,
         child: Row(children: [
           _buildStepsText(),
         ]));
@@ -350,9 +354,9 @@ class _HomeScreenState extends State<HomeScreen> {
   Widget _buildPlaceholderCarouselSliderContainer() {
     return Container(
       alignment: Alignment.topRight,
-      padding: Dimens.placeHolderCarouselSliderContainerPadding,
+      padding: Dimens.homeScreen.placeHolderCarouselSliderContainerPadding,
       height: MediaQuery.of(context).size.height /
-          Dimens.placeHolderCarouselSliderHeightRatio,
+          Dimens.homeScreen.placeHolderCarouselSliderHeightRatio,
       child: _buildPlaceholderStepSliderWidget(),
     );
   }
@@ -363,18 +367,18 @@ class _HomeScreenState extends State<HomeScreen> {
       itemBuilder: (BuildContext context, int index, int realIndex) {
         return Container(
           alignment: Alignment.topLeft,
-          width: _getScreenWidth(),
-          margin: Dimens.sliderContainerMargin,
-          padding: Dimens.sliderContainerPadding,
+          width: _getScreenWidth,
+          margin: Dimens.stepSlider.sliderContainerMargin,
+          padding: Dimens.stepSlider.sliderContainerPadding,
           decoration: BoxDecoration(
             color: Colors.grey,
             borderRadius: BorderRadius.all(
-                Radius.circular(Dimens.placeHolderStepSliderBorderRadius)),
+                Radius.circular(Dimens.homeScreen.placeHolderStepSliderBorderRadius)),
           ),
         );
       },
       options: CarouselOptions(
-        height: _getScreenHeight() / Dimens.placeHolderCarouselHeightRatio,
+        height: _getScreenHeight / Dimens.homeScreen.placeHolderCarouselHeightRatio,
         initialPage: 0,
         enableInfiniteScroll: false,
         autoPlay: false,
@@ -384,16 +388,16 @@ class _HomeScreenState extends State<HomeScreen> {
     );
   }
 
-  Widget _buildPlaceholderCompressedTasklistTimeline() {
+  Widget _buildPlaceholderCompressedTaskListTimeline() {
     return Padding(
-      padding: Dimens.stepTimelineContainerPadding,
+      padding: Dimens.stepTimeLine.containerPadding,
       child: Container(
         decoration: BoxDecoration(
             color: Colors.grey,
-            borderRadius: BorderRadius.all(Radius.circular(Dimens.compressedTaskListBorderRadius))),
-        padding: Dimens.timelineContainerPadding,
-        height: _getScreenHeight() /
-            Dimens.placeHolderCompressedTaskListHeightRatio,
+            borderRadius: BorderRadius.all(Radius.circular(Dimens.homeScreen.compressedTaskListBorderRadius))),
+        padding: Dimens.compressedTaskList.timelineContainerPadding,
+        height: _getScreenHeight /
+            Dimens.homeScreen.placeHolderCompressedTaskListHeightRatio,
         width: double.infinity,
         child: Align(
           alignment: Alignment.topLeft,
@@ -401,7 +405,4 @@ class _HomeScreenState extends State<HomeScreen> {
       ),
     );
   }
-
-  double _getScreenHeight() => MediaQuery.of(context).size.height;
-  double _getScreenWidth() => MediaQuery.of(context).size.width;
 }

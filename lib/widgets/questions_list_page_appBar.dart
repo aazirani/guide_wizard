@@ -1,18 +1,15 @@
 import 'package:flutter/material.dart';
-import 'package:guide_wizard/constants/colors.dart';
 import 'package:guide_wizard/constants/dimens.dart';
-import 'package:guide_wizard/data/data_laod_handler.dart';
 import 'package:guide_wizard/widgets/scrolling_overflow_text.dart';
+import 'package:guide_wizard/utils/extension/context_extensions.dart';
 
 class QuestionsListAppBar extends StatefulWidget implements PreferredSizeWidget {
-  double appBarSize;
-  double fontSize;
+  double appBarSize = Dimens.questionListPageAppBar.height;
+  double fontSize = Dimens.questionListPageAppBar.fontSize;
   String title;
 
   QuestionsListAppBar(
       {Key? key,
-        this.appBarSize = Dimens.questionListPageAppBarHeight,
-        this.fontSize = Dimens.questionListPageAppBarFontSize,
         this.title = "",
       })
       : super(key: key);
@@ -32,22 +29,21 @@ class _QuestionsListAppBarState extends State<QuestionsListAppBar> {
   Widget build(BuildContext context) {
     return AppBar(
       automaticallyImplyLeading: false,
-      backgroundColor: AppColors.main_color,
-      toolbarHeight: Dimens.appBar["toolbarHeight"],
-      titleSpacing: Dimens.appBar["titleSpacing"],
+      backgroundColor: context.primaryColor,
+      toolbarHeight: Dimens.appBar.toolbarHeight,
+      titleSpacing: Dimens.appBar.titleSpacing,
       leading: IconButton(
         onPressed: () {
-          DataLoadHandler(context: context).checkIfUpdateIsNecessary();
           Navigator.pop(context);
         },
         icon: Icon(
           Icons.arrow_back_rounded,
-          color: AppColors.bright_foreground_color,
+          color: context.lightBackgroundColor,
         ),
       ),
       title: ScrollingOverflowText(
         widget.title,
-        style: TextStyle(color: AppColors.white, fontSize: 20),
+        style: Theme.of(context).textTheme.titleLarge!.copyWith(color: context.lightBackgroundColor),
         overflowRatio: 0.75,
       ),
     );

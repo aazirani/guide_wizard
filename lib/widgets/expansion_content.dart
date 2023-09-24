@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_markdown/flutter_markdown.dart';
-import 'package:guide_wizard/constants/colors.dart';
 import 'package:guide_wizard/constants/dimens.dart';
 import 'package:guide_wizard/stores/technical_name/technical_name_with_translations_store.dart';
 import 'package:guide_wizard/url_handler.dart';
+import 'package:guide_wizard/utils/extension/context_extensions.dart';
 import 'package:guide_wizard/widgets/measure_size.dart';
 import 'package:provider/provider.dart';
 import 'package:render_metrics/render_metrics.dart';
@@ -36,7 +36,8 @@ class _ExpansionContentState extends State<ExpansionContent> {
   void didChangeDependencies() {
     super.didChangeDependencies();
     // initializing stores
-    _technicalNameWithTranslationsStore = Provider.of<TechnicalNameWithTranslationsStore>(context);
+    _technicalNameWithTranslationsStore =
+        Provider.of<TechnicalNameWithTranslationsStore>(context);
   }
 
   @override
@@ -46,18 +47,19 @@ class _ExpansionContentState extends State<ExpansionContent> {
       children: [
         Flexible(
           child: Padding(
-            padding: Dimens.expansionContentPadding,
+            padding: Dimens.expansionContent.padding,
             child: MeasureSize(
                 onChange: (Size size) {
                   setState(() {
                     widgetHeight = size.height;
                   });
                 },
-                child: Column(
-                    children: [
-                      if (widget.deadline != null) _buildDeadlineContainer(),
-                      _buildMarkdownContent()
-                    ])),
+                child: Column(children: [
+                  (widget.deadline!.isNotEmpty)
+                      ? _buildDeadlineContainer()
+                      : Container(),
+                  _buildMarkdownContent()
+                ])),
           ),
         ),
       ],
@@ -66,32 +68,57 @@ class _ExpansionContentState extends State<ExpansionContent> {
 
   Widget _buildDeadlineContainer() {
     return Padding(
-        padding: Dimens.deadlineContainerPadding,
+        padding: Dimens.expansionContent.deadlineContainerPadding,
         child: Align(
             alignment: Alignment.topLeft,
             child: Container(
               decoration: BoxDecoration(
-                  color: AppColors.red[250]!.withOpacity(Dimens.deadlineContainerColorOpacity),
-                  border: Border(
-                      left: BorderSide(width: Dimens.deadlineContainerBorderWidth, color: AppColors.red[150]!))),
+                  color: context.deadlineContainerColor,
+                  ),
               child: Padding(
-                padding: Dimens.deadlineContentPadding,
-                child: Text("${widget.deadline}",
-                    style: TextStyle(
-                        color: AppColors.red[200],
-                        fontWeight: FontWeight.w800)),
-              ),
+                  padding: Dimens.expansionContent.deadlineContentPadding,
+                  child: Text.rich(
+                    TextSpan(
+                      children: [
+                        WidgetSpan(
+                          child: Padding(
+                              padding: EdgeInsets.only(right: 8),
+                              child: Icon(
+                                Icons.calendar_month,
+                                color: context.deadlineColor,
+                              )),
+                        ),
+                        TextSpan(
+                            text: "${widget.deadline}",
+                            style: Theme.of(context).textTheme.bodyMedium,),
+                      ],
+                    ),
+                  )),
             )));
   }
 
   Widget _buildMarkdownContent() {
     return Markdown(
       onTapLink: (text, url, title) {
-        UrlHandler.openUrl(context: context, url: url!, technicalNameWithTranslationsStore: _technicalNameWithTranslationsStore);
+        UrlHandler.openUrl(
+            context: context,
+            url: url!,
+            technicalNameWithTranslationsStore:
+                _technicalNameWithTranslationsStore);
       },
       shrinkWrap: true,
       physics: NeverScrollableScrollPhysics(),
-      data: fixedJsonMarkdown(widget.markdown));
+      data: fixedJsonMarkdown(widget.markdown),
+      styleSheet: MarkdownStyleSheet(
+        blockquoteDecoration: BoxDecoration(
+          color: context.blockQuoteColor,
+          borderRadius: BorderRadius.all(Radius.circular(5))
+        ),
+          p: Theme.of(context)
+              .textTheme
+              .bodyLarge!
+              .copyWith(color: context.textOnLightBackgroundColor)),
+    );
   }
 
   String fixedJsonMarkdown(String json_markdown) {
