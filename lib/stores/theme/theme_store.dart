@@ -1,6 +1,6 @@
-import 'package:boilerplate/data/repository.dart';
-import 'package:boilerplate/stores/error/error_store.dart';
 import 'package:flutter/material.dart';
+import 'package:guide_wizard/data/repository.dart';
+import 'package:guide_wizard/stores/error/error_store.dart';
 import 'package:mobx/mobx.dart';
 
 part 'theme_store.g.dart';
@@ -44,10 +44,4 @@ abstract class _ThemeStore with Store {
 
   bool isPlatformDark(BuildContext context) =>
       MediaQuery.platformBrightnessOf(context) == Brightness.dark;
-
-  // dispose:-------------------------------------------------------------------
-  @override
-  dispose() {
-
-  }
 }

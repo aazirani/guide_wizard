@@ -19,7 +19,6 @@
 /// `import` this file in your project, anywhere you needed it.
 /// `import 'path/to/theme.dart';`
 import 'package:flutter/material.dart';
-import 'package:google_fonts/google_fonts.dart';
 
 class AppThemeData {
   static const _lightFillColor = Colors.black;
@@ -28,26 +27,22 @@ class AppThemeData {
   static final Color _lightFocusColor = Colors.black.withOpacity(0.12);
   static final Color _darkFocusColor = Colors.white.withOpacity(0.12);
 
-  static ThemeData lightThemeData =
-      themeData(lightColorScheme, _lightFocusColor);
+  static ThemeData lightThemeData = themeData(lightColorScheme, _lightFocusColor);
   static ThemeData darkThemeData = themeData(darkColorScheme, _darkFocusColor);
 
   static ThemeData themeData(ColorScheme colorScheme, Color focusColor) {
     return ThemeData(
       colorScheme: colorScheme,
       textTheme: _textTheme,
-      // Matches manifest.json colors and background color.
-      primaryColor: const Color(0xFF030303),
       appBarTheme: AppBarTheme(
         backgroundColor: colorScheme.background,
         elevation: 0,
         iconTheme: IconThemeData(color: colorScheme.primary),
       ),
       iconTheme: IconThemeData(color: colorScheme.onPrimary),
-      canvasColor: colorScheme.background,
       scaffoldBackgroundColor: colorScheme.background,
       highlightColor: Colors.transparent,
-      focusColor: focusColor,
+      shadowColor: AppColors.grey200,
       snackBarTheme: SnackBarThemeData(
         behavior: SnackBarBehavior.floating,
         backgroundColor: Color.alphaBlend(
@@ -59,19 +54,24 @@ class AppThemeData {
     );
   }
 
-  static const ColorScheme lightColorScheme = ColorScheme(
-    primary: Color(0xFFd21e1d),
-    primaryContainer: Color(0xFF9e1718),
-    secondary: Color(0xFFEFF3F3),
-    secondaryContainer: Color(0xFFFAFBFB),
-    background: Color(0xFFE6EBEB),
-    surface: Color(0xFFFAFBFB),
-    onBackground: Colors.white,
-    error: _lightFillColor,
+  static ColorScheme lightColorScheme = ColorScheme(
+    primary: AppColors.blue100,
+    primaryContainer: AppColors.blue50,
+    onPrimary: AppColors.white,
+    secondary: AppColors.green100,
+    secondaryContainer: AppColors.green50,
+    background: AppColors.white,
+    onBackground: AppColors.blue200,
+    tertiary: AppColors.orange100,
+    tertiaryContainer: AppColors.orange50,
+    surface: AppColors.grey50,
+    error: AppColors.red100,
     onError: _lightFillColor,
-    onPrimary: _lightFillColor,
-    onSecondary: Color(0xFF322942),
-    onSurface: Color(0xFF241E30),
+    errorContainer: AppColors.grey100,
+    onErrorContainer: AppColors.grey50,
+    onSecondary: AppColors.blue200,
+    onSurface: AppColors.blue200,
+    surfaceTint: AppColors.grey300,
     brightness: Brightness.light,
   );
 
@@ -97,16 +97,26 @@ class AppThemeData {
   static const _semiBold = FontWeight.w600;
   static const _bold = FontWeight.w700;
 
+
   static final TextTheme _textTheme = TextTheme(
-    headline4: GoogleFonts.montserrat(fontWeight: _bold, fontSize: 20.0),
-    caption: GoogleFonts.oswald(fontWeight: _semiBold, fontSize: 16.0),
-    headline5: GoogleFonts.oswald(fontWeight: _medium, fontSize: 16.0),
-    subtitle1: GoogleFonts.montserrat(fontWeight: _medium, fontSize: 16.0),
-    overline: GoogleFonts.montserrat(fontWeight: _medium, fontSize: 12.0),
-    bodyText1: GoogleFonts.montserrat(fontWeight: _regular, fontSize: 14.0),
-    subtitle2: GoogleFonts.montserrat(fontWeight: _medium, fontSize: 14.0),
-    bodyText2: GoogleFonts.montserrat(fontWeight: _regular, fontSize: 16.0),
-    headline6: GoogleFonts.montserrat(fontWeight: _bold, fontSize: 16.0),
-    button: GoogleFonts.montserrat(fontWeight: _semiBold, fontSize: 14.0),
+    //app bar titles
+    titleLarge: TextStyle(fontSize: 20, fontWeight: _bold),
+    // step slider titles, task titles , sub task title 
+    titleMedium: TextStyle(fontSize: 19, fontWeight: _medium),
+    // "steps" / "Description" / "In Progress" in home / task title in task list with less font weight
+    titleSmall: TextStyle(fontSize: 18, fontWeight: _semiBold), 
+    // description in task page
+    bodyLarge: TextStyle(fontSize:18, fontWeight: _regular),
+    //description in home, in progress tasks in home, deadline in task page, modal bottom sheet dialog
+    bodyMedium: TextStyle(fontSize: 17),
+    // no of tasks in step slider and tasklist / button text
+    bodySmall: TextStyle(fontSize: 16,),
+    labelMedium: TextStyle(fontSize: 17),
+    labelSmall: TextStyle(fontSize: 14),
+  ).apply(
+    displayColor:  lightColorScheme.onSurface, 
+    bodyColor: lightColorScheme.onSurface, 
   );
 }
+
+

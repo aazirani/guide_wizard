@@ -24,15 +24,6 @@ class SharedPreferenceHelper {
     return _sharedPreference.remove(Preferences.auth_token);
   }
 
-  // Login:---------------------------------------------------------------------
-  Future<bool> get isLoggedIn async {
-    return _sharedPreference.getBool(Preferences.is_logged_in) ?? false;
-  }
-
-  Future<bool> saveIsLoggedIn(bool value) async {
-    return _sharedPreference.setBool(Preferences.is_logged_in, value);
-  }
-
   // Theme:------------------------------------------------------
   bool get isDarkMode {
     return _sharedPreference.getBool(Preferences.is_dark_mode) ?? false;
@@ -47,7 +38,21 @@ class SharedPreferenceHelper {
     return _sharedPreference.getString(Preferences.current_language);
   }
 
-  Future<void> changeLanguage(String language) {
-    return _sharedPreference.setString(Preferences.current_language, language);
+  Future<String> changeLanguage(String language) {
+    return _sharedPreference.setString(Preferences.current_language, language).then((_) => language);
+  }
+
+  // Loading dialog:---------------------------------------------------------------------
+  Future<bool> get isDataLoaded async {
+    return _sharedPreference.getBool(Preferences.is_data_loaded) ?? false;
+  }
+
+  // current step:---------------------------------------------------
+  bool? get answerWasUpdated {
+    return _sharedPreference.getBool(Preferences.answer_was_updated);
+  }
+
+  Future<void> setAnswerWasUpdated(bool mustUpdate) {
+    return _sharedPreference.setBool(Preferences.answer_was_updated, mustUpdate);
   }
 }
