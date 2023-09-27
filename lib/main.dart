@@ -26,30 +26,3 @@ Future<void> setPreferredOrientations() {
     DeviceOrientation.landscapeLeft,
   ]);
 }
-
-class MyApp2 extends StatelessWidget {
-  @override
-  Widget build(BuildContext context) {
-    return MaterialApp(
-      title: 'Flutter Web Demo',
-      theme: ThemeData(
-        primarySwatch: Colors.blue,
-      ),
-      home: WebMyHomePage(),
-    );
-  }
-}
-
-class WebMyHomePage extends StatelessWidget {
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: Text('Flutter Web Demo'),
-      ),
-      body: Center(
-        child: Text('Hello, Flutter Web!'),
-      ),
-    );
-  }
-}
