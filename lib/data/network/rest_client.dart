@@ -12,7 +12,9 @@ class RestClient {
 
   // Get:-----------------------------------------------------------------------
   Future<dynamic> get(String path) {
-    return http.get(Uri.https(Endpoints.baseUrl, path)).then(_createResponse);
+    return http.get(
+        Uri.https(Endpoints.baseUrl, path)
+    ).then(_createResponse);
   }
 
   // Post:----------------------------------------------------------------------

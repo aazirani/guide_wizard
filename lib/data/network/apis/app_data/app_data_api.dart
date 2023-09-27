@@ -22,7 +22,6 @@ class StepApi {
       final res = await _dioClient.get(Endpoints.getAppData + parameters);
       return AppStepList.fromJson(res["rows"]);
     } catch (e) {
-      print(e.toString());
       DataLoadHandler().showServerErrorMessage();
       throw e;
     }

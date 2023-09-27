@@ -13,7 +13,11 @@ abstract class NetworkModule {
       ..options.baseUrl = Endpoints.baseUrl
       ..options.connectTimeout = Endpoints.connectionTimeout
       ..options.receiveTimeout = Endpoints.receiveTimeout
-      ..options.headers = {'Content-Type': 'application/json; charset=utf-8'}
+      ..options.headers = {
+        'Content-Type': 'application/json; charset=utf-8',
+        // 'Access-Control-Allow-Origin': '*',
+        // 'Access-Control-Allow-Credentials': '*',
+      }
       ..interceptors.add(LogInterceptor(
         request: true,
         responseBody: true,

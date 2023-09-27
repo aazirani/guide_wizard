@@ -17,8 +17,10 @@ class Endpoints {
   static const String getAppData = appApiUrl + "/content/answerIds/";
 
   static const String getTechnicalNames = appApiUrl + "/translations?answerIds=";
+  // static const String getTechnicalNames = appApiUrl + "/translations";
 
   static const String getUpdatedAtTimes = appApiUrl + "/lastUpdates?answerIds=";
+  // static const String getUpdatedAtTimes = appApiUrl + "/lastUpdates";
 
   static const String tasksImageBaseUrl = baseUrl + "/tasks/image/";
   static const String answersImageBaseUrl = baseUrl + "/answers/image/";
