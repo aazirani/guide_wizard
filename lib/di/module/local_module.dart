@@ -7,6 +7,7 @@ import 'package:path_provider/path_provider.dart';
 import 'package:sembast/sembast.dart';
 import 'package:sembast/sembast_io.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:sembast_web/sembast_web.dart';
 
 abstract class LocalModule {
 
@@ -26,20 +27,22 @@ abstract class LocalModule {
     var encryptionKey = "";
 
     // Get a platform-specific directory where persistent app data can be stored
-    final appDocumentDir = await getApplicationDocumentsDirectory();
+    // final appDocumentDir = await getApplicationDocumentsDirectory();
 
     // Path with the form: /platform-specific-directory/demo.db
-    final dbPath = join(appDocumentDir.path, DBConstants.DB_NAME);
+    // final dbPath = join(appDocumentDir.path, DBConstants.DB_NAME);
+    final dbPath = 'guidewizardweb' + DBConstants.DB_NAME;
 
     // Check to see if encryption is set, then provide codec
     // else init normal db with path
     var database;
+    var factory = databaseFactoryWeb;
     if (encryptionKey.isNotEmpty) {
       // Initialize the encryption codec with a user password
       var codec = getXXTeaCodec(password: encryptionKey);
-      database = await databaseFactoryIo.openDatabase(dbPath, codec: codec);
+      database = await factory.openDatabase(dbPath, codec: codec);
     } else {
-      database = await databaseFactoryIo.openDatabase(dbPath);
+      database = await factory.openDatabase(dbPath);
     }
 
     // Return database instance

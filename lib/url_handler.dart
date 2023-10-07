@@ -8,7 +8,7 @@ class UrlHandler {
   UrlHandler._();
 
   static _launchURL(String urlAddress) async {
-    final Uri url = Uri.parse(urlAddress);
+    final Uri url = Uri.https(urlAddress);
     if (!await launchUrl(url)) {
       throw Exception('Could not launch $url');
     }

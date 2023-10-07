@@ -28,8 +28,7 @@ Future<void> setupLocator() async {
 
   // async singletons:----------------------------------------------------------
   getIt.registerSingletonAsync<Database>(() => LocalModule.provideDatabase());
-  getIt.registerSingletonAsync<SharedPreferences>(
-      () => LocalModule.provideSharedPreferences());
+  getIt.registerSingletonAsync<SharedPreferences>(() => LocalModule.provideSharedPreferences());
 
   // singletons:----------------------------------------------------------------
   getIt.registerSingleton(

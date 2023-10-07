@@ -88,23 +88,19 @@ class DataLoadHandler {
         await loadDataFromDb();
         _dataStore.loadingFinished();
       }
-      if(await hasInternet()) {
-        _dataStore.loadingStarted();
-        await updatedAtWasChanged().then((updatedAtTimesUpdatedMap) async => {
-          if (updatedAtTimesUpdatedMap.length > 0 && updatedAtTimesUpdatedMap.values.any((updateAtChanged) => updateAtChanged)) {
-            await loadDataFromApi(updatedAtTimesUpdatedMap[UpdatedAtTimesFactory.LAST_UPDATED_AT_TECHNICAL_NAMES]!, updatedAtTimesUpdatedMap[UpdatedAtTimesFactory.LAST_UPDATED_AT_CONTENT]!)
-          }
-        });
-        _dataStore.loadingFinished();
-      }
+      _dataStore.loadingStarted();
+      await updatedAtWasChanged().then((updatedAtTimesUpdatedMap) async => {
+        if (updatedAtTimesUpdatedMap.length > 0 && updatedAtTimesUpdatedMap.values.any((updateAtChanged) => updateAtChanged)) {
+          await loadDataFromApi(updatedAtTimesUpdatedMap[UpdatedAtTimesFactory.LAST_UPDATED_AT_TECHNICAL_NAMES]!, updatedAtTimesUpdatedMap[UpdatedAtTimesFactory.LAST_UPDATED_AT_CONTENT]!)
+        }
+      });
+      _dataStore.loadingFinished();
     }
     if(noLocalData || isAnswerWasUpdated || refreshData) {
-      if(await checkInternetConnectionAndShowMessage(processId: processId)) {
-        ScaffoldMessenger.of(context).clearSnackBars();
-        _dataStore.loadingStarted();
-        await loadDataFromApi(true, true);
-        _dataStore.loadingFinished();
-      }
+      ScaffoldMessenger.of(context).clearSnackBars();
+      _dataStore.loadingStarted();
+      await loadDataFromApi(true, true);
+      _dataStore.loadingFinished();
     }
   }
 
