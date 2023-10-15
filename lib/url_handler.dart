@@ -17,62 +17,6 @@ class UrlHandler {
       required String url,
       required TechnicalNameWithTranslationsStore
           technicalNameWithTranslationsStore}) {
-    ButtonStyle _textButtonStyle() {
-      return ButtonStyle(
-        overlayColor: MaterialStateColor.resolveWith((states) =>
-            context.openButtonOverlayColor),
-        shape: MaterialStateProperty.all<RoundedRectangleBorder>(
-          RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(5.0),
-          ),
-        ),
-      );
-    }
-
-    showDialog(
-      context: context,
-      builder: (context) => AlertDialog(
-        title: Text(
-          technicalNameWithTranslationsStore
-              .getTranslationByTechnicalName(LangKeys.url_dialog_title),
-        ),
-        content: Column(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            Text(
-              technicalNameWithTranslationsStore.getTranslationByTechnicalName(
-                      LangKeys.url_dialog_message) +
-                  " $url?",
-              textAlign: TextAlign.left,
-            ),
-          ],
-        ),
-        actions: [
-          TextButton(
-            onPressed: () {
-              Navigator.of(context).pop();
-            },
-            child: Text(
-              technicalNameWithTranslationsStore
-                  .getTranslationByTechnicalName(LangKeys.cancel),
-              style: Theme.of(context).textTheme.bodySmall,
-            ),
-            style: _textButtonStyle(),
-          ),
-          TextButton(
-            onPressed: () {
-              _launchURL(url);
-              Navigator.of(context).pop();
-            },
-            child: Text(
-              technicalNameWithTranslationsStore
-                  .getTranslationByTechnicalName(LangKeys.open_link),
-              style: Theme.of(context).textTheme.bodySmall,
-            ),
-            style: _textButtonStyle(),
-          ),
-        ],
-      ),
-    );
+    _launchURL(url);
   }
 }
