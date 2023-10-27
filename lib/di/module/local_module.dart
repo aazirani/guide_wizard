@@ -27,9 +27,6 @@ abstract class LocalModule {
     // Key for encryption
     var encryptionKey = "";
 
-    // Get a platform-specific directory where persistent app data can be stored
-    final appDocumentDir = await getApplicationDocumentsDirectory();
-
     // Path with the form: /platform-specific-directory/demo.db
     final dbPath;
     // Check to see if encryption is set, then provide codec
@@ -42,6 +39,8 @@ abstract class LocalModule {
       dbPath = 'guidewizardweb' + DBConstants.DB_NAME;
       factory = databaseFactoryWeb;
     } else {
+      // Get a platform-specific directory where persistent app data can be stored
+      final appDocumentDir = await getApplicationDocumentsDirectory();
       dbPath = join(appDocumentDir.path, DBConstants.DB_NAME);
       factory = databaseFactoryIo;
     }

@@ -3,6 +3,7 @@ import 'package:guide_wizard/constants/lang_keys.dart';
 import 'package:guide_wizard/stores/technical_name/technical_name_with_translations_store.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:guide_wizard/utils/extension/context_extensions.dart';
+import 'package:flutter/foundation.dart' show kIsWeb;
 
 class UrlHandler {
   UrlHandler._();
@@ -15,6 +16,18 @@ class UrlHandler {
   }
 
   static openUrl(
+      {required BuildContext context,
+        required String url,
+        required TechnicalNameWithTranslationsStore
+        technicalNameWithTranslationsStore}) {
+    if (kIsWeb) {
+      _launchURL(url);
+    } else {
+      _openUrl_App(context: context, url: url, technicalNameWithTranslationsStore: technicalNameWithTranslationsStore);
+    }
+  }
+
+  static _openUrl_App(
       {required BuildContext context,
       required String url,
       required TechnicalNameWithTranslationsStore
