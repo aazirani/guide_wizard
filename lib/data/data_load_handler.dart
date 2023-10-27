@@ -12,6 +12,7 @@ import 'package:guide_wizard/stores/technical_name/technical_name_with_translati
 import 'package:guide_wizard/stores/updated_at_times/updated_at_times_store.dart';
 import 'package:internet_connection_checker/internet_connection_checker.dart';
 import 'package:provider/provider.dart';
+import 'package:flutter/foundation.dart' show kIsWeb;
 
 class DataLoadHandler {
   // This class is SINGLETON
@@ -77,6 +78,16 @@ class DataLoadHandler {
   }
 
   Future loadDataAndCheckForUpdate({bool initialLoading = false, bool refreshData = false, int processId = 0}) async {
+    // ****************** Web and App Conflict Implementation ******************
+    if (kIsWeb) {
+      await loadDataAndCheckForUpdate_Web(initialLoading: initialLoading, refreshData: refreshData, processId: processId);
+    } else {
+      await loadDataAndCheckForUpdate_App(initialLoading: initialLoading, refreshData: refreshData, processId: processId);
+    }
+    // *************************************************************************
+  }
+
+  Future loadDataAndCheckForUpdate_App({bool initialLoading = false, bool refreshData = false, int processId = 0}) async {
     if (_dataStore.isLoading) return;
 
     bool isAnswerWasUpdated = await answerWasUpdated();
@@ -105,6 +116,35 @@ class DataLoadHandler {
         await loadDataFromApi(true, true);
         _dataStore.loadingFinished();
       }
+    }
+  }
+
+
+  Future loadDataAndCheckForUpdate_Web({bool initialLoading = false, bool refreshData = false, int processId = 0}) async {
+    if (_dataStore.isLoading) return;
+
+    bool isAnswerWasUpdated = await answerWasUpdated();
+    bool noLocalData = await hasNoLocalData();
+
+    if(initialLoading) {
+      if(!noLocalData) {
+        _dataStore.loadingStarted();
+        await loadDataFromDb();
+        _dataStore.loadingFinished();
+      }
+      _dataStore.loadingStarted();
+      await updatedAtWasChanged().then((updatedAtTimesUpdatedMap) async => {
+        if (updatedAtTimesUpdatedMap.length > 0 && updatedAtTimesUpdatedMap.values.any((updateAtChanged) => updateAtChanged)) {
+          await loadDataFromApi(updatedAtTimesUpdatedMap[UpdatedAtTimesFactory.LAST_UPDATED_AT_TECHNICAL_NAMES]!, updatedAtTimesUpdatedMap[UpdatedAtTimesFactory.LAST_UPDATED_AT_CONTENT]!)
+        }
+      });
+      _dataStore.loadingFinished();
+    }
+    if(noLocalData || isAnswerWasUpdated || refreshData) {
+      ScaffoldMessenger.of(context).clearSnackBars();
+      _dataStore.loadingStarted();
+      await loadDataFromApi(true, true);
+      _dataStore.loadingFinished();
     }
   }
 
