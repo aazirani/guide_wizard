@@ -32,7 +32,7 @@ class DataLoadHandler {
   late UpdatedAtTimesStore _updatedAtTimesStore = Provider.of<UpdatedAtTimesStore>(context, listen: false);
   late AppSettingsStore _appSettingsStore = Provider.of<AppSettingsStore>(context, listen: false);
 
-  Future<bool> hasInternet() async => await InternetConnectionChecker().hasConnection;
+  Future<bool> hasInternet() async => kIsWeb || await InternetConnectionChecker().hasConnection;
   Future<bool> hasNoLocalData() async => await _dataStore.isDataSourceEmpty() || await _technicalNameWithTranslationsStore.isDataSourceEmpty();
   Future<bool> answerWasUpdated() async => await _appSettingsStore.getAnswerWasUpdated() ?? false;
 
