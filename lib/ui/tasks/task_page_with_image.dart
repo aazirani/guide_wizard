@@ -12,6 +12,7 @@ import 'package:guide_wizard/widgets/task_page_appbar_widget.dart';
 import 'package:provider/provider.dart';
 import 'package:render_metrics/render_metrics.dart';
 import 'package:guide_wizard/utils/extension/context_extensions.dart';
+import 'package:flutter/foundation.dart' show kIsWeb;
 
 class TaskPageWithImage extends StatefulWidget {
   final Task task;
@@ -27,6 +28,7 @@ class _TaskPageWithImageState extends State<TaskPageWithImage> {
   // stores:--------------------------------------------------------------------
   late TechnicalNameWithTranslationsStore _technicalNameWithTranslationsStore;
   var imageSlideSize = Size.zero;
+  final scrollController = ScrollController();
 
   @override
   void didChangeDependencies() {
@@ -51,35 +53,77 @@ class _TaskPageWithImageState extends State<TaskPageWithImage> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: context.primaryColor,
-      body: CustomScrollView(
-        physics: ClampingScrollPhysics(),
-        slivers: [
-          SliverAppBar(
-            automaticallyImplyLeading: false,
-            flexibleSpace: BlocksAppBarWidget(
-              task: widget.task,
-              step: widget.step,
-              title: _technicalNameWithTranslationsStore.getTranslation(widget.task.text),
-            ), // Your custom widget goes here
-          ),
-          SliverFillRemaining(
-            child: _buildScaffoldBody()
-          ),
-        ],
+      appBar: BlocksAppBarWidget(
+        task: widget.task,
+        step: widget.step,
+        title: _technicalNameWithTranslationsStore.getTranslation(widget.task.text),
       ),
+      body: _buildScaffoldBody(),
     );
   }
 
   Widget _buildScaffoldBody() {
+    // ****************** Web and App Conflict Implementation ******************
+    if (kIsWeb) {
+      return _buildScaffoldBody_Web();
+    } else {
+      return _buildScaffoldBody_App();
+    }
+    // *************************************************************************
+  }
+
+  Widget _buildScaffoldBody_Web() {
+    return SizedBox.expand(
+      child: Container(
+        color: context.primaryColor,
+        child: Container(
+          decoration: BoxDecoration(
+              borderRadius: Dimens.taskPage.textOnlyScaffoldBorder,
+              color: context.lightBackgroundColor),
+          child: _buildPageContent(),
+        ),
+      ),
+    );
+  }
+
+  _buildPageContent() {
+    return RawScrollbar(
+      controller: scrollController,
+      child: ListView.builder(
+        controller: scrollController,
+        padding: EdgeInsets.zero,
+        scrollDirection: Axis.vertical,
+        shrinkWrap: true,
+        itemCount: widget.task.sub_tasks.length + 2,
+        itemBuilder: _buildDraggableSheetItems_Web,
+      ),
+    );
+  }
+
+  Widget _buildDraggableSheetItems_Web(context, i) {
+    if(i == 0) return Padding(
+      padding: const EdgeInsets.only(top: 10),
+      child: _buildImageSlide(),
+    );
+    if(i == 1) return _buildDescription();
+    return SubTaskWidget(
+      index: i - 2,
+      task: widget.task,
+      step: widget.step,
+      renderManager: renderManager,
+    );
+  }
+
+  Widget _buildScaffoldBody_App() {
     return Stack(
       children: [
         MeasureSize(
-          onChange: (Size size) {
-            setState(() {
-              imageSlideSize = size;
-            });
-          },
-          child: _buildImageSlide()
+            onChange: (Size size) {
+              setState(() {
+                imageSlideSize = size;
+              });
+            },
+            child: _buildImageSlide()
         ),
         _buildDraggableScrollableSheet(),
       ],
@@ -105,23 +149,23 @@ class _TaskPageWithImageState extends State<TaskPageWithImage> {
             decoration: BoxDecoration(
               borderRadius: Dimens.taskPage.textOnlyScaffoldBorder,
             color: context.lightBackgroundColor),
-            child: RawScrollbar(
+            // child: RawScrollbar(
               child: ListView.builder(
                 padding: EdgeInsets.zero,
                 scrollDirection: Axis.vertical,
                 shrinkWrap: true,
                 controller: scrollController,
                 itemCount: widget.task.sub_tasks.length + 1,
-                itemBuilder: _buildDraggableSheetItems,
+                itemBuilder: _buildDraggableSheetItems_App,
               ),
-            ),
+            // ),
           );
         },
       ),
     );
   }
 
-  Widget _buildDraggableSheetItems(context, i) {
+  Widget _buildDraggableSheetItems_App(context, i) {
     if(i == 0) return _buildDescription();
     return SubTaskWidget(
       index: i - 1,

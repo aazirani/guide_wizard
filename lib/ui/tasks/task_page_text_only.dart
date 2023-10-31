@@ -22,6 +22,7 @@ class TaskPageTextOnly extends StatefulWidget {
 class _TaskPageTextOnlyState extends State<TaskPageTextOnly> {
 
   RenderParametersManager renderManager = RenderParametersManager<dynamic>();
+  final scrollController = ScrollController();
   // stores:--------------------------------------------------------------------
   late TechnicalNameWithTranslationsStore _technicalNameWithTranslationsStore;
 
@@ -72,7 +73,9 @@ class _TaskPageTextOnlyState extends State<TaskPageTextOnly> {
 
   _buildPageContent() {
     return RawScrollbar(
+      controller: scrollController,
       child: ListView(
+        controller: scrollController,
         children: [
           _technicalNameWithTranslationsStore.getTranslation(widget.task.description) == "" ? SizedBox(height: Dimens.taskPage.textOnlyListViewPadding.top,) : _buildDescription(),
           _buildSubTasksList(),
