@@ -76,27 +76,25 @@ class _TaskPageWithImageState extends State<TaskPageWithImage> {
     return SizedBox.expand(
       child: Container(
         color: context.primaryColor,
-        child: Container(
-          decoration: BoxDecoration(
-              borderRadius: Dimens.taskPage.textOnlyScaffoldBorder,
-              color: context.lightBackgroundColor),
-          child: _buildPageContent(),
+        child: ClipRRect(
+          borderRadius: Dimens.taskPage.textOnlyScaffoldBorder,
+          child: Container(
+            color: context.lightBackgroundColor,
+            child: _buildPageContent(),
+          ),
         ),
       ),
     );
   }
 
   _buildPageContent() {
-    return RawScrollbar(
+    return ListView.builder(
       controller: scrollController,
-      child: ListView.builder(
-        controller: scrollController,
-        padding: EdgeInsets.zero,
-        scrollDirection: Axis.vertical,
-        shrinkWrap: true,
-        itemCount: widget.task.sub_tasks.length + 2,
-        itemBuilder: _buildDraggableSheetItems_Web,
-      ),
+      padding: EdgeInsets.zero,
+      scrollDirection: Axis.vertical,
+      shrinkWrap: true,
+      itemCount: widget.task.sub_tasks.length + 2,
+      itemBuilder: _buildDraggableSheetItems_Web,
     );
   }
 

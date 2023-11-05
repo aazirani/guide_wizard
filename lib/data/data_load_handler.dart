@@ -220,6 +220,8 @@ class DataLoadHandler {
 
   loadDataFromApi(
       bool technicalNamesShouldBeUpdated, bool contentsShouldBeUpdated) async {
+    print("technicalNamesShouldBeUpdated: $technicalNamesShouldBeUpdated");
+    print("contentsShouldBeUpdated: $contentsShouldBeUpdated");
     if (technicalNamesShouldBeUpdated &&
         !_technicalNameWithTranslationsStore.technicalNameLoading) {
       await _technicalNameWithTranslationsStore.getTechnicalNameWithTranslationsFromApi();
