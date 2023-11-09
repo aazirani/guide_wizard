@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:guide_wizard/constants/app_theme.dart';
+import 'package:guide_wizard/constants/colors.dart';
 import 'package:guide_wizard/constants/strings.dart';
 import 'package:guide_wizard/data/repository.dart';
 import 'package:guide_wizard/di/components/service_locator.dart';
@@ -41,23 +42,31 @@ class MyApp extends StatelessWidget {
         Provider<UpdatedAtTimesStore>(create: (_) => _updatedAtTimesStore),
         Provider<AppSettingsStore>(create: (_) => _appSettingsStore),
       ],
-      child: MaterialApp(
-        debugShowCheckedModeBanner: false,
-        title: Strings.appName,
-        theme: _themeStore.darkMode
-            ? AppThemeData.darkThemeData
-            : AppThemeData.lightThemeData,
-        routes: Routes.routes,
-        locale: Locale(_languageStore.locale),
-        localizationsDelegates: [
-          // Built-in localization of basic text for Material widgets
-          GlobalMaterialLocalizations.delegate,
-          // Built-in localization for text direction LTR/RTL
-          GlobalWidgetsLocalizations.delegate,
-          // Built-in localization of basic text for Cupertino widgets
-          GlobalCupertinoLocalizations.delegate,
-        ],
-        home: HomeScreen(),
+      child: Container(
+        color: AppColors.grey200,
+        child: Center(
+          child: Container(
+            constraints: const BoxConstraints(maxWidth: 600),
+            child: MaterialApp(
+              debugShowCheckedModeBanner: false,
+              title: Strings.appName,
+              theme: _themeStore.darkMode
+                  ? AppThemeData.darkThemeData
+                  : AppThemeData.lightThemeData,
+              routes: Routes.routes,
+              locale: Locale(_languageStore.locale),
+              localizationsDelegates: [
+                // Built-in localization of basic text for Material widgets
+                GlobalMaterialLocalizations.delegate,
+                // Built-in localization for text direction LTR/RTL
+                GlobalWidgetsLocalizations.delegate,
+                // Built-in localization of basic text for Cupertino widgets
+                GlobalCupertinoLocalizations.delegate,
+              ],
+              home: HomeScreen(),
+            ),
+          ),
+        ),
       ),
     );
   }
