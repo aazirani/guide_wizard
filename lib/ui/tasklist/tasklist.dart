@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:guide_wizard/constants/dimens.dart';
 import 'package:guide_wizard/constants/lang_keys.dart';
+import 'package:guide_wizard/constants/settings.dart';
 import 'package:guide_wizard/models/step/app_step.dart';
 import 'package:guide_wizard/stores/data/data_store.dart';
 import 'package:guide_wizard/stores/technical_name/technical_name_with_translations_store.dart';
@@ -10,6 +11,7 @@ import 'package:guide_wizard/widgets/measure_size.dart';
 import 'package:guide_wizard/widgets/scrolling_overflow_text.dart';
 import 'package:provider/provider.dart';
 import 'package:guide_wizard/utils/extension/context_extensions.dart';
+import 'package:flutter/foundation.dart' show kIsWeb;
 
 class TaskList extends StatefulWidget {
   AppStep step;
@@ -78,7 +80,8 @@ class _TaskListState extends State<TaskList> {
               progressBarSize = size;
             });
           },
-          child: _buildTaskProgressBar()),
+          child: _buildTaskProgressBar()
+      ),
       _buildExpandableTaskTimeline(),
     ]);
   }
@@ -189,7 +192,7 @@ class _TaskListState extends State<TaskList> {
   }
 
   double _getScreenWidth() {
-    return MediaQuery.of(context).size.width;
+    return kIsWeb ? SettingsConstants.webMaxWidth : MediaQuery.of(context).size.width;
   }
 
   double _getScreenHeight() {

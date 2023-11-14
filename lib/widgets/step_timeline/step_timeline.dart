@@ -1,6 +1,8 @@
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:guide_wizard/constants/dimens.dart';
+import 'package:guide_wizard/constants/settings.dart';
 import 'package:guide_wizard/stores/app_settings/app_settings_store.dart';
 import 'package:guide_wizard/stores/data/data_store.dart';
 import 'package:provider/provider.dart';
@@ -129,5 +131,5 @@ class _StepTimeLineState extends State<StepTimeLine> {
   }
 
   //logic methods : ..............................................................
-  double _getScreenWidth() => MediaQuery.of(context).size.width;
+  double _getScreenWidth() => kIsWeb ? SettingsConstants.webMaxWidth : MediaQuery.of(context).size.width;
 }

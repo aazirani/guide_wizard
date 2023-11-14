@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:guide_wizard/constants/settings.dart';
 import 'package:guide_wizard/constants/widgets_constants/scrolling_overflow_text_constants.dart';
 import 'package:marquee/marquee.dart';
+import 'package:flutter/foundation.dart' show kIsWeb;
 
 class ScrollingOverflowText extends StatefulWidget {
   String text;
@@ -14,7 +16,7 @@ class ScrollingOverflowText extends StatefulWidget {
 }
 
 class _ScrollingOverflowTextState extends State<ScrollingOverflowText> {
-  double _getScreenWidth() => MediaQuery.of(context).size.width;
+  double _getScreenWidth() => kIsWeb ? SettingsConstants.webMaxWidth : MediaQuery.of(context).size.width;
 
   @override
   Widget build(BuildContext context) {
