@@ -1,17 +1,17 @@
+import 'package:flutter/foundation.dart' show kIsWeb;
 import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:guide_wizard/constants/dimens.dart';
 import 'package:guide_wizard/constants/lang_keys.dart';
-import 'package:guide_wizard/constants/settings.dart';
 import 'package:guide_wizard/models/step/app_step.dart';
+import 'package:guide_wizard/stores/app_settings/app_settings_store.dart';
 import 'package:guide_wizard/stores/data/data_store.dart';
 import 'package:guide_wizard/stores/technical_name/technical_name_with_translations_store.dart';
 import 'package:guide_wizard/ui/tasklist/tasklist_timeline.dart';
+import 'package:guide_wizard/utils/extension/context_extensions.dart';
 import 'package:guide_wizard/widgets/measure_size.dart';
 import 'package:guide_wizard/widgets/scrolling_overflow_text.dart';
 import 'package:provider/provider.dart';
-import 'package:guide_wizard/utils/extension/context_extensions.dart';
-import 'package:flutter/foundation.dart' show kIsWeb;
 
 class TaskList extends StatefulWidget {
   AppStep step;
@@ -25,6 +25,7 @@ class _TaskListState extends State<TaskList> {
   // stores:--------------------------------------------------------------------
   late DataStore _dataStore;
   late TechnicalNameWithTranslationsStore _technicalNameWithTranslationsStore;
+  late AppSettingsStore _appSettingsStore;
 
   @override
   void didChangeDependencies() {
@@ -33,6 +34,7 @@ class _TaskListState extends State<TaskList> {
     _dataStore = Provider.of<DataStore>(context);
     _technicalNameWithTranslationsStore =
         Provider.of<TechnicalNameWithTranslationsStore>(context);
+    _appSettingsStore = Provider.of<AppSettingsStore>(context);
   }
 
   var progressBarSize = Size.zero;
@@ -192,7 +194,7 @@ class _TaskListState extends State<TaskList> {
   }
 
   double _getScreenWidth() {
-    return kIsWeb ? SettingsConstants.webMaxWidth : MediaQuery.of(context).size.width;
+    return kIsWeb ? _appSettingsStore.currentMinDimension : MediaQuery.of(context).size.width;
   }
 
   double _getScreenHeight() {
