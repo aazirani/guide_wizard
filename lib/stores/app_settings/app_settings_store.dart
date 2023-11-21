@@ -12,6 +12,9 @@ abstract class _AppSettingsStore with Store {
   @observable
   int currentStepId = 0;
 
+  @observable
+  double currentMinDimension = 0;
+
   // constructor:---------------------------------------------------------------
   _AppSettingsStore(Repository repository) : this._repository = repository {
   }
@@ -41,6 +44,10 @@ abstract class _AppSettingsStore with Store {
     return _repository.setAnswerWasUpdated(answersWasUpdated);
   }
 
+  @action
+  void setMinDimension(double minDimension) {
+    currentMinDimension = minDimension;
+  }
   // general methods:-----------------------------------------------------------
   void dispose() {
     for (final d in _disposers) {
