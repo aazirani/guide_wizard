@@ -142,7 +142,7 @@ class _StepSliderWidgetState extends State<StepSliderWidget> {
             SizedBox(
                 height: heightConstraint *
                     Dimens.stepSlider.spaceBetweenTitleAndNoOfTasksPercentage),
-            Flexible(flex: 1, child: _buildStepNoOfTasksOrQuestions(index)),
+            Flexible(flex: 2, child: _buildStepNoOfTasksOrQuestions(index)),
             SizedBox(
                 height: heightConstraint *
                     Dimens.stepSlider
