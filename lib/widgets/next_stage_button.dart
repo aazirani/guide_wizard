@@ -99,13 +99,20 @@ class _NextStageButtonState extends State<NextStageButton> {
   void onTapFunction(BuildContext context) async {
     setButtonState(ButtonState.loading);
 
-    if (!await DataLoadHandler().hasInternet()) {
-      setButtonState(ButtonState.fail);
-      Future.delayed(Duration(milliseconds: 2000), () {
-        setButtonState(ButtonState.idle);
-      });
-      return;
+
+    // ****************** Web and App Conflict Implementation ******************
+    if (kIsWeb) {
+      // pass
+    } else {
+      if (!await DataLoadHandler().hasInternet()) {
+        setButtonState(ButtonState.fail);
+        Future.delayed(Duration(milliseconds: 2000), () {
+          setButtonState(ButtonState.idle);
+        });
+        return;
+      }
     }
+    // *************************************************************************
 
     await updateIfAnswersHasChanged();
 
@@ -129,7 +136,7 @@ class _NextStageButtonState extends State<NextStageButton> {
   }
 
   Future<void> updateIfAnswersHasChanged() async {
-    bool answerWasUpdated = await _appSettingsStore.getAnswerWasUpdated() ?? false;
+    bool answerWasUpdated = await _appSettingsStore.getAnswerWasUpdated();
     if (answerWasUpdated) {
       await DataLoadHandler().loadDataAndCheckForUpdate();
     }
