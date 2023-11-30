@@ -61,7 +61,7 @@ class Repository {
 
 
   Future<List<AppStep>> updateContent(List<AppStep> stepsBeforeUpdate, List<AppStep> stepsAfterUpdate) async {
-    await await truncateStep();
+    await truncateStep();
 
     // Update selected answers
     updateSelectedAnswers(stepsBeforeUpdate, stepsAfterUpdate);

@@ -112,9 +112,7 @@ class DataLoadHandler {
     if(noLocalData || isAnswerWasUpdated || refreshData) {
       if(await checkInternetConnectionAndShowMessage(processId: processId)) {
         ScaffoldMessenger.of(context).clearSnackBars();
-        _dataStore.loadingStarted();
         await loadDataFromApi(true, true);
-        _dataStore.loadingFinished();
       }
     }
   }
@@ -141,7 +139,6 @@ class DataLoadHandler {
       _dataStore.loadingFinished();
     }
     if(noLocalData || isAnswerWasUpdated || refreshData) {
-      ScaffoldMessenger.of(context).clearSnackBars();
       _dataStore.loadingStarted();
       await loadDataFromApi(true, true);
       _dataStore.loadingFinished();
@@ -219,12 +216,10 @@ class DataLoadHandler {
   }
 
   loadDataFromApi(bool technicalNamesShouldBeUpdated, bool contentsShouldBeUpdated) async {
-    print("technicalNamesShouldBeUpdated: $technicalNamesShouldBeUpdated");
-    print("contentsShouldBeUpdated: $contentsShouldBeUpdated");
-    if (technicalNamesShouldBeUpdated && !_technicalNameWithTranslationsStore.technicalNameLoading) {
+    if (technicalNamesShouldBeUpdated) {
       await _technicalNameWithTranslationsStore.getTechnicalNameWithTranslationsFromApi();
     }
-    if (contentsShouldBeUpdated && !_dataStore.stepLoading) {
+    if (contentsShouldBeUpdated) {
       await _dataStore.getStepsFromApi().then((steps) async => {
         if (steps.isNotEmpty) {
             _appSettingsStore.setCurrentStepId(steps.first.id)
