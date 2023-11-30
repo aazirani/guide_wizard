@@ -111,7 +111,6 @@ class DataLoadHandler {
     }
     if(noLocalData || isAnswerWasUpdated || refreshData) {
       if(await checkInternetConnectionAndShowMessage(processId: processId)) {
-        ScaffoldMessenger.of(context).clearSnackBars();
         await loadDataFromApi(true, true);
       }
     }
