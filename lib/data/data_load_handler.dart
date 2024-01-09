@@ -34,7 +34,7 @@ class DataLoadHandler {
 
   Future<bool> hasInternet() async => kIsWeb || await InternetConnectionChecker().hasConnection;
   Future<bool> hasNoLocalData() async => await _dataStore.isDataSourceEmpty() || await _technicalNameWithTranslationsStore.isDataSourceEmpty();
-  Future<bool> answerWasUpdated() async => await _appSettingsStore.getAnswerWasUpdated() ?? false;
+  Future<bool> answerWasUpdated() async => await _appSettingsStore.getAnswerWasUpdated();
 
   void showErrorMessage({required Widget messageWidgetObserver, String? buttonLabel, required var onPressedButton, Duration? duration}) {
     ScaffoldMessenger.of(context).clearSnackBars();
@@ -111,10 +111,7 @@ class DataLoadHandler {
     }
     if(noLocalData || isAnswerWasUpdated || refreshData) {
       if(await checkInternetConnectionAndShowMessage(processId: processId)) {
-        ScaffoldMessenger.of(context).clearSnackBars();
-        _dataStore.loadingStarted();
         await loadDataFromApi(true, true);
-        _dataStore.loadingFinished();
       }
     }
   }
@@ -141,7 +138,6 @@ class DataLoadHandler {
       _dataStore.loadingFinished();
     }
     if(noLocalData || isAnswerWasUpdated || refreshData) {
-      ScaffoldMessenger.of(context).clearSnackBars();
       _dataStore.loadingStarted();
       await loadDataFromApi(true, true);
       _dataStore.loadingFinished();
@@ -218,25 +214,19 @@ class DataLoadHandler {
     }
   }
 
-  loadDataFromApi(
-      bool technicalNamesShouldBeUpdated, bool contentsShouldBeUpdated) async {
-    print("technicalNamesShouldBeUpdated: $technicalNamesShouldBeUpdated");
-    print("contentsShouldBeUpdated: $contentsShouldBeUpdated");
-    if (technicalNamesShouldBeUpdated &&
-        !_technicalNameWithTranslationsStore.technicalNameLoading) {
+  loadDataFromApi(bool technicalNamesShouldBeUpdated, bool contentsShouldBeUpdated) async {
+    if (technicalNamesShouldBeUpdated) {
       await _technicalNameWithTranslationsStore.getTechnicalNameWithTranslationsFromApi();
     }
-    if (contentsShouldBeUpdated && !_dataStore.stepLoading) {
+    if (contentsShouldBeUpdated) {
       await _dataStore.getStepsFromApi().then((steps) async => {
-            if (steps.isNotEmpty)
-              {
-                _appSettingsStore.setCurrentStepId(steps.first.id)
-              }
-          });
+        if (steps.isNotEmpty) {
+            _appSettingsStore.setCurrentStepId(steps.first.id)
+          }
+      });
     }
 
-    if (_technicalNameWithTranslationsStore.technicalNameSuccess &&
-        _dataStore.stepSuccess) {
+    if (_technicalNameWithTranslationsStore.technicalNameSuccess && _dataStore.stepSuccess) {
       await _appSettingsStore.setAnswerWasUpdated(false);
     }
   }

@@ -35,7 +35,7 @@ abstract class _AppSettingsStore with Store {
 
   // must update methods:-----------------------------------------------------------
   @action
-  bool? getAnswerWasUpdated() {
+  bool getAnswerWasUpdated() {
     return _repository.getAnswerWasUpdated;
   }
 
