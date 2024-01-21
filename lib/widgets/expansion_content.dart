@@ -122,8 +122,6 @@ class _ExpansionContentState extends State<ExpansionContent> {
   }
 
   String fixedJsonMarkdown(String json_markdown) {
-    return json_markdown.replaceAllMapped(RegExp(r'(?<!\\)\\n'), (match) {
-      return '\n';
-    });
+    return json_markdown.replaceAll('\\n', '\n');
   }
 }

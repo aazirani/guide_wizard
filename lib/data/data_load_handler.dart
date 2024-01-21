@@ -12,6 +12,7 @@ import 'package:guide_wizard/stores/technical_name/technical_name_with_translati
 import 'package:guide_wizard/stores/updated_at_times/updated_at_times_store.dart';
 import 'package:internet_connection_checker/internet_connection_checker.dart';
 import 'package:provider/provider.dart';
+import 'package:flutter/foundation.dart' show kIsWeb;
 
 class DataLoadHandler {
   // This class is SINGLETON
@@ -31,9 +32,9 @@ class DataLoadHandler {
   late UpdatedAtTimesStore _updatedAtTimesStore = Provider.of<UpdatedAtTimesStore>(context, listen: false);
   late AppSettingsStore _appSettingsStore = Provider.of<AppSettingsStore>(context, listen: false);
 
-  Future<bool> hasInternet() async => await InternetConnectionChecker().hasConnection;
+  Future<bool> hasInternet() async => kIsWeb || await InternetConnectionChecker().hasConnection;
   Future<bool> hasNoLocalData() async => await _dataStore.isDataSourceEmpty() || await _technicalNameWithTranslationsStore.isDataSourceEmpty();
-  Future<bool> answerWasUpdated() async => await _appSettingsStore.getAnswerWasUpdated() ?? false;
+  Future<bool> answerWasUpdated() async => await _appSettingsStore.getAnswerWasUpdated();
 
   void showErrorMessage({required Widget messageWidgetObserver, String? buttonLabel, required var onPressedButton, Duration? duration}) {
     ScaffoldMessenger.of(context).clearSnackBars();
@@ -77,6 +78,16 @@ class DataLoadHandler {
   }
 
   Future loadDataAndCheckForUpdate({bool initialLoading = false, bool refreshData = false, int processId = 0}) async {
+    // ****************** Web and App Conflict Implementation ******************
+    if (kIsWeb) {
+      await loadDataAndCheckForUpdate_Web(initialLoading: initialLoading, refreshData: refreshData, processId: processId);
+    } else {
+      await loadDataAndCheckForUpdate_App(initialLoading: initialLoading, refreshData: refreshData, processId: processId);
+    }
+    // *************************************************************************
+  }
+
+  Future loadDataAndCheckForUpdate_App({bool initialLoading = false, bool refreshData = false, int processId = 0}) async {
     if (_dataStore.isLoading) return;
 
     bool isAnswerWasUpdated = await answerWasUpdated();
@@ -100,11 +111,36 @@ class DataLoadHandler {
     }
     if(noLocalData || isAnswerWasUpdated || refreshData) {
       if(await checkInternetConnectionAndShowMessage(processId: processId)) {
-        ScaffoldMessenger.of(context).clearSnackBars();
-        _dataStore.loadingStarted();
         await loadDataFromApi(true, true);
+      }
+    }
+  }
+
+
+  Future loadDataAndCheckForUpdate_Web({bool initialLoading = false, bool refreshData = false, int processId = 0}) async {
+    if (_dataStore.isLoading) return;
+
+    bool isAnswerWasUpdated = await answerWasUpdated();
+    bool noLocalData = await hasNoLocalData();
+
+    if(initialLoading) {
+      if(!noLocalData) {
+        _dataStore.loadingStarted();
+        await loadDataFromDb();
         _dataStore.loadingFinished();
       }
+      _dataStore.loadingStarted();
+      await updatedAtWasChanged().then((updatedAtTimesUpdatedMap) async => {
+        if (updatedAtTimesUpdatedMap.length > 0 && updatedAtTimesUpdatedMap.values.any((updateAtChanged) => updateAtChanged)) {
+          await loadDataFromApi(updatedAtTimesUpdatedMap[UpdatedAtTimesFactory.LAST_UPDATED_AT_TECHNICAL_NAMES]!, updatedAtTimesUpdatedMap[UpdatedAtTimesFactory.LAST_UPDATED_AT_CONTENT]!)
+        }
+      });
+      _dataStore.loadingFinished();
+    }
+    if(noLocalData || isAnswerWasUpdated || refreshData) {
+      _dataStore.loadingStarted();
+      await loadDataFromApi(true, true);
+      _dataStore.loadingFinished();
     }
   }
 
@@ -178,23 +214,19 @@ class DataLoadHandler {
     }
   }
 
-  loadDataFromApi(
-      bool technicalNamesShouldBeUpdated, bool contentsShouldBeUpdated) async {
-    if (technicalNamesShouldBeUpdated &&
-        !_technicalNameWithTranslationsStore.technicalNameLoading) {
+  loadDataFromApi(bool technicalNamesShouldBeUpdated, bool contentsShouldBeUpdated) async {
+    if (technicalNamesShouldBeUpdated) {
       await _technicalNameWithTranslationsStore.getTechnicalNameWithTranslationsFromApi();
     }
-    if (contentsShouldBeUpdated && !_dataStore.stepLoading) {
+    if (contentsShouldBeUpdated) {
       await _dataStore.getStepsFromApi().then((steps) async => {
-            if (steps.isNotEmpty)
-              {
-                _appSettingsStore.setCurrentStepId(steps.first.id)
-              }
-          });
+        if (steps.isNotEmpty) {
+            _appSettingsStore.setCurrentStepId(steps.first.id)
+          }
+      });
     }
 
-    if (_technicalNameWithTranslationsStore.technicalNameSuccess &&
-        _dataStore.stepSuccess) {
+    if (_technicalNameWithTranslationsStore.technicalNameSuccess && _dataStore.stepSuccess) {
       await _appSettingsStore.setAnswerWasUpdated(false);
     }
   }

@@ -61,7 +61,7 @@ class Repository {
 
 
   Future<List<AppStep>> updateContent(List<AppStep> stepsBeforeUpdate, List<AppStep> stepsAfterUpdate) async {
-    await await truncateStep();
+    await truncateStep();
 
     // Update selected answers
     updateSelectedAnswers(stepsBeforeUpdate, stepsAfterUpdate);
@@ -114,7 +114,7 @@ class Repository {
   Future truncateStep() =>
       _stepDataSource.deleteAll().catchError((error) => throw error);
 
-  Future<int> insertStep(AppStep step) => _stepDataSource
+  Future<void> insertStep(AppStep step) => _stepDataSource
       .insert(step)
       .then((id) => id)
       .catchError((error) => throw error);
@@ -274,8 +274,7 @@ class Repository {
   }
 
   // Must Update Value: ------------------------------------------------------------------
-  bool? get getAnswerWasUpdated => _sharedPrefsHelper.answerWasUpdated;
+  bool get getAnswerWasUpdated => _sharedPrefsHelper.answerWasUpdated;
 
-  Future<void> setAnswerWasUpdated(bool answerWasUpdated) =>
-      _sharedPrefsHelper.setAnswerWasUpdated(answerWasUpdated);
+  Future<void> setAnswerWasUpdated(bool answerWasUpdated) => _sharedPrefsHelper.setAnswerWasUpdated(answerWasUpdated);
 }

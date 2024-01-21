@@ -1,4 +1,3 @@
-import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:guide_wizard/constants/dimens.dart';
@@ -9,12 +8,14 @@ import 'package:guide_wizard/stores/data/data_store.dart';
 import 'package:guide_wizard/stores/language/language_store.dart';
 import 'package:guide_wizard/stores/technical_name/technical_name_with_translations_store.dart';
 import 'package:guide_wizard/stores/updated_at_times/updated_at_times_store.dart';
-import 'package:guide_wizard/widgets/compressed_tasklist_timeline/compressed_task_list_timeline.dart';
-import 'package:guide_wizard/widgets/step_slider/step_slider_widget.dart';
+import 'package:guide_wizard/widgets/current_step_indicator_widget.dart';
+import 'package:guide_wizard/widgets/info_step_description.dart';
+import 'package:guide_wizard/widgets/shimmering_effect/shimmer_widget.dart';
+import 'package:guide_wizard/widgets/step_slider/steps_widget.dart';
 import 'package:guide_wizard/widgets/step_timeline/step_timeline.dart';
+import 'package:guide_wizard/widgets/task_step_description.dart';
 import 'package:material_dialog/material_dialog.dart';
 import 'package:provider/provider.dart';
-import 'package:shimmer/shimmer.dart';
 import 'package:guide_wizard/utils/extension/context_extensions.dart';
 
 class HomeScreen extends StatefulWidget {
@@ -34,10 +35,6 @@ class _HomeScreenState extends State<HomeScreen> {
   late UpdatedAtTimesStore _updatedAtTimesStore;
   late AppSettingsStore _appSettingsStore;
   late DataLoadHandler _dataLoadHandler = DataLoadHandler(context: context);
-
-  // Getters :---------------------------------------------------------------------
-  get _getScreenHeight => MediaQuery.of(context).size.height;
-  get _getScreenWidth => MediaQuery.of(context).size.width;
 
   @override
   void didChangeDependencies() {
@@ -93,8 +90,12 @@ class _HomeScreenState extends State<HomeScreen> {
         padding: EdgeInsets.only(left: 10),
         child: Observer(
           builder: (_) => Text(
-              _technicalNameWithTranslationsStore.getTranslationByTechnicalName(LangKeys.steps_title),
-              style: Theme.of(context).textTheme.titleLarge!.copyWith(color: Theme.of(context).colorScheme.onPrimary),
+            _technicalNameWithTranslationsStore
+                .getTranslationByTechnicalName(LangKeys.steps_title),
+            style: Theme.of(context)
+                .textTheme
+                .titleLarge!
+                .copyWith(color: Theme.of(context).colorScheme.onPrimary),
           ),
         ),
       ),
@@ -183,19 +184,17 @@ class _HomeScreenState extends State<HomeScreen> {
               topRight: Radius.circular(Dimens.homeScreen.bodyBorderRadius),
             ),
           ),
-          child: !_dataStore.isEmpty && !_dataStore.isLoading && !_technicalNameWithTranslationsStore.technicalNameLoading && !_updatedAtTimesStore.updatedAtTimesLoading && _dataStore.stepSuccess && _technicalNameWithTranslationsStore.technicalNameSuccess && _updatedAtTimesStore.updatedAtTimesSuccess
+          child: !_dataStore.isEmpty &&
+                  !_dataStore.isLoading &&
+                  !_technicalNameWithTranslationsStore.technicalNameLoading &&
+                  !_updatedAtTimesStore.updatedAtTimesLoading &&
+                  _dataStore.stepSuccess &&
+                  _technicalNameWithTranslationsStore.technicalNameSuccess &&
+                  _updatedAtTimesStore.updatedAtTimesSuccess
               ? _buildScreenElements()
-              : _shimmerAll(),
+              : ShimmerWidget(),
         ),
       ),
-    );
-  }
-
-  Widget _shimmerAll() {
-    return Shimmer.fromColors(
-      baseColor: context.shimmerBaseColor,
-      highlightColor: context.shimmerHeighlightColor,
-      child: _buildPlaceholderScreenElements(),
     );
   }
 
@@ -205,204 +204,13 @@ class _HomeScreenState extends State<HomeScreen> {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.center,
       children: [
-        _buildCurrentStepIndicator(),
-        StepSliderWidget(),
+        CurrentStepIndicatorWidget(),
+        StepsWidget(),
         StepTimeLine(),
         _dataStore.isFirstStep(_appSettingsStore.currentStepId)
-            ? _buildQuestionDescription()
-            : _buildInProgressCompressedTaskList(),
+            ? InfoStepDescription()
+            : TaskStepDescription(),
       ],
-    );
-  }
-
-  Widget _buildCurrentStepIndicator() {
-    return Padding(
-        padding: Dimens.homeScreen.currentStepIndicatorPadding,
-        child: Row(children: [
-          _buildStepsText(),
-          SizedBox(width: 10),
-          _buildCurrentStepText(),
-        ]));
-  }
-
-  Widget _buildStepsText() {
-    return Text(
-        _technicalNameWithTranslationsStore
-            .getTranslationByTechnicalName(LangKeys.steps),
-        style: Theme.of(context).textTheme.titleSmall);
-  }
-
-  Widget _buildCurrentStepText() {
-    return Text(
-        "${_dataStore.getAllSteps.indexWhere((step) => step.id == _appSettingsStore.currentStepId) + 1}/${_dataStore.getAllSteps.length}",
-        style: Theme.of(context).textTheme.titleSmall);
-  }
-
-  Widget _buildQuestionDescription() {
-    return Expanded(
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.start,
-        children: [
-          Padding(
-              padding: Dimens.homeScreen.inProgressTextPadding,
-              child: Align(
-                  alignment: Alignment.centerLeft,
-                  child: Text(
-                      _technicalNameWithTranslationsStore
-                          .getTranslationByTechnicalName(LangKeys.description),
-                      style: Theme.of(context).textTheme.titleSmall))),
-          Flexible(
-            child: Container(
-              margin: Dimens.homeScreen.questionsStepDescMargin,
-              padding: Dimens.homeScreen.questionsStepDescPadding,
-              decoration: BoxDecoration(
-                color: context.containerColor,
-                borderRadius: BorderRadius.all(Radius.circular(Dimens.compressedTaskList.contentRadius)),
-              ),
-              child: RawScrollbar(
-                child: SingleChildScrollView(
-                  child: Column(
-                    mainAxisSize: MainAxisSize.min,
-                    children: [
-                      Flexible(
-                        child: Text(
-                            _technicalNameWithTranslationsStore.getTranslation(
-                                _dataStore
-                                    .getStepById(
-                                        _appSettingsStore.currentStepId)
-                                    .description),
-                            style: Theme.of(context).textTheme.bodyMedium),
-                      ),
-                    ],
-                  ),
-                ),
-              ),
-            ),
-          ),
-        ],
-      ),
-    );
-  }
-
-  Widget _buildInProgressCompressedTaskList() {
-    return Flexible(
-      child: Column(
-        children: [
-          Padding(
-            padding: Dimens.homeScreen.inProgressTextPadding,
-            child: Align(
-              alignment: Alignment.centerLeft,
-              child: Text(
-                _technicalNameWithTranslationsStore
-                    .getTranslationByTechnicalName(LangKeys.in_progress),
-                style: Theme.of(context).textTheme.titleSmall,
-              ),
-            ),
-          ),
-          Flexible(
-            child: Padding(
-              padding: Dimens.compressedTaskList.padding,
-              child: CompressedTaskListTimeline(),
-            ),
-          ),
-        ],
-      ),
-    );
-  }
-
-  _buildPlaceholderScreenElements() {
-    return Column(
-      children: [
-        _buildPlaceholderCurrentStepIndicator(),
-        _buildPlaceholderCarouselSliderContainer(),
-         _buildPlaceholderStepTimeline(),
-        SizedBox(height: Dimens.homeScreen.StepTimelineProgressBarDistance),
-        SizedBox(height: Dimens.homeScreen.progressBarCompressedTaskListDistance),
-        _buildPlaceholderCompressedTaskListTimeline(),
-      ],
-    );
-  }
-
-  _buildPlaceholderStepTimeline(){
-    return Padding(
-      padding: Dimens.stepTimeLine.containerPadding,
-      child: Container(
-        width: MediaQuery.of(context).size.width,
-        height: 40,
-        decoration: BoxDecoration(
-            color: context.containerColor,
-            borderRadius: Dimens.stepTimeLine.containerBorderRadius,
-            boxShadow: [
-              BoxShadow(
-                  color: context.shadowColor,
-                  blurRadius: 0.3,
-                  offset: Offset(0, 2))
-            ]),
-      ),
-    );
-
-  }
-
-  _buildPlaceholderCurrentStepIndicator() {
-    return Padding(
-        padding: Dimens.homeScreen.currentStepIndicatorPadding,
-        child: Row(children: [
-          _buildStepsText(),
-        ]));
-  }
-
-  Widget _buildPlaceholderCarouselSliderContainer() {
-    return Container(
-      alignment: Alignment.topRight,
-      padding: Dimens.homeScreen.placeHolderCarouselSliderContainerPadding,
-      height: MediaQuery.of(context).size.height /
-          Dimens.homeScreen.placeHolderCarouselSliderHeightRatio,
-      child: _buildPlaceholderStepSliderWidget(),
-    );
-  }
-
-  Widget _buildPlaceholderStepSliderWidget() {
-    return CarouselSlider.builder(
-      itemCount: 5,
-      itemBuilder: (BuildContext context, int index, int realIndex) {
-        return Container(
-          alignment: Alignment.topLeft,
-          width: _getScreenWidth,
-          margin: Dimens.stepSlider.sliderContainerMargin,
-          padding: Dimens.stepSlider.sliderContainerPadding,
-          decoration: BoxDecoration(
-            color: Colors.grey,
-            borderRadius: BorderRadius.all(
-                Radius.circular(Dimens.homeScreen.placeHolderStepSliderBorderRadius)),
-          ),
-        );
-      },
-      options: CarouselOptions(
-        height: _getScreenHeight / Dimens.homeScreen.placeHolderCarouselHeightRatio,
-        initialPage: 0,
-        enableInfiniteScroll: false,
-        autoPlay: false,
-        enlargeCenterPage: false,
-        scrollDirection: Axis.horizontal,
-      ),
-    );
-  }
-
-  Widget _buildPlaceholderCompressedTaskListTimeline() {
-    return Padding(
-      padding: Dimens.stepTimeLine.containerPadding,
-      child: Container(
-        decoration: BoxDecoration(
-            color: Colors.grey,
-            borderRadius: BorderRadius.all(Radius.circular(Dimens.homeScreen.compressedTaskListBorderRadius))),
-        padding: Dimens.compressedTaskList.timelineContainerPadding,
-        height: _getScreenHeight /
-            Dimens.homeScreen.placeHolderCompressedTaskListHeightRatio,
-        width: double.infinity,
-        child: Align(
-          alignment: Alignment.topLeft,
-        ),
-      ),
     );
   }
 }

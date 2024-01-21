@@ -20,8 +20,8 @@ class StepDataSource {
   StepDataSource(this._db);
 
   // DB functions:--------------------------------------------------------------
-  Future<int> insert(AppStep step) async {
-    return await _stepsStore.add(_db, step.toMap());
+  Future<void> insert(AppStep step) async {
+    await _stepsStore.record(step.id).put(_db, step.toMap());
   }
 
   Future<int> count() async {
@@ -65,6 +65,7 @@ class StepDataSource {
           steps: ObservableList.of(recordSnapshots.map((snapshot) {
             final step = AppStepFactory().fromMap(snapshot.value);
             // An ID is a key of a record from the database.
+            // step.id = snapshot.key;
             return step;
           })));
     } else {
