@@ -48,8 +48,8 @@ class SharedPreferenceHelper {
   }
 
   // current step:---------------------------------------------------
-  bool? get answerWasUpdated {
-    return _sharedPreference.getBool(Preferences.answer_was_updated);
+  bool get answerWasUpdated {
+    return _sharedPreference.getBool(Preferences.answer_was_updated) ?? false;
   }
 
   Future<void> setAnswerWasUpdated(bool mustUpdate) {

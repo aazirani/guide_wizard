@@ -7,6 +7,8 @@ import 'package:path_provider/path_provider.dart';
 import 'package:sembast/sembast.dart';
 import 'package:sembast/sembast_io.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:sembast_web/sembast_web.dart';
+import 'package:flutter/foundation.dart' show kIsWeb;
 
 abstract class LocalModule {
 
@@ -25,21 +27,31 @@ abstract class LocalModule {
     // Key for encryption
     var encryptionKey = "";
 
-    // Get a platform-specific directory where persistent app data can be stored
-    final appDocumentDir = await getApplicationDocumentsDirectory();
-
     // Path with the form: /platform-specific-directory/demo.db
-    final dbPath = join(appDocumentDir.path, DBConstants.DB_NAME);
-
+    final dbPath;
     // Check to see if encryption is set, then provide codec
     // else init normal db with path
     var database;
+    var factory;
+
+    // ****************** Web and App Conflict Implementation ******************
+    if (kIsWeb) {
+      dbPath = 'guidewizardweb' + DBConstants.DB_NAME;
+      factory = databaseFactoryWeb;
+    } else {
+      // Get a platform-specific directory where persistent app data can be stored
+      final appDocumentDir = await getApplicationDocumentsDirectory();
+      dbPath = join(appDocumentDir.path, DBConstants.DB_NAME);
+      factory = databaseFactoryIo;
+    }
+    // *************************************************************************
+
     if (encryptionKey.isNotEmpty) {
       // Initialize the encryption codec with a user password
       var codec = getXXTeaCodec(password: encryptionKey);
-      database = await databaseFactoryIo.openDatabase(dbPath, codec: codec);
+      database = await factory.openDatabase(dbPath, codec: codec);
     } else {
-      database = await databaseFactoryIo.openDatabase(dbPath);
+      database = await factory.openDatabase(dbPath);
     }
 
     // Return database instance

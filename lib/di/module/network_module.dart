@@ -15,10 +15,10 @@ abstract class NetworkModule {
       ..options.receiveTimeout = Endpoints.receiveTimeout
       ..options.headers = {'Content-Type': 'application/json; charset=utf-8'}
       ..interceptors.add(LogInterceptor(
-        request: true,
-        responseBody: true,
-        requestBody: true,
-        requestHeader: true,
+        request: false,
+        responseBody: false,
+        requestBody: false,
+        requestHeader: false,
       ))
       ..interceptors.add(
         InterceptorsWrapper(

@@ -9,6 +9,7 @@ import 'package:guide_wizard/ui/home/home.dart';
 import 'package:guide_wizard/utils/extension/context_extensions.dart';
 import 'package:progress_state_button/progress_button.dart';
 import 'package:provider/provider.dart';
+import 'package:flutter/foundation.dart' show kIsWeb;
 
 class NextStageButton extends StatefulWidget {
   double height = Dimens.nextStageButton.defaultHeight;
@@ -46,10 +47,10 @@ class _NextStageButtonState extends State<NextStageButton> {
 
   @override
   Widget build(BuildContext context) {
-    return newVersionButton();
+    return newVersionButton(context);
   }
 
-  Widget newVersionButton() {
+  Widget newVersionButton(BuildContext context) {
     return ProgressButton(
       minWidth: _getScreenWidth() - 20,
       maxWidth: _getScreenWidth() - 20,
@@ -87,22 +88,31 @@ class _NextStageButtonState extends State<NextStageButton> {
         ButtonState.success: context.secondaryContainerColor,
       },
       minWidthStates: [],
-      onPressed: onTapFunction,
+      onPressed: (){
+        onTapFunction(context);
+      },
       state: buttonState,
       padding: Dimens.nextStageButton.padding,
     );
   }
 
-  void onTapFunction() async {
+  void onTapFunction(BuildContext context) async {
     setButtonState(ButtonState.loading);
 
-    if (!await DataLoadHandler().hasInternet()) {
-      setButtonState(ButtonState.fail);
-      Future.delayed(Duration(milliseconds: 2000), () {
-        setButtonState(ButtonState.idle);
-      });
-      return;
+
+    // ****************** Web and App Conflict Implementation ******************
+    if (kIsWeb) {
+      // pass
+    } else {
+      if (!await DataLoadHandler().hasInternet()) {
+        setButtonState(ButtonState.fail);
+        Future.delayed(Duration(milliseconds: 2000), () {
+          setButtonState(ButtonState.idle);
+        });
+        return;
+      }
     }
+    // *************************************************************************
 
     await updateIfAnswersHasChanged();
 
@@ -126,7 +136,7 @@ class _NextStageButtonState extends State<NextStageButton> {
   }
 
   Future<void> updateIfAnswersHasChanged() async {
-    bool answerWasUpdated = await _appSettingsStore.getAnswerWasUpdated() ?? false;
+    bool answerWasUpdated = await _appSettingsStore.getAnswerWasUpdated();
     if (answerWasUpdated) {
       await DataLoadHandler().loadDataAndCheckForUpdate();
     }

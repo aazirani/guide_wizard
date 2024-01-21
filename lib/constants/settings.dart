@@ -6,4 +6,6 @@ class SettingsConstants {
   static const updateRequiredSnackBarDuration = Duration(seconds: 7);
   static const internetCheckingPeriod = Duration(seconds: 7);
   static const updateRequestStop = Duration(minutes: 5);
+
+  static const webMaxWidth = 600.0;
 }

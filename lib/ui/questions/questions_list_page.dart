@@ -23,6 +23,7 @@ class _QuestionsListPageState extends State<QuestionsListPage> {
   // stores:--------------------------------------------------------------------
   late DataStore _dataStore;
   late TechnicalNameWithTranslationsStore _technicalNameWithTranslationsStore;
+  final scrollController = ScrollController();
 
   @override
   void initState() {
@@ -60,7 +61,9 @@ class _QuestionsListPageState extends State<QuestionsListPage> {
               children: [
                 Flexible(
                   child: RawScrollbar(
+                    controller: scrollController,
                     child: ListView.builder(
+                      controller: scrollController,
                       shrinkWrap: true,
                       itemCount: questions.length,
                       itemBuilder: (context, index) => _buildQuestionWidget(index),
