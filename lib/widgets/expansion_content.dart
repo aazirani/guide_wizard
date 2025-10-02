@@ -59,7 +59,11 @@ class _ExpansionContentState extends State<ExpansionContent> {
                       ? _buildDeadlineContainer()
                       : Container(),
                   _buildMarkdownContent()
-                ])),
+                ],
+                  mainAxisAlignment: MainAxisAlignment.start,
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                ),
+            ),
           ),
         ),
       ],
@@ -69,32 +73,30 @@ class _ExpansionContentState extends State<ExpansionContent> {
   Widget _buildDeadlineContainer() {
     return Padding(
         padding: Dimens.expansionContent.deadlineContainerPadding,
-        child: Align(
-            alignment: Alignment.topLeft,
-            child: Container(
-              decoration: BoxDecoration(
-                  color: context.deadlineContainerColor,
-                  ),
-              child: Padding(
-                  padding: Dimens.expansionContent.deadlineContentPadding,
-                  child: Text.rich(
-                    TextSpan(
-                      children: [
-                        WidgetSpan(
-                          child: Padding(
-                              padding: EdgeInsets.only(right: 8),
-                              child: Icon(
-                                Icons.calendar_month,
-                                color: context.deadlineColor,
-                              )),
-                        ),
-                        TextSpan(
-                            text: "${widget.deadline}",
-                            style: Theme.of(context).textTheme.bodyMedium,),
-                      ],
+        child: Container(
+          decoration: BoxDecoration(
+              color: context.deadlineContainerColor,
+              ),
+          child: Padding(
+              padding: Dimens.expansionContent.deadlineContentPadding,
+              child: Text.rich(
+                TextSpan(
+                  children: [
+                    WidgetSpan(
+                      child: Padding(
+                          padding: EdgeInsetsDirectional.only(end: 8),
+                          child: Icon(
+                            Icons.calendar_month,
+                            color: context.deadlineColor,
+                          )),
                     ),
-                  )),
-            )));
+                    TextSpan(
+                        text: "${widget.deadline}",
+                        style: Theme.of(context).textTheme.bodyMedium,),
+                  ],
+                ),
+              )),
+        ));
   }
 
   Widget _buildMarkdownContent() {

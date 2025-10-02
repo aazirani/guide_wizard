@@ -6,7 +6,7 @@ import 'package:guide_wizard/stores/app_settings/app_settings_store.dart';
 import 'package:guide_wizard/stores/data/data_store.dart';
 import 'package:guide_wizard/utils/extension/context_extensions.dart';
 import 'package:provider/provider.dart';
-import 'package:timelines/timelines.dart';
+import 'package:timelines_plus/timelines_plus.dart';
 
 class StepTimeLine extends StatefulWidget {
   StepTimeLine({Key? key}) : super(key: key);

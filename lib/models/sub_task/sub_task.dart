@@ -75,15 +75,15 @@ abstract class _SubTask with Store {
 class SubTaskFactory {
   SubTask fromMap(Map<String, dynamic> json) {
     return SubTask(
-      id: json["id"],
-      task_id: json["task_id"],
-      title: json["title"],
-      markdown: json["markdown"],
-      deadline: json["deadline"],
-      order: json["order"],
-      creator_id: json["creator_id"],
-      created_at: json["created_at"],
-      updated_at: json["updated_at"],
+      id: json["id"] ?? 0,
+      task_id: json["task_id"] ?? 0,
+      title: json["title"] ?? 0,
+      markdown: json["markdown"] ?? 0,
+      deadline: json["deadline"] ?? 0,
+      order: json["order"] ?? 0,
+      creator_id: json["creator_id"] ?? 0,
+      created_at: json["created_at"] ?? "",
+      updated_at: json["updated_at"] ?? "",
     );
   }
 }

@@ -30,7 +30,7 @@ class _StepSliderWidgetState extends State<StepSliderWidget> {
     _appSettingsStore = Provider.of<AppSettingsStore>(context);
   }
 
-  final CarouselController _carouselController = CarouselController();
+  final CarouselSliderController _carouselController = CarouselSliderController();
 
   @override
   Widget build(BuildContext context) {
@@ -57,7 +57,6 @@ class _StepSliderWidgetState extends State<StepSliderWidget> {
                   _carouselController.animateToPage(index);
                 },
                 child: StepContent(step_index: index),
-                // child: _buildSliderContainer(index),
               );
             },
           );

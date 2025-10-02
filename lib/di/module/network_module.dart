@@ -11,8 +11,8 @@ abstract class NetworkModule {
 
     dio
       ..options.baseUrl = Endpoints.baseUrl
-      ..options.connectTimeout = Endpoints.connectionTimeout
-      ..options.receiveTimeout = Endpoints.receiveTimeout
+      ..options.connectTimeout = Duration(milliseconds: Endpoints.connectionTimeout)
+      ..options.receiveTimeout = Duration(milliseconds: Endpoints.receiveTimeout)
       ..options.headers = {'Content-Type': 'application/json; charset=utf-8'}
       ..interceptors.add(LogInterceptor(
         request: false,

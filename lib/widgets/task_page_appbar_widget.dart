@@ -4,9 +4,9 @@ import 'package:guide_wizard/constants/dimens.dart';
 import 'package:guide_wizard/models/step/app_step.dart';
 import 'package:guide_wizard/models/task/task.dart';
 import 'package:guide_wizard/stores/data/data_store.dart';
+import 'package:guide_wizard/utils/extension/context_extensions.dart';
 import 'package:guide_wizard/widgets/scrolling_overflow_text.dart';
 import 'package:provider/provider.dart';
-import 'package:guide_wizard/utils/extension/context_extensions.dart';
 
 class BlocksAppBarWidget extends StatefulWidget implements PreferredSizeWidget {
   Task task;
@@ -41,7 +41,7 @@ class _BlocksAppBarWidgetState extends State<BlocksAppBarWidget> {
 
   _buildDoneUndoneButtonStyle() {
     return ElevatedButton.styleFrom(
-        padding: EdgeInsets.all(0),
+        padding: EdgeInsetsDirectional.all(0),
         backgroundColor: widget.task.isDone ? context.lightBackgroundColor : context.primaryColor,
         foregroundColor: context.doneButtonColor,
         shape: RoundedRectangleBorder(

@@ -68,14 +68,14 @@ abstract class _AppStep with Store {
 class AppStepFactory{
   AppStep fromMap(Map<String, dynamic> json) {
     return AppStep(
-      id: json["id"],
-      name: json["name"],
-      description: json["description"],
-      order: json["order"],
+      id: json["id"] ?? 0,
+      name: json["name"] ?? 0,
+      description: json["description"] ?? 0,
+      order: json["order"] ?? 0,
       image: json["image"],
-      creator_id: json["creator_id"],
-      created_at: json["created_at"],
-      updated_at: json["updated_at"],
+      creator_id: json["creator_id"] ?? 0,
+      created_at: json["created_at"] ?? "",
+      updated_at: json["updated_at"] ?? "",
       questions: ObservableList.of(json["questions"].map((x) => QuestionFactory().fromMap(x)).toList().cast<Question>()),
       tasks: ObservableList.of(json["tasks"].map((task) => TaskFactory().fromMap(task)).toList().cast<Task>()),
     );

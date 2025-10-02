@@ -104,18 +104,18 @@ abstract class _Question with Store {
 class QuestionFactory {
   Question fromMap(Map<String, dynamic> json) {
     return Question(
-      id: json["id"],
-      title: json["title"],
-      sub_title: json["sub_title"],
-      type: json["type"],
-      axis_count: json["axis_count"],
+      id: json["id"] ?? 0,
+      title: json["title"] ?? 0,
+      sub_title: json["sub_title"] ?? 0,
+      type: json["type"] ?? "",
+      axis_count: json["axis_count"] ?? 0,
       is_multiple_choice: (json["is_multiple_choice"] == 1) ? true : false,
-      info_url: json["info_url"],
-      info_description: json["info_description"],
-      step_id: json["step_id"],
-      creator_id: json["creator_id"],
-      created_at: json["created_at"],
-      updated_at: json["updated_at"],
+      info_url: json["info_url"] ?? 0,
+      info_description: json["info_description"] ?? 0,
+      step_id: json["step_id"] ?? 0,
+      creator_id: json["creator_id"] ?? 0,
+      created_at: json["created_at"] ?? "",
+      updated_at: json["updated_at"] ?? "",
       answers: ObservableList<Answer>.of(
           json["answers"].map((x) => AnswerFactory().fromMap(x)).toList().cast<Answer>()),
     );

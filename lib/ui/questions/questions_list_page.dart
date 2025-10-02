@@ -2,12 +2,12 @@ import 'package:flutter/material.dart';
 import 'package:guide_wizard/providers/question_widget_state/question_widget_state.dart';
 import 'package:guide_wizard/stores/data/data_store.dart';
 import 'package:guide_wizard/stores/technical_name/technical_name_with_translations_store.dart';
+import 'package:guide_wizard/utils/extension/context_extensions.dart';
 import 'package:guide_wizard/widgets/measure_size.dart';
 import 'package:guide_wizard/widgets/next_stage_button.dart';
 import 'package:guide_wizard/widgets/question_widget.dart';
 import 'package:guide_wizard/widgets/questions_list_page_appBar.dart';
 import 'package:provider/provider.dart';
-import 'package:guide_wizard/utils/extension/context_extensions.dart';
 
 class QuestionsListPage extends StatefulWidget {
   int stepId;
@@ -103,7 +103,7 @@ class _QuestionsListPageState extends State<QuestionsListPage> {
       },
       child: SafeArea(
         child: Padding(
-          padding: const EdgeInsets.only(bottom: 10),
+          padding: const EdgeInsetsDirectional.only(bottom: 10),
           child: NextStageButton(),
         ),
       ),

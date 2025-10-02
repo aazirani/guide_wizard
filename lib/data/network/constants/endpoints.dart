@@ -2,7 +2,7 @@ class Endpoints {
   Endpoints._();
 
   // base url
-  static const String baseUrl = "https://qa-wg.collegiality.de/admin/public";
+  static const String baseUrl = "http://localhost:8080";
 
   // app api
   static const String appApiUrl = baseUrl + "/api/app";

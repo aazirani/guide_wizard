@@ -8,15 +8,14 @@ import 'package:guide_wizard/stores/data/data_store.dart';
 import 'package:guide_wizard/stores/language/language_store.dart';
 import 'package:guide_wizard/stores/technical_name/technical_name_with_translations_store.dart';
 import 'package:guide_wizard/stores/updated_at_times/updated_at_times_store.dart';
+import 'package:guide_wizard/utils/extension/context_extensions.dart';
 import 'package:guide_wizard/widgets/current_step_indicator_widget.dart';
 import 'package:guide_wizard/widgets/info_step_description.dart';
 import 'package:guide_wizard/widgets/shimmering_effect/shimmer_widget.dart';
 import 'package:guide_wizard/widgets/step_slider/steps_widget.dart';
 import 'package:guide_wizard/widgets/step_timeline/step_timeline.dart';
 import 'package:guide_wizard/widgets/task_step_description.dart';
-import 'package:material_dialog/material_dialog.dart';
 import 'package:provider/provider.dart';
-import 'package:guide_wizard/utils/extension/context_extensions.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({
@@ -87,7 +86,7 @@ class _HomeScreenState extends State<HomeScreen> {
       backgroundColor: context.primaryColor,
       actions: _buildActions(context),
       title: Padding(
-        padding: EdgeInsets.only(left: 10),
+        padding: EdgeInsetsDirectional.only(start: 10),
         child: Observer(
           builder: (_) => Text(
             _technicalNameWithTranslationsStore
@@ -104,7 +103,7 @@ class _HomeScreenState extends State<HomeScreen> {
 
   List<Widget> _buildActions(BuildContext context) {
     return <Widget>[
-      _buildLanguageButton(),
+      //_buildLanguageButton(),
     ];
   }
 
@@ -123,8 +122,10 @@ class _HomeScreenState extends State<HomeScreen> {
   _buildLanguageDialog() {
     _showDialog<String>(
       context: context,
+      child: Container()
+      /*
       child: Observer(
-        builder: (_) => MaterialDialog(
+        builder: (_) => MaterialDialogs(
           borderRadius: Dimens.homeScreen.buttonRadius,
           enableFullWidth: true,
           headerColor: Theme.of(context).primaryColor,
@@ -155,6 +156,8 @@ class _HomeScreenState extends State<HomeScreen> {
               .toList(),
         ),
       ),
+
+       */
     );
   }
 

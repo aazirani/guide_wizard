@@ -95,15 +95,15 @@ abstract class _Task with Store {
 class TaskFactory {
   Task fromMap(Map<String, dynamic> json) {
     return Task(
-      id: json["id"],
-      step_id: json["step_id"],
-      text: json["text"],
-      description: json["description"],
+      id: json["id"] ?? 0,
+      step_id: json["step_id"] ?? 0,
+      text: json["text"] ?? 0,
+      description: json["description"] ?? 0,
       image_1: json["image_1"],
       image_2: json["image_2"],
-      creator_id: json["creator_id"],
-      created_at: json["created_at"],
-      updated_at: json["updated_at"],
+      creator_id: json["creator_id"] ?? 0,
+      created_at: json["created_at"] ?? "",
+      updated_at: json["updated_at"] ?? "",
       sub_tasks: ObservableList<SubTask>.of(json["sub_tasks"].map((x) => SubTaskFactory().fromMap(x)).toList().cast<SubTask>()),
       isDone: json["isDone"] ?? false,
     );
