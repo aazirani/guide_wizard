@@ -87,15 +87,15 @@ abstract class _Answer with Store {
 class AnswerFactory {
   Answer fromMap(Map<String, dynamic> json) {
     return Answer(
-      id: json["id"],
-      question_id: json["question_id"],
-      title: json["title"],
-      order: json["order"],
+      id: json["id"] ?? 0,
+      question_id: json["question_id"] ?? 0,
+      title: json["title"] ?? 0,
+      order: json["order"] ?? 0,
       image: json["image"],
       is_enabled: json["is_enabled"] == 1 ? true : false,
-      creator_id: json["creator_id"],
-      created_at: json["created_at"],
-      updated_at: json["updated_at"],
+      creator_id: json["creator_id"] ?? 0,
+      created_at: json["created_at"] ?? "",
+      updated_at: json["updated_at"] ?? "",
       selected: json["selected"] ?? false,
     );
   }

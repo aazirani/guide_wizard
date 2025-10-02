@@ -7,10 +7,10 @@ import 'package:guide_wizard/models/task/task.dart';
 import 'package:guide_wizard/stores/technical_name/technical_name_with_translations_store.dart';
 import 'package:guide_wizard/ui/tasks/task_page_text_only.dart';
 import 'package:guide_wizard/ui/tasks/task_page_with_image.dart';
+import 'package:guide_wizard/utils/extension/context_extensions.dart';
 import 'package:guide_wizard/widgets/diamond_indicator.dart';
 import 'package:provider/provider.dart';
-import 'package:timelines/timelines.dart';
-import 'package:guide_wizard/utils/extension/context_extensions.dart';
+import 'package:timelines_plus/timelines_plus.dart';
 
 class TaskListTimeLine extends StatefulWidget {
   final AppStep step;
@@ -116,19 +116,20 @@ class _TaskListTimeLineState extends State<TaskListTimeLine> {
       child: Container(
         child: Row(
           children: [
-            Flexible(
+            Expanded(
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 mainAxisAlignment: MainAxisAlignment.center,
-                children: (_deadLineAvailable())
-                    ? [
-                        _buildContentTitle(),
-                        _buildContentDeadline(),
-                      ]
-                    : [_buildContentTitle()],
+                children: [_buildContentTitle()],
               ),
             ),
-            widget.task.isDone ? _buildDoneBadge() : Container(),
+            Column(
+              crossAxisAlignment: CrossAxisAlignment.end,
+              children: [
+                widget.task.isDone ? _buildDoneBadge() : Expanded(child: SizedBox.shrink()),
+                _deadLineAvailable() ? _buildContentDeadline() : Expanded(child: SizedBox.shrink())
+              ],
+            )
           ],
         ),
       ),
@@ -137,15 +138,12 @@ class _TaskListTimeLineState extends State<TaskListTimeLine> {
 
   Widget _buildContentTitle() {
     return Flexible(
-      child: Align(
-        alignment: Alignment.centerLeft,
-        child: Text(
-          "${_technicalNameWithTranslationsStore.getTranslation(widget.task.text)} ",
-          style: Theme.of(context)
-              .textTheme
-              .titleSmall!
-              .copyWith(fontWeight: FontWeight.normal),
-        ),
+      child: Text(
+        "${_technicalNameWithTranslationsStore.getTranslation(widget.task.text)} ",
+        style: Theme.of(context)
+            .textTheme
+            .titleSmall!
+            .copyWith(fontWeight: FontWeight.normal),
       ),
     );
   }
@@ -179,8 +177,8 @@ class _TaskListTimeLineState extends State<TaskListTimeLine> {
   Widget _buildContentDeadline() {
     return Container(
         padding: Dimens.taskListTimeLine.contentDeadlineTopPadding,
-        width: 80,
-        height: 40,
+        width: 110,
+        height: 50,
         child: (_deadLineAvailable())
             ? _buildDeadlineContainer()
             : null);

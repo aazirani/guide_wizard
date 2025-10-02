@@ -32,7 +32,7 @@ class DataLoadHandler {
   late UpdatedAtTimesStore _updatedAtTimesStore = Provider.of<UpdatedAtTimesStore>(context, listen: false);
   late AppSettingsStore _appSettingsStore = Provider.of<AppSettingsStore>(context, listen: false);
 
-  Future<bool> hasInternet() async => kIsWeb || await InternetConnectionChecker().hasConnection;
+  Future<bool> hasInternet() async => kIsWeb || await InternetConnectionChecker.instance.hasConnection;
   Future<bool> hasNoLocalData() async => await _dataStore.isDataSourceEmpty() || await _technicalNameWithTranslationsStore.isDataSourceEmpty();
   Future<bool> answerWasUpdated() async => await _appSettingsStore.getAnswerWasUpdated();
 
@@ -206,7 +206,7 @@ class DataLoadHandler {
     await _technicalNameWithTranslationsStore.getTechnicalNameWithTranslationsFromDb();
     List<AppStep> steps = await _dataStore.getStepsFromDb();
     if (steps.isNotEmpty) {
-      if (_dataStore.stepIsDone(_dataStore.getStepByIndex(0).id))
+      if (_dataStore.stepIsDone(_dataStore.getStepByIndex(0).id) && steps.length > 1)
         _appSettingsStore.setCurrentStepId(_dataStore.getStepByIndex(1).id);
       else {
         _appSettingsStore.setCurrentStepId(steps.first.id);

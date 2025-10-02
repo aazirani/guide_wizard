@@ -1,260 +1,324 @@
-# Guide Wizard App
+# Guide Wizard Mobile App
 
-An app that guides international students through the initial stages of settling into a new city and university.
+A Flutter mobile application that provides personalized, step-by-step guidance through complex processes. The app delivers adaptive content based on user responses with multilingual support and intelligent logic-based personalization.
 
-For more information about the basics of this repo, head over to the links below.
+**🌐 Website**: [https://aazirani.github.io/guidewizard/](https://aazirani.github.io/guidewizard/)
 
-https://github.com/zubairehman/flutter-boilerplate-project/tree/master
+## 🌟 Live Implementations
 
-https://github.com/zubairehman/flutter-boilerplate-project/wiki
+Guide Wizard is currently being used by:
 
-This Flutter project was written using MobX and Provider.
+- **[Bazm](http://bazm.me)** - Wedding planning checklist ([checklist.bazm.me](http://checklist.bazm.me))
 
-## How to Use 
+**Using Guide Wizard?** Let me know and I'll list your implementation here! Open an issue or contact me to be featured.
 
-**Step 1:**
+## 🚀 Features
 
-Download or clone this repo by using the link below:
+- **Personalized Guidance**: Dynamic content adaptation based on user profile and answers
+- **Step-by-Step Navigation**: Intuitive wizard-style interface guiding users through multi-step processes
+- **Intelligent Logic System**: Content personalization using expression-based conditional logic
+- **Multilingual Support**: Full internationalization with dynamic language switching
+- **Offline Capability**: Local database caching for offline access to downloaded content
+- **Image-Rich Content**: Visual guides with image-based questions and task illustrations
+- **Task Management**: Track progress through checklists and subtasks
+- **Clean Architecture**: MobX state management with reactive UI updates
+- **Material Design**: Modern, responsive UI following Material Design guidelines
 
+## 📋 Prerequisites
+
+Before you begin, ensure you have the following installed:
+
+- **[Flutter SDK](https://flutter.dev/docs/get-started/install)** (2.0.0 or higher)
+- **[Dart SDK](https://dart.dev/get-dart)** (2.12.0 or higher)
+- **Android Studio** or **Xcode** (for mobile development)
+- **Git**
+
+### Backend Requirement
+
+This app requires the **Guide Wizard Backend** to be running. The backend provides the API for content management, logic evaluation, and personalization.
+
+**Backend Repository**: [Guide Wizard Backend](https://github.com/aazirani/guide_wizard_backend)
+
+## 🔧 Installation
+
+### Step 1: Clone the Repository
+
+```bash
+git clone https://github.com/aazirani/guide_wizard.git
+cd guide_wizard
 ```
-https://github.com/zubairehman/flutter-boilerplate-project.git
+
+### Step 2: Install Dependencies
+
+```bash
+flutter pub get
 ```
 
-**Step 2:**
+### Step 3: Generate Code Files
 
-Go to project root and execute the following command in console to get the required dependencies: 
+This project uses code generation for MobX stores and JSON serialization. Run the build runner:
 
-```
-flutter pub get 
-```
-
-**Step 3:**
-
-This project uses `inject` library that works with code generation, execute the following command to generate files:
-
-```
+```bash
+# One-time generation
 flutter packages pub run build_runner build --delete-conflicting-outputs
-```
 
-or watch command in order to keep the source code synced automatically:
-
-```
+# Or use watch mode for automatic regeneration during development
 flutter packages pub run build_runner watch
 ```
 
-## Hide Generated Files
+### Step 4: Configure Backend URL
 
-In-order to hide generated files, navigate to `Android Studio` -> `Preferences` -> `Editor` -> `File Types` and paste the below lines under `ignore files and folders` section:
+The app is configured to connect to `http://localhost:8080` by default for local development.
+
+To change the backend URL, edit `lib/data/network/constants/endpoints.dart`:
+
+```dart
+class Endpoints {
+  static const String baseUrl = "http://your-backend-url.com";
+  // ... rest of the file
+}
+```
+
+### Step 5: Run the App
+
+```bash
+# For Android
+flutter run
+
+# For iOS
+flutter run
+
+# For a specific device
+flutter devices
+flutter run -d <device-id>
+```
+
+## 🏗️ Project Architecture
+
+This project follows a clean architecture pattern with clear separation of concerns:
+
+```
+lib/
+├── constants/              # App-level constants
+│   ├── app_theme.dart     # Theme configuration
+│   ├── endpoints.dart     # API endpoints
+│   ├── preferences.dart   # SharedPreferences keys
+│   └── strings.dart       # String constants
+├── data/                   # Data layer
+│   ├── local/             # Local database (Sembast)
+│   ├── network/           # API client (Dio)
+│   ├── sharedpref/        # SharedPreferences helper
+│   └── repository.dart    # Central data repository
+├── models/                 # Data models
+│   ├── answer/
+│   ├── question/
+│   ├── step/
+│   ├── task/
+│   └── sub_task/
+├── stores/                 # MobX state management
+│   ├── content/           # Content store
+│   ├── language/          # Language store
+│   └── theme/             # Theme store
+├── ui/                     # UI layer
+│   ├── splash/            # Splash screen
+│   ├── home/              # Home screen
+│   ├── questions/         # Questions screen
+│   └── tasks/             # Tasks screen
+├── utils/                  # Utility functions
+├── widgets/                # Reusable widgets
+├── main.dart              # App entry point
+└── routes.dart            # Navigation routes
+```
+
+## 📚 Key Technologies
+
+### State Management
+- **[MobX](https://github.com/mobxjs/mobx.dart)** - Reactive state management
+- **[Provider](https://github.com/rrousselGit/provider)** - Dependency injection
+
+### Networking
+- **[Dio](https://github.com/flutterchina/dio)** - HTTP client for API communication
+
+### Local Storage
+- **[Sembast](https://github.com/tekartik/sembast.dart)** - NoSQL database for offline storage
+- **[SharedPreferences](https://pub.dev/packages/shared_preferences)** - Key-value storage
+
+### Code Generation
+- **[build_runner](https://pub.dev/packages/build_runner)** - Code generation tool
+- **[json_serializable](https://pub.dev/packages/json_serializable)** - JSON serialization
+- **[mobx_codegen](https://pub.dev/packages/mobx_codegen)** - MobX code generation
+
+### Other Libraries
+- **[get_it](https://github.com/fluttercommunity/get_it)** - Service locator
+- **[validators](https://github.com/dart-league/validators)** - Input validation
+- **[xxtea](https://github.com/xxtea/xxtea-dart)** - Encryption
+
+## 🎨 Customization
+
+### Changing Theme
+
+Edit `lib/constants/app_theme.dart` to customize colors, typography, and other theme properties:
+
+```dart
+final ThemeData themeData = ThemeData(
+  primaryColor: Colors.blue,
+  accentColor: Colors.blueAccent,
+  // ... customize other properties
+);
+```
+
+### Adding Languages
+
+1. Add translations to the backend using the admin panel
+2. The app will automatically fetch and display available languages
+3. Users can switch languages from the settings
+
+### Modifying API Endpoints
+
+Update `lib/data/network/constants/endpoints.dart` to match your backend API structure.
+
+## 🧪 Testing
+
+```bash
+# Run all tests
+flutter test
+
+# Run tests with coverage
+flutter test --coverage
+
+# Run specific test file
+flutter test test/widget_test.dart
+```
+
+## 📱 Building for Production
+
+### Android
+
+```bash
+# Build APK
+flutter build apk --release
+
+# Build App Bundle (recommended for Play Store)
+flutter build appbundle --release
+```
+
+The built files will be in `build/app/outputs/`.
+
+### iOS
+
+```bash
+# Build for iOS
+flutter build ios --release
+```
+
+Open `ios/Runner.xcworkspace` in Xcode to archive and submit to App Store.
+
+### Web
+
+```bash
+# Build for web
+flutter build web --release
+```
+
+The built files will be in `build/web/`. Deploy the contents to your web server or hosting platform.
+
+## 🔍 IDE Configuration
+
+### Hide Generated Files
+
+#### Android Studio / IntelliJ IDEA
+
+Navigate to **Preferences** → **Editor** → **File Types** and add the following patterns under **Ignore files and folders**:
 
 ```
 *.inject.summary;*.inject.dart;*.g.dart;
 ```
 
-In Visual Studio Code, navigate to `Preferences` -> `Settings` and search for `Files:Exclude`. Add the following patterns:
+#### Visual Studio Code
+
+Navigate to **Preferences** → **Settings**, search for **Files: Exclude**, and add:
+
 ```
 **/*.inject.summary
 **/*.inject.dart
 **/*.g.dart
 ```
 
-### Libraries & Tools Used
+## 🐛 Troubleshooting
 
-* [Dio](https://github.com/flutterchina/dio)
-* [Database](https://github.com/tekartik/sembast.dart)
-* [MobX](https://github.com/mobxjs/mobx.dart) (to connect the reactive data of your application with the UI)
-* [Provider](https://github.com/rrousselGit/provider) (State Management)
-* [Encryption](https://github.com/xxtea/xxtea-dart)
-* [Validation](https://github.com/dart-league/validators)
-* [Logging](https://github.com/zubairehman/Flogs)
-* [Notifications](https://github.com/AndreHaueisen/flushbar)
-* [Json Serialization](https://github.com/dart-lang/json_serializable)
-* [Dependency Injection](https://github.com/fluttercommunity/get_it)
+### Build Runner Issues
 
-### Folder Structure
-Here is the core folder structure which flutter provides.
+If code generation fails:
 
-```
-flutter-app/
-|- android
-|- build
-|- ios
-|- lib
-|- test
+```bash
+# Clean and rebuild
+flutter clean
+flutter pub get
+flutter packages pub run build_runner build --delete-conflicting-outputs
 ```
 
-Here is the folder structure we have been using in this project
+### Network Connection Issues
 
-```
-lib/
-|- constants/
-|- data/
-|- stores/
-|- ui/
-|- utils/
-|- widgets/
-|- main.dart
-|- routes.dart
-```
+- Ensure the backend is running and accessible
+- Check the base URL in `endpoints.dart`
+- For Android emulator connecting to localhost, use `http://10.0.2.2:8080` instead of `http://localhost:8080`
+- For iOS simulator, `http://localhost:8080` should work
 
-Now, lets dive into the lib folder which has the main code for the application.
+### Database Issues
 
-```
-1- constants - All the application level constants are defined in this directory with-in their respective files. This directory contains the constants for `theme`, `dimentions`, `api endpoints`, `preferences` and `strings`.
-2- data - Contains the data layer of your project, includes directories for local, network and shared pref/cache.
-3- stores - Contains store(s) for state-management of your application, to connect the reactive data of your application with the UI. 
-4- ui — Contains all the ui of your project, contains sub directory for each screen.
-5- util — Contains the utilities/common functions of your application.
-6- widgets — Contains the common widgets for your applications. For example, Button, TextField etc.
-7- routes.dart — This file contains all the routes for your application.
-8- main.dart - This is the starting point of the application. All the application level configurations are defined in this file i.e, theme, routes, title, orientation etc.
+Clear app data and reinstall:
+
+```bash
+# Uninstall from device
+flutter clean
+
+# Reinstall
+flutter run
 ```
 
-### Constants
+## 👥 Contributors
 
-This directory contains all the application level constants. A separate file is created for each type as shown in example below:
+- **[Amin Azirani](https://github.com/aazirani)**
+- **[Zoha Ansari](https://github.com/ZohaNsar)**
+- **[Shayan Kebriti](https://github.com/shayankebriti)**
 
-```
-constants/
-|- app_theme.dart
-|- dimens.dart
-|- endpoints.dart
-|- preferences.dart
-|- strings.dart
-```
+## 🤝 Contributing
 
-### Data
+1. Fork the repository
+2. Create a feature branch (`git checkout -b feature/amazing-feature`)
+3. Follow Flutter/Dart style guidelines
+4. Write tests for new functionality
+5. Commit your changes (`git commit -m 'Add some amazing feature'`)
+6. Push to the branch (`git push origin feature/amazing-feature`)
+7. Open a Pull Request
 
-All the business logic the application is in this directory, it represents the data layer of the application. It is sub-divided into three directories `local`, `network` and `sharedperf`, each containing the domain specific logic. Since each layer exists independently, unit testing is much easier. The communication between UI and data layer is handled using the central repository.
+### Development Guidelines
 
-```
-data/
-|- local/
-    |- constants/
-    |- datasources/
-    |- app_database.dart
-   
-|- network/
-    |- constants/
-    |- exceptions/
-    |- rest_client.dart
-    
-|- sharedpref
-    |- constants/
-    |- shared_preference_helper.dart
-    
-|- repository.dart
+- Follow [Effective Dart](https://dart.dev/guides/language/effective-dart) style guide
+- Use MobX for state management
+- Write widget tests for UI components
+- Keep widgets small and focused
+- Use meaningful variable and function names
 
-```
+## 📄 License
 
-### Stores
+This project is licensed under the MIT License - see the [LICENSE.md](LICENSE.md) file for details.
 
-The store is where all the application state lives in flutter. The Store is basically a widget that stands at the top of the widget tree and passes it's data down using special methods. In-case of multiple stores, a separate folder for each store is created as shown in the example below:
+## 🔗 Related Projects
 
-```
-stores/
-|- login/
-    |- login_store.dart
-    |- form_validator.dart
-```
+- **Backend API**: [Guide Wizard Backend](https://github.com/aazirani/guide_wizard_backend) - The backend system powering this app
 
-### UI
+## 📞 Support
 
-This directory contains all the ui of the application. Each screen is located in a separate folder making it easy to combine group of files related to that particular screen. All the screen specific widgets will be placed in the `widgets` directory as shown in the example below:
+For questions and support:
+- Create an issue in the GitHub repository
+- Check Flutter documentation at [flutter.dev](https://flutter.dev/docs)
+- Review the troubleshooting section above
 
-```
-ui/
-|- login
-   |- login_screen.dart
-   |- widgets
-      |- login_form.dart
-      |- login_button.dart
-```
+## 🙏 Acknowledgments
 
-### Utils
+This project was built using the [Flutter Boilerplate Project](https://github.com/zubairehman/flutter-boilerplate-project) as a foundation.
 
-Contains the common file(s) and utilities used in the project. The folder structure is as follows: 
+---
 
-```
-utils/
-|- encryption
-   |- xxtea.dart
-|- date
-  |- date_time.dart
-```
-
-### Widgets
-
-Contains the common widgets that are shared across multiple screens. For example, Button, TextField etc.
-
-```
-widgets/
-|- app_icon_widget.dart
-|- empty_app_bar.dart
-|- progress_indicator.dart
-```
-
-### Routes
-
-This file contains all the routes of the application.
-
-```dart
-import 'package:flutter/material.dart';
-
-import 'ui/home/home.dart';
-import 'ui/login/login.dart';
-import 'ui/splash/splash.dart';
-
-class Routes {
-  Routes._();
-
-  //static variables
-  static const String splash = '/splash';
-  static const String login = '/login';
-  static const String home = '/home';
-
-  static final routes = <String, WidgetBuilder>{
-    splash: (BuildContext context) => SplashScreen(),
-    login: (BuildContext context) => LoginScreen(),
-    home: (BuildContext context) => HomeScreen(),
-  };
-}
-```
-
-### Main
-
-This is the starting point of the application. All the application level configurations are defined in this file i.e, theme, routes, title, orientation etc.
-
-```dart
-import 'package:guide_wizard/routes.dart';
-import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
-
-import 'constants/app_theme.dart';
-import 'constants/strings.dart';
-import 'ui/splash/splash.dart';
-
-void main() {
-  SystemChrome.setPreferredOrientations([
-    DeviceOrientation.portraitUp,
-    DeviceOrientation.portraitDown,
-    DeviceOrientation.landscapeRight,
-    DeviceOrientation.landscapeLeft,
-  ]).then((_) {
-    runApp(MyApp());
-  });
-}
-
-class MyApp extends StatelessWidget {
-  // This widget is the root of your application.
-  @override
-  Widget build(BuildContext context) {
-    return MaterialApp(
-      debugShowCheckedModeBanner: false,
-      title: Strings.appName,
-      theme: themeData,
-      routes: Routes.routes,
-      home: SplashScreen(),
-    );
-  }
-}
-```
+**Built with ❤️ using Flutter**

@@ -11,10 +11,10 @@ import 'package:guide_wizard/stores/app_settings/app_settings_store.dart';
 import 'package:guide_wizard/stores/data/data_store.dart';
 import 'package:guide_wizard/stores/technical_name/technical_name_with_translations_store.dart';
 import 'package:guide_wizard/url_handler.dart';
+import 'package:guide_wizard/utils/extension/context_extensions.dart';
 import 'package:guide_wizard/widgets/info_dialog.dart';
 import 'package:guide_wizard/widgets/load_image_with_cache.dart';
 import 'package:provider/provider.dart';
-import 'package:guide_wizard/utils/extension/context_extensions.dart';
 
 class QuestionWidget extends StatefulWidget {
   Question question;
@@ -72,7 +72,7 @@ class _QuestionWidgetState extends State<QuestionWidget> with AutomaticKeepAlive
   Widget _buildTitle() {
     var titleId = widget.question.title;
     return Padding(
-      padding: const EdgeInsets.only(top: 20, bottom: 22, left: 17),
+      padding: const EdgeInsetsDirectional.only(top: 20, bottom: 22, start: 17),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
@@ -83,7 +83,7 @@ class _QuestionWidgetState extends State<QuestionWidget> with AutomaticKeepAlive
             ),
           ),
           Padding(
-            padding: const EdgeInsets.only(right: 20),
+            padding: const EdgeInsetsDirectional.only(end: 20),
             child: _hasInfo()
                 ? _buildInfoButton()
                 : SizedBox(),
@@ -288,7 +288,7 @@ class _QuestionWidgetState extends State<QuestionWidget> with AutomaticKeepAlive
 
   Widget _buildAOptionsRow(int begin, int end) {
     return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 10),
+      padding: const EdgeInsetsDirectional.symmetric(horizontal: 10),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
@@ -305,7 +305,7 @@ class _QuestionWidgetState extends State<QuestionWidget> with AutomaticKeepAlive
         alignment: AlignmentDirectional.topEnd,
         children: [
           Container(
-            margin: const EdgeInsets.all(8),
+            margin: const EdgeInsetsDirectional.all(8),
             child: ListTile(
                 horizontalTitleGap: 0,
                 minVerticalPadding: 0,
@@ -347,7 +347,7 @@ class _QuestionWidgetState extends State<QuestionWidget> with AutomaticKeepAlive
     if (answerHasTitle(answer)) {
       var answerTitleId = answer.title;
       return Padding(
-        padding: const EdgeInsets.only(top: 5, bottom: 5),
+        padding: const EdgeInsetsDirectional.only(top: 5, bottom: 5),
         child: Row(
           children: [
             Transform.scale(

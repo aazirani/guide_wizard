@@ -43,8 +43,8 @@ class UpdatedAtTimesFactory {
 
   UpdatedAtTimes fromMap(Map<String, dynamic> json) {
     return UpdatedAtTimes(
-      last_updated_at_content: json[LAST_UPDATED_AT_CONTENT],
-      last_updated_at_technical_names: json[LAST_UPDATED_AT_TECHNICAL_NAMES],
+      last_updated_at_content: json[LAST_UPDATED_AT_CONTENT] ?? DateTime(1).toString(),
+      last_updated_at_technical_names: json[LAST_UPDATED_AT_TECHNICAL_NAMES] ?? DateTime(1).toString(),
       last_apps_request_time: json[LAST_APPS_REQUEST_TIME] != null ? json[LAST_APPS_REQUEST_TIME] : DateTime(1).toString()
     );
   }

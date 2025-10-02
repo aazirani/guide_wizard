@@ -1,5 +1,5 @@
 /// Creating custom color palettes is part of creating a custom app. The idea is to create
-/// your class of custom colors, in this case `CompanyColors` and then create a `ThemeData`
+/// your class of custom colors, in this case `AppColors` and then create a `ThemeData`
 /// object with those colors you just defined.
 ///
 /// Resource:
@@ -51,7 +51,7 @@ class AppThemeData {
           _lightFillColor.withOpacity(0.80),
           _darkFillColor,
         ),
-        contentTextStyle: _textTheme.subtitle1!.apply(color: _darkFillColor),
+        contentTextStyle: _textTheme.titleMedium!.apply(color: _darkFillColor),
       ),
     );
   }

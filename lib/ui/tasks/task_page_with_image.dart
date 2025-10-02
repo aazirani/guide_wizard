@@ -1,18 +1,18 @@
 import 'dart:math' as math;
 
+import 'package:flutter/foundation.dart' show kIsWeb;
 import 'package:flutter/material.dart';
 import 'package:guide_wizard/constants/dimens.dart';
 import 'package:guide_wizard/models/step/app_step.dart';
 import 'package:guide_wizard/models/task/task.dart';
 import 'package:guide_wizard/stores/technical_name/technical_name_with_translations_store.dart';
+import 'package:guide_wizard/utils/extension/context_extensions.dart';
 import 'package:guide_wizard/widgets/image_slide.dart';
 import 'package:guide_wizard/widgets/measure_size.dart';
 import 'package:guide_wizard/widgets/sub_task_widget.dart';
 import 'package:guide_wizard/widgets/task_page_appbar_widget.dart';
 import 'package:provider/provider.dart';
 import 'package:render_metrics/render_metrics.dart';
-import 'package:guide_wizard/utils/extension/context_extensions.dart';
-import 'package:flutter/foundation.dart' show kIsWeb;
 
 class TaskPageWithImage extends StatefulWidget {
   final Task task;
@@ -100,7 +100,7 @@ class _TaskPageWithImageState extends State<TaskPageWithImage> {
 
   Widget _buildDraggableSheetItems_Web(context, i) {
     if(i == 0) return Padding(
-      padding: const EdgeInsets.only(top: 10),
+      padding: const EdgeInsetsDirectional.only(top: 10),
       child: _buildImageSlide(),
     );
     if(i == 1) return _buildDescription();

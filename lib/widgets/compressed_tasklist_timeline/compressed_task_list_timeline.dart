@@ -4,10 +4,11 @@ import 'package:guide_wizard/constants/dimens.dart';
 import 'package:guide_wizard/stores/app_settings/app_settings_store.dart';
 import 'package:guide_wizard/stores/data/data_store.dart';
 import 'package:guide_wizard/stores/technical_name/technical_name_with_translations_store.dart';
+import 'package:guide_wizard/ui/tasklist/tasklist_timeline.dart';
 import 'package:guide_wizard/utils/extension/context_extensions.dart';
 import 'package:guide_wizard/widgets/diamond_indicator.dart';
 import 'package:provider/provider.dart';
-import 'package:timelines/timelines.dart';
+import 'package:timelines_plus/timelines_plus.dart';
 
 class CompressedTaskListTimeline extends StatefulWidget {
 
@@ -43,27 +44,15 @@ class _CompressedTaskListTimelineState
   Widget _buildTimeline() {
     return Observer(
       builder: (_) => RawScrollbar(
-        child: Timeline.tileBuilder(
-          shrinkWrap: true,
-          theme: TimelineThemeData(
-            direction: Axis.vertical,
-            nodePosition: Dimens.compressedTaskList.timelineNodePosition,
-          ),
-          builder: TimelineTileBuilder(
-            itemCount: _dataStore.getAllSteps.length == 0
-                ? 0
-                : _dataStore.getStepById(_appSettingsStore.currentStepId).tasks.length,
-            itemExtent: Dimens.compressedTaskList.timeLineItemExtend,
-            contentsBuilder: (context, index) =>
-                _buildContents(index),
-            indicatorBuilder: (context, index) => _buildIndicator(index),
-            startConnectorBuilder: (context, index) => index == 0
-                ? Container()
-                : _buildConnector(),
-            endConnectorBuilder: (context, index) => index == _dataStore.getStepById(_appSettingsStore.currentStepId).tasks.length - 1
-                ? Container()
-                : _buildConnector(),
-          ),
+        child: ListView.builder(
+          scrollDirection: Axis.vertical,
+          itemCount: _dataStore.getStepById(_appSettingsStore.currentStepId).tasks.length,
+          itemBuilder: (context, index) {
+            return TaskListTimeLine(
+                step: _dataStore.getStepById(_appSettingsStore.currentStepId),
+                index: index,
+                task: _dataStore.getStepById(_appSettingsStore.currentStepId).tasks.elementAt(index));
+          },
         ),
       ),
     );
@@ -106,8 +95,8 @@ class _CompressedTaskListTimelineState
     return Row(
       children: [
         Flexible(
-          child: Align(
-            alignment: Alignment.centerLeft,
+          child: Padding(
+            padding: const EdgeInsets.all(16.0),
             child: Text(
               "${_technicalNameWithTranslationsStore.getTranslation(_dataStore.getStepById(_appSettingsStore.currentStepId).tasks.elementAt(index).text)}",
               style: Theme.of(context).textTheme.bodyMedium

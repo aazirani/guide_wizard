@@ -3,13 +3,13 @@ import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:guide_wizard/constants/dimens.dart';
 import 'package:guide_wizard/stores/app_settings/app_settings_store.dart';
 import 'package:guide_wizard/stores/data/data_store.dart';
+import 'package:guide_wizard/utils/extension/context_extensions.dart';
 import 'package:guide_wizard/widgets/progress_bar.dart';
 import 'package:guide_wizard/widgets/step_avatar.dart';
 import 'package:guide_wizard/widgets/step_continue_button_widget.dart';
 import 'package:guide_wizard/widgets/step_counter_widget.dart';
 import 'package:guide_wizard/widgets/step_title.dart';
 import 'package:provider/provider.dart';
-import 'package:guide_wizard/utils/extension/context_extensions.dart';
 
 class StepContent extends StatefulWidget {
   final int step_index;
@@ -52,13 +52,13 @@ class _StepContentState extends State<StepContent> {
                 Expanded(
                     flex: 2,
                     child: Padding(
-                        padding: EdgeInsets.only(
+                        padding: EdgeInsetsDirectional.only(
                             top: heightConstraint *
                                 Dimens
                                     .stepSlider.contentHeightPaddingPercentage,
-                            left: heightConstraint *
+                            start: heightConstraint *
                                 Dimens.stepSlider.contentLeftPaddingPercentage,
-                            right: heightConstraint *
+                            end: heightConstraint *
                                 Dimens.stepSlider.contentRightPaddingPercentage,
                             bottom: heightConstraint *
                                 Dimens
@@ -90,7 +90,7 @@ class _StepContentState extends State<StepContent> {
                                                     .spaceBetweenNoOfTasksAndContinueButtonPercentage),
                                       ])),
                               Expanded(
-                                  flex: 2, child: StepContinueButton(step_index: widget.step_index)),
+                                  flex: 2, child: widget.step_index == 0 ? StepContinueButton(step_index: widget.step_index) : SizedBox.shrink()),
                             ]))),
                 (_dataStore.getStepByIndex(widget.step_index).image != null)
                     ? Expanded(

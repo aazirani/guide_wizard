@@ -19,7 +19,7 @@ class _StepsWidget extends State<StepsWidget> {
   Widget build(BuildContext context) {
     return Container(
       alignment: Alignment.topRight,
-      padding: EdgeInsets.only(top: 20,),
+      padding: EdgeInsetsDirectional.only(top: 20,),
       width: MediaQuery.of(context).size.width,
       height: MediaQuery.of(context).size.height / 3.2,
       child: StepSliderWidget(),
