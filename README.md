@@ -2,6 +2,8 @@
 
 A Flutter mobile application that provides personalized, step-by-step guidance through complex processes. The app delivers adaptive content based on user responses with multilingual support and intelligent logic-based personalization.
 
+**🌐 Website**: [https://aazirani.github.io/guidewizard/](https://aazirani.github.io/guidewizard/)
+
 ## 🌟 Live Implementations
 
 Guide Wizard is currently being used by:
@@ -273,6 +275,12 @@ flutter clean
 # Reinstall
 flutter run
 ```
+
+## 👥 Contributors
+
+- **[Amin Azirani](https://github.com/aazirani)**
+- **[Zoha Ansari](https://github.com/ZohaNsar)**
+- **[Shayan Kebriti](https://github.com/shayankebriti)**
 
 ## 🤝 Contributing
 
