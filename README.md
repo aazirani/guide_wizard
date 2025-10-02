@@ -2,6 +2,14 @@
 
 A Flutter mobile application that provides personalized, step-by-step guidance through complex processes. The app delivers adaptive content based on user responses with multilingual support and intelligent logic-based personalization.
 
+## 🌟 Live Implementations
+
+Guide Wizard is currently being used by:
+
+- **[Bazm](http://bazm.me)** - Wedding planning checklist ([checklist.bazm.me](http://checklist.bazm.me))
+
+**Using Guide Wizard?** Let me know and I'll list your implementation here! Open an issue or contact me to be featured.
+
 ## 🚀 Features
 
 - **Personalized Guidance**: Dynamic content adaptation based on user profile and answers
@@ -202,6 +210,15 @@ flutter build ios --release
 ```
 
 Open `ios/Runner.xcworkspace` in Xcode to archive and submit to App Store.
+
+### Web
+
+```bash
+# Build for web
+flutter build web --release
+```
+
+The built files will be in `build/web/`. Deploy the contents to your web server or hosting platform.
 
 ## 🔍 IDE Configuration
 

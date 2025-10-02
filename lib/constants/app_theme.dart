@@ -1,5 +1,5 @@
 /// Creating custom color palettes is part of creating a custom app. The idea is to create
-/// your class of custom colors, in this case `CompanyColors` and then create a `ThemeData`
+/// your class of custom colors, in this case `AppColors` and then create a `ThemeData`
 /// object with those colors you just defined.
 ///
 /// Resource:
