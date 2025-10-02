@@ -4,6 +4,16 @@ A Flutter mobile application that provides personalized, step-by-step guidance t
 
 **🌐 Website**: [https://aazirani.github.io/guidewizard/](https://aazirani.github.io/guidewizard/)
 
+## 📱 Screenshots
+
+<p align="center">
+  <img src="screenshots/IMG_4979-portrait-1027x2048.png" width="200" alt="Welcome Screen">
+  <img src="screenshots/IMG_4980-portrait-1027x2048.png" width="200" alt="Step Navigation">
+  <img src="screenshots/IMG_4981-portrait-1027x2048.png" width="200" alt="Question Interface">
+  <img src="screenshots/IMG_4982-portrait-1027x2048.png" width="200" alt="Task List">
+  <img src="screenshots/IMG_4983-portrait-1027x2048.png" width="200" alt="Task Details">
+</p>
+
 ## 🌟 Live Implementations
 
 Guide Wizard is currently being used by:
